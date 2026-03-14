@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Calendar, MapPin, DollarSign } from 'lucide-react'
+import { ArrowLeft, Calendar, MapPin, DollarSign, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { useToast } from '@/hooks/use-toast'
@@ -50,6 +50,10 @@ const DemandDetail = () => {
               <MapPin className="w-4 h-4" />
               <span>{demand.location}</span>
             </div>
+            <div className="flex items-center gap-1.5">
+              <Users className="w-4 h-4" />
+              <span>{demand.guests} convidados</span>
+            </div>
           </div>
         </div>
 
@@ -57,7 +61,7 @@ const DemandDetail = () => {
           <CardContent className="p-5 flex items-center justify-between">
             <div>
               <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
-                {role === 'customer' ? 'Orçamento Cliente' : 'Valor Líquido (-10% Taxa)'}
+                {role === 'customer' ? 'Orçamento Estimado' : 'Valor Líquido (-10% Taxa)'}
               </p>
               <p className="text-2xl font-bold text-accent mt-1 flex items-center gap-2">
                 <DollarSign className="w-6 h-6" />

@@ -25,6 +25,7 @@ export type Demand = {
   id: string
   title: string
   budget: number
+  guests: number
   date: string
   location: string
   requirements: TechRequirement
@@ -56,7 +57,8 @@ const MOCK_DEMANDS: Demand[] = [
   {
     id: 'd1',
     title: 'Casamento Sítio das Palmeiras',
-    budget: 5000,
+    budget: 65000,
+    guests: 300,
     date: '2026-05-20',
     location: 'São Paulo, SP',
     requirements: {
@@ -85,7 +87,8 @@ const MOCK_DEMANDS: Demand[] = [
   {
     id: 'd2',
     title: 'Festa Corporativa Tech',
-    budget: 12000,
+    budget: 95000,
+    guests: 150,
     date: '2026-06-15',
     location: 'Campinas, SP',
     requirements: {
