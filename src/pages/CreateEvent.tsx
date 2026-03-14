@@ -1,14 +1,15 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, CheckCircle2, Speaker, Lightbulb, Monitor, Layers, Zap } from 'lucide-react'
+import { ArrowLeft, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/hooks/use-toast'
 import { useApp, TechRequirement } from '@/store/AppContext'
+import { SERVICES } from '@/lib/services'
 
-const steps = ['Básico', 'Técnico', 'Revisão']
+const steps = ['Básico', 'Serviços', 'Revisão']
 
 const CreateEvent = () => {
   const navigate = useNavigate()
@@ -23,10 +24,20 @@ const CreateEvent = () => {
     location: '',
     requirements: {
       sound: false,
-      lighting: false,
       light: false,
       led: false,
       grid: false,
+      buffet: false,
+      drinks: false,
+      cocktails: false,
+      photo: false,
+      video: false,
+      singer: false,
+      band: false,
+      dj: false,
+      space: false,
+      ceremonial: false,
+      security: false,
       details: '',
     },
   })
@@ -60,7 +71,7 @@ const CreateEvent = () => {
     })
     toast({
       title: 'Sucesso!',
-      description: 'Sua demanda foi publicada para as locadoras.',
+      description: 'Sua demanda foi publicada para os fornecedores.',
     })
     navigate('/demandas')
   }
@@ -155,33 +166,27 @@ const CreateEvent = () => {
         {currentStep === 2 && (
           <div className="space-y-6 animate-fade-in">
             <h2 className="text-lg font-semibold">O que você precisa?</h2>
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { id: 'sound', label: 'Estrutura de Som', icon: Speaker },
-                { id: 'lighting', label: 'Iluminação Cênica', icon: Lightbulb },
-                { id: 'light', label: 'Luz', icon: Zap },
-                { id: 'led', label: 'Painel de LED', icon: Monitor },
-                { id: 'grid', label: 'Estrutura Grid', icon: Layers },
-              ].map(({ id, label, icon: Icon }) => (
+            <div className="grid grid-cols-3 gap-3">
+              {SERVICES.map(({ id, label, icon: Icon }) => (
                 <div
                   key={id}
-                  className={`flex flex-col items-center justify-center p-4 rounded-xl border transition-all cursor-pointer ${
+                  className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all cursor-pointer ${
                     formData.requirements[id as keyof TechRequirement]
                       ? 'bg-primary/20 border-primary shadow-[0_0_15px_rgba(0,82,255,0.2)] text-white'
                       : 'bg-card border-border text-muted-foreground hover:bg-card/80'
                   }`}
                   onClick={() => updateReq(id, !formData.requirements[id as keyof TechRequirement])}
                 >
-                  <Icon className="w-8 h-8 mb-2" />
-                  <span className="text-xs font-medium text-center">{label}</span>
+                  <Icon className="w-6 h-6 mb-2" />
+                  <span className="text-[10px] font-medium text-center leading-tight">{label}</span>
                 </div>
               ))}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="details">Detalhes Técnicos Adicionais</Label>
+              <Label htmlFor="details">Detalhes Adicionais</Label>
               <Textarea
                 id="details"
-                placeholder="Descreva tamanhos, quantidades, etc..."
+                placeholder="Descreva tamanhos, quantidades, cronograma, etc..."
                 value={formData.requirements.details}
                 onChange={(e) =>
                   setFormData((prev) => ({
@@ -218,38 +223,22 @@ const CreateEvent = () => {
               </div>
 
               <div>
-                <h3 className="text-sm text-muted-foreground mb-2">Equipamentos Solicitados</h3>
+                <h3 className="text-sm text-muted-foreground mb-2">Serviços Solicitados</h3>
                 <div className="flex flex-wrap gap-2">
-                  {formData.requirements.sound && (
-                    <span className="bg-blue-500/20 text-blue-400 text-xs px-2 py-1 rounded">
-                      Som
-                    </span>
-                  )}
-                  {formData.requirements.lighting && (
-                    <span className="bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded">
-                      Cênica
-                    </span>
-                  )}
-                  {formData.requirements.light && (
-                    <span className="bg-amber-500/20 text-amber-400 text-xs px-2 py-1 rounded">
-                      Luz
-                    </span>
-                  )}
-                  {formData.requirements.led && (
-                    <span className="bg-purple-500/20 text-purple-400 text-xs px-2 py-1 rounded">
-                      LED
-                    </span>
-                  )}
-                  {formData.requirements.grid && (
-                    <span className="bg-gray-500/20 text-gray-400 text-xs px-2 py-1 rounded">
-                      Grid
-                    </span>
-                  )}
-                  {!Object.values(formData.requirements).some(
-                    (v) => typeof v === 'boolean' && v,
-                  ) && (
+                  {SERVICES.map((s) => {
+                    if (!formData.requirements[s.id as keyof TechRequirement]) return null
+                    return (
+                      <span
+                        key={s.id}
+                        className={`${s.bg} ${s.color} text-xs px-2 py-1 rounded font-medium`}
+                      >
+                        {s.label}
+                      </span>
+                    )
+                  })}
+                  {!SERVICES.some((s) => formData.requirements[s.id as keyof TechRequirement]) && (
                     <span className="text-sm text-muted-foreground">
-                      Nenhum equipamento selecionado
+                      Nenhum serviço selecionado
                     </span>
                   )}
                 </div>

@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
-import { Calendar, MapPin, Speaker, Lightbulb, Monitor, Layers } from 'lucide-react'
+import { Calendar, MapPin } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { useApp } from '@/store/AppContext'
+import { SERVICES } from '@/lib/services'
 
 const Demands = () => {
   const { role, demands, isSubscribed } = useApp()
@@ -64,27 +65,30 @@ const Demands = () => {
                     </div>
 
                     <div className="flex items-center justify-between pt-4 border-t border-border/50">
-                      <div className="flex gap-2">
-                        {demand.requirements.sound && (
-                          <div className="p-1.5 bg-blue-500/10 rounded-md">
-                            <Speaker className="w-4 h-4 text-blue-400" />
-                          </div>
-                        )}
-                        {demand.requirements.lighting && (
-                          <div className="p-1.5 bg-yellow-500/10 rounded-md">
-                            <Lightbulb className="w-4 h-4 text-yellow-400" />
-                          </div>
-                        )}
-                        {demand.requirements.led && (
-                          <div className="p-1.5 bg-purple-500/10 rounded-md">
-                            <Monitor className="w-4 h-4 text-purple-400" />
-                          </div>
-                        )}
-                        {demand.requirements.grid && (
-                          <div className="p-1.5 bg-gray-500/10 rounded-md">
-                            <Layers className="w-4 h-4 text-gray-400" />
-                          </div>
-                        )}
+                      <div className="flex gap-1.5 items-center">
+                        {(() => {
+                          const activeReqs = SERVICES.filter(
+                            (s) => demand.requirements[s.id as keyof typeof demand.requirements],
+                          )
+                          return (
+                            <>
+                              {activeReqs.slice(0, 4).map((req) => (
+                                <div
+                                  key={req.id}
+                                  className={`p-1.5 ${req.bg} rounded-md`}
+                                  title={req.label}
+                                >
+                                  <req.icon className={`w-4 h-4 ${req.color}`} />
+                                </div>
+                              ))}
+                              {activeReqs.length > 4 && (
+                                <div className="p-1.5 bg-muted rounded-md flex items-center justify-center text-[10px] font-bold text-muted-foreground min-w-[28px]">
+                                  +{activeReqs.length - 4}
+                                </div>
+                              )}
+                            </>
+                          )
+                        })()}
                       </div>
                       <div className="text-right">
                         <p className="text-[10px] text-muted-foreground mb-0.5">

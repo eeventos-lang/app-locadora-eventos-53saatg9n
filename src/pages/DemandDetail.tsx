@@ -1,19 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import {
-  ArrowLeft,
-  Calendar,
-  MapPin,
-  DollarSign,
-  Speaker,
-  Lightbulb,
-  Monitor,
-  Layers,
-  Zap,
-} from 'lucide-react'
+import { ArrowLeft, Calendar, MapPin, DollarSign } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { useToast } from '@/hooks/use-toast'
 import { useApp } from '@/store/AppContext'
+import { SERVICES } from '@/lib/services'
 
 const DemandDetail = () => {
   const { id } = useParams()
@@ -34,44 +25,6 @@ const DemandDetail = () => {
     })
     navigate('/demandas')
   }
-
-  const reqIcons = [
-    {
-      key: 'sound',
-      icon: Speaker,
-      label: 'Estrutura de Som',
-      color: 'text-blue-400',
-      bg: 'bg-blue-500/10',
-    },
-    {
-      key: 'lighting',
-      icon: Lightbulb,
-      label: 'Iluminação Cênica',
-      color: 'text-yellow-400',
-      bg: 'bg-yellow-500/10',
-    },
-    {
-      key: 'light',
-      icon: Zap,
-      label: 'Luz',
-      color: 'text-amber-400',
-      bg: 'bg-amber-500/10',
-    },
-    {
-      key: 'led',
-      icon: Monitor,
-      label: 'Painel de LED',
-      color: 'text-purple-400',
-      bg: 'bg-purple-500/10',
-    },
-    {
-      key: 'grid',
-      icon: Layers,
-      label: 'Grid / Box Truss',
-      color: 'text-gray-400',
-      bg: 'bg-gray-500/10',
-    },
-  ]
 
   return (
     <div className="min-h-screen bg-background flex flex-col animate-slide-up relative z-50 pb-20">
@@ -125,13 +78,13 @@ const DemandDetail = () => {
         </Card>
 
         <section className="space-y-4">
-          <h3 className="font-semibold text-white text-lg">Requisitos Técnicos</h3>
+          <h3 className="font-semibold text-white text-lg">Serviços Solicitados</h3>
           <div className="grid grid-cols-2 gap-3">
-            {reqIcons.map(({ key, icon: Icon, label, color, bg }) => {
-              if (!demand.requirements[key as keyof typeof demand.requirements]) return null
+            {SERVICES.map(({ id, icon: Icon, label, color, bg }) => {
+              if (!demand.requirements[id as keyof typeof demand.requirements]) return null
               return (
                 <div
-                  key={key}
+                  key={id}
                   className={`${bg} border border-border rounded-xl p-4 flex flex-col items-center justify-center text-center gap-2`}
                 >
                   <Icon className={`w-8 h-8 ${color}`} />

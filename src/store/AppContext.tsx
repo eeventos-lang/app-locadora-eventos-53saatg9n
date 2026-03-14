@@ -4,10 +4,20 @@ export type Role = 'customer' | 'company'
 
 export type TechRequirement = {
   sound: boolean
-  lighting: boolean
   light: boolean
   led: boolean
   grid: boolean
+  buffet: boolean
+  drinks: boolean
+  cocktails: boolean
+  photo: boolean
+  video: boolean
+  singer: boolean
+  band: boolean
+  dj: boolean
+  space: boolean
+  ceremonial: boolean
+  security: boolean
   details: string
 }
 
@@ -51,11 +61,22 @@ const MOCK_DEMANDS: Demand[] = [
     location: 'São Paulo, SP',
     requirements: {
       sound: true,
-      lighting: true,
-      light: false,
+      light: true,
       led: false,
       grid: true,
-      details: 'Preciso de PA para 300 pessoas, iluminação cênica na pista e grid Q30.',
+      buffet: true,
+      drinks: false,
+      cocktails: true,
+      photo: false,
+      video: false,
+      singer: false,
+      band: true,
+      dj: true,
+      space: false,
+      ceremonial: true,
+      security: false,
+      details:
+        'Preciso de PA para 300 pessoas, iluminação cênica na pista, grid Q30 e banda para festa.',
     },
     status: 'open',
     proposals: 2,
@@ -69,11 +90,21 @@ const MOCK_DEMANDS: Demand[] = [
     location: 'Campinas, SP',
     requirements: {
       sound: true,
-      lighting: true,
       light: true,
       led: true,
       grid: true,
-      details: 'Painel de LED 4x3 indoor, som para banda, luz de palco completa.',
+      buffet: true,
+      drinks: true,
+      cocktails: false,
+      photo: true,
+      video: true,
+      singer: false,
+      band: false,
+      dj: true,
+      space: true,
+      ceremonial: false,
+      security: true,
+      details: 'Painel de LED 4x3 indoor, som para DJ, luz de palco completa e buffet completo.',
     },
     status: 'open',
     proposals: 5,

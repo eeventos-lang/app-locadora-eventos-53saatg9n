@@ -1,18 +1,12 @@
 import { Link } from 'react-router-dom'
-import { Plus, Speaker, Lightbulb, Monitor, Layers, ArrowRight } from 'lucide-react'
+import { Plus, Speaker, MapPin, ArrowRight } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useApp } from '@/store/AppContext'
+import { SERVICES } from '@/lib/services'
 
 const Index = () => {
   const { role, demands, isSubscribed } = useApp()
-
-  const categories = [
-    { icon: Speaker, label: 'Som', color: 'text-blue-400' },
-    { icon: Lightbulb, label: 'Luz', color: 'text-yellow-400' },
-    { icon: Monitor, label: 'Painel LED', color: 'text-purple-400' },
-    { icon: Layers, label: 'Grid', color: 'text-gray-400' },
-  ]
 
   if (role === 'customer') {
     const myDemands = demands.slice(0, 2)
@@ -46,12 +40,14 @@ const Index = () => {
         <section>
           <h3 className="font-semibold mb-4 text-white">Categorias Populares</h3>
           <div className="grid grid-cols-4 gap-4">
-            {categories.map((cat, i) => (
+            {[SERVICES[0], SERVICES[4], SERVICES[7], SERVICES[12]].map((cat, i) => (
               <div key={i} className="flex flex-col items-center gap-2">
                 <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center">
                   <cat.icon className={`w-6 h-6 ${cat.color}`} />
                 </div>
-                <span className="text-xs font-medium text-muted-foreground">{cat.label}</span>
+                <span className="text-[10px] font-medium text-muted-foreground text-center leading-tight">
+                  {cat.label}
+                </span>
               </div>
             ))}
           </div>
@@ -151,16 +147,30 @@ const Index = () => {
                   </div>
                   <div className="flex items-center gap-4 text-xs text-muted-foreground mb-3">
                     <span className="flex items-center gap-1">
-                      <Layers className="w-3 h-3" /> {demand.location}
+                      <MapPin className="w-3 h-3" /> {demand.location}
                     </span>
                   </div>
                   <div className="flex items-center justify-between pt-3 border-t border-border/50">
-                    <div className="flex gap-2">
-                      {demand.requirements.sound && <Speaker className="w-4 h-4 text-blue-400" />}
-                      {demand.requirements.lighting && (
-                        <Lightbulb className="w-4 h-4 text-yellow-400" />
-                      )}
-                      {demand.requirements.led && <Monitor className="w-4 h-4 text-purple-400" />}
+                    <div className="flex items-center gap-2">
+                      {(() => {
+                        const activeReqs = SERVICES.filter(
+                          (s) => demand.requirements[s.id as keyof typeof demand.requirements],
+                        )
+                        return (
+                          <>
+                            <div className="flex gap-1.5">
+                              {activeReqs.slice(0, 3).map((req) => (
+                                <req.icon key={req.id} className={`w-4 h-4 ${req.color}`} />
+                              ))}
+                            </div>
+                            {activeReqs.length > 3 && (
+                              <span className="text-[10px] text-muted-foreground font-medium">
+                                +{activeReqs.length - 3}
+                              </span>
+                            )}
+                          </>
+                        )
+                      })()}
                     </div>
                     <div className="text-right">
                       <p className="text-[10px] text-muted-foreground mb-0.5">Valor Líquido</p>

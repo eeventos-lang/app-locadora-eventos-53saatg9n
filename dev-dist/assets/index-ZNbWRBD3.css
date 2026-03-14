@@ -1220,6 +1220,10 @@ section[aria-label='Notifications alt+T'] {
   min-width: 12rem;
 }
 
+.min-w-\[28px\]{
+  min-width: 28px;
+}
+
 .min-w-\[8rem\]{
   min-width: 8rem;
 }
@@ -1394,6 +1398,10 @@ section[aria-label='Notifications alt+T'] {
 
 .grid-cols-2{
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-cols-3{
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .grid-cols-4{
@@ -1712,10 +1720,6 @@ section[aria-label='Notifications alt+T'] {
   background-color: rgb(245 158 11 / 0.1);
 }
 
-.bg-amber-500\/20{
-  background-color: rgb(245 158 11 / 0.2);
-}
-
 .bg-background{
   background-color: hsl(var(--background));
 }
@@ -1741,10 +1745,6 @@ section[aria-label='Notifications alt+T'] {
   background-color: rgb(59 130 246 / 0.1);
 }
 
-.bg-blue-500\/20{
-  background-color: rgb(59 130 246 / 0.2);
-}
-
 .bg-border{
   background-color: hsl(var(--border));
 }
@@ -1761,8 +1761,16 @@ section[aria-label='Notifications alt+T'] {
   background-color: hsl(var(--card) / 0.95);
 }
 
+.bg-cyan-500\/10{
+  background-color: rgb(6 182 212 / 0.1);
+}
+
 .bg-destructive{
   background-color: hsl(var(--destructive));
+}
+
+.bg-emerald-500\/10{
+  background-color: rgb(16 185 129 / 0.1);
 }
 
 .bg-foreground{
@@ -1778,8 +1786,8 @@ section[aria-label='Notifications alt+T'] {
   background-color: rgb(107 114 128 / 0.1);
 }
 
-.bg-gray-500\/20{
-  background-color: rgb(107 114 128 / 0.2);
+.bg-indigo-500\/10{
+  background-color: rgb(99 102 241 / 0.1);
 }
 
 .bg-muted{
@@ -1788,6 +1796,14 @@ section[aria-label='Notifications alt+T'] {
 
 .bg-muted\/50{
   background-color: hsl(var(--muted) / 0.5);
+}
+
+.bg-orange-500\/10{
+  background-color: rgb(249 115 22 / 0.1);
+}
+
+.bg-pink-500\/10{
+  background-color: rgb(236 72 153 / 0.1);
 }
 
 .bg-popover{
@@ -1806,8 +1822,12 @@ section[aria-label='Notifications alt+T'] {
   background-color: rgb(168 85 247 / 0.1);
 }
 
-.bg-purple-500\/20{
-  background-color: rgb(168 85 247 / 0.2);
+.bg-red-500\/10{
+  background-color: rgb(239 68 68 / 0.1);
+}
+
+.bg-rose-500\/10{
+  background-color: rgb(244 63 94 / 0.1);
 }
 
 .bg-secondary{
@@ -1822,16 +1842,24 @@ section[aria-label='Notifications alt+T'] {
   background-color: hsl(var(--sidebar-border));
 }
 
+.bg-slate-500\/10{
+  background-color: rgb(100 116 139 / 0.1);
+}
+
+.bg-teal-500\/10{
+  background-color: rgb(20 184 166 / 0.1);
+}
+
 .bg-transparent{
   background-color: transparent;
 }
 
-.bg-yellow-500\/10{
-  background-color: rgb(234 179 8 / 0.1);
+.bg-violet-500\/10{
+  background-color: rgb(139 92 246 / 0.1);
 }
 
-.bg-yellow-500\/20{
-  background-color: rgb(234 179 8 / 0.2);
+.bg-yellow-500\/10{
+  background-color: rgb(234 179 8 / 0.1);
 }
 
 .bg-gradient-to-br{
@@ -2200,12 +2228,22 @@ section[aria-label='Notifications alt+T'] {
   color: currentColor;
 }
 
+.text-cyan-400{
+  --tw-text-opacity: 1;
+  color: rgb(34 211 238 / var(--tw-text-opacity, 1));
+}
+
 .text-destructive{
   color: hsl(var(--destructive));
 }
 
 .text-destructive-foreground{
   color: hsl(var(--destructive-foreground));
+}
+
+.text-emerald-400{
+  --tw-text-opacity: 1;
+  color: rgb(52 211 153 / var(--tw-text-opacity, 1));
 }
 
 .text-foreground{
@@ -2226,8 +2264,23 @@ section[aria-label='Notifications alt+T'] {
   color: rgb(75 85 99 / var(--tw-text-opacity, 1));
 }
 
+.text-indigo-400{
+  --tw-text-opacity: 1;
+  color: rgb(129 140 248 / var(--tw-text-opacity, 1));
+}
+
 .text-muted-foreground{
   color: hsl(var(--muted-foreground));
+}
+
+.text-orange-400{
+  --tw-text-opacity: 1;
+  color: rgb(251 146 60 / var(--tw-text-opacity, 1));
+}
+
+.text-pink-400{
+  --tw-text-opacity: 1;
+  color: rgb(244 114 182 / var(--tw-text-opacity, 1));
 }
 
 .text-popover-foreground{
@@ -2247,6 +2300,16 @@ section[aria-label='Notifications alt+T'] {
   color: rgb(192 132 252 / var(--tw-text-opacity, 1));
 }
 
+.text-red-400{
+  --tw-text-opacity: 1;
+  color: rgb(248 113 113 / var(--tw-text-opacity, 1));
+}
+
+.text-rose-400{
+  --tw-text-opacity: 1;
+  color: rgb(251 113 133 / var(--tw-text-opacity, 1));
+}
+
 .text-secondary-foreground{
   color: hsl(var(--secondary-foreground));
 }
@@ -2257,6 +2320,21 @@ section[aria-label='Notifications alt+T'] {
 
 .text-sidebar-foreground\/70{
   color: hsl(var(--sidebar-foreground) / 0.7);
+}
+
+.text-slate-400{
+  --tw-text-opacity: 1;
+  color: rgb(148 163 184 / var(--tw-text-opacity, 1));
+}
+
+.text-teal-400{
+  --tw-text-opacity: 1;
+  color: rgb(45 212 191 / var(--tw-text-opacity, 1));
+}
+
+.text-violet-400{
+  --tw-text-opacity: 1;
+  color: rgb(167 139 250 / var(--tw-text-opacity, 1));
 }
 
 .text-white{
