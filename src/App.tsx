@@ -31,16 +31,55 @@ if (typeof window !== 'undefined' && typeof CSSStyleSheet !== 'undefined') {
         try {
           return originalCssRules.get ? originalCssRules.get.call(this) : []
         } catch (e) {
-          if (e instanceof DOMException && e.name === 'SecurityError') {
-            console.warn(
-              'CORS SecurityError: Blocked access to cross-origin stylesheet cssRules safely bypassed.',
-            )
-            return []
-          }
-          throw e
+          console.warn('Blocked access to stylesheet cssRules safely bypassed.', e)
+          return []
         }
       },
     })
+  }
+}
+
+// Global fetch interceptor to prevent html-to-image / document generation from crashing
+// when a stylesheet or asset returns 404.
+if (typeof window !== 'undefined') {
+  const originalFetch = window.fetch
+  window.fetch = async function (...args) {
+    try {
+      const response = await originalFetch.apply(this, args)
+      if (!response.ok && (response.status === 404 || response.status === 403)) {
+        const url =
+          typeof args[0] === 'string' ? args[0] : args[0] instanceof Request ? args[0].url : ''
+        const isAsset =
+          url.match(/\.(css|png|jpe?g|svg|woff2?|ttf)(\?.*)?$/i) || url.includes('/assets/')
+        if (isAsset) {
+          console.warn(`Gracefully intercepted failed fetch for asset: ${url}`)
+          return new Response('', {
+            status: 200,
+            statusText: 'OK',
+            headers: new Headers({
+              'Content-Type': url.includes('.css') ? 'text/css' : 'text/plain',
+            }),
+          })
+        }
+      }
+      return response
+    } catch (error) {
+      const url =
+        typeof args[0] === 'string' ? args[0] : args[0] instanceof Request ? args[0].url : ''
+      const isAsset =
+        url.match(/\.(css|png|jpe?g|svg|woff2?|ttf)(\?.*)?$/i) || url.includes('/assets/')
+      if (isAsset) {
+        console.warn(`Gracefully intercepted network error for asset: ${url}`, error)
+        return new Response('', {
+          status: 200,
+          statusText: 'OK',
+          headers: new Headers({
+            'Content-Type': url.includes('.css') ? 'text/css' : 'text/plain',
+          }),
+        })
+      }
+      throw error
+    }
   }
 }
 
