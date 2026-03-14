@@ -16,7 +16,7 @@ const Demands = () => {
           Ative sua assinatura premium para visualizar todas as demandas disponíveis na plataforma.
         </p>
         <Link
-          to="/perfil"
+          to="/subscription"
           className="px-8 py-3 bg-primary text-primary-foreground rounded-lg font-medium shadow-md hover:bg-primary/90 transition-all"
         >
           Assinar Agora
@@ -40,7 +40,7 @@ const Demands = () => {
           </div>
         ) : (
           demands.map((demand) => (
-            <Link key={demand.id} to={`/demanda/${demand.id}`} className="block">
+            <Link key={demand.id} to={`/demands/${demand.id}`} className="block">
               <Card className="hover:shadow-md transition-all duration-300 border-border group bg-card">
                 <CardContent className="p-0">
                   <div className="p-5 md:p-6 space-y-4">

@@ -62,7 +62,7 @@ const CreateEvent = () => {
   const handleSubmit = () => {
     addDemand({ ...formData, title: formData.title || 'Novo Evento', budget: totals.total })
     toast({ title: 'Sucesso!', description: 'Sua demanda foi publicada para os fornecedores.' })
-    navigate('/demandas')
+    navigate('/demands')
   }
 
   return (

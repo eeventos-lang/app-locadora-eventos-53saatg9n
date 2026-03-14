@@ -22861,8 +22861,108 @@ function Badge({ className, variant, ...props }) {
 		...props
 	});
 }
-(/* @__PURE__ */ new Date()).toISOString(), (/* @__PURE__ */ new Date()).toISOString();
+//#endregion
+//#region src/store/AppContext.tsx
+var MOCK_DEMANDS = [{
+	id: "d1",
+	title: "Casamento Sítio das Palmeiras",
+	budget: 65e3,
+	guests: 300,
+	date: "2026-05-20",
+	location: "São Paulo, SP",
+	requirements: {
+		sound: true,
+		light: true,
+		led: false,
+		grid: true,
+		buffet: true,
+		drinks: false,
+		cocktails: true,
+		photo: false,
+		video: false,
+		singer: false,
+		band: true,
+		dj: true,
+		space: false,
+		ceremonial: true,
+		security: false,
+		details: "Preciso de PA para 300 pessoas, iluminação cênica na pista, grid Q30 e banda para festa."
+	},
+	status: "open",
+	proposals: 2,
+	createdAt: (/* @__PURE__ */ new Date()).toISOString()
+}, {
+	id: "d2",
+	title: "Festa Corporativa Tech",
+	budget: 95e3,
+	guests: 150,
+	date: "2026-06-15",
+	location: "Campinas, SP",
+	requirements: {
+		sound: true,
+		light: true,
+		led: true,
+		grid: true,
+		buffet: true,
+		drinks: true,
+		cocktails: false,
+		photo: true,
+		video: true,
+		singer: false,
+		band: false,
+		dj: true,
+		space: true,
+		ceremonial: false,
+		security: true,
+		details: "Painel de LED 4x3 indoor, som para DJ, luz de palco completa e buffet completo."
+	},
+	status: "open",
+	proposals: 5,
+	createdAt: (/* @__PURE__ */ new Date()).toISOString()
+}];
 var AppContext = (0, import_react.createContext)(void 0);
+var AppProvider = ({ children }) => {
+	const [role, setRole] = (0, import_react.useState)("customer");
+	const [isSubscribed, setIsSubscribed] = (0, import_react.useState)(true);
+	const [demands, setDemands] = (0, import_react.useState)(MOCK_DEMANDS);
+	const [companyProfile, setCompanyProfile] = (0, import_react.useState)({
+		name: "JD Eventos Tech",
+		specialties: "Som, Iluminação, Painel de LED",
+		address: "",
+		logo: "",
+		observations: ""
+	});
+	const addDemand = (demandData) => {
+		setDemands([{
+			...demandData,
+			id: Math.random().toString(36).substring(7),
+			status: "open",
+			proposals: 0,
+			createdAt: (/* @__PURE__ */ new Date()).toISOString()
+		}, ...demands]);
+	};
+	const updateCompanyProfile = (profile) => {
+		setCompanyProfile((prev) => ({
+			...prev,
+			...profile
+		}));
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppContext.Provider, {
+		"data-uid": "src/store/AppContext.tsx:148:5",
+		"data-prohibitions": "[editContent]",
+		value: {
+			role,
+			setRole,
+			isSubscribed,
+			setIsSubscribed,
+			demands,
+			addDemand,
+			companyProfile,
+			updateCompanyProfile
+		},
+		children
+	});
+};
 var useApp = () => {
 	const context = (0, import_react.useContext)(AppContext);
 	if (context === void 0) throw new Error("useApp must be used within an AppProvider");
@@ -23001,7 +23101,7 @@ var Demands = () => {
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 				"data-uid": "src/pages/Demands.tsx:18:9",
 				"data-prohibitions": "[]",
-				to: "/perfil",
+				to: "/subscription",
 				className: "px-8 py-3 bg-primary text-primary-foreground rounded-lg font-medium shadow-md hover:bg-primary/90 transition-all",
 				children: "Assinar Agora"
 			})
@@ -23033,7 +23133,7 @@ var Demands = () => {
 			}) : demands.map((demand) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 				"data-uid": "src/pages/Demands.tsx:43:13",
 				"data-prohibitions": "[editContent]",
-				to: `/demanda/${demand.id}`,
+				to: `/demands/${demand.id}`,
 				className: "block",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
 					"data-uid": "src/pages/Demands.tsx:44:15",
@@ -23315,7 +23415,7 @@ var DemandDetail = () => {
 			title: "Proposta Enviada!",
 			description: "O cliente receberá sua notificação em breve."
 		});
-		navigate("/demandas");
+		navigate("/demands");
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		"data-uid": "src/pages/DemandDetail.tsx:31:5",
@@ -24797,7 +24897,7 @@ var CreateEvent = () => {
 			title: "Sucesso!",
 			description: "Sua demanda foi publicada para os fornecedores."
 		});
-		navigate("/demandas");
+		navigate("/demands");
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		"data-uid": "src/pages/CreateEvent.tsx:69:5",
@@ -29817,119 +29917,123 @@ TooltipContent.displayName = Content2.displayName;
 //#endregion
 //#region src/App.tsx
 function App() {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TooltipProvider, {
-		"data-uid": "src/App.tsx:18:5",
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppProvider, {
+		"data-uid": "src/App.tsx:19:5",
 		"data-prohibitions": "[]",
-		children: [
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Toaster$2, {
-				"data-uid": "src/App.tsx:19:7",
-				"data-prohibitions": "[editContent]"
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Toaster, {
-				"data-uid": "src/App.tsx:20:7",
-				"data-prohibitions": "[editContent]"
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
-				"data-uid": "src/App.tsx:21:7",
-				"data-prohibitions": "[]",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Routes, {
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TooltipProvider, {
+			"data-uid": "src/App.tsx:20:7",
+			"data-prohibitions": "[]",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Toaster$2, {
+					"data-uid": "src/App.tsx:21:9",
+					"data-prohibitions": "[editContent]"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Toaster, {
 					"data-uid": "src/App.tsx:22:9",
+					"data-prohibitions": "[editContent]"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
+					"data-uid": "src/App.tsx:23:9",
 					"data-prohibitions": "[]",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Route, {
-						"data-uid": "src/App.tsx:23:11",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Routes, {
+						"data-uid": "src/App.tsx:24:11",
 						"data-prohibitions": "[]",
-						path: "/",
-						element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layout, {
-							"data-uid": "src/App.tsx:23:36",
-							"data-prohibitions": "[editContent]"
-						}),
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-								"data-uid": "src/App.tsx:24:13",
-								"data-prohibitions": "[editContent]",
-								index: true,
-								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Index, {
-									"data-uid": "src/App.tsx:24:35",
-									"data-prohibitions": "[editContent]"
-								})
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Route, {
+							"data-uid": "src/App.tsx:25:13",
+							"data-prohibitions": "[]",
+							path: "/",
+							element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layout, {
+								"data-uid": "src/App.tsx:25:38",
+								"data-prohibitions": "[editContent]"
 							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-								"data-uid": "src/App.tsx:25:13",
-								"data-prohibitions": "[editContent]",
-								path: "login",
-								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Login, {
-									"data-uid": "src/App.tsx:25:42",
-									"data-prohibitions": "[editContent]"
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+									"data-uid": "src/App.tsx:26:15",
+									"data-prohibitions": "[editContent]",
+									index: true,
+									element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Index, {
+										"data-uid": "src/App.tsx:26:37",
+										"data-prohibitions": "[editContent]"
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+									"data-uid": "src/App.tsx:27:15",
+									"data-prohibitions": "[editContent]",
+									path: "login",
+									element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Login, {
+										"data-uid": "src/App.tsx:27:44",
+										"data-prohibitions": "[editContent]"
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+									"data-uid": "src/App.tsx:28:15",
+									"data-prohibitions": "[editContent]",
+									path: "register",
+									element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Register, {
+										"data-uid": "src/App.tsx:28:47",
+										"data-prohibitions": "[editContent]"
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+									"data-uid": "src/App.tsx:29:15",
+									"data-prohibitions": "[editContent]",
+									path: "demands",
+									element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Demands, {
+										"data-uid": "src/App.tsx:29:46",
+										"data-prohibitions": "[editContent]"
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+									"data-uid": "src/App.tsx:30:15",
+									"data-prohibitions": "[editContent]",
+									path: "demands/:id",
+									element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DemandDetail, {
+										"data-uid": "src/App.tsx:30:50",
+										"data-prohibitions": "[editContent]"
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+									"data-uid": "src/App.tsx:31:15",
+									"data-prohibitions": "[editContent]",
+									path: "create-event",
+									element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreateEvent, {
+										"data-uid": "src/App.tsx:31:51",
+										"data-prohibitions": "[editContent]"
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+									"data-uid": "src/App.tsx:32:15",
+									"data-prohibitions": "[editContent]",
+									path: "profile",
+									element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Profile, {
+										"data-uid": "src/App.tsx:32:46",
+										"data-prohibitions": "[editContent]"
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+									"data-uid": "src/App.tsx:33:15",
+									"data-prohibitions": "[editContent]",
+									path: "subscription",
+									element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Subscription, {
+										"data-uid": "src/App.tsx:33:51",
+										"data-prohibitions": "[editContent]"
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+									"data-uid": "src/App.tsx:34:15",
+									"data-prohibitions": "[editContent]",
+									path: "*",
+									element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(NotFound, {
+										"data-uid": "src/App.tsx:34:40",
+										"data-prohibitions": "[editContent]"
+									})
 								})
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-								"data-uid": "src/App.tsx:26:13",
-								"data-prohibitions": "[editContent]",
-								path: "register",
-								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Register, {
-									"data-uid": "src/App.tsx:26:45",
-									"data-prohibitions": "[editContent]"
-								})
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-								"data-uid": "src/App.tsx:27:13",
-								"data-prohibitions": "[editContent]",
-								path: "demands",
-								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Demands, {
-									"data-uid": "src/App.tsx:27:44",
-									"data-prohibitions": "[editContent]"
-								})
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-								"data-uid": "src/App.tsx:28:13",
-								"data-prohibitions": "[editContent]",
-								path: "demands/:id",
-								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DemandDetail, {
-									"data-uid": "src/App.tsx:28:48",
-									"data-prohibitions": "[editContent]"
-								})
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-								"data-uid": "src/App.tsx:29:13",
-								"data-prohibitions": "[editContent]",
-								path: "create-event",
-								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreateEvent, {
-									"data-uid": "src/App.tsx:29:49",
-									"data-prohibitions": "[editContent]"
-								})
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-								"data-uid": "src/App.tsx:30:13",
-								"data-prohibitions": "[editContent]",
-								path: "profile",
-								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Profile, {
-									"data-uid": "src/App.tsx:30:44",
-									"data-prohibitions": "[editContent]"
-								})
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-								"data-uid": "src/App.tsx:31:13",
-								"data-prohibitions": "[editContent]",
-								path: "subscription",
-								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Subscription, {
-									"data-uid": "src/App.tsx:31:49",
-									"data-prohibitions": "[editContent]"
-								})
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-								"data-uid": "src/App.tsx:32:13",
-								"data-prohibitions": "[editContent]",
-								path: "*",
-								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(NotFound, {
-									"data-uid": "src/App.tsx:32:38",
-									"data-prohibitions": "[editContent]"
-								})
-							})
-						]
+							]
+						})
 					})
 				})
-			})
-		]
+			]
+		})
 	});
 }
 //#endregion
@@ -29940,4 +30044,4 @@ function App() {
 }));
 //#endregion
 
-//# sourceMappingURL=index-C-Y54aX7.js.map
+//# sourceMappingURL=index-BxUpA1ui.js.map

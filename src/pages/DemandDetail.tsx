@@ -24,7 +24,7 @@ const DemandDetail = () => {
       title: 'Proposta Enviada!',
       description: 'O cliente receberá sua notificação em breve.',
     })
-    navigate('/demandas')
+    navigate('/demands')
   }
 
   return (
