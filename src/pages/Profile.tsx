@@ -7,8 +7,16 @@ import { Switch } from '@/components/ui/switch'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
 import { Upload } from 'lucide-react'
+import { SERVICES } from '@/lib/services'
 
 const Profile = () => {
   const {
@@ -178,6 +186,31 @@ const Profile = () => {
               </div>
 
               <div className="space-y-2">
+                <Label>Setor Principal de Atuação</Label>
+                <Select
+                  value={localProfile.sector || ''}
+                  onValueChange={(val) => setLocalProfile({ ...localProfile, sector: val })}
+                >
+                  <SelectTrigger className="bg-background">
+                    <SelectValue placeholder="Selecione seu setor" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {SERVICES.map((s) => (
+                      <SelectItem key={s.id} value={s.id}>
+                        <div className="flex items-center gap-2">
+                          <s.icon className={`w-4 h-4 ${s.color}`} />
+                          <span>{s.label}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-[10px] text-muted-foreground mt-1">
+                  Você receberá apenas demandas relacionadas a este setor.
+                </p>
+              </div>
+
+              <div className="space-y-2">
                 <Label>Endereço da Empresa</Label>
                 <Input
                   value={localProfile.address}
@@ -187,13 +220,13 @@ const Profile = () => {
               </div>
 
               <div className="space-y-2">
-                <Label>Especialidades</Label>
+                <Label>Especialidades Adicionais</Label>
                 <Input
                   value={localProfile.specialties}
                   onChange={(e) =>
                     setLocalProfile({ ...localProfile, specialties: e.target.value })
                   }
-                  placeholder="Som, Iluminação, etc."
+                  placeholder="Ex: Flores, Arranjos..."
                 />
               </div>
 

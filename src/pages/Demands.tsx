@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { Calendar, MapPin } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
@@ -6,7 +7,17 @@ import { useApp } from '@/store/AppContext'
 import { SERVICES } from '@/lib/services'
 
 const Demands = () => {
-  const { role, demands, isSubscribed } = useApp()
+  const { role, demands, isSubscribed, companyProfile } = useApp()
+
+  const activeSector = SERVICES.find((s) => s.id === companyProfile?.sector)
+
+  const filteredDemands = useMemo(() => {
+    if (role === 'customer') return demands
+    if (!companyProfile?.sector) return []
+    return demands.filter(
+      (d) => d.requirements[companyProfile.sector as keyof typeof d.requirements],
+    )
+  }, [demands, role, companyProfile?.sector])
 
   if (role === 'company' && !isSubscribed) {
     return (
@@ -29,17 +40,25 @@ const Demands = () => {
     <div className="space-y-6 animate-slide-up pb-12">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-3xl font-bold text-foreground tracking-tight">
-          {role === 'customer' ? 'Meus Eventos' : 'Demandas Disponíveis'}
+          {role === 'customer'
+            ? 'Meus Eventos'
+            : activeSector
+              ? `Oportunidades: ${activeSector.label}`
+              : 'Demandas Disponíveis'}
         </h1>
       </div>
 
       <div className="space-y-4">
-        {demands.length === 0 ? (
+        {filteredDemands.length === 0 ? (
           <div className="text-center text-muted-foreground py-16 border-2 border-dashed border-border rounded-xl bg-secondary/30">
-            Nenhuma demanda encontrada no momento.
+            {role === 'company' && companyProfile?.sector
+              ? `Não há demandas de ${activeSector?.label.toLowerCase()} no momento.`
+              : role === 'company'
+                ? 'Configure seu setor no perfil para ver oportunidades.'
+                : 'Nenhuma demanda encontrada no momento.'}
           </div>
         ) : (
-          demands.map((demand) => (
+          filteredDemands.map((demand) => (
             <Link key={demand.id} to={`/demands/${demand.id}`} className="block">
               <Card className="hover:shadow-md transition-all duration-300 border-border group bg-card">
                 <CardContent className="p-0">

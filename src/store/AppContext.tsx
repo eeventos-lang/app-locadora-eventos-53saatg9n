@@ -38,6 +38,7 @@ export type Demand = {
 export type CompanyProfile = {
   name: string
   specialties: string
+  sector: string
   address: string
   logo: string
   observations: string
@@ -150,9 +151,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [isSubscribed, setIsSubscribed] = useState<boolean>(true)
   const [demands, setDemands] = useState<Demand[]>(MOCK_DEMANDS)
   const [companyProfile, setCompanyProfile] = useState<CompanyProfile>({
-    name: 'JD Eventos Tech',
-    specialties: 'Som, Iluminação, Painel de LED',
-    address: '',
+    name: 'JD Decorações',
+    specialties: 'Casamentos, Cenografia, Flores',
+    sector: 'decoracao',
+    address: 'Av. das Flores, 123',
     logo: '',
     observations: '',
   })
