@@ -15986,7 +15986,7 @@ function useLocation() {
 	return import_react.useContext(LocationContext).location;
 }
 var navigateEffectWarning = `You should call navigate() in a React.useEffect(), not when your component is first rendered.`;
-function useIsomorphicLayoutEffect$1(cb) {
+function useIsomorphicLayoutEffect$2(cb) {
 	if (!import_react.useContext(NavigationContext).static) import_react.useLayoutEffect(cb);
 }
 function useNavigate() {
@@ -16001,7 +16001,7 @@ function useNavigateUnstable() {
 	let { pathname: locationPathname } = useLocation();
 	let routePathnamesJson = JSON.stringify(getResolveToMatches(matches));
 	let activeRef = import_react.useRef(false);
-	useIsomorphicLayoutEffect$1(() => {
+	useIsomorphicLayoutEffect$2(() => {
 		activeRef.current = true;
 	});
 	return import_react.useCallback((to, options = {}) => {
@@ -16326,7 +16326,7 @@ function useNavigateStable() {
 	let { router } = useDataRouterContext("useNavigate");
 	let id = useCurrentRouteId("useNavigate");
 	let activeRef = import_react.useRef(false);
-	useIsomorphicLayoutEffect$1(() => {
+	useIsomorphicLayoutEffect$2(() => {
 		activeRef.current = true;
 	});
 	return import_react.useCallback(async (to, options = {}) => {
@@ -17016,7 +17016,7 @@ var NavLink = import_react.forwardRef(function NavLinkWithRef({ "aria-current": 
 	}, typeof children === "function" ? children(renderProps) : children);
 });
 NavLink.displayName = "NavLink";
-var Form = import_react.forwardRef(({ discover = "render", fetcherKey, navigate, reloadDocument, replace: replace2, state, method = defaultMethod, action, onSubmit, relative, preventScrollReset, viewTransition, unstable_defaultShouldRevalidate, ...props }, forwardedRef) => {
+var Form$1 = import_react.forwardRef(({ discover = "render", fetcherKey, navigate, reloadDocument, replace: replace2, state, method = defaultMethod, action, onSubmit, relative, preventScrollReset, viewTransition, unstable_defaultShouldRevalidate, ...props }, forwardedRef) => {
 	let { unstable_useTransitions } = import_react.useContext(NavigationContext);
 	let submit = useSubmit();
 	let formAction = useFormAction(action, { relative });
@@ -17051,7 +17051,7 @@ var Form = import_react.forwardRef(({ discover = "render", fetcherKey, navigate,
 		"data-discover": !isAbsolute && discover === "render" ? "true" : void 0
 	});
 });
-Form.displayName = "Form";
+Form$1.displayName = "Form";
 function ScrollRestoration({ getKey, storageKey, ...props }) {
 	let remixContext = import_react.useContext(FrameworkContext);
 	let { basename } = import_react.useContext(NavigationContext);
@@ -17418,6 +17418,17 @@ var ArrowRight = createLucideIcon("arrow-right", [["path", {
 	d: "m12 5 7 7-7 7",
 	key: "xquz4c"
 }]]);
+var Briefcase = createLucideIcon("briefcase", [["path", {
+	d: "M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16",
+	key: "jecpp"
+}], ["rect", {
+	width: "20",
+	height: "14",
+	x: "2",
+	y: "6",
+	rx: "2",
+	key: "i6l2r4"
+}]]);
 var Building = createLucideIcon("building", [
 	["path", {
 		d: "M12 10h.01",
@@ -17773,6 +17784,10 @@ var Lightbulb = createLucideIcon("lightbulb", [
 		key: "ceow96"
 	}]
 ]);
+var LoaderCircle = createLucideIcon("loader-circle", [["path", {
+	d: "M21 12a9 9 0 1 1-6.219-8.56",
+	key: "13zald"
+}]]);
 var LogIn = createLucideIcon("log-in", [
 	["path", {
 		d: "m10 17 5-5-5-5",
@@ -17989,6 +18004,15 @@ var UserPlus = createLucideIcon("user-plus", [
 		key: "1shjgl"
 	}]
 ]);
+var User = createLucideIcon("user", [["path", {
+	d: "M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2",
+	key: "975kel"
+}], ["circle", {
+	cx: "12",
+	cy: "7",
+	r: "4",
+	key: "17ys0d"
+}]]);
 var Users = createLucideIcon("users", [
 	["path", {
 		d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2",
@@ -18384,17 +18408,17 @@ function getElementRef$2(element) {
 }
 //#endregion
 //#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/clsx@2.1.1/node_modules/clsx/dist/clsx.mjs
-function r(e) {
+function r$1(e) {
 	var t, f, n = "";
 	if ("string" == typeof e || "number" == typeof e) n += e;
 	else if ("object" == typeof e) if (Array.isArray(e)) {
 		var o = e.length;
-		for (t = 0; t < o; t++) e[t] && (f = r(e[t])) && (n && (n += " "), n += f);
+		for (t = 0; t < o; t++) e[t] && (f = r$1(e[t])) && (n && (n += " "), n += f);
 	} else for (f in e) e[f] && (n && (n += " "), n += f);
 	return n;
 }
 function clsx() {
-	for (var e, t, f = 0, n = "", o = arguments.length; f < o; f++) (e = arguments[f]) && (t = r(e)) && (n && (n += " "), n += t);
+	for (var e, t, f = 0, n = "", o = arguments.length; f < o; f++) (e = arguments[f]) && (t = r$1(e)) && (n && (n += " "), n += t);
 	return n;
 }
 //#endregion
@@ -20037,7 +20061,7 @@ function useControllableState({ prop, defaultProp, onChange = () => {}, caller }
 	}
 	return [value, import_react.useCallback((nextValue) => {
 		if (isControlled) {
-			const value2 = isFunction(nextValue) ? nextValue(prop) : nextValue;
+			const value2 = isFunction$1(nextValue) ? nextValue(prop) : nextValue;
 			if (value2 !== prop) onChangeRef.current?.(value2);
 		} else setUncontrolledProp(nextValue);
 	}, [
@@ -20066,7 +20090,7 @@ function useUncontrolledState({ defaultProp, onChange }) {
 		onChangeRef
 	];
 }
-function isFunction(value) {
+function isFunction$1(value) {
 	return typeof value === "function";
 }
 //#endregion
@@ -20825,7 +20849,7 @@ function useCallbackRef(initialValue, callback) {
 }
 //#endregion
 //#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/use-callback-ref@1.3.3_@types+react@19.2.14_react@19.2.4/node_modules/use-callback-ref/dist/es2015/useMergeRef.js
-var useIsomorphicLayoutEffect = typeof window !== "undefined" ? import_react.useLayoutEffect : import_react.useEffect;
+var useIsomorphicLayoutEffect$1 = typeof window !== "undefined" ? import_react.useLayoutEffect : import_react.useEffect;
 var currentValues = /* @__PURE__ */ new WeakMap();
 /**
 * Merges two or more refs together providing a single interface to set their value
@@ -20847,7 +20871,7 @@ function useMergeRefs(refs, defaultValue) {
 			return assignRef(ref, newValue);
 		});
 	});
-	useIsomorphicLayoutEffect(function() {
+	useIsomorphicLayoutEffect$1(function() {
 		var oldValue = currentValues.get(callbackRef);
 		if (oldValue) {
 			var prevRefs_1 = new Set(oldValue);
@@ -21110,7 +21134,7 @@ var zeroGap = {
 	right: 0,
 	gap: 0
 };
-var parse = function(x) {
+var parse$2 = function(x) {
 	return parseInt(x || "", 10) || 0;
 };
 var getOffset = function(gapMode) {
@@ -21119,9 +21143,9 @@ var getOffset = function(gapMode) {
 	var top = cs[gapMode === "padding" ? "paddingTop" : "marginTop"];
 	var right = cs[gapMode === "padding" ? "paddingRight" : "marginRight"];
 	return [
-		parse(left),
-		parse(top),
-		parse(right)
+		parse$2(left),
+		parse$2(top),
+		parse$2(right)
 	];
 };
 var getGapWidth = function(gapMode) {
@@ -22705,1013 +22729,5459 @@ function Login() {
 	});
 }
 //#endregion
-//#region src/pages/Register.tsx
-function Register() {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		"data-uid": "src/pages/Register.tsx:17:5",
-		"data-prohibitions": "[]",
-		className: "flex min-h-[80vh] items-center justify-center py-12 px-4",
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-			"data-uid": "src/pages/Register.tsx:18:7",
-			"data-prohibitions": "[]",
-			className: "w-full max-w-md mx-auto shadow-lg border-primary/10",
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-					"data-uid": "src/pages/Register.tsx:19:9",
-					"data-prohibitions": "[]",
-					className: "space-y-4 flex flex-col items-center text-center pt-8",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-						"data-uid": "src/pages/Register.tsx:20:11",
-						"data-prohibitions": "[]",
-						to: "/",
-						className: "transition-transform hover:scale-105",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-							"data-uid": "src/pages/Register.tsx:21:13",
-							"data-prohibitions": "[editContent]",
-							src: e_eventos_novo_62817_default,
-							alt: "e-eventos",
-							className: "h-24 w-24 rounded-[1.5rem] object-contain shadow-md bg-white/5 p-2 border border-white/10"
-						})
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/Register.tsx:27:11",
-						"data-prohibitions": "[]",
-						className: "space-y-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-							"data-uid": "src/pages/Register.tsx:28:13",
-							"data-prohibitions": "[]",
-							className: "text-2xl font-extrabold tracking-tight",
-							children: "Criar Conta"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-							"data-uid": "src/pages/Register.tsx:29:13",
-							"data-prohibitions": "[]",
-							className: "text-base",
-							children: "Junte-se ao e-eventos e comece agora"
-						})]
-					})]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-					"data-uid": "src/pages/Register.tsx:34:9",
-					"data-prohibitions": "[]",
-					className: "space-y-4",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/Register.tsx:35:11",
-							"data-prohibitions": "[]",
-							className: "space-y-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-								"data-uid": "src/pages/Register.tsx:36:13",
-								"data-prohibitions": "[]",
-								htmlFor: "name",
-								children: "Nome completo"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-								"data-uid": "src/pages/Register.tsx:37:13",
-								"data-prohibitions": "[editContent]",
-								id: "name",
-								type: "text",
-								placeholder: "João Silva",
-								required: true,
-								className: "h-11"
-							})]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/Register.tsx:39:11",
-							"data-prohibitions": "[]",
-							className: "space-y-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-								"data-uid": "src/pages/Register.tsx:40:13",
-								"data-prohibitions": "[]",
-								htmlFor: "email",
-								children: "Email"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-								"data-uid": "src/pages/Register.tsx:41:13",
-								"data-prohibitions": "[editContent]",
-								id: "email",
-								type: "email",
-								placeholder: "m@exemplo.com",
-								required: true,
-								className: "h-11"
-							})]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/Register.tsx:43:11",
-							"data-prohibitions": "[]",
-							className: "space-y-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-								"data-uid": "src/pages/Register.tsx:44:13",
-								"data-prohibitions": "[]",
-								htmlFor: "password",
-								children: "Senha"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-								"data-uid": "src/pages/Register.tsx:45:13",
-								"data-prohibitions": "[editContent]",
-								id: "password",
-								type: "password",
-								required: true,
-								className: "h-11"
-							})]
-						})
-					]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardFooter, {
-					"data-uid": "src/pages/Register.tsx:48:9",
-					"data-prohibitions": "[]",
-					className: "flex flex-col space-y-4 pb-8",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-						"data-uid": "src/pages/Register.tsx:49:11",
-						"data-prohibitions": "[]",
-						className: "w-full h-11 text-md",
-						children: "Cadastrar"
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/Register.tsx:50:11",
-						"data-prohibitions": "[]",
-						className: "text-sm text-center text-muted-foreground",
-						children: [
-							"Já tem uma conta?",
-							" ",
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-								"data-uid": "src/pages/Register.tsx:52:13",
-								"data-prohibitions": "[]",
-								to: "/login",
-								className: "font-semibold text-primary hover:underline",
-								children: "Fazer login"
-							})
-						]
-					})]
-				})
-			]
-		})
-	});
-}
-//#endregion
-//#region src/components/ui/badge.tsx
-var badgeVariants = cva("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2", {
-	variants: { variant: {
-		default: "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
-		secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-		destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-		outline: "text-foreground"
-	} },
-	defaultVariants: { variant: "default" }
-});
-function Badge({ className, variant, ...props }) {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		"data-uid": "src/components/ui/badge.tsx:30:10",
-		"data-prohibitions": "[editContent]",
-		className: cn$1(badgeVariants({ variant }), className),
-		...props
-	});
-}
-//#endregion
-//#region src/store/AppContext.tsx
-var MOCK_DEMANDS = [{
-	id: "d1",
-	title: "Casamento Sítio das Palmeiras",
-	budget: 65e3,
-	guests: 300,
-	date: "2026-05-20",
-	location: "São Paulo, SP",
-	requirements: {
-		sound: true,
-		light: true,
-		led: false,
-		grid: true,
-		buffet: true,
-		drinks: false,
-		cocktails: true,
-		photo: false,
-		video: false,
-		singer: false,
-		band: true,
-		dj: true,
-		space: false,
-		ceremonial: true,
-		security: false,
-		details: "Preciso de PA para 300 pessoas, iluminação cênica na pista, grid Q30 e banda para festa."
-	},
-	status: "open",
-	proposals: 2,
-	createdAt: (/* @__PURE__ */ new Date()).toISOString()
-}, {
-	id: "d2",
-	title: "Festa Corporativa Tech",
-	budget: 95e3,
-	guests: 150,
-	date: "2026-06-15",
-	location: "Campinas, SP",
-	requirements: {
-		sound: true,
-		light: true,
-		led: true,
-		grid: true,
-		buffet: true,
-		drinks: true,
-		cocktails: false,
-		photo: true,
-		video: true,
-		singer: false,
-		band: false,
-		dj: true,
-		space: true,
-		ceremonial: false,
-		security: true,
-		details: "Painel de LED 4x3 indoor, som para DJ, luz de palco completa e buffet completo."
-	},
-	status: "open",
-	proposals: 5,
-	createdAt: (/* @__PURE__ */ new Date()).toISOString()
-}];
-var AppContext = (0, import_react.createContext)(void 0);
-var AppProvider = ({ children }) => {
-	const [role, setRole] = (0, import_react.useState)("customer");
-	const [isSubscribed, setIsSubscribed] = (0, import_react.useState)(true);
-	const [demands, setDemands] = (0, import_react.useState)(MOCK_DEMANDS);
-	const [companyProfile, setCompanyProfile] = (0, import_react.useState)({
-		name: "JD Eventos Tech",
-		specialties: "Som, Iluminação, Painel de LED",
-		address: "",
-		logo: "",
-		observations: ""
-	});
-	const addDemand = (demandData) => {
-		setDemands([{
-			...demandData,
-			id: Math.random().toString(36).substring(7),
-			status: "open",
-			proposals: 0,
-			createdAt: (/* @__PURE__ */ new Date()).toISOString()
-		}, ...demands]);
-	};
-	const updateCompanyProfile = (profile) => {
-		setCompanyProfile((prev) => ({
-			...prev,
-			...profile
-		}));
-	};
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppContext.Provider, {
-		"data-uid": "src/store/AppContext.tsx:148:5",
-		"data-prohibitions": "[editContent]",
-		value: {
-			role,
-			setRole,
-			isSubscribed,
-			setIsSubscribed,
-			demands,
-			addDemand,
-			companyProfile,
-			updateCompanyProfile
-		},
-		children
-	});
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/react-hook-form@7.71.2_react@19.2.4/node_modules/react-hook-form/dist/index.esm.mjs
+var isCheckBoxInput = (element) => element.type === "checkbox";
+var isDateObject = (value) => value instanceof Date;
+var isNullOrUndefined = (value) => value == null;
+var isObjectType = (value) => typeof value === "object";
+var isObject$1 = (value) => !isNullOrUndefined(value) && !Array.isArray(value) && isObjectType(value) && !isDateObject(value);
+var getEventValue = (event) => isObject$1(event) && event.target ? isCheckBoxInput(event.target) ? event.target.checked : event.target.value : event;
+var getNodeParentName = (name) => name.substring(0, name.search(/\.\d+(\.|$)/)) || name;
+var isNameInFieldArray = (names, name) => names.has(getNodeParentName(name));
+var isPlainObject$1 = (tempObject) => {
+	const prototypeCopy = tempObject.constructor && tempObject.constructor.prototype;
+	return isObject$1(prototypeCopy) && prototypeCopy.hasOwnProperty("isPrototypeOf");
 };
-var useApp = () => {
-	const context = (0, import_react.useContext)(AppContext);
-	if (context === void 0) throw new Error("useApp must be used within an AppProvider");
-	return context;
+var isWeb = typeof window !== "undefined" && typeof window.HTMLElement !== "undefined" && typeof document !== "undefined";
+function cloneObject(data) {
+	if (data instanceof Date) return new Date(data);
+	const isFileListInstance = typeof FileList !== "undefined" && data instanceof FileList;
+	if (isWeb && (data instanceof Blob || isFileListInstance)) return data;
+	const isArray = Array.isArray(data);
+	if (!isArray && !(isObject$1(data) && isPlainObject$1(data))) return data;
+	const copy = isArray ? [] : Object.create(Object.getPrototypeOf(data));
+	for (const key in data) if (Object.prototype.hasOwnProperty.call(data, key)) copy[key] = cloneObject(data[key]);
+	return copy;
+}
+var isKey = (value) => /^\w*$/.test(value);
+var isUndefined = (val) => val === void 0;
+var compact = (value) => Array.isArray(value) ? value.filter(Boolean) : [];
+var stringToPath = (input) => compact(input.replace(/["|']|\]/g, "").split(/\.|\[/));
+var get = (object, path, defaultValue) => {
+	if (!path || !isObject$1(object)) return defaultValue;
+	const result = (isKey(path) ? [path] : stringToPath(path)).reduce((result, key) => isNullOrUndefined(result) ? result : result[key], object);
+	return isUndefined(result) || result === object ? isUndefined(object[path]) ? defaultValue : object[path] : result;
 };
-//#endregion
-//#region src/lib/services.ts
-var SERVICES = [
-	{
-		id: "sound",
-		label: "Som",
-		icon: Speaker,
-		color: "text-blue-400",
-		bg: "bg-blue-500/10"
-	},
-	{
-		id: "light",
-		label: "Luz",
-		icon: Lightbulb,
-		color: "text-yellow-400",
-		bg: "bg-yellow-500/10"
-	},
-	{
-		id: "led",
-		label: "Painel LED",
-		icon: Monitor,
-		color: "text-purple-400",
-		bg: "bg-purple-500/10"
-	},
-	{
-		id: "grid",
-		label: "Estrutura",
-		icon: Layers,
-		color: "text-gray-400",
-		bg: "bg-gray-500/10"
-	},
-	{
-		id: "buffet",
-		label: "Buffet",
-		icon: Utensils,
-		color: "text-orange-400",
-		bg: "bg-orange-500/10"
-	},
-	{
-		id: "drinks",
-		label: "Bebidas",
-		icon: GlassWater,
-		color: "text-cyan-400",
-		bg: "bg-cyan-500/10"
-	},
-	{
-		id: "cocktails",
-		label: "Bar Drinks",
-		icon: Wine,
-		color: "text-pink-400",
-		bg: "bg-pink-500/10"
-	},
-	{
-		id: "photo",
-		label: "Fotografia",
-		icon: Camera,
-		color: "text-teal-400",
-		bg: "bg-teal-500/10"
-	},
-	{
-		id: "video",
-		label: "Videomaker",
-		icon: Video,
-		color: "text-red-400",
-		bg: "bg-red-500/10"
-	},
-	{
-		id: "singer",
-		label: "Cantor",
-		icon: Mic,
-		color: "text-indigo-400",
-		bg: "bg-indigo-500/10"
-	},
-	{
-		id: "band",
-		label: "Banda",
-		icon: Music,
-		color: "text-rose-400",
-		bg: "bg-rose-500/10"
-	},
-	{
-		id: "dj",
-		label: "DJ",
-		icon: Disc,
-		color: "text-violet-400",
-		bg: "bg-violet-500/10"
-	},
-	{
-		id: "space",
-		label: "Espaço",
-		icon: Building,
-		color: "text-emerald-400",
-		bg: "bg-emerald-500/10"
-	},
-	{
-		id: "ceremonial",
-		label: "Cerimonial",
-		icon: ClipboardList,
-		color: "text-amber-400",
-		bg: "bg-amber-500/10"
-	},
-	{
-		id: "security",
-		label: "Seguranças",
-		icon: Shield,
-		color: "text-slate-400",
-		bg: "bg-slate-500/10"
+var isBoolean = (value) => typeof value === "boolean";
+var isFunction = (value) => typeof value === "function";
+var set = (object, path, value) => {
+	let index = -1;
+	const tempPath = isKey(path) ? [path] : stringToPath(path);
+	const length = tempPath.length;
+	const lastIndex = length - 1;
+	while (++index < length) {
+		const key = tempPath[index];
+		let newValue = value;
+		if (index !== lastIndex) {
+			const objValue = object[key];
+			newValue = isObject$1(objValue) || Array.isArray(objValue) ? objValue : !isNaN(+tempPath[index + 1]) ? [] : {};
+		}
+		if (key === "__proto__" || key === "constructor" || key === "prototype") return;
+		object[key] = newValue;
+		object = object[key];
 	}
-];
-//#endregion
-//#region src/pages/Demands.tsx
-var Demands = () => {
-	const { role, demands, isSubscribed } = useApp();
-	if (role === "company" && !isSubscribed) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/Demands.tsx:13:7",
-		"data-prohibitions": "[]",
-		className: "p-6 flex flex-col items-center justify-center min-h-[70vh] text-center animate-slide-up",
-		children: [
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-				"data-uid": "src/pages/Demands.tsx:14:9",
-				"data-prohibitions": "[]",
-				className: "text-2xl font-bold mb-3 text-foreground tracking-tight",
-				children: "Acesso Restrito"
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-				"data-uid": "src/pages/Demands.tsx:15:9",
-				"data-prohibitions": "[]",
-				className: "text-muted-foreground mb-8 max-w-md mx-auto leading-relaxed",
-				children: "Ative sua assinatura premium para visualizar todas as demandas disponíveis na plataforma."
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-				"data-uid": "src/pages/Demands.tsx:18:9",
-				"data-prohibitions": "[]",
-				to: "/subscription",
-				className: "px-8 py-3 bg-primary text-primary-foreground rounded-lg font-medium shadow-md hover:bg-primary/90 transition-all",
-				children: "Assinar Agora"
-			})
-		]
-	});
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/Demands.tsx:29:5",
-		"data-prohibitions": "[editContent]",
-		className: "space-y-6 animate-slide-up pb-12",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			"data-uid": "src/pages/Demands.tsx:30:7",
-			"data-prohibitions": "[editContent]",
-			className: "flex items-center justify-between mb-4",
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-				"data-uid": "src/pages/Demands.tsx:31:9",
-				"data-prohibitions": "[editContent]",
-				className: "text-3xl font-bold text-foreground tracking-tight",
-				children: role === "customer" ? "Meus Eventos" : "Demandas Disponíveis"
-			})
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			"data-uid": "src/pages/Demands.tsx:36:7",
-			"data-prohibitions": "[editContent]",
-			className: "space-y-4",
-			children: demands.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/Demands.tsx:38:11",
-				"data-prohibitions": "[]",
-				className: "text-center text-muted-foreground py-16 border-2 border-dashed border-border rounded-xl bg-secondary/30",
-				children: "Nenhuma demanda encontrada no momento."
-			}) : demands.map((demand) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-				"data-uid": "src/pages/Demands.tsx:43:13",
-				"data-prohibitions": "[editContent]",
-				to: `/demands/${demand.id}`,
-				className: "block",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
-					"data-uid": "src/pages/Demands.tsx:44:15",
-					"data-prohibitions": "[editContent]",
-					className: "hover:shadow-md transition-all duration-300 border-border group bg-card",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-						"data-uid": "src/pages/Demands.tsx:45:17",
-						"data-prohibitions": "[editContent]",
-						className: "p-0",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/Demands.tsx:46:19",
-							"data-prohibitions": "[editContent]",
-							className: "p-5 md:p-6 space-y-4",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Demands.tsx:47:21",
-									"data-prohibitions": "[editContent]",
-									className: "flex justify-between items-start gap-4",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-										"data-uid": "src/pages/Demands.tsx:48:23",
-										"data-prohibitions": "[editContent]",
-										className: "font-semibold text-foreground text-lg md:text-xl leading-tight group-hover:text-primary transition-colors",
-										children: demand.title
-									}), demand.status === "open" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
-										"data-uid": "src/pages/Demands.tsx:52:25",
-										"data-prohibitions": "[]",
-										variant: "secondary",
-										className: "text-[10px] uppercase tracking-wider font-bold bg-primary/10 text-primary hover:bg-primary/20 shrink-0",
-										children: "Aberto"
-									})]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Demands.tsx:61:21",
-									"data-prohibitions": "[editContent]",
-									className: "flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-sm text-muted-foreground",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/Demands.tsx:62:23",
-										"data-prohibitions": "[editContent]",
-										className: "flex items-center gap-2",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, {
-											"data-uid": "src/pages/Demands.tsx:63:25",
-											"data-prohibitions": "[editContent]",
-											className: "w-4 h-4"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											"data-uid": "src/pages/Demands.tsx:64:25",
-											"data-prohibitions": "[editContent]",
-											className: "font-medium",
-											children: new Date(demand.date).toLocaleDateString("pt-BR")
-										})]
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/Demands.tsx:68:23",
-										"data-prohibitions": "[editContent]",
-										className: "flex items-center gap-2",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, {
-											"data-uid": "src/pages/Demands.tsx:69:25",
-											"data-prohibitions": "[editContent]",
-											className: "w-4 h-4"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											"data-uid": "src/pages/Demands.tsx:70:25",
-											"data-prohibitions": "[editContent]",
-											className: "font-medium",
-											children: demand.location
-										})]
-									})]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Demands.tsx:74:21",
-									"data-prohibitions": "[editContent]",
-									className: "flex items-center justify-between pt-5 border-t border-border",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										"data-uid": "src/pages/Demands.tsx:75:23",
-										"data-prohibitions": "[editContent]",
-										className: "flex gap-2 items-center flex-wrap",
-										children: (() => {
-											const activeReqs = SERVICES.filter((s) => demand.requirements[s.id]);
-											return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [activeReqs.slice(0, 4).map((req) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												"data-uid": "src/pages/Demands.tsx:83:33",
-												"data-prohibitions": "[editContent]",
-												className: `p-2 ${req.bg} rounded-lg`,
-												title: req.label,
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(req.icon, {
-													"data-uid": "src/pages/Demands.tsx:88:35",
-													"data-prohibitions": "[editContent]",
-													className: `w-4 h-4 ${req.color}`
-												})
-											}, req.id)), activeReqs.length > 4 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												"data-uid": "src/pages/Demands.tsx:92:33",
-												"data-prohibitions": "[editContent]",
-												className: "p-2 bg-secondary rounded-lg flex items-center justify-center text-xs font-bold text-muted-foreground min-w-[32px]",
-												children: ["+", activeReqs.length - 4]
-											})] });
-										})()
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/Demands.tsx:100:23",
-										"data-prohibitions": "[editContent]",
-										className: "text-right",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-											"data-uid": "src/pages/Demands.tsx:101:25",
-											"data-prohibitions": "[editContent]",
-											className: "text-[10px] text-muted-foreground mb-1 uppercase tracking-wider font-semibold",
-											children: role === "customer" ? "Orçamento" : "Valor Líquido"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-											"data-uid": "src/pages/Demands.tsx:104:25",
-											"data-prohibitions": "[editContent]",
-											className: "text-foreground font-bold text-lg md:text-xl",
-											children: new Intl.NumberFormat("pt-BR", {
-												style: "currency",
-												currency: "BRL"
-											}).format(role === "customer" ? demand.budget : demand.budget * .9)
-										})]
-									})]
-								})
-							]
-						})
-					})
-				})
-			}, demand.id))
-		})]
-	});
 };
-//#endregion
-//#region src/hooks/use-toast.ts
-var TOAST_LIMIT = 1;
-var TOAST_REMOVE_DELAY = 1e6;
-var count = 0;
-function genId() {
-	count = (count + 1) % Number.MAX_SAFE_INTEGER;
-	return count.toString();
-}
-var toastTimeouts = /* @__PURE__ */ new Map();
-var addToRemoveQueue = (toastId) => {
-	if (toastTimeouts.has(toastId)) return;
-	const timeout = setTimeout(() => {
-		toastTimeouts.delete(toastId);
-		dispatch({
-			type: "REMOVE_TOAST",
-			toastId
-		});
-	}, TOAST_REMOVE_DELAY);
-	toastTimeouts.set(toastId, timeout);
+var EVENTS = {
+	BLUR: "blur",
+	FOCUS_OUT: "focusout",
+	CHANGE: "change"
 };
-var reducer = (state, action) => {
-	switch (action.type) {
-		case "ADD_TOAST": return {
-			...state,
-			toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT)
-		};
-		case "UPDATE_TOAST": return {
-			...state,
-			toasts: state.toasts.map((t) => t.id === action.toast.id ? {
-				...t,
-				...action.toast
-			} : t)
-		};
-		case "DISMISS_TOAST": {
-			const { toastId } = action;
-			if (toastId) addToRemoveQueue(toastId);
-			else state.toasts.forEach((toast) => {
-				addToRemoveQueue(toast.id);
+var VALIDATION_MODE = {
+	onBlur: "onBlur",
+	onChange: "onChange",
+	onSubmit: "onSubmit",
+	onTouched: "onTouched",
+	all: "all"
+};
+var INPUT_VALIDATION_RULES = {
+	max: "max",
+	min: "min",
+	maxLength: "maxLength",
+	minLength: "minLength",
+	pattern: "pattern",
+	required: "required",
+	validate: "validate"
+};
+/**
+* Separate context for `control` to prevent unnecessary rerenders.
+* Internal hooks that only need control use this instead of full form context.
+*/
+var HookFormControlContext = import_react.createContext(null);
+HookFormControlContext.displayName = "HookFormControlContext";
+/**
+* @internal Internal hook to access only control from context.
+*/
+var useFormControlContext = () => import_react.useContext(HookFormControlContext);
+var getProxyFormState = (formState, control, localProxyFormState, isRoot = true) => {
+	const result = { defaultValues: control._defaultValues };
+	for (const key in formState) Object.defineProperty(result, key, { get: () => {
+		const _key = key;
+		if (control._proxyFormState[_key] !== VALIDATION_MODE.all) control._proxyFormState[_key] = !isRoot || VALIDATION_MODE.all;
+		localProxyFormState && (localProxyFormState[_key] = true);
+		return formState[_key];
+	} });
+	return result;
+};
+var useIsomorphicLayoutEffect = typeof window !== "undefined" ? import_react.useLayoutEffect : import_react.useEffect;
+/**
+* This custom hook allows you to subscribe to each form state, and isolate the re-render at the custom hook level. It has its scope in terms of form state subscription, so it would not affect other useFormState and useForm. Using this hook can reduce the re-render impact on large and complex form application.
+*
+* @remarks
+* [API](https://react-hook-form.com/docs/useformstate) • [Demo](https://codesandbox.io/s/useformstate-75xly)
+*
+* @param props - include options on specify fields to subscribe. {@link UseFormStateReturn}
+*
+* @example
+* ```tsx
+* function App() {
+*   const { register, handleSubmit, control } = useForm({
+*     defaultValues: {
+*     firstName: "firstName"
+*   }});
+*   const { dirtyFields } = useFormState({
+*     control
+*   });
+*   const onSubmit = (data) => console.log(data);
+*
+*   return (
+*     <form onSubmit={handleSubmit(onSubmit)}>
+*       <input {...register("firstName")} placeholder="First Name" />
+*       {dirtyFields.firstName && <p>Field is dirty.</p>}
+*       <input type="submit" />
+*     </form>
+*   );
+* }
+* ```
+*/
+function useFormState(props) {
+	const formControl = useFormControlContext();
+	const { control = formControl, disabled, name, exact } = props || {};
+	const [formState, updateFormState] = import_react.useState(control._formState);
+	const _localProxyFormState = import_react.useRef({
+		isDirty: false,
+		isLoading: false,
+		dirtyFields: false,
+		touchedFields: false,
+		validatingFields: false,
+		isValidating: false,
+		isValid: false,
+		errors: false
+	});
+	useIsomorphicLayoutEffect(() => control._subscribe({
+		name,
+		formState: _localProxyFormState.current,
+		exact,
+		callback: (formState) => {
+			!disabled && updateFormState({
+				...control._formState,
+				...formState
 			});
-			return {
-				...state,
-				toasts: state.toasts.map((t) => t.id === toastId || toastId === void 0 ? {
-					...t,
-					open: false
-				} : t)
-			};
 		}
-		case "REMOVE_TOAST":
-			if (action.toastId === void 0) return {
-				...state,
-				toasts: []
-			};
-			return {
-				...state,
-				toasts: state.toasts.filter((t) => t.id !== action.toastId)
-			};
-	}
-};
-var listeners = [];
-var memoryState = { toasts: [] };
-function dispatch(action) {
-	memoryState = reducer(memoryState, action);
-	listeners.forEach((listener) => {
-		listener(memoryState);
-	});
+	}), [
+		name,
+		disabled,
+		exact
+	]);
+	import_react.useEffect(() => {
+		_localProxyFormState.current.isValid && control._setValid(true);
+	}, [control]);
+	return import_react.useMemo(() => getProxyFormState(formState, control, _localProxyFormState.current, false), [formState, control]);
 }
-function toast$1({ ...props }) {
-	const id = genId();
-	const update = (props) => dispatch({
-		type: "UPDATE_TOAST",
-		toast: {
-			...props,
-			id
+var isString = (value) => typeof value === "string";
+var generateWatchOutput = (names, _names, formValues, isGlobal, defaultValue) => {
+	if (isString(names)) {
+		isGlobal && _names.watch.add(names);
+		return get(formValues, names, defaultValue);
+	}
+	if (Array.isArray(names)) return names.map((fieldName) => (isGlobal && _names.watch.add(fieldName), get(formValues, fieldName)));
+	isGlobal && (_names.watchAll = true);
+	return formValues;
+};
+var isPrimitive = (value) => isNullOrUndefined(value) || !isObjectType(value);
+function deepEqual$1(object1, object2, _internal_visited = /* @__PURE__ */ new WeakSet()) {
+	if (isPrimitive(object1) || isPrimitive(object2)) return Object.is(object1, object2);
+	if (isDateObject(object1) && isDateObject(object2)) return Object.is(object1.getTime(), object2.getTime());
+	const keys1 = Object.keys(object1);
+	const keys2 = Object.keys(object2);
+	if (keys1.length !== keys2.length) return false;
+	if (_internal_visited.has(object1) || _internal_visited.has(object2)) return true;
+	_internal_visited.add(object1);
+	_internal_visited.add(object2);
+	for (const key of keys1) {
+		const val1 = object1[key];
+		if (!keys2.includes(key)) return false;
+		if (key !== "ref") {
+			const val2 = object2[key];
+			if (isDateObject(val1) && isDateObject(val2) || isObject$1(val1) && isObject$1(val2) || Array.isArray(val1) && Array.isArray(val2) ? !deepEqual$1(val1, val2, _internal_visited) : !Object.is(val1, val2)) return false;
 		}
+	}
+	return true;
+}
+/**
+* Custom hook to subscribe to field change and isolate re-rendering at the component level.
+*
+* @remarks
+*
+* [API](https://react-hook-form.com/docs/usewatch) • [Demo](https://codesandbox.io/s/react-hook-form-v7-ts-usewatch-h9i5e)
+*
+* @example
+* ```tsx
+* const { control } = useForm();
+* const values = useWatch({
+*   name: "fieldName"
+*   control,
+* })
+* ```
+*/
+function useWatch(props) {
+	const formControl = useFormControlContext();
+	const { control = formControl, name, defaultValue, disabled, exact, compute } = props || {};
+	const _defaultValue = import_react.useRef(defaultValue);
+	const _compute = import_react.useRef(compute);
+	const _computeFormValues = import_react.useRef(void 0);
+	const _prevControl = import_react.useRef(control);
+	const _prevName = import_react.useRef(name);
+	_compute.current = compute;
+	const [value, updateValue] = import_react.useState(() => {
+		const defaultValue = control._getWatch(name, _defaultValue.current);
+		return _compute.current ? _compute.current(defaultValue) : defaultValue;
 	});
-	const dismiss = () => dispatch({
-		type: "DISMISS_TOAST",
-		toastId: id
+	const getCurrentOutput = import_react.useCallback((values) => {
+		const formValues = generateWatchOutput(name, control._names, values || control._formValues, false, _defaultValue.current);
+		return _compute.current ? _compute.current(formValues) : formValues;
+	}, [
+		control._formValues,
+		control._names,
+		name
+	]);
+	const refreshValue = import_react.useCallback((values) => {
+		if (!disabled) {
+			const formValues = generateWatchOutput(name, control._names, values || control._formValues, false, _defaultValue.current);
+			if (_compute.current) {
+				const computedFormValues = _compute.current(formValues);
+				if (!deepEqual$1(computedFormValues, _computeFormValues.current)) {
+					updateValue(computedFormValues);
+					_computeFormValues.current = computedFormValues;
+				}
+			} else updateValue(formValues);
+		}
+	}, [
+		control._formValues,
+		control._names,
+		disabled,
+		name
+	]);
+	useIsomorphicLayoutEffect(() => {
+		if (_prevControl.current !== control || !deepEqual$1(_prevName.current, name)) {
+			_prevControl.current = control;
+			_prevName.current = name;
+			refreshValue();
+		}
+		return control._subscribe({
+			name,
+			formState: { values: true },
+			exact,
+			callback: (formState) => {
+				refreshValue(formState.values);
+			}
+		});
+	}, [
+		control,
+		exact,
+		name,
+		refreshValue
+	]);
+	import_react.useEffect(() => control._removeUnmounted());
+	const controlChanged = _prevControl.current !== control;
+	const prevName = _prevName.current;
+	const computedOutput = import_react.useMemo(() => {
+		if (disabled) return null;
+		const nameChanged = !controlChanged && !deepEqual$1(prevName, name);
+		return controlChanged || nameChanged ? getCurrentOutput() : null;
+	}, [
+		disabled,
+		controlChanged,
+		name,
+		prevName,
+		getCurrentOutput
+	]);
+	return computedOutput !== null ? computedOutput : value;
+}
+/**
+* Custom hook to work with controlled component, this function provide you with both form and field level state. Re-render is isolated at the hook level.
+*
+* @remarks
+* [API](https://react-hook-form.com/docs/usecontroller) • [Demo](https://codesandbox.io/s/usecontroller-0o8px)
+*
+* @param props - the path name to the form field value, and validation rules.
+*
+* @returns field properties, field and form state. {@link UseControllerReturn}
+*
+* @example
+* ```tsx
+* function Input(props) {
+*   const { field, fieldState, formState } = useController(props);
+*   return (
+*     <div>
+*       <input {...field} placeholder={props.name} />
+*       <p>{fieldState.isTouched && "Touched"}</p>
+*       <p>{formState.isSubmitted ? "submitted" : ""}</p>
+*     </div>
+*   );
+* }
+* ```
+*/
+function useController(props) {
+	const formControl = useFormControlContext();
+	const { name, disabled, control = formControl, shouldUnregister, defaultValue, exact = true } = props;
+	const isArrayField = isNameInFieldArray(control._names.array, name);
+	const value = useWatch({
+		control,
+		name,
+		defaultValue: import_react.useMemo(() => get(control._formValues, name, get(control._defaultValues, name, defaultValue)), [
+			control,
+			name,
+			defaultValue
+		]),
+		exact
 	});
-	dispatch({
-		type: "ADD_TOAST",
-		toast: {
-			...props,
-			id,
-			open: true,
-			onOpenChange: (open) => {
-				if (!open) dismiss();
+	const formState = useFormState({
+		control,
+		name,
+		exact
+	});
+	const _props = import_react.useRef(props);
+	const _previousNameRef = import_react.useRef(void 0);
+	const _registerProps = import_react.useRef(control.register(name, {
+		...props.rules,
+		value,
+		...isBoolean(props.disabled) ? { disabled: props.disabled } : {}
+	}));
+	_props.current = props;
+	const fieldState = import_react.useMemo(() => Object.defineProperties({}, {
+		invalid: {
+			enumerable: true,
+			get: () => !!get(formState.errors, name)
+		},
+		isDirty: {
+			enumerable: true,
+			get: () => !!get(formState.dirtyFields, name)
+		},
+		isTouched: {
+			enumerable: true,
+			get: () => !!get(formState.touchedFields, name)
+		},
+		isValidating: {
+			enumerable: true,
+			get: () => !!get(formState.validatingFields, name)
+		},
+		error: {
+			enumerable: true,
+			get: () => get(formState.errors, name)
+		}
+	}), [formState, name]);
+	const onChange = import_react.useCallback((event) => _registerProps.current.onChange({
+		target: {
+			value: getEventValue(event),
+			name
+		},
+		type: EVENTS.CHANGE
+	}), [name]);
+	const onBlur = import_react.useCallback(() => _registerProps.current.onBlur({
+		target: {
+			value: get(control._formValues, name),
+			name
+		},
+		type: EVENTS.BLUR
+	}), [name, control._formValues]);
+	const ref = import_react.useCallback((elm) => {
+		const field = get(control._fields, name);
+		if (field && field._f && elm) field._f.ref = {
+			focus: () => isFunction(elm.focus) && elm.focus(),
+			select: () => isFunction(elm.select) && elm.select(),
+			setCustomValidity: (message) => isFunction(elm.setCustomValidity) && elm.setCustomValidity(message),
+			reportValidity: () => isFunction(elm.reportValidity) && elm.reportValidity()
+		};
+	}, [control._fields, name]);
+	const field = import_react.useMemo(() => ({
+		name,
+		value,
+		...isBoolean(disabled) || formState.disabled ? { disabled: formState.disabled || disabled } : {},
+		onChange,
+		onBlur,
+		ref
+	}), [
+		name,
+		disabled,
+		formState.disabled,
+		onChange,
+		onBlur,
+		ref,
+		value
+	]);
+	import_react.useEffect(() => {
+		const _shouldUnregisterField = control._options.shouldUnregister || shouldUnregister;
+		const previousName = _previousNameRef.current;
+		if (previousName && previousName !== name && !isArrayField) control.unregister(previousName);
+		control.register(name, {
+			..._props.current.rules,
+			...isBoolean(_props.current.disabled) ? { disabled: _props.current.disabled } : {}
+		});
+		const updateMounted = (name, value) => {
+			const field = get(control._fields, name);
+			if (field && field._f) field._f.mount = value;
+		};
+		updateMounted(name, true);
+		if (_shouldUnregisterField) {
+			const value = cloneObject(get(control._options.defaultValues, name, _props.current.defaultValue));
+			set(control._defaultValues, name, value);
+			if (isUndefined(get(control._formValues, name))) set(control._formValues, name, value);
+		}
+		!isArrayField && control.register(name);
+		_previousNameRef.current = name;
+		return () => {
+			(isArrayField ? _shouldUnregisterField && !control._state.action : _shouldUnregisterField) ? control.unregister(name) : updateMounted(name, false);
+		};
+	}, [
+		name,
+		control,
+		isArrayField,
+		shouldUnregister
+	]);
+	import_react.useEffect(() => {
+		control._setDisabledField({
+			disabled,
+			name
+		});
+	}, [
+		disabled,
+		name,
+		control
+	]);
+	return import_react.useMemo(() => ({
+		field,
+		formState,
+		fieldState
+	}), [
+		field,
+		formState,
+		fieldState
+	]);
+}
+/**
+* Component based on `useController` hook to work with controlled component.
+*
+* @remarks
+* [API](https://react-hook-form.com/docs/usecontroller/controller) • [Demo](https://codesandbox.io/s/react-hook-form-v6-controller-ts-jwyzw) • [Video](https://www.youtube.com/watch?v=N2UNk_UCVyA)
+*
+* @param props - the path name to the form field value, and validation rules.
+*
+* @returns provide field handler functions, field and form state.
+*
+* @example
+* ```tsx
+* function App() {
+*   const { control } = useForm<FormValues>({
+*     defaultValues: {
+*       test: ""
+*     }
+*   });
+*
+*   return (
+*     <form>
+*       <Controller
+*         control={control}
+*         name="test"
+*         render={({ field: { onChange, onBlur, value, ref }, formState, fieldState }) => (
+*           <>
+*             <input
+*               onChange={onChange} // send value to hook form
+*               onBlur={onBlur} // notify when input is touched
+*               value={value} // return updated value
+*               ref={ref} // set ref for focus management
+*             />
+*             <p>{formState.isSubmitted ? "submitted" : ""}</p>
+*             <p>{fieldState.isTouched ? "touched" : ""}</p>
+*           </>
+*         )}
+*       />
+*     </form>
+*   );
+* }
+* ```
+*/
+var Controller = (props) => props.render(useController(props));
+var HookFormContext = import_react.createContext(null);
+HookFormContext.displayName = "HookFormContext";
+/**
+* This custom hook allows you to access the form context. useFormContext is intended to be used in deeply nested structures, where it would become inconvenient to pass the context as a prop. To be used with {@link FormProvider}.
+*
+* @remarks
+* [API](https://react-hook-form.com/docs/useformcontext) • [Demo](https://codesandbox.io/s/react-hook-form-v7-form-context-ytudi)
+*
+* @returns return all useForm methods
+*
+* @example
+* ```tsx
+* function App() {
+*   const methods = useForm();
+*   const onSubmit = data => console.log(data);
+*
+*   return (
+*     <FormProvider {...methods} >
+*       <form onSubmit={methods.handleSubmit(onSubmit)}>
+*         <NestedInput />
+*         <input type="submit" />
+*       </form>
+*     </FormProvider>
+*   );
+* }
+*
+*  function NestedInput() {
+*   const { register } = useFormContext(); // retrieve all hook methods
+*   return <input {...register("test")} />;
+* }
+* ```
+*/
+var useFormContext = () => import_react.useContext(HookFormContext);
+/**
+* A provider component that propagates the `useForm` methods to all children components via [React Context](https://react.dev/reference/react/useContext) API. To be used with {@link useFormContext}.
+*
+* @remarks
+* [API](https://react-hook-form.com/docs/useformcontext) • [Demo](https://codesandbox.io/s/react-hook-form-v7-form-context-ytudi)
+*
+* @param props - all useForm methods
+*
+* @example
+* ```tsx
+* function App() {
+*   const methods = useForm();
+*   const onSubmit = data => console.log(data);
+*
+*   return (
+*     <FormProvider {...methods} >
+*       <form onSubmit={methods.handleSubmit(onSubmit)}>
+*         <NestedInput />
+*         <input type="submit" />
+*       </form>
+*     </FormProvider>
+*   );
+* }
+*
+*  function NestedInput() {
+*   const { register } = useFormContext(); // retrieve all hook methods
+*   return <input {...register("test")} />;
+* }
+* ```
+*/
+var FormProvider = (props) => {
+	const { children, watch, getValues, getFieldState, setError, clearErrors, setValue, trigger, formState, resetField, reset, handleSubmit, unregister, control, register, setFocus, subscribe } = props;
+	return import_react.createElement(HookFormContext.Provider, { value: import_react.useMemo(() => ({
+		watch,
+		getValues,
+		getFieldState,
+		setError,
+		clearErrors,
+		setValue,
+		trigger,
+		formState,
+		resetField,
+		reset,
+		handleSubmit,
+		unregister,
+		control,
+		register,
+		setFocus,
+		subscribe
+	}), [
+		clearErrors,
+		control,
+		formState,
+		getFieldState,
+		getValues,
+		handleSubmit,
+		register,
+		reset,
+		resetField,
+		setError,
+		setFocus,
+		setValue,
+		subscribe,
+		trigger,
+		unregister,
+		watch
+	]) }, import_react.createElement(HookFormControlContext.Provider, { value: control }, children));
+};
+var appendErrors = (name, validateAllFieldCriteria, errors, type, message) => validateAllFieldCriteria ? {
+	...errors[name],
+	types: {
+		...errors[name] && errors[name].types ? errors[name].types : {},
+		[type]: message || true
+	}
+} : {};
+var convertToArrayPayload = (value) => Array.isArray(value) ? value : [value];
+var createSubject = () => {
+	let _observers = [];
+	const next = (value) => {
+		for (const observer of _observers) observer.next && observer.next(value);
+	};
+	const subscribe = (observer) => {
+		_observers.push(observer);
+		return { unsubscribe: () => {
+			_observers = _observers.filter((o) => o !== observer);
+		} };
+	};
+	const unsubscribe = () => {
+		_observers = [];
+	};
+	return {
+		get observers() {
+			return _observers;
+		},
+		next,
+		subscribe,
+		unsubscribe
+	};
+};
+function extractFormValues(fieldsState, formValues) {
+	const values = {};
+	for (const key in fieldsState) if (fieldsState.hasOwnProperty(key)) {
+		const fieldState = fieldsState[key];
+		const fieldValue = formValues[key];
+		if (fieldState && isObject$1(fieldState) && fieldValue) {
+			const nestedFieldsState = extractFormValues(fieldState, fieldValue);
+			if (isObject$1(nestedFieldsState)) values[key] = nestedFieldsState;
+		} else if (fieldsState[key]) values[key] = fieldValue;
+	}
+	return values;
+}
+var isEmptyObject = (value) => isObject$1(value) && !Object.keys(value).length;
+var isFileInput = (element) => element.type === "file";
+var isHTMLElement$2 = (value) => {
+	if (!isWeb) return false;
+	const owner = value ? value.ownerDocument : 0;
+	return value instanceof (owner && owner.defaultView ? owner.defaultView.HTMLElement : HTMLElement);
+};
+var isMultipleSelect = (element) => element.type === `select-multiple`;
+var isRadioInput = (element) => element.type === "radio";
+var isRadioOrCheckbox = (ref) => isRadioInput(ref) || isCheckBoxInput(ref);
+var live = (ref) => isHTMLElement$2(ref) && ref.isConnected;
+function baseGet(object, updatePath) {
+	const length = updatePath.slice(0, -1).length;
+	let index = 0;
+	while (index < length) object = isUndefined(object) ? index++ : object[updatePath[index++]];
+	return object;
+}
+function isEmptyArray(obj) {
+	for (const key in obj) if (obj.hasOwnProperty(key) && !isUndefined(obj[key])) return false;
+	return true;
+}
+function unset(object, path) {
+	const paths = Array.isArray(path) ? path : isKey(path) ? [path] : stringToPath(path);
+	const childObject = paths.length === 1 ? object : baseGet(object, paths);
+	const index = paths.length - 1;
+	const key = paths[index];
+	if (childObject) delete childObject[key];
+	if (index !== 0 && (isObject$1(childObject) && isEmptyObject(childObject) || Array.isArray(childObject) && isEmptyArray(childObject))) unset(object, paths.slice(0, -1));
+	return object;
+}
+var objectHasFunction = (data) => {
+	for (const key in data) if (isFunction(data[key])) return true;
+	return false;
+};
+function isTraversable(value) {
+	return Array.isArray(value) || isObject$1(value) && !objectHasFunction(value);
+}
+function markFieldsDirty(data, fields = {}) {
+	for (const key in data) {
+		const value = data[key];
+		if (isTraversable(value)) {
+			fields[key] = Array.isArray(value) ? [] : {};
+			markFieldsDirty(value, fields[key]);
+		} else if (!isUndefined(value)) fields[key] = true;
+	}
+	return fields;
+}
+function getDirtyFields(data, formValues, dirtyFieldsFromValues) {
+	if (!dirtyFieldsFromValues) dirtyFieldsFromValues = markFieldsDirty(formValues);
+	for (const key in data) {
+		const value = data[key];
+		if (isTraversable(value)) if (isUndefined(formValues) || isPrimitive(dirtyFieldsFromValues[key])) dirtyFieldsFromValues[key] = markFieldsDirty(value, Array.isArray(value) ? [] : {});
+		else getDirtyFields(value, isNullOrUndefined(formValues) ? {} : formValues[key], dirtyFieldsFromValues[key]);
+		else {
+			const formValue = formValues[key];
+			dirtyFieldsFromValues[key] = !deepEqual$1(value, formValue);
+		}
+	}
+	return dirtyFieldsFromValues;
+}
+var defaultResult = {
+	value: false,
+	isValid: false
+};
+var validResult = {
+	value: true,
+	isValid: true
+};
+var getCheckboxValue = (options) => {
+	if (Array.isArray(options)) {
+		if (options.length > 1) {
+			const values = options.filter((option) => option && option.checked && !option.disabled).map((option) => option.value);
+			return {
+				value: values,
+				isValid: !!values.length
+			};
+		}
+		return options[0].checked && !options[0].disabled ? options[0].attributes && !isUndefined(options[0].attributes.value) ? isUndefined(options[0].value) || options[0].value === "" ? validResult : {
+			value: options[0].value,
+			isValid: true
+		} : validResult : defaultResult;
+	}
+	return defaultResult;
+};
+var getFieldValueAs = (value, { valueAsNumber, valueAsDate, setValueAs }) => isUndefined(value) ? value : valueAsNumber ? value === "" ? NaN : value ? +value : value : valueAsDate && isString(value) ? new Date(value) : setValueAs ? setValueAs(value) : value;
+var defaultReturn = {
+	isValid: false,
+	value: null
+};
+var getRadioValue = (options) => Array.isArray(options) ? options.reduce((previous, option) => option && option.checked && !option.disabled ? {
+	isValid: true,
+	value: option.value
+} : previous, defaultReturn) : defaultReturn;
+function getFieldValue(_f) {
+	const ref = _f.ref;
+	if (isFileInput(ref)) return ref.files;
+	if (isRadioInput(ref)) return getRadioValue(_f.refs).value;
+	if (isMultipleSelect(ref)) return [...ref.selectedOptions].map(({ value }) => value);
+	if (isCheckBoxInput(ref)) return getCheckboxValue(_f.refs).value;
+	return getFieldValueAs(isUndefined(ref.value) ? _f.ref.value : ref.value, _f);
+}
+var getResolverOptions = (fieldsNames, _fields, criteriaMode, shouldUseNativeValidation) => {
+	const fields = {};
+	for (const name of fieldsNames) {
+		const field = get(_fields, name);
+		field && set(fields, name, field._f);
+	}
+	return {
+		criteriaMode,
+		names: [...fieldsNames],
+		fields,
+		shouldUseNativeValidation
+	};
+};
+var isRegex = (value) => value instanceof RegExp;
+var getRuleValue = (rule) => isUndefined(rule) ? rule : isRegex(rule) ? rule.source : isObject$1(rule) ? isRegex(rule.value) ? rule.value.source : rule.value : rule;
+var getValidationModes = (mode) => ({
+	isOnSubmit: !mode || mode === VALIDATION_MODE.onSubmit,
+	isOnBlur: mode === VALIDATION_MODE.onBlur,
+	isOnChange: mode === VALIDATION_MODE.onChange,
+	isOnAll: mode === VALIDATION_MODE.all,
+	isOnTouch: mode === VALIDATION_MODE.onTouched
+});
+var ASYNC_FUNCTION = "AsyncFunction";
+var hasPromiseValidation = (fieldReference) => !!fieldReference && !!fieldReference.validate && !!(isFunction(fieldReference.validate) && fieldReference.validate.constructor.name === ASYNC_FUNCTION || isObject$1(fieldReference.validate) && Object.values(fieldReference.validate).find((validateFunction) => validateFunction.constructor.name === ASYNC_FUNCTION));
+var hasValidation = (options) => options.mount && (options.required || options.min || options.max || options.maxLength || options.minLength || options.pattern || options.validate);
+var isWatched = (name, _names, isBlurEvent) => !isBlurEvent && (_names.watchAll || _names.watch.has(name) || [..._names.watch].some((watchName) => name.startsWith(watchName) && /^\.\w+/.test(name.slice(watchName.length))));
+var iterateFieldsByAction = (fields, action, fieldsNames, abortEarly) => {
+	for (const key of fieldsNames || Object.keys(fields)) {
+		const field = get(fields, key);
+		if (field) {
+			const { _f, ...currentField } = field;
+			if (_f) {
+				if (_f.refs && _f.refs[0] && action(_f.refs[0], key) && !abortEarly) return true;
+				else if (_f.ref && action(_f.ref, _f.name) && !abortEarly) return true;
+				else if (iterateFieldsByAction(currentField, action)) break;
+			} else if (isObject$1(currentField)) {
+				if (iterateFieldsByAction(currentField, action)) break;
 			}
 		}
+	}
+};
+function schemaErrorLookup(errors, _fields, name) {
+	const error = get(errors, name);
+	if (error || isKey(name)) return {
+		error,
+		name
+	};
+	const names = name.split(".");
+	while (names.length) {
+		const fieldName = names.join(".");
+		const field = get(_fields, fieldName);
+		const foundError = get(errors, fieldName);
+		if (field && !Array.isArray(field) && name !== fieldName) return { name };
+		if (foundError && foundError.type) return {
+			name: fieldName,
+			error: foundError
+		};
+		if (foundError && foundError.root && foundError.root.type) return {
+			name: `${fieldName}.root`,
+			error: foundError.root
+		};
+		names.pop();
+	}
+	return { name };
+}
+var shouldRenderFormState = (formStateData, _proxyFormState, updateFormState, isRoot) => {
+	updateFormState(formStateData);
+	const { name, ...formState } = formStateData;
+	return isEmptyObject(formState) || Object.keys(formState).length >= Object.keys(_proxyFormState).length || Object.keys(formState).find((key) => _proxyFormState[key] === (!isRoot || VALIDATION_MODE.all));
+};
+var shouldSubscribeByName = (name, signalName, exact) => !name || !signalName || name === signalName || convertToArrayPayload(name).some((currentName) => currentName && (exact ? currentName === signalName : currentName.startsWith(signalName) || signalName.startsWith(currentName)));
+var skipValidation = (isBlurEvent, isTouched, isSubmitted, reValidateMode, mode) => {
+	if (mode.isOnAll) return false;
+	else if (!isSubmitted && mode.isOnTouch) return !(isTouched || isBlurEvent);
+	else if (isSubmitted ? reValidateMode.isOnBlur : mode.isOnBlur) return !isBlurEvent;
+	else if (isSubmitted ? reValidateMode.isOnChange : mode.isOnChange) return isBlurEvent;
+	return true;
+};
+var unsetEmptyArray = (ref, name) => !compact(get(ref, name)).length && unset(ref, name);
+var updateFieldArrayRootError = (errors, error, name) => {
+	const fieldArrayErrors = convertToArrayPayload(get(errors, name));
+	set(fieldArrayErrors, "root", error[name]);
+	set(errors, name, fieldArrayErrors);
+	return errors;
+};
+function getValidateError(result, ref, type = "validate") {
+	if (isString(result) || Array.isArray(result) && result.every(isString) || isBoolean(result) && !result) return {
+		type,
+		message: isString(result) ? result : "",
+		ref
+	};
+}
+var getValueAndMessage = (validationData) => isObject$1(validationData) && !isRegex(validationData) ? validationData : {
+	value: validationData,
+	message: ""
+};
+var validateField = async (field, disabledFieldNames, formValues, validateAllFieldCriteria, shouldUseNativeValidation, isFieldArray) => {
+	const { ref, refs, required, maxLength, minLength, min, max, pattern, validate, name, valueAsNumber, mount } = field._f;
+	const inputValue = get(formValues, name);
+	if (!mount || disabledFieldNames.has(name)) return {};
+	const inputRef = refs ? refs[0] : ref;
+	const setCustomValidity = (message) => {
+		if (shouldUseNativeValidation && inputRef.reportValidity) {
+			inputRef.setCustomValidity(isBoolean(message) ? "" : message || "");
+			inputRef.reportValidity();
+		}
+	};
+	const error = {};
+	const isRadio = isRadioInput(ref);
+	const isCheckBox = isCheckBoxInput(ref);
+	const isRadioOrCheckbox = isRadio || isCheckBox;
+	const isEmpty = (valueAsNumber || isFileInput(ref)) && isUndefined(ref.value) && isUndefined(inputValue) || isHTMLElement$2(ref) && ref.value === "" || inputValue === "" || Array.isArray(inputValue) && !inputValue.length;
+	const appendErrorsCurry = appendErrors.bind(null, name, validateAllFieldCriteria, error);
+	const getMinMaxMessage = (exceedMax, maxLengthMessage, minLengthMessage, maxType = INPUT_VALIDATION_RULES.maxLength, minType = INPUT_VALIDATION_RULES.minLength) => {
+		const message = exceedMax ? maxLengthMessage : minLengthMessage;
+		error[name] = {
+			type: exceedMax ? maxType : minType,
+			message,
+			ref,
+			...appendErrorsCurry(exceedMax ? maxType : minType, message)
+		};
+	};
+	if (isFieldArray ? !Array.isArray(inputValue) || !inputValue.length : required && (!isRadioOrCheckbox && (isEmpty || isNullOrUndefined(inputValue)) || isBoolean(inputValue) && !inputValue || isCheckBox && !getCheckboxValue(refs).isValid || isRadio && !getRadioValue(refs).isValid)) {
+		const { value, message } = isString(required) ? {
+			value: !!required,
+			message: required
+		} : getValueAndMessage(required);
+		if (value) {
+			error[name] = {
+				type: INPUT_VALIDATION_RULES.required,
+				message,
+				ref: inputRef,
+				...appendErrorsCurry(INPUT_VALIDATION_RULES.required, message)
+			};
+			if (!validateAllFieldCriteria) {
+				setCustomValidity(message);
+				return error;
+			}
+		}
+	}
+	if (!isEmpty && (!isNullOrUndefined(min) || !isNullOrUndefined(max))) {
+		let exceedMax;
+		let exceedMin;
+		const maxOutput = getValueAndMessage(max);
+		const minOutput = getValueAndMessage(min);
+		if (!isNullOrUndefined(inputValue) && !isNaN(inputValue)) {
+			const valueNumber = ref.valueAsNumber || (inputValue ? +inputValue : inputValue);
+			if (!isNullOrUndefined(maxOutput.value)) exceedMax = valueNumber > maxOutput.value;
+			if (!isNullOrUndefined(minOutput.value)) exceedMin = valueNumber < minOutput.value;
+		} else {
+			const valueDate = ref.valueAsDate || new Date(inputValue);
+			const convertTimeToDate = (time) => /* @__PURE__ */ new Date((/* @__PURE__ */ new Date()).toDateString() + " " + time);
+			const isTime = ref.type == "time";
+			const isWeek = ref.type == "week";
+			if (isString(maxOutput.value) && inputValue) exceedMax = isTime ? convertTimeToDate(inputValue) > convertTimeToDate(maxOutput.value) : isWeek ? inputValue > maxOutput.value : valueDate > new Date(maxOutput.value);
+			if (isString(minOutput.value) && inputValue) exceedMin = isTime ? convertTimeToDate(inputValue) < convertTimeToDate(minOutput.value) : isWeek ? inputValue < minOutput.value : valueDate < new Date(minOutput.value);
+		}
+		if (exceedMax || exceedMin) {
+			getMinMaxMessage(!!exceedMax, maxOutput.message, minOutput.message, INPUT_VALIDATION_RULES.max, INPUT_VALIDATION_RULES.min);
+			if (!validateAllFieldCriteria) {
+				setCustomValidity(error[name].message);
+				return error;
+			}
+		}
+	}
+	if ((maxLength || minLength) && !isEmpty && (isString(inputValue) || isFieldArray && Array.isArray(inputValue))) {
+		const maxLengthOutput = getValueAndMessage(maxLength);
+		const minLengthOutput = getValueAndMessage(minLength);
+		const exceedMax = !isNullOrUndefined(maxLengthOutput.value) && inputValue.length > +maxLengthOutput.value;
+		const exceedMin = !isNullOrUndefined(minLengthOutput.value) && inputValue.length < +minLengthOutput.value;
+		if (exceedMax || exceedMin) {
+			getMinMaxMessage(exceedMax, maxLengthOutput.message, minLengthOutput.message);
+			if (!validateAllFieldCriteria) {
+				setCustomValidity(error[name].message);
+				return error;
+			}
+		}
+	}
+	if (pattern && !isEmpty && isString(inputValue)) {
+		const { value: patternValue, message } = getValueAndMessage(pattern);
+		if (isRegex(patternValue) && !inputValue.match(patternValue)) {
+			error[name] = {
+				type: INPUT_VALIDATION_RULES.pattern,
+				message,
+				ref,
+				...appendErrorsCurry(INPUT_VALIDATION_RULES.pattern, message)
+			};
+			if (!validateAllFieldCriteria) {
+				setCustomValidity(message);
+				return error;
+			}
+		}
+	}
+	if (validate) {
+		if (isFunction(validate)) {
+			const validateError = getValidateError(await validate(inputValue, formValues), inputRef);
+			if (validateError) {
+				error[name] = {
+					...validateError,
+					...appendErrorsCurry(INPUT_VALIDATION_RULES.validate, validateError.message)
+				};
+				if (!validateAllFieldCriteria) {
+					setCustomValidity(validateError.message);
+					return error;
+				}
+			}
+		} else if (isObject$1(validate)) {
+			let validationResult = {};
+			for (const key in validate) {
+				if (!isEmptyObject(validationResult) && !validateAllFieldCriteria) break;
+				const validateError = getValidateError(await validate[key](inputValue, formValues), inputRef, key);
+				if (validateError) {
+					validationResult = {
+						...validateError,
+						...appendErrorsCurry(key, validateError.message)
+					};
+					setCustomValidity(validateError.message);
+					if (validateAllFieldCriteria) error[name] = validationResult;
+				}
+			}
+			if (!isEmptyObject(validationResult)) {
+				error[name] = {
+					ref: inputRef,
+					...validationResult
+				};
+				if (!validateAllFieldCriteria) return error;
+			}
+		}
+	}
+	setCustomValidity(true);
+	return error;
+};
+var defaultOptions = {
+	mode: VALIDATION_MODE.onSubmit,
+	reValidateMode: VALIDATION_MODE.onChange,
+	shouldFocusError: true
+};
+function createFormControl(props = {}) {
+	let _options = {
+		...defaultOptions,
+		...props
+	};
+	let _formState = {
+		submitCount: 0,
+		isDirty: false,
+		isReady: false,
+		isLoading: isFunction(_options.defaultValues),
+		isValidating: false,
+		isSubmitted: false,
+		isSubmitting: false,
+		isSubmitSuccessful: false,
+		isValid: false,
+		touchedFields: {},
+		dirtyFields: {},
+		validatingFields: {},
+		errors: _options.errors || {},
+		disabled: _options.disabled || false
+	};
+	let _fields = {};
+	let _defaultValues = isObject$1(_options.defaultValues) || isObject$1(_options.values) ? cloneObject(_options.defaultValues || _options.values) || {} : {};
+	let _formValues = _options.shouldUnregister ? {} : cloneObject(_defaultValues);
+	let _state = {
+		action: false,
+		mount: false,
+		watch: false,
+		keepIsValid: false
+	};
+	let _names = {
+		mount: /* @__PURE__ */ new Set(),
+		disabled: /* @__PURE__ */ new Set(),
+		unMount: /* @__PURE__ */ new Set(),
+		array: /* @__PURE__ */ new Set(),
+		watch: /* @__PURE__ */ new Set()
+	};
+	let delayErrorCallback;
+	let timer = 0;
+	const defaultProxyFormState = {
+		isDirty: false,
+		dirtyFields: false,
+		validatingFields: false,
+		touchedFields: false,
+		isValidating: false,
+		isValid: false,
+		errors: false
+	};
+	const _proxyFormState = { ...defaultProxyFormState };
+	let _proxySubscribeFormState = { ..._proxyFormState };
+	const _subjects = {
+		array: createSubject(),
+		state: createSubject()
+	};
+	const shouldDisplayAllAssociatedErrors = _options.criteriaMode === VALIDATION_MODE.all;
+	const debounce = (callback) => (wait) => {
+		clearTimeout(timer);
+		timer = setTimeout(callback, wait);
+	};
+	const _setValid = async (shouldUpdateValid) => {
+		if (_state.keepIsValid) return;
+		if (!_options.disabled && (_proxyFormState.isValid || _proxySubscribeFormState.isValid || shouldUpdateValid)) {
+			let isValid;
+			if (_options.resolver) {
+				isValid = isEmptyObject((await _runSchema()).errors);
+				_updateIsValidating();
+			} else isValid = await executeBuiltInValidation(_fields, true);
+			if (isValid !== _formState.isValid) _subjects.state.next({ isValid });
+		}
+	};
+	const _updateIsValidating = (names, isValidating) => {
+		if (!_options.disabled && (_proxyFormState.isValidating || _proxyFormState.validatingFields || _proxySubscribeFormState.isValidating || _proxySubscribeFormState.validatingFields)) {
+			(names || Array.from(_names.mount)).forEach((name) => {
+				if (name) isValidating ? set(_formState.validatingFields, name, isValidating) : unset(_formState.validatingFields, name);
+			});
+			_subjects.state.next({
+				validatingFields: _formState.validatingFields,
+				isValidating: !isEmptyObject(_formState.validatingFields)
+			});
+		}
+	};
+	const _setFieldArray = (name, values = [], method, args, shouldSetValues = true, shouldUpdateFieldsAndState = true) => {
+		if (args && method && !_options.disabled) {
+			_state.action = true;
+			if (shouldUpdateFieldsAndState && Array.isArray(get(_fields, name))) {
+				const fieldValues = method(get(_fields, name), args.argA, args.argB);
+				shouldSetValues && set(_fields, name, fieldValues);
+			}
+			if (shouldUpdateFieldsAndState && Array.isArray(get(_formState.errors, name))) {
+				const errors = method(get(_formState.errors, name), args.argA, args.argB);
+				shouldSetValues && set(_formState.errors, name, errors);
+				unsetEmptyArray(_formState.errors, name);
+			}
+			if ((_proxyFormState.touchedFields || _proxySubscribeFormState.touchedFields) && shouldUpdateFieldsAndState && Array.isArray(get(_formState.touchedFields, name))) {
+				const touchedFields = method(get(_formState.touchedFields, name), args.argA, args.argB);
+				shouldSetValues && set(_formState.touchedFields, name, touchedFields);
+			}
+			if (_proxyFormState.dirtyFields || _proxySubscribeFormState.dirtyFields) _formState.dirtyFields = getDirtyFields(_defaultValues, _formValues);
+			_subjects.state.next({
+				name,
+				isDirty: _getDirty(name, values),
+				dirtyFields: _formState.dirtyFields,
+				errors: _formState.errors,
+				isValid: _formState.isValid
+			});
+		} else set(_formValues, name, values);
+	};
+	const updateErrors = (name, error) => {
+		set(_formState.errors, name, error);
+		_subjects.state.next({ errors: _formState.errors });
+	};
+	const _setErrors = (errors) => {
+		_formState.errors = errors;
+		_subjects.state.next({
+			errors: _formState.errors,
+			isValid: false
+		});
+	};
+	const updateValidAndValue = (name, shouldSkipSetValueAs, value, ref) => {
+		const field = get(_fields, name);
+		if (field) {
+			const defaultValue = get(_formValues, name, isUndefined(value) ? get(_defaultValues, name) : value);
+			isUndefined(defaultValue) || ref && ref.defaultChecked || shouldSkipSetValueAs ? set(_formValues, name, shouldSkipSetValueAs ? defaultValue : getFieldValue(field._f)) : setFieldValue(name, defaultValue);
+			_state.mount && !_state.action && _setValid();
+		}
+	};
+	const updateTouchAndDirty = (name, fieldValue, isBlurEvent, shouldDirty, shouldRender) => {
+		let shouldUpdateField = false;
+		let isPreviousDirty = false;
+		const output = { name };
+		if (!_options.disabled) {
+			if (!isBlurEvent || shouldDirty) {
+				if (_proxyFormState.isDirty || _proxySubscribeFormState.isDirty) {
+					isPreviousDirty = _formState.isDirty;
+					_formState.isDirty = output.isDirty = _getDirty();
+					shouldUpdateField = isPreviousDirty !== output.isDirty;
+				}
+				const isCurrentFieldPristine = deepEqual$1(get(_defaultValues, name), fieldValue);
+				isPreviousDirty = !!get(_formState.dirtyFields, name);
+				isCurrentFieldPristine ? unset(_formState.dirtyFields, name) : set(_formState.dirtyFields, name, true);
+				output.dirtyFields = _formState.dirtyFields;
+				shouldUpdateField = shouldUpdateField || (_proxyFormState.dirtyFields || _proxySubscribeFormState.dirtyFields) && isPreviousDirty !== !isCurrentFieldPristine;
+			}
+			if (isBlurEvent) {
+				const isPreviousFieldTouched = get(_formState.touchedFields, name);
+				if (!isPreviousFieldTouched) {
+					set(_formState.touchedFields, name, isBlurEvent);
+					output.touchedFields = _formState.touchedFields;
+					shouldUpdateField = shouldUpdateField || (_proxyFormState.touchedFields || _proxySubscribeFormState.touchedFields) && isPreviousFieldTouched !== isBlurEvent;
+				}
+			}
+			shouldUpdateField && shouldRender && _subjects.state.next(output);
+		}
+		return shouldUpdateField ? output : {};
+	};
+	const shouldRenderByError = (name, isValid, error, fieldState) => {
+		const previousFieldError = get(_formState.errors, name);
+		const shouldUpdateValid = (_proxyFormState.isValid || _proxySubscribeFormState.isValid) && isBoolean(isValid) && _formState.isValid !== isValid;
+		if (_options.delayError && error) {
+			delayErrorCallback = debounce(() => updateErrors(name, error));
+			delayErrorCallback(_options.delayError);
+		} else {
+			clearTimeout(timer);
+			delayErrorCallback = null;
+			error ? set(_formState.errors, name, error) : unset(_formState.errors, name);
+		}
+		if ((error ? !deepEqual$1(previousFieldError, error) : previousFieldError) || !isEmptyObject(fieldState) || shouldUpdateValid) {
+			const updatedFormState = {
+				...fieldState,
+				...shouldUpdateValid && isBoolean(isValid) ? { isValid } : {},
+				errors: _formState.errors,
+				name
+			};
+			_formState = {
+				..._formState,
+				...updatedFormState
+			};
+			_subjects.state.next(updatedFormState);
+		}
+	};
+	const _runSchema = async (name) => {
+		_updateIsValidating(name, true);
+		return await _options.resolver(_formValues, _options.context, getResolverOptions(name || _names.mount, _fields, _options.criteriaMode, _options.shouldUseNativeValidation));
+	};
+	const executeSchemaAndUpdateState = async (names) => {
+		const { errors } = await _runSchema(names);
+		_updateIsValidating(names);
+		if (names) for (const name of names) {
+			const error = get(errors, name);
+			error ? set(_formState.errors, name, error) : unset(_formState.errors, name);
+		}
+		else _formState.errors = errors;
+		return errors;
+	};
+	const executeBuiltInValidation = async (fields, shouldOnlyCheckValid, context = { valid: true }) => {
+		for (const name in fields) {
+			const field = fields[name];
+			if (field) {
+				const { _f, ...fieldValue } = field;
+				if (_f) {
+					const isFieldArrayRoot = _names.array.has(_f.name);
+					const isPromiseFunction = field._f && hasPromiseValidation(field._f);
+					if (isPromiseFunction && _proxyFormState.validatingFields) _updateIsValidating([_f.name], true);
+					const fieldError = await validateField(field, _names.disabled, _formValues, shouldDisplayAllAssociatedErrors, _options.shouldUseNativeValidation && !shouldOnlyCheckValid, isFieldArrayRoot);
+					if (isPromiseFunction && _proxyFormState.validatingFields) _updateIsValidating([_f.name]);
+					if (fieldError[_f.name]) {
+						context.valid = false;
+						if (shouldOnlyCheckValid || props.shouldUseNativeValidation) break;
+					}
+					!shouldOnlyCheckValid && (get(fieldError, _f.name) ? isFieldArrayRoot ? updateFieldArrayRootError(_formState.errors, fieldError, _f.name) : set(_formState.errors, _f.name, fieldError[_f.name]) : unset(_formState.errors, _f.name));
+				}
+				!isEmptyObject(fieldValue) && await executeBuiltInValidation(fieldValue, shouldOnlyCheckValid, context);
+			}
+		}
+		return context.valid;
+	};
+	const _removeUnmounted = () => {
+		for (const name of _names.unMount) {
+			const field = get(_fields, name);
+			field && (field._f.refs ? field._f.refs.every((ref) => !live(ref)) : !live(field._f.ref)) && unregister(name);
+		}
+		_names.unMount = /* @__PURE__ */ new Set();
+	};
+	const _getDirty = (name, data) => !_options.disabled && (name && data && set(_formValues, name, data), !deepEqual$1(getValues(), _defaultValues));
+	const _getWatch = (names, defaultValue, isGlobal) => generateWatchOutput(names, _names, { ..._state.mount ? _formValues : isUndefined(defaultValue) ? _defaultValues : isString(names) ? { [names]: defaultValue } : defaultValue }, isGlobal, defaultValue);
+	const _getFieldArray = (name) => compact(get(_state.mount ? _formValues : _defaultValues, name, _options.shouldUnregister ? get(_defaultValues, name, []) : []));
+	const setFieldValue = (name, value, options = {}) => {
+		const field = get(_fields, name);
+		let fieldValue = value;
+		if (field) {
+			const fieldReference = field._f;
+			if (fieldReference) {
+				!fieldReference.disabled && set(_formValues, name, getFieldValueAs(value, fieldReference));
+				fieldValue = isHTMLElement$2(fieldReference.ref) && isNullOrUndefined(value) ? "" : value;
+				if (isMultipleSelect(fieldReference.ref)) [...fieldReference.ref.options].forEach((optionRef) => optionRef.selected = fieldValue.includes(optionRef.value));
+				else if (fieldReference.refs) if (isCheckBoxInput(fieldReference.ref)) fieldReference.refs.forEach((checkboxRef) => {
+					if (!checkboxRef.defaultChecked || !checkboxRef.disabled) if (Array.isArray(fieldValue)) checkboxRef.checked = !!fieldValue.find((data) => data === checkboxRef.value);
+					else checkboxRef.checked = fieldValue === checkboxRef.value || !!fieldValue;
+				});
+				else fieldReference.refs.forEach((radioRef) => radioRef.checked = radioRef.value === fieldValue);
+				else if (isFileInput(fieldReference.ref)) fieldReference.ref.value = "";
+				else {
+					fieldReference.ref.value = fieldValue;
+					if (!fieldReference.ref.type) _subjects.state.next({
+						name,
+						values: cloneObject(_formValues)
+					});
+				}
+			}
+		}
+		(options.shouldDirty || options.shouldTouch) && updateTouchAndDirty(name, fieldValue, options.shouldTouch, options.shouldDirty, true);
+		options.shouldValidate && trigger(name);
+	};
+	const setValues = (name, value, options) => {
+		for (const fieldKey in value) {
+			if (!value.hasOwnProperty(fieldKey)) return;
+			const fieldValue = value[fieldKey];
+			const fieldName = name + "." + fieldKey;
+			const field = get(_fields, fieldName);
+			(_names.array.has(name) || isObject$1(fieldValue) || field && !field._f) && !isDateObject(fieldValue) ? setValues(fieldName, fieldValue, options) : setFieldValue(fieldName, fieldValue, options);
+		}
+	};
+	const setValue = (name, value, options = {}) => {
+		const field = get(_fields, name);
+		const isFieldArray = _names.array.has(name);
+		const cloneValue = cloneObject(value);
+		set(_formValues, name, cloneValue);
+		if (isFieldArray) {
+			_subjects.array.next({
+				name,
+				values: cloneObject(_formValues)
+			});
+			if ((_proxyFormState.isDirty || _proxyFormState.dirtyFields || _proxySubscribeFormState.isDirty || _proxySubscribeFormState.dirtyFields) && options.shouldDirty) _subjects.state.next({
+				name,
+				dirtyFields: getDirtyFields(_defaultValues, _formValues),
+				isDirty: _getDirty(name, cloneValue)
+			});
+		} else field && !field._f && !isNullOrUndefined(cloneValue) ? setValues(name, cloneValue, options) : setFieldValue(name, cloneValue, options);
+		if (isWatched(name, _names)) _subjects.state.next({
+			..._formState,
+			name,
+			values: cloneObject(_formValues)
+		});
+		else _subjects.state.next({
+			name: _state.mount ? name : void 0,
+			values: cloneObject(_formValues)
+		});
+	};
+	const onChange = async (event) => {
+		_state.mount = true;
+		const target = event.target;
+		let name = target.name;
+		let isFieldValueUpdated = true;
+		const field = get(_fields, name);
+		const _updateIsFieldValueUpdated = (fieldValue) => {
+			isFieldValueUpdated = Number.isNaN(fieldValue) || isDateObject(fieldValue) && isNaN(fieldValue.getTime()) || deepEqual$1(fieldValue, get(_formValues, name, fieldValue));
+		};
+		const validationModeBeforeSubmit = getValidationModes(_options.mode);
+		const validationModeAfterSubmit = getValidationModes(_options.reValidateMode);
+		if (field) {
+			let error;
+			let isValid;
+			const fieldValue = target.type ? getFieldValue(field._f) : getEventValue(event);
+			const isBlurEvent = event.type === EVENTS.BLUR || event.type === EVENTS.FOCUS_OUT;
+			const shouldSkipValidation = !hasValidation(field._f) && !_options.resolver && !get(_formState.errors, name) && !field._f.deps || skipValidation(isBlurEvent, get(_formState.touchedFields, name), _formState.isSubmitted, validationModeAfterSubmit, validationModeBeforeSubmit);
+			const watched = isWatched(name, _names, isBlurEvent);
+			set(_formValues, name, fieldValue);
+			if (isBlurEvent) {
+				if (!target || !target.readOnly) {
+					field._f.onBlur && field._f.onBlur(event);
+					delayErrorCallback && delayErrorCallback(0);
+				}
+			} else if (field._f.onChange) field._f.onChange(event);
+			const fieldState = updateTouchAndDirty(name, fieldValue, isBlurEvent);
+			const shouldRender = !isEmptyObject(fieldState) || watched;
+			!isBlurEvent && _subjects.state.next({
+				name,
+				type: event.type,
+				values: cloneObject(_formValues)
+			});
+			if (shouldSkipValidation) {
+				if (_proxyFormState.isValid || _proxySubscribeFormState.isValid) {
+					if (_options.mode === "onBlur") {
+						if (isBlurEvent) _setValid();
+					} else if (!isBlurEvent) _setValid();
+				}
+				return shouldRender && _subjects.state.next({
+					name,
+					...watched ? {} : fieldState
+				});
+			}
+			!isBlurEvent && watched && _subjects.state.next({ ..._formState });
+			if (_options.resolver) {
+				const { errors } = await _runSchema([name]);
+				_updateIsValidating([name]);
+				_updateIsFieldValueUpdated(fieldValue);
+				if (isFieldValueUpdated) {
+					const previousErrorLookupResult = schemaErrorLookup(_formState.errors, _fields, name);
+					const errorLookupResult = schemaErrorLookup(errors, _fields, previousErrorLookupResult.name || name);
+					error = errorLookupResult.error;
+					name = errorLookupResult.name;
+					isValid = isEmptyObject(errors);
+				}
+			} else {
+				_updateIsValidating([name], true);
+				error = (await validateField(field, _names.disabled, _formValues, shouldDisplayAllAssociatedErrors, _options.shouldUseNativeValidation))[name];
+				_updateIsValidating([name]);
+				_updateIsFieldValueUpdated(fieldValue);
+				if (isFieldValueUpdated) {
+					if (error) isValid = false;
+					else if (_proxyFormState.isValid || _proxySubscribeFormState.isValid) isValid = await executeBuiltInValidation(_fields, true);
+				}
+			}
+			if (isFieldValueUpdated) {
+				field._f.deps && (!Array.isArray(field._f.deps) || field._f.deps.length > 0) && trigger(field._f.deps);
+				shouldRenderByError(name, isValid, error, fieldState);
+			}
+		}
+	};
+	const _focusInput = (ref, key) => {
+		if (get(_formState.errors, key) && ref.focus) {
+			ref.focus();
+			return 1;
+		}
+	};
+	const trigger = async (name, options = {}) => {
+		let isValid;
+		let validationResult;
+		const fieldNames = convertToArrayPayload(name);
+		if (_options.resolver) {
+			const errors = await executeSchemaAndUpdateState(isUndefined(name) ? name : fieldNames);
+			isValid = isEmptyObject(errors);
+			validationResult = name ? !fieldNames.some((name) => get(errors, name)) : isValid;
+		} else if (name) {
+			validationResult = (await Promise.all(fieldNames.map(async (fieldName) => {
+				const field = get(_fields, fieldName);
+				return await executeBuiltInValidation(field && field._f ? { [fieldName]: field } : field);
+			}))).every(Boolean);
+			!(!validationResult && !_formState.isValid) && _setValid();
+		} else validationResult = isValid = await executeBuiltInValidation(_fields);
+		_subjects.state.next({
+			...!isString(name) || (_proxyFormState.isValid || _proxySubscribeFormState.isValid) && isValid !== _formState.isValid ? {} : { name },
+			..._options.resolver || !name ? { isValid } : {},
+			errors: _formState.errors
+		});
+		options.shouldFocus && !validationResult && iterateFieldsByAction(_fields, _focusInput, name ? fieldNames : _names.mount);
+		return validationResult;
+	};
+	const getValues = (fieldNames, config) => {
+		let values = { ..._state.mount ? _formValues : _defaultValues };
+		if (config) values = extractFormValues(config.dirtyFields ? _formState.dirtyFields : _formState.touchedFields, values);
+		return isUndefined(fieldNames) ? values : isString(fieldNames) ? get(values, fieldNames) : fieldNames.map((name) => get(values, name));
+	};
+	const getFieldState = (name, formState) => ({
+		invalid: !!get((formState || _formState).errors, name),
+		isDirty: !!get((formState || _formState).dirtyFields, name),
+		error: get((formState || _formState).errors, name),
+		isValidating: !!get(_formState.validatingFields, name),
+		isTouched: !!get((formState || _formState).touchedFields, name)
 	});
+	const clearErrors = (name) => {
+		const names = name ? convertToArrayPayload(name) : void 0;
+		names === null || names === void 0 || names.forEach((inputName) => unset(_formState.errors, inputName));
+		if (names) names.forEach((inputName) => {
+			_subjects.state.next({
+				name: inputName,
+				errors: _formState.errors
+			});
+		});
+		else _subjects.state.next({ errors: {} });
+	};
+	const setError = (name, error, options) => {
+		const ref = (get(_fields, name, { _f: {} })._f || {}).ref;
+		const { ref: currentRef, message, type, ...restOfErrorTree } = get(_formState.errors, name) || {};
+		set(_formState.errors, name, {
+			...restOfErrorTree,
+			...error,
+			ref
+		});
+		_subjects.state.next({
+			name,
+			errors: _formState.errors,
+			isValid: false
+		});
+		options && options.shouldFocus && ref && ref.focus && ref.focus();
+	};
+	const watch = (name, defaultValue) => isFunction(name) ? _subjects.state.subscribe({ next: (payload) => "values" in payload && name(_getWatch(void 0, defaultValue), payload) }) : _getWatch(name, defaultValue, true);
+	const _subscribe = (props) => _subjects.state.subscribe({ next: (formState) => {
+		if (shouldSubscribeByName(props.name, formState.name, props.exact) && shouldRenderFormState(formState, props.formState || _proxyFormState, _setFormState, props.reRenderRoot)) props.callback({
+			values: { ..._formValues },
+			..._formState,
+			...formState,
+			defaultValues: _defaultValues
+		});
+	} }).unsubscribe;
+	const subscribe = (props) => {
+		_state.mount = true;
+		_proxySubscribeFormState = {
+			..._proxySubscribeFormState,
+			...props.formState
+		};
+		return _subscribe({
+			...props,
+			formState: {
+				...defaultProxyFormState,
+				...props.formState
+			}
+		});
+	};
+	const unregister = (name, options = {}) => {
+		for (const fieldName of name ? convertToArrayPayload(name) : _names.mount) {
+			_names.mount.delete(fieldName);
+			_names.array.delete(fieldName);
+			if (!options.keepValue) {
+				unset(_fields, fieldName);
+				unset(_formValues, fieldName);
+			}
+			!options.keepError && unset(_formState.errors, fieldName);
+			!options.keepDirty && unset(_formState.dirtyFields, fieldName);
+			!options.keepTouched && unset(_formState.touchedFields, fieldName);
+			!options.keepIsValidating && unset(_formState.validatingFields, fieldName);
+			!_options.shouldUnregister && !options.keepDefaultValue && unset(_defaultValues, fieldName);
+		}
+		_subjects.state.next({ values: cloneObject(_formValues) });
+		_subjects.state.next({
+			..._formState,
+			...!options.keepDirty ? {} : { isDirty: _getDirty() }
+		});
+		!options.keepIsValid && _setValid();
+	};
+	const _setDisabledField = ({ disabled, name }) => {
+		if (isBoolean(disabled) && _state.mount || !!disabled || _names.disabled.has(name)) {
+			const disabledStateChanged = _names.disabled.has(name) !== !!disabled;
+			disabled ? _names.disabled.add(name) : _names.disabled.delete(name);
+			disabledStateChanged && _state.mount && !_state.action && _setValid();
+		}
+	};
+	const register = (name, options = {}) => {
+		let field = get(_fields, name);
+		const disabledIsDefined = isBoolean(options.disabled) || isBoolean(_options.disabled);
+		set(_fields, name, {
+			...field || {},
+			_f: {
+				...field && field._f ? field._f : { ref: { name } },
+				name,
+				mount: true,
+				...options
+			}
+		});
+		_names.mount.add(name);
+		if (field) _setDisabledField({
+			disabled: isBoolean(options.disabled) ? options.disabled : _options.disabled,
+			name
+		});
+		else updateValidAndValue(name, true, options.value);
+		return {
+			...disabledIsDefined ? { disabled: options.disabled || _options.disabled } : {},
+			..._options.progressive ? {
+				required: !!options.required,
+				min: getRuleValue(options.min),
+				max: getRuleValue(options.max),
+				minLength: getRuleValue(options.minLength),
+				maxLength: getRuleValue(options.maxLength),
+				pattern: getRuleValue(options.pattern)
+			} : {},
+			name,
+			onChange,
+			onBlur: onChange,
+			ref: (ref) => {
+				if (ref) {
+					register(name, options);
+					field = get(_fields, name);
+					const fieldRef = isUndefined(ref.value) ? ref.querySelectorAll ? ref.querySelectorAll("input,select,textarea")[0] || ref : ref : ref;
+					const radioOrCheckbox = isRadioOrCheckbox(fieldRef);
+					const refs = field._f.refs || [];
+					if (radioOrCheckbox ? refs.find((option) => option === fieldRef) : fieldRef === field._f.ref) return;
+					set(_fields, name, { _f: {
+						...field._f,
+						...radioOrCheckbox ? {
+							refs: [
+								...refs.filter(live),
+								fieldRef,
+								...Array.isArray(get(_defaultValues, name)) ? [{}] : []
+							],
+							ref: {
+								type: fieldRef.type,
+								name
+							}
+						} : { ref: fieldRef }
+					} });
+					updateValidAndValue(name, false, void 0, fieldRef);
+				} else {
+					field = get(_fields, name, {});
+					if (field._f) field._f.mount = false;
+					(_options.shouldUnregister || options.shouldUnregister) && !(isNameInFieldArray(_names.array, name) && _state.action) && _names.unMount.add(name);
+				}
+			}
+		};
+	};
+	const _focusError = () => _options.shouldFocusError && iterateFieldsByAction(_fields, _focusInput, _names.mount);
+	const _disableForm = (disabled) => {
+		if (isBoolean(disabled)) {
+			_subjects.state.next({ disabled });
+			iterateFieldsByAction(_fields, (ref, name) => {
+				const currentField = get(_fields, name);
+				if (currentField) {
+					ref.disabled = currentField._f.disabled || disabled;
+					if (Array.isArray(currentField._f.refs)) currentField._f.refs.forEach((inputRef) => {
+						inputRef.disabled = currentField._f.disabled || disabled;
+					});
+				}
+			}, 0, false);
+		}
+	};
+	const handleSubmit = (onValid, onInvalid) => async (e) => {
+		let onValidError = void 0;
+		if (e) {
+			e.preventDefault && e.preventDefault();
+			e.persist && e.persist();
+		}
+		let fieldValues = cloneObject(_formValues);
+		_subjects.state.next({ isSubmitting: true });
+		if (_options.resolver) {
+			const { errors, values } = await _runSchema();
+			_updateIsValidating();
+			_formState.errors = errors;
+			fieldValues = cloneObject(values);
+		} else await executeBuiltInValidation(_fields);
+		if (_names.disabled.size) for (const name of _names.disabled) unset(fieldValues, name);
+		unset(_formState.errors, "root");
+		if (isEmptyObject(_formState.errors)) {
+			_subjects.state.next({ errors: {} });
+			try {
+				await onValid(fieldValues, e);
+			} catch (error) {
+				onValidError = error;
+			}
+		} else {
+			if (onInvalid) await onInvalid({ ..._formState.errors }, e);
+			_focusError();
+			setTimeout(_focusError);
+		}
+		_subjects.state.next({
+			isSubmitted: true,
+			isSubmitting: false,
+			isSubmitSuccessful: isEmptyObject(_formState.errors) && !onValidError,
+			submitCount: _formState.submitCount + 1,
+			errors: _formState.errors
+		});
+		if (onValidError) throw onValidError;
+	};
+	const resetField = (name, options = {}) => {
+		if (get(_fields, name)) {
+			if (isUndefined(options.defaultValue)) setValue(name, cloneObject(get(_defaultValues, name)));
+			else {
+				setValue(name, options.defaultValue);
+				set(_defaultValues, name, cloneObject(options.defaultValue));
+			}
+			if (!options.keepTouched) unset(_formState.touchedFields, name);
+			if (!options.keepDirty) {
+				unset(_formState.dirtyFields, name);
+				_formState.isDirty = options.defaultValue ? _getDirty(name, cloneObject(get(_defaultValues, name))) : _getDirty();
+			}
+			if (!options.keepError) {
+				unset(_formState.errors, name);
+				_proxyFormState.isValid && _setValid();
+			}
+			_subjects.state.next({ ..._formState });
+		}
+	};
+	const _reset = (formValues, keepStateOptions = {}) => {
+		const updatedValues = formValues ? cloneObject(formValues) : _defaultValues;
+		const cloneUpdatedValues = cloneObject(updatedValues);
+		const isEmptyResetValues = isEmptyObject(formValues);
+		const values = isEmptyResetValues ? _defaultValues : cloneUpdatedValues;
+		if (!keepStateOptions.keepDefaultValues) _defaultValues = updatedValues;
+		if (!keepStateOptions.keepValues) {
+			if (keepStateOptions.keepDirtyValues) {
+				const fieldsToCheck = new Set([..._names.mount, ...Object.keys(getDirtyFields(_defaultValues, _formValues))]);
+				for (const fieldName of Array.from(fieldsToCheck)) {
+					const isDirty = get(_formState.dirtyFields, fieldName);
+					const existingValue = get(_formValues, fieldName);
+					const newValue = get(values, fieldName);
+					if (isDirty && !isUndefined(existingValue)) set(values, fieldName, existingValue);
+					else if (!isDirty && !isUndefined(newValue)) setValue(fieldName, newValue);
+				}
+			} else {
+				if (isWeb && isUndefined(formValues)) for (const name of _names.mount) {
+					const field = get(_fields, name);
+					if (field && field._f) {
+						const fieldReference = Array.isArray(field._f.refs) ? field._f.refs[0] : field._f.ref;
+						if (isHTMLElement$2(fieldReference)) {
+							const form = fieldReference.closest("form");
+							if (form) {
+								form.reset();
+								break;
+							}
+						}
+					}
+				}
+				if (keepStateOptions.keepFieldsRef) for (const fieldName of _names.mount) setValue(fieldName, get(values, fieldName));
+				else _fields = {};
+			}
+			_formValues = _options.shouldUnregister ? keepStateOptions.keepDefaultValues ? cloneObject(_defaultValues) : {} : cloneObject(values);
+			_subjects.array.next({ values: { ...values } });
+			_subjects.state.next({ values: { ...values } });
+		}
+		_names = {
+			mount: keepStateOptions.keepDirtyValues ? _names.mount : /* @__PURE__ */ new Set(),
+			unMount: /* @__PURE__ */ new Set(),
+			array: /* @__PURE__ */ new Set(),
+			disabled: /* @__PURE__ */ new Set(),
+			watch: /* @__PURE__ */ new Set(),
+			watchAll: false,
+			focus: ""
+		};
+		_state.mount = !_proxyFormState.isValid || !!keepStateOptions.keepIsValid || !!keepStateOptions.keepDirtyValues || !_options.shouldUnregister && !isEmptyObject(values);
+		_state.watch = !!_options.shouldUnregister;
+		_state.keepIsValid = !!keepStateOptions.keepIsValid;
+		_state.action = false;
+		if (!keepStateOptions.keepErrors) _formState.errors = {};
+		_subjects.state.next({
+			submitCount: keepStateOptions.keepSubmitCount ? _formState.submitCount : 0,
+			isDirty: isEmptyResetValues ? false : keepStateOptions.keepDirty ? _formState.isDirty : !!(keepStateOptions.keepDefaultValues && !deepEqual$1(formValues, _defaultValues)),
+			isSubmitted: keepStateOptions.keepIsSubmitted ? _formState.isSubmitted : false,
+			dirtyFields: isEmptyResetValues ? {} : keepStateOptions.keepDirtyValues ? keepStateOptions.keepDefaultValues && _formValues ? getDirtyFields(_defaultValues, _formValues) : _formState.dirtyFields : keepStateOptions.keepDefaultValues && formValues ? getDirtyFields(_defaultValues, formValues) : keepStateOptions.keepDirty ? _formState.dirtyFields : {},
+			touchedFields: keepStateOptions.keepTouched ? _formState.touchedFields : {},
+			errors: keepStateOptions.keepErrors ? _formState.errors : {},
+			isSubmitSuccessful: keepStateOptions.keepIsSubmitSuccessful ? _formState.isSubmitSuccessful : false,
+			isSubmitting: false,
+			defaultValues: _defaultValues
+		});
+	};
+	const reset = (formValues, keepStateOptions) => _reset(isFunction(formValues) ? formValues(_formValues) : formValues, {
+		..._options.resetOptions,
+		...keepStateOptions
+	});
+	const setFocus = (name, options = {}) => {
+		const field = get(_fields, name);
+		const fieldReference = field && field._f;
+		if (fieldReference) {
+			const fieldRef = fieldReference.refs ? fieldReference.refs[0] : fieldReference.ref;
+			if (fieldRef.focus) setTimeout(() => {
+				fieldRef.focus();
+				options.shouldSelect && isFunction(fieldRef.select) && fieldRef.select();
+			});
+		}
+	};
+	const _setFormState = (updatedFormState) => {
+		_formState = {
+			..._formState,
+			...updatedFormState
+		};
+	};
+	const _resetDefaultValues = () => isFunction(_options.defaultValues) && _options.defaultValues().then((values) => {
+		reset(values, _options.resetOptions);
+		_subjects.state.next({ isLoading: false });
+	});
+	const methods = {
+		control: {
+			register,
+			unregister,
+			getFieldState,
+			handleSubmit,
+			setError,
+			_subscribe,
+			_runSchema,
+			_updateIsValidating,
+			_focusError,
+			_getWatch,
+			_getDirty,
+			_setValid,
+			_setFieldArray,
+			_setDisabledField,
+			_setErrors,
+			_getFieldArray,
+			_reset,
+			_resetDefaultValues,
+			_removeUnmounted,
+			_disableForm,
+			_subjects,
+			_proxyFormState,
+			get _fields() {
+				return _fields;
+			},
+			get _formValues() {
+				return _formValues;
+			},
+			get _state() {
+				return _state;
+			},
+			set _state(value) {
+				_state = value;
+			},
+			get _defaultValues() {
+				return _defaultValues;
+			},
+			get _names() {
+				return _names;
+			},
+			set _names(value) {
+				_names = value;
+			},
+			get _formState() {
+				return _formState;
+			},
+			get _options() {
+				return _options;
+			},
+			set _options(value) {
+				_options = {
+					..._options,
+					...value
+				};
+			}
+		},
+		subscribe,
+		trigger,
+		register,
+		handleSubmit,
+		watch,
+		setValue,
+		getValues,
+		reset,
+		resetField,
+		clearErrors,
+		unregister,
+		setError,
+		setFocus,
+		getFieldState
+	};
+	return {
+		...methods,
+		formControl: methods
+	};
+}
+/**
+* Custom hook to manage the entire form.
+*
+* @remarks
+* [API](https://react-hook-form.com/docs/useform) • [Demo](https://codesandbox.io/s/react-hook-form-get-started-ts-5ksmm) • [Video](https://www.youtube.com/watch?v=RkXv4AXXC_4)
+*
+* @param props - form configuration and validation parameters.
+*
+* @returns methods - individual functions to manage the form state. {@link UseFormReturn}
+*
+* @example
+* ```tsx
+* function App() {
+*   const { register, handleSubmit, watch, formState: { errors } } = useForm();
+*   const onSubmit = data => console.log(data);
+*
+*   console.log(watch("example"));
+*
+*   return (
+*     <form onSubmit={handleSubmit(onSubmit)}>
+*       <input defaultValue="test" {...register("example")} />
+*       <input {...register("exampleRequired", { required: true })} />
+*       {errors.exampleRequired && <span>This field is required</span>}
+*       <button>Submit</button>
+*     </form>
+*   );
+* }
+* ```
+*/
+function useForm(props = {}) {
+	const _formControl = import_react.useRef(void 0);
+	const _values = import_react.useRef(void 0);
+	const [formState, updateFormState] = import_react.useState({
+		isDirty: false,
+		isValidating: false,
+		isLoading: isFunction(props.defaultValues),
+		isSubmitted: false,
+		isSubmitting: false,
+		isSubmitSuccessful: false,
+		isValid: false,
+		submitCount: 0,
+		dirtyFields: {},
+		touchedFields: {},
+		validatingFields: {},
+		errors: props.errors || {},
+		disabled: props.disabled || false,
+		isReady: false,
+		defaultValues: isFunction(props.defaultValues) ? void 0 : props.defaultValues
+	});
+	if (!_formControl.current) if (props.formControl) {
+		_formControl.current = {
+			...props.formControl,
+			formState
+		};
+		if (props.defaultValues && !isFunction(props.defaultValues)) props.formControl.reset(props.defaultValues, props.resetOptions);
+	} else {
+		const { formControl, ...rest } = createFormControl(props);
+		_formControl.current = {
+			...rest,
+			formState
+		};
+	}
+	const control = _formControl.current.control;
+	control._options = props;
+	useIsomorphicLayoutEffect(() => {
+		const sub = control._subscribe({
+			formState: control._proxyFormState,
+			callback: () => updateFormState({ ...control._formState }),
+			reRenderRoot: true
+		});
+		updateFormState((data) => ({
+			...data,
+			isReady: true
+		}));
+		control._formState.isReady = true;
+		return sub;
+	}, [control]);
+	import_react.useEffect(() => control._disableForm(props.disabled), [control, props.disabled]);
+	import_react.useEffect(() => {
+		if (props.mode) control._options.mode = props.mode;
+		if (props.reValidateMode) control._options.reValidateMode = props.reValidateMode;
+	}, [
+		control,
+		props.mode,
+		props.reValidateMode
+	]);
+	import_react.useEffect(() => {
+		if (props.errors) {
+			control._setErrors(props.errors);
+			control._focusError();
+		}
+	}, [control, props.errors]);
+	import_react.useEffect(() => {
+		props.shouldUnregister && control._subjects.state.next({ values: control._getWatch() });
+	}, [control, props.shouldUnregister]);
+	import_react.useEffect(() => {
+		if (control._proxyFormState.isDirty) {
+			const isDirty = control._getDirty();
+			if (isDirty !== formState.isDirty) control._subjects.state.next({ isDirty });
+		}
+	}, [control, formState.isDirty]);
+	import_react.useEffect(() => {
+		var _a;
+		if (props.values && !deepEqual$1(props.values, _values.current)) {
+			control._reset(props.values, {
+				keepFieldsRef: true,
+				...control._options.resetOptions
+			});
+			if (!((_a = control._options.resetOptions) === null || _a === void 0 ? void 0 : _a.keepIsValid)) control._setValid();
+			_values.current = props.values;
+			updateFormState((state) => ({ ...state }));
+		} else control._resetDefaultValues();
+	}, [control, props.values]);
+	import_react.useEffect(() => {
+		if (!control._state.mount) {
+			control._setValid();
+			control._state.mount = true;
+		}
+		if (control._state.watch) {
+			control._state.watch = false;
+			control._subjects.state.next({ ...control._formState });
+		}
+		control._removeUnmounted();
+	});
+	_formControl.current.formState = import_react.useMemo(() => getProxyFormState(formState, control), [control, formState]);
+	return _formControl.current;
+}
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@hookform+resolvers@5.2.2_react-hook-form@7.71.2_react@19.2.4_/node_modules/@hookform/resolvers/dist/resolvers.mjs
+var r = (t, r, o) => {
+	if (t && "reportValidity" in t) {
+		const s = get(o, r);
+		t.setCustomValidity(s && s.message || ""), t.reportValidity();
+	}
+}, o = (e, t) => {
+	for (const o in t.fields) {
+		const s = t.fields[o];
+		s && s.ref && "reportValidity" in s.ref ? r(s.ref, o, e) : s && s.refs && s.refs.forEach((t) => r(t, o, e));
+	}
+}, s$1 = (r, s) => {
+	s.shouldUseNativeValidation && o(r, s);
+	const n = {};
+	for (const o in r) {
+		const f = get(s.fields, o), c = Object.assign(r[o] || {}, { ref: f && f.ref });
+		if (i$1(s.names || Object.keys(r), o)) {
+			const r = Object.assign({}, get(n, o));
+			set(r, "root", c), set(n, o, r);
+		} else set(n, o, c);
+	}
+	return n;
+}, i$1 = (e, t) => {
+	const r = n(t);
+	return e.some((e) => n(e).match(`^${r}\\.\\d+`));
+};
+function n(e) {
+	return e.replace(/\]|\[/g, "");
+}
+Object.freeze({ status: "aborted" });
+function $constructor(name, initializer, params) {
+	function init(inst, def) {
+		if (!inst._zod) Object.defineProperty(inst, "_zod", {
+			value: {
+				def,
+				constr: _,
+				traits: /* @__PURE__ */ new Set()
+			},
+			enumerable: false
+		});
+		if (inst._zod.traits.has(name)) return;
+		inst._zod.traits.add(name);
+		initializer(inst, def);
+		const proto = _.prototype;
+		const keys = Object.keys(proto);
+		for (let i = 0; i < keys.length; i++) {
+			const k = keys[i];
+			if (!(k in inst)) inst[k] = proto[k].bind(inst);
+		}
+	}
+	const Parent = params?.Parent ?? Object;
+	class Definition extends Parent {}
+	Object.defineProperty(Definition, "name", { value: name });
+	function _(def) {
+		var _a;
+		const inst = params?.Parent ? new Definition() : this;
+		init(inst, def);
+		(_a = inst._zod).deferred ?? (_a.deferred = []);
+		for (const fn of inst._zod.deferred) fn();
+		return inst;
+	}
+	Object.defineProperty(_, "init", { value: init });
+	Object.defineProperty(_, Symbol.hasInstance, { value: (inst) => {
+		if (params?.Parent && inst instanceof params.Parent) return true;
+		return inst?._zod?.traits?.has(name);
+	} });
+	Object.defineProperty(_, "name", { value: name });
+	return _;
+}
+var $ZodAsyncError = class extends Error {
+	constructor() {
+		super(`Encountered Promise during synchronous parse. Use .parseAsync() instead.`);
+	}
+};
+var $ZodEncodeError = class extends Error {
+	constructor(name) {
+		super(`Encountered unidirectional transform during encode: ${name}`);
+		this.name = "ZodEncodeError";
+	}
+};
+var globalConfig = {};
+function config(newConfig) {
+	if (newConfig) Object.assign(globalConfig, newConfig);
+	return globalConfig;
+}
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/util.js
+function getEnumValues(entries) {
+	const numericValues = Object.values(entries).filter((v) => typeof v === "number");
+	return Object.entries(entries).filter(([k, _]) => numericValues.indexOf(+k) === -1).map(([_, v]) => v);
+}
+function jsonStringifyReplacer(_, value) {
+	if (typeof value === "bigint") return value.toString();
+	return value;
+}
+function cached(getter) {
+	return { get value() {
+		{
+			const value = getter();
+			Object.defineProperty(this, "value", { value });
+			return value;
+		}
+		throw new Error("cached value already set");
+	} };
+}
+function nullish(input) {
+	return input === null || input === void 0;
+}
+function cleanRegex(source) {
+	const start = source.startsWith("^") ? 1 : 0;
+	const end = source.endsWith("$") ? source.length - 1 : source.length;
+	return source.slice(start, end);
+}
+var EVALUATING = Symbol("evaluating");
+function defineLazy(object, key, getter) {
+	let value = void 0;
+	Object.defineProperty(object, key, {
+		get() {
+			if (value === EVALUATING) return;
+			if (value === void 0) {
+				value = EVALUATING;
+				value = getter();
+			}
+			return value;
+		},
+		set(v) {
+			Object.defineProperty(object, key, { value: v });
+		},
+		configurable: true
+	});
+}
+function assignProp(target, prop, value) {
+	Object.defineProperty(target, prop, {
+		value,
+		writable: true,
+		enumerable: true,
+		configurable: true
+	});
+}
+function mergeDefs(...defs) {
+	const mergedDescriptors = {};
+	for (const def of defs) {
+		const descriptors = Object.getOwnPropertyDescriptors(def);
+		Object.assign(mergedDescriptors, descriptors);
+	}
+	return Object.defineProperties({}, mergedDescriptors);
+}
+function esc(str) {
+	return JSON.stringify(str);
+}
+function slugify(input) {
+	return input.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/[\s_-]+/g, "-").replace(/^-+|-+$/g, "");
+}
+var captureStackTrace = "captureStackTrace" in Error ? Error.captureStackTrace : (..._args) => {};
+function isObject(data) {
+	return typeof data === "object" && data !== null && !Array.isArray(data);
+}
+var allowsEval = cached(() => {
+	if (typeof navigator !== "undefined" && navigator?.userAgent?.includes("Cloudflare")) return false;
+	try {
+		new Function("");
+		return true;
+	} catch (_) {
+		return false;
+	}
+});
+function isPlainObject(o) {
+	if (isObject(o) === false) return false;
+	const ctor = o.constructor;
+	if (ctor === void 0) return true;
+	if (typeof ctor !== "function") return true;
+	const prot = ctor.prototype;
+	if (isObject(prot) === false) return false;
+	if (Object.prototype.hasOwnProperty.call(prot, "isPrototypeOf") === false) return false;
+	return true;
+}
+function shallowClone(o) {
+	if (isPlainObject(o)) return { ...o };
+	if (Array.isArray(o)) return [...o];
+	return o;
+}
+var propertyKeyTypes = new Set([
+	"string",
+	"number",
+	"symbol"
+]);
+function escapeRegex(str) {
+	return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+function clone(inst, def, params) {
+	const cl = new inst._zod.constr(def ?? inst._zod.def);
+	if (!def || params?.parent) cl._zod.parent = inst;
+	return cl;
+}
+function normalizeParams(_params) {
+	const params = _params;
+	if (!params) return {};
+	if (typeof params === "string") return { error: () => params };
+	if (params?.message !== void 0) {
+		if (params?.error !== void 0) throw new Error("Cannot specify both `message` and `error` params");
+		params.error = params.message;
+	}
+	delete params.message;
+	if (typeof params.error === "string") return {
+		...params,
+		error: () => params.error
+	};
+	return params;
+}
+function optionalKeys(shape) {
+	return Object.keys(shape).filter((k) => {
+		return shape[k]._zod.optin === "optional" && shape[k]._zod.optout === "optional";
+	});
+}
+Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, -Number.MAX_VALUE, Number.MAX_VALUE;
+function pick(schema, mask) {
+	const currDef = schema._zod.def;
+	const checks = currDef.checks;
+	if (checks && checks.length > 0) throw new Error(".pick() cannot be used on object schemas containing refinements");
+	return clone(schema, mergeDefs(schema._zod.def, {
+		get shape() {
+			const newShape = {};
+			for (const key in mask) {
+				if (!(key in currDef.shape)) throw new Error(`Unrecognized key: "${key}"`);
+				if (!mask[key]) continue;
+				newShape[key] = currDef.shape[key];
+			}
+			assignProp(this, "shape", newShape);
+			return newShape;
+		},
+		checks: []
+	}));
+}
+function omit(schema, mask) {
+	const currDef = schema._zod.def;
+	const checks = currDef.checks;
+	if (checks && checks.length > 0) throw new Error(".omit() cannot be used on object schemas containing refinements");
+	return clone(schema, mergeDefs(schema._zod.def, {
+		get shape() {
+			const newShape = { ...schema._zod.def.shape };
+			for (const key in mask) {
+				if (!(key in currDef.shape)) throw new Error(`Unrecognized key: "${key}"`);
+				if (!mask[key]) continue;
+				delete newShape[key];
+			}
+			assignProp(this, "shape", newShape);
+			return newShape;
+		},
+		checks: []
+	}));
+}
+function extend(schema, shape) {
+	if (!isPlainObject(shape)) throw new Error("Invalid input to extend: expected a plain object");
+	const checks = schema._zod.def.checks;
+	if (checks && checks.length > 0) {
+		const existingShape = schema._zod.def.shape;
+		for (const key in shape) if (Object.getOwnPropertyDescriptor(existingShape, key) !== void 0) throw new Error("Cannot overwrite keys on object schemas containing refinements. Use `.safeExtend()` instead.");
+	}
+	return clone(schema, mergeDefs(schema._zod.def, { get shape() {
+		const _shape = {
+			...schema._zod.def.shape,
+			...shape
+		};
+		assignProp(this, "shape", _shape);
+		return _shape;
+	} }));
+}
+function safeExtend(schema, shape) {
+	if (!isPlainObject(shape)) throw new Error("Invalid input to safeExtend: expected a plain object");
+	return clone(schema, mergeDefs(schema._zod.def, { get shape() {
+		const _shape = {
+			...schema._zod.def.shape,
+			...shape
+		};
+		assignProp(this, "shape", _shape);
+		return _shape;
+	} }));
+}
+function merge(a, b) {
+	return clone(a, mergeDefs(a._zod.def, {
+		get shape() {
+			const _shape = {
+				...a._zod.def.shape,
+				...b._zod.def.shape
+			};
+			assignProp(this, "shape", _shape);
+			return _shape;
+		},
+		get catchall() {
+			return b._zod.def.catchall;
+		},
+		checks: []
+	}));
+}
+function partial(Class, schema, mask) {
+	const checks = schema._zod.def.checks;
+	if (checks && checks.length > 0) throw new Error(".partial() cannot be used on object schemas containing refinements");
+	return clone(schema, mergeDefs(schema._zod.def, {
+		get shape() {
+			const oldShape = schema._zod.def.shape;
+			const shape = { ...oldShape };
+			if (mask) for (const key in mask) {
+				if (!(key in oldShape)) throw new Error(`Unrecognized key: "${key}"`);
+				if (!mask[key]) continue;
+				shape[key] = Class ? new Class({
+					type: "optional",
+					innerType: oldShape[key]
+				}) : oldShape[key];
+			}
+			else for (const key in oldShape) shape[key] = Class ? new Class({
+				type: "optional",
+				innerType: oldShape[key]
+			}) : oldShape[key];
+			assignProp(this, "shape", shape);
+			return shape;
+		},
+		checks: []
+	}));
+}
+function required(Class, schema, mask) {
+	return clone(schema, mergeDefs(schema._zod.def, { get shape() {
+		const oldShape = schema._zod.def.shape;
+		const shape = { ...oldShape };
+		if (mask) for (const key in mask) {
+			if (!(key in shape)) throw new Error(`Unrecognized key: "${key}"`);
+			if (!mask[key]) continue;
+			shape[key] = new Class({
+				type: "nonoptional",
+				innerType: oldShape[key]
+			});
+		}
+		else for (const key in oldShape) shape[key] = new Class({
+			type: "nonoptional",
+			innerType: oldShape[key]
+		});
+		assignProp(this, "shape", shape);
+		return shape;
+	} }));
+}
+function aborted(x, startIndex = 0) {
+	if (x.aborted === true) return true;
+	for (let i = startIndex; i < x.issues.length; i++) if (x.issues[i]?.continue !== true) return true;
+	return false;
+}
+function prefixIssues(path, issues) {
+	return issues.map((iss) => {
+		var _a;
+		(_a = iss).path ?? (_a.path = []);
+		iss.path.unshift(path);
+		return iss;
+	});
+}
+function unwrapMessage(message) {
+	return typeof message === "string" ? message : message?.message;
+}
+function finalizeIssue(iss, ctx, config) {
+	const full = {
+		...iss,
+		path: iss.path ?? []
+	};
+	if (!iss.message) full.message = unwrapMessage(iss.inst?._zod.def?.error?.(iss)) ?? unwrapMessage(ctx?.error?.(iss)) ?? unwrapMessage(config.customError?.(iss)) ?? unwrapMessage(config.localeError?.(iss)) ?? "Invalid input";
+	delete full.inst;
+	delete full.continue;
+	if (!ctx?.reportInput) delete full.input;
+	return full;
+}
+function getLengthableOrigin(input) {
+	if (Array.isArray(input)) return "array";
+	if (typeof input === "string") return "string";
+	return "unknown";
+}
+function issue(...args) {
+	const [iss, input, inst] = args;
+	if (typeof iss === "string") return {
+		message: iss,
+		code: "custom",
+		input,
+		inst
+	};
+	return { ...iss };
+}
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/errors.js
+var initializer$1 = (inst, def) => {
+	inst.name = "$ZodError";
+	Object.defineProperty(inst, "_zod", {
+		value: inst._zod,
+		enumerable: false
+	});
+	Object.defineProperty(inst, "issues", {
+		value: def,
+		enumerable: false
+	});
+	inst.message = JSON.stringify(def, jsonStringifyReplacer, 2);
+	Object.defineProperty(inst, "toString", {
+		value: () => inst.message,
+		enumerable: false
+	});
+};
+var $ZodError = $constructor("$ZodError", initializer$1);
+var $ZodRealError = $constructor("$ZodError", initializer$1, { Parent: Error });
+function flattenError(error, mapper = (issue) => issue.message) {
+	const fieldErrors = {};
+	const formErrors = [];
+	for (const sub of error.issues) if (sub.path.length > 0) {
+		fieldErrors[sub.path[0]] = fieldErrors[sub.path[0]] || [];
+		fieldErrors[sub.path[0]].push(mapper(sub));
+	} else formErrors.push(mapper(sub));
+	return {
+		formErrors,
+		fieldErrors
+	};
+}
+function formatError(error, mapper = (issue) => issue.message) {
+	const fieldErrors = { _errors: [] };
+	const processError = (error) => {
+		for (const issue of error.issues) if (issue.code === "invalid_union" && issue.errors.length) issue.errors.map((issues) => processError({ issues }));
+		else if (issue.code === "invalid_key") processError({ issues: issue.issues });
+		else if (issue.code === "invalid_element") processError({ issues: issue.issues });
+		else if (issue.path.length === 0) fieldErrors._errors.push(mapper(issue));
+		else {
+			let curr = fieldErrors;
+			let i = 0;
+			while (i < issue.path.length) {
+				const el = issue.path[i];
+				if (!(i === issue.path.length - 1)) curr[el] = curr[el] || { _errors: [] };
+				else {
+					curr[el] = curr[el] || { _errors: [] };
+					curr[el]._errors.push(mapper(issue));
+				}
+				curr = curr[el];
+				i++;
+			}
+		}
+	};
+	processError(error);
+	return fieldErrors;
+}
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/parse.js
+var _parse = (_Err) => (schema, value, _ctx, _params) => {
+	const ctx = _ctx ? Object.assign(_ctx, { async: false }) : { async: false };
+	const result = schema._zod.run({
+		value,
+		issues: []
+	}, ctx);
+	if (result instanceof Promise) throw new $ZodAsyncError();
+	if (result.issues.length) {
+		const e = new (_params?.Err ?? _Err)(result.issues.map((iss) => finalizeIssue(iss, ctx, config())));
+		captureStackTrace(e, _params?.callee);
+		throw e;
+	}
+	return result.value;
+};
+var parse$1 = /* @__PURE__ */ _parse($ZodRealError);
+var _parseAsync = (_Err) => async (schema, value, _ctx, params) => {
+	const ctx = _ctx ? Object.assign(_ctx, { async: true }) : { async: true };
+	let result = schema._zod.run({
+		value,
+		issues: []
+	}, ctx);
+	if (result instanceof Promise) result = await result;
+	if (result.issues.length) {
+		const e = new (params?.Err ?? _Err)(result.issues.map((iss) => finalizeIssue(iss, ctx, config())));
+		captureStackTrace(e, params?.callee);
+		throw e;
+	}
+	return result.value;
+};
+var parseAsync$1 = /* @__PURE__ */ _parseAsync($ZodRealError);
+var _safeParse = (_Err) => (schema, value, _ctx) => {
+	const ctx = _ctx ? {
+		..._ctx,
+		async: false
+	} : { async: false };
+	const result = schema._zod.run({
+		value,
+		issues: []
+	}, ctx);
+	if (result instanceof Promise) throw new $ZodAsyncError();
+	return result.issues.length ? {
+		success: false,
+		error: new (_Err ?? $ZodError)(result.issues.map((iss) => finalizeIssue(iss, ctx, config())))
+	} : {
+		success: true,
+		data: result.value
+	};
+};
+var safeParse$1 = /* @__PURE__ */ _safeParse($ZodRealError);
+var _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
+	const ctx = _ctx ? Object.assign(_ctx, { async: true }) : { async: true };
+	let result = schema._zod.run({
+		value,
+		issues: []
+	}, ctx);
+	if (result instanceof Promise) result = await result;
+	return result.issues.length ? {
+		success: false,
+		error: new _Err(result.issues.map((iss) => finalizeIssue(iss, ctx, config())))
+	} : {
+		success: true,
+		data: result.value
+	};
+};
+var safeParseAsync$1 = /* @__PURE__ */ _safeParseAsync($ZodRealError);
+var _encode = (_Err) => (schema, value, _ctx) => {
+	const ctx = _ctx ? Object.assign(_ctx, { direction: "backward" }) : { direction: "backward" };
+	return _parse(_Err)(schema, value, ctx);
+};
+var _decode = (_Err) => (schema, value, _ctx) => {
+	return _parse(_Err)(schema, value, _ctx);
+};
+var _encodeAsync = (_Err) => async (schema, value, _ctx) => {
+	const ctx = _ctx ? Object.assign(_ctx, { direction: "backward" }) : { direction: "backward" };
+	return _parseAsync(_Err)(schema, value, ctx);
+};
+var _decodeAsync = (_Err) => async (schema, value, _ctx) => {
+	return _parseAsync(_Err)(schema, value, _ctx);
+};
+var _safeEncode = (_Err) => (schema, value, _ctx) => {
+	const ctx = _ctx ? Object.assign(_ctx, { direction: "backward" }) : { direction: "backward" };
+	return _safeParse(_Err)(schema, value, ctx);
+};
+var _safeDecode = (_Err) => (schema, value, _ctx) => {
+	return _safeParse(_Err)(schema, value, _ctx);
+};
+var _safeEncodeAsync = (_Err) => async (schema, value, _ctx) => {
+	const ctx = _ctx ? Object.assign(_ctx, { direction: "backward" }) : { direction: "backward" };
+	return _safeParseAsync(_Err)(schema, value, ctx);
+};
+var _safeDecodeAsync = (_Err) => async (schema, value, _ctx) => {
+	return _safeParseAsync(_Err)(schema, value, _ctx);
+};
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/regexes.js
+var cuid = /^[cC][^\s-]{8,}$/;
+var cuid2 = /^[0-9a-z]+$/;
+var ulid = /^[0-9A-HJKMNP-TV-Za-hjkmnp-tv-z]{26}$/;
+var xid = /^[0-9a-vA-V]{20}$/;
+var ksuid = /^[A-Za-z0-9]{27}$/;
+var nanoid = /^[a-zA-Z0-9_-]{21}$/;
+/** ISO 8601-1 duration regex. Does not support the 8601-2 extensions like negative durations or fractional/negative components. */
+var duration$1 = /^P(?:(\d+W)|(?!.*W)(?=\d|T\d)(\d+Y)?(\d+M)?(\d+D)?(T(?=\d)(\d+H)?(\d+M)?(\d+([.,]\d+)?S)?)?)$/;
+/** A regex for any UUID-like identifier: 8-4-4-4-12 hex pattern */
+var guid = /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$/;
+/** Returns a regex for validating an RFC 9562/4122 UUID.
+*
+* @param version Optionally specify a version 1-8. If no version is specified, all versions are supported. */
+var uuid = (version) => {
+	if (!version) return /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/;
+	return new RegExp(`^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-${version}[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$`);
+};
+/** Practical email validation */
+var email = /^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$/;
+var _emoji$1 = `^(\\p{Extended_Pictographic}|\\p{Emoji_Component})+$`;
+function emoji() {
+	return new RegExp(_emoji$1, "u");
+}
+var ipv4 = /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$/;
+var ipv6 = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))$/;
+var cidrv4 = /^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\/([0-9]|[1-2][0-9]|3[0-2])$/;
+var cidrv6 = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|::|([0-9a-fA-F]{1,4})?::([0-9a-fA-F]{1,4}:?){0,6})\/(12[0-8]|1[01][0-9]|[1-9]?[0-9])$/;
+var base64 = /^$|^(?:[0-9a-zA-Z+/]{4})*(?:(?:[0-9a-zA-Z+/]{2}==)|(?:[0-9a-zA-Z+/]{3}=))?$/;
+var base64url = /^[A-Za-z0-9_-]*$/;
+var e164 = /^\+[1-9]\d{6,14}$/;
+var dateSource = `(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))`;
+var date$1 = /* @__PURE__ */ new RegExp(`^${dateSource}$`);
+function timeSource(args) {
+	const hhmm = `(?:[01]\\d|2[0-3]):[0-5]\\d`;
+	return typeof args.precision === "number" ? args.precision === -1 ? `${hhmm}` : args.precision === 0 ? `${hhmm}:[0-5]\\d` : `${hhmm}:[0-5]\\d\\.\\d{${args.precision}}` : `${hhmm}(?::[0-5]\\d(?:\\.\\d+)?)?`;
+}
+function time$1(args) {
+	return new RegExp(`^${timeSource(args)}$`);
+}
+function datetime$1(args) {
+	const time = timeSource({ precision: args.precision });
+	const opts = ["Z"];
+	if (args.local) opts.push("");
+	if (args.offset) opts.push(`([+-](?:[01]\\d|2[0-3]):[0-5]\\d)`);
+	const timeRegex = `${time}(?:${opts.join("|")})`;
+	return new RegExp(`^${dateSource}T(?:${timeRegex})$`);
+}
+var string$1 = (params) => {
+	const regex = params ? `[\\s\\S]{${params?.minimum ?? 0},${params?.maximum ?? ""}}` : `[\\s\\S]*`;
+	return new RegExp(`^${regex}$`);
+};
+var lowercase = /^[^A-Z]*$/;
+var uppercase = /^[^a-z]*$/;
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/checks.js
+var $ZodCheck = /* @__PURE__ */ $constructor("$ZodCheck", (inst, def) => {
+	var _a;
+	inst._zod ?? (inst._zod = {});
+	inst._zod.def = def;
+	(_a = inst._zod).onattach ?? (_a.onattach = []);
+});
+var $ZodCheckMaxLength = /* @__PURE__ */ $constructor("$ZodCheckMaxLength", (inst, def) => {
+	var _a;
+	$ZodCheck.init(inst, def);
+	(_a = inst._zod.def).when ?? (_a.when = (payload) => {
+		const val = payload.value;
+		return !nullish(val) && val.length !== void 0;
+	});
+	inst._zod.onattach.push((inst) => {
+		const curr = inst._zod.bag.maximum ?? Number.POSITIVE_INFINITY;
+		if (def.maximum < curr) inst._zod.bag.maximum = def.maximum;
+	});
+	inst._zod.check = (payload) => {
+		const input = payload.value;
+		if (input.length <= def.maximum) return;
+		const origin = getLengthableOrigin(input);
+		payload.issues.push({
+			origin,
+			code: "too_big",
+			maximum: def.maximum,
+			inclusive: true,
+			input,
+			inst,
+			continue: !def.abort
+		});
+	};
+});
+var $ZodCheckMinLength = /* @__PURE__ */ $constructor("$ZodCheckMinLength", (inst, def) => {
+	var _a;
+	$ZodCheck.init(inst, def);
+	(_a = inst._zod.def).when ?? (_a.when = (payload) => {
+		const val = payload.value;
+		return !nullish(val) && val.length !== void 0;
+	});
+	inst._zod.onattach.push((inst) => {
+		const curr = inst._zod.bag.minimum ?? Number.NEGATIVE_INFINITY;
+		if (def.minimum > curr) inst._zod.bag.minimum = def.minimum;
+	});
+	inst._zod.check = (payload) => {
+		const input = payload.value;
+		if (input.length >= def.minimum) return;
+		const origin = getLengthableOrigin(input);
+		payload.issues.push({
+			origin,
+			code: "too_small",
+			minimum: def.minimum,
+			inclusive: true,
+			input,
+			inst,
+			continue: !def.abort
+		});
+	};
+});
+var $ZodCheckLengthEquals = /* @__PURE__ */ $constructor("$ZodCheckLengthEquals", (inst, def) => {
+	var _a;
+	$ZodCheck.init(inst, def);
+	(_a = inst._zod.def).when ?? (_a.when = (payload) => {
+		const val = payload.value;
+		return !nullish(val) && val.length !== void 0;
+	});
+	inst._zod.onattach.push((inst) => {
+		const bag = inst._zod.bag;
+		bag.minimum = def.length;
+		bag.maximum = def.length;
+		bag.length = def.length;
+	});
+	inst._zod.check = (payload) => {
+		const input = payload.value;
+		const length = input.length;
+		if (length === def.length) return;
+		const origin = getLengthableOrigin(input);
+		const tooBig = length > def.length;
+		payload.issues.push({
+			origin,
+			...tooBig ? {
+				code: "too_big",
+				maximum: def.length
+			} : {
+				code: "too_small",
+				minimum: def.length
+			},
+			inclusive: true,
+			exact: true,
+			input: payload.value,
+			inst,
+			continue: !def.abort
+		});
+	};
+});
+var $ZodCheckStringFormat = /* @__PURE__ */ $constructor("$ZodCheckStringFormat", (inst, def) => {
+	var _a, _b;
+	$ZodCheck.init(inst, def);
+	inst._zod.onattach.push((inst) => {
+		const bag = inst._zod.bag;
+		bag.format = def.format;
+		if (def.pattern) {
+			bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
+			bag.patterns.add(def.pattern);
+		}
+	});
+	if (def.pattern) (_a = inst._zod).check ?? (_a.check = (payload) => {
+		def.pattern.lastIndex = 0;
+		if (def.pattern.test(payload.value)) return;
+		payload.issues.push({
+			origin: "string",
+			code: "invalid_format",
+			format: def.format,
+			input: payload.value,
+			...def.pattern ? { pattern: def.pattern.toString() } : {},
+			inst,
+			continue: !def.abort
+		});
+	});
+	else (_b = inst._zod).check ?? (_b.check = () => {});
+});
+var $ZodCheckRegex = /* @__PURE__ */ $constructor("$ZodCheckRegex", (inst, def) => {
+	$ZodCheckStringFormat.init(inst, def);
+	inst._zod.check = (payload) => {
+		def.pattern.lastIndex = 0;
+		if (def.pattern.test(payload.value)) return;
+		payload.issues.push({
+			origin: "string",
+			code: "invalid_format",
+			format: "regex",
+			input: payload.value,
+			pattern: def.pattern.toString(),
+			inst,
+			continue: !def.abort
+		});
+	};
+});
+var $ZodCheckLowerCase = /* @__PURE__ */ $constructor("$ZodCheckLowerCase", (inst, def) => {
+	def.pattern ?? (def.pattern = lowercase);
+	$ZodCheckStringFormat.init(inst, def);
+});
+var $ZodCheckUpperCase = /* @__PURE__ */ $constructor("$ZodCheckUpperCase", (inst, def) => {
+	def.pattern ?? (def.pattern = uppercase);
+	$ZodCheckStringFormat.init(inst, def);
+});
+var $ZodCheckIncludes = /* @__PURE__ */ $constructor("$ZodCheckIncludes", (inst, def) => {
+	$ZodCheck.init(inst, def);
+	const escapedRegex = escapeRegex(def.includes);
+	const pattern = new RegExp(typeof def.position === "number" ? `^.{${def.position}}${escapedRegex}` : escapedRegex);
+	def.pattern = pattern;
+	inst._zod.onattach.push((inst) => {
+		const bag = inst._zod.bag;
+		bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
+		bag.patterns.add(pattern);
+	});
+	inst._zod.check = (payload) => {
+		if (payload.value.includes(def.includes, def.position)) return;
+		payload.issues.push({
+			origin: "string",
+			code: "invalid_format",
+			format: "includes",
+			includes: def.includes,
+			input: payload.value,
+			inst,
+			continue: !def.abort
+		});
+	};
+});
+var $ZodCheckStartsWith = /* @__PURE__ */ $constructor("$ZodCheckStartsWith", (inst, def) => {
+	$ZodCheck.init(inst, def);
+	const pattern = new RegExp(`^${escapeRegex(def.prefix)}.*`);
+	def.pattern ?? (def.pattern = pattern);
+	inst._zod.onattach.push((inst) => {
+		const bag = inst._zod.bag;
+		bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
+		bag.patterns.add(pattern);
+	});
+	inst._zod.check = (payload) => {
+		if (payload.value.startsWith(def.prefix)) return;
+		payload.issues.push({
+			origin: "string",
+			code: "invalid_format",
+			format: "starts_with",
+			prefix: def.prefix,
+			input: payload.value,
+			inst,
+			continue: !def.abort
+		});
+	};
+});
+var $ZodCheckEndsWith = /* @__PURE__ */ $constructor("$ZodCheckEndsWith", (inst, def) => {
+	$ZodCheck.init(inst, def);
+	const pattern = new RegExp(`.*${escapeRegex(def.suffix)}$`);
+	def.pattern ?? (def.pattern = pattern);
+	inst._zod.onattach.push((inst) => {
+		const bag = inst._zod.bag;
+		bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
+		bag.patterns.add(pattern);
+	});
+	inst._zod.check = (payload) => {
+		if (payload.value.endsWith(def.suffix)) return;
+		payload.issues.push({
+			origin: "string",
+			code: "invalid_format",
+			format: "ends_with",
+			suffix: def.suffix,
+			input: payload.value,
+			inst,
+			continue: !def.abort
+		});
+	};
+});
+var $ZodCheckOverwrite = /* @__PURE__ */ $constructor("$ZodCheckOverwrite", (inst, def) => {
+	$ZodCheck.init(inst, def);
+	inst._zod.check = (payload) => {
+		payload.value = def.tx(payload.value);
+	};
+});
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/doc.js
+var Doc = class {
+	constructor(args = []) {
+		this.content = [];
+		this.indent = 0;
+		if (this) this.args = args;
+	}
+	indented(fn) {
+		this.indent += 1;
+		fn(this);
+		this.indent -= 1;
+	}
+	write(arg) {
+		if (typeof arg === "function") {
+			arg(this, { execution: "sync" });
+			arg(this, { execution: "async" });
+			return;
+		}
+		const lines = arg.split("\n").filter((x) => x);
+		const minIndent = Math.min(...lines.map((x) => x.length - x.trimStart().length));
+		const dedented = lines.map((x) => x.slice(minIndent)).map((x) => " ".repeat(this.indent * 2) + x);
+		for (const line of dedented) this.content.push(line);
+	}
+	compile() {
+		const F = Function;
+		const args = this?.args;
+		const lines = [...(this?.content ?? [``]).map((x) => `  ${x}`)];
+		return new F(...args, lines.join("\n"));
+	}
+};
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/versions.js
+var version = {
+	major: 4,
+	minor: 3,
+	patch: 6
+};
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/schemas.js
+var $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
+	var _a;
+	inst ?? (inst = {});
+	inst._zod.def = def;
+	inst._zod.bag = inst._zod.bag || {};
+	inst._zod.version = version;
+	const checks = [...inst._zod.def.checks ?? []];
+	if (inst._zod.traits.has("$ZodCheck")) checks.unshift(inst);
+	for (const ch of checks) for (const fn of ch._zod.onattach) fn(inst);
+	if (checks.length === 0) {
+		(_a = inst._zod).deferred ?? (_a.deferred = []);
+		inst._zod.deferred?.push(() => {
+			inst._zod.run = inst._zod.parse;
+		});
+	} else {
+		const runChecks = (payload, checks, ctx) => {
+			let isAborted = aborted(payload);
+			let asyncResult;
+			for (const ch of checks) {
+				if (ch._zod.def.when) {
+					if (!ch._zod.def.when(payload)) continue;
+				} else if (isAborted) continue;
+				const currLen = payload.issues.length;
+				const _ = ch._zod.check(payload);
+				if (_ instanceof Promise && ctx?.async === false) throw new $ZodAsyncError();
+				if (asyncResult || _ instanceof Promise) asyncResult = (asyncResult ?? Promise.resolve()).then(async () => {
+					await _;
+					if (payload.issues.length === currLen) return;
+					if (!isAborted) isAborted = aborted(payload, currLen);
+				});
+				else {
+					if (payload.issues.length === currLen) continue;
+					if (!isAborted) isAborted = aborted(payload, currLen);
+				}
+			}
+			if (asyncResult) return asyncResult.then(() => {
+				return payload;
+			});
+			return payload;
+		};
+		const handleCanaryResult = (canary, payload, ctx) => {
+			if (aborted(canary)) {
+				canary.aborted = true;
+				return canary;
+			}
+			const checkResult = runChecks(payload, checks, ctx);
+			if (checkResult instanceof Promise) {
+				if (ctx.async === false) throw new $ZodAsyncError();
+				return checkResult.then((checkResult) => inst._zod.parse(checkResult, ctx));
+			}
+			return inst._zod.parse(checkResult, ctx);
+		};
+		inst._zod.run = (payload, ctx) => {
+			if (ctx.skipChecks) return inst._zod.parse(payload, ctx);
+			if (ctx.direction === "backward") {
+				const canary = inst._zod.parse({
+					value: payload.value,
+					issues: []
+				}, {
+					...ctx,
+					skipChecks: true
+				});
+				if (canary instanceof Promise) return canary.then((canary) => {
+					return handleCanaryResult(canary, payload, ctx);
+				});
+				return handleCanaryResult(canary, payload, ctx);
+			}
+			const result = inst._zod.parse(payload, ctx);
+			if (result instanceof Promise) {
+				if (ctx.async === false) throw new $ZodAsyncError();
+				return result.then((result) => runChecks(result, checks, ctx));
+			}
+			return runChecks(result, checks, ctx);
+		};
+	}
+	defineLazy(inst, "~standard", () => ({
+		validate: (value) => {
+			try {
+				const r = safeParse$1(inst, value);
+				return r.success ? { value: r.data } : { issues: r.error?.issues };
+			} catch (_) {
+				return safeParseAsync$1(inst, value).then((r) => r.success ? { value: r.data } : { issues: r.error?.issues });
+			}
+		},
+		vendor: "zod",
+		version: 1
+	}));
+});
+var $ZodString = /* @__PURE__ */ $constructor("$ZodString", (inst, def) => {
+	$ZodType.init(inst, def);
+	inst._zod.pattern = [...inst?._zod.bag?.patterns ?? []].pop() ?? string$1(inst._zod.bag);
+	inst._zod.parse = (payload, _) => {
+		if (def.coerce) try {
+			payload.value = String(payload.value);
+		} catch (_) {}
+		if (typeof payload.value === "string") return payload;
+		payload.issues.push({
+			expected: "string",
+			code: "invalid_type",
+			input: payload.value,
+			inst
+		});
+		return payload;
+	};
+});
+var $ZodStringFormat = /* @__PURE__ */ $constructor("$ZodStringFormat", (inst, def) => {
+	$ZodCheckStringFormat.init(inst, def);
+	$ZodString.init(inst, def);
+});
+var $ZodGUID = /* @__PURE__ */ $constructor("$ZodGUID", (inst, def) => {
+	def.pattern ?? (def.pattern = guid);
+	$ZodStringFormat.init(inst, def);
+});
+var $ZodUUID = /* @__PURE__ */ $constructor("$ZodUUID", (inst, def) => {
+	if (def.version) {
+		const v = {
+			v1: 1,
+			v2: 2,
+			v3: 3,
+			v4: 4,
+			v5: 5,
+			v6: 6,
+			v7: 7,
+			v8: 8
+		}[def.version];
+		if (v === void 0) throw new Error(`Invalid UUID version: "${def.version}"`);
+		def.pattern ?? (def.pattern = uuid(v));
+	} else def.pattern ?? (def.pattern = uuid());
+	$ZodStringFormat.init(inst, def);
+});
+var $ZodEmail = /* @__PURE__ */ $constructor("$ZodEmail", (inst, def) => {
+	def.pattern ?? (def.pattern = email);
+	$ZodStringFormat.init(inst, def);
+});
+var $ZodURL = /* @__PURE__ */ $constructor("$ZodURL", (inst, def) => {
+	$ZodStringFormat.init(inst, def);
+	inst._zod.check = (payload) => {
+		try {
+			const trimmed = payload.value.trim();
+			const url = new URL(trimmed);
+			if (def.hostname) {
+				def.hostname.lastIndex = 0;
+				if (!def.hostname.test(url.hostname)) payload.issues.push({
+					code: "invalid_format",
+					format: "url",
+					note: "Invalid hostname",
+					pattern: def.hostname.source,
+					input: payload.value,
+					inst,
+					continue: !def.abort
+				});
+			}
+			if (def.protocol) {
+				def.protocol.lastIndex = 0;
+				if (!def.protocol.test(url.protocol.endsWith(":") ? url.protocol.slice(0, -1) : url.protocol)) payload.issues.push({
+					code: "invalid_format",
+					format: "url",
+					note: "Invalid protocol",
+					pattern: def.protocol.source,
+					input: payload.value,
+					inst,
+					continue: !def.abort
+				});
+			}
+			if (def.normalize) payload.value = url.href;
+			else payload.value = trimmed;
+			return;
+		} catch (_) {
+			payload.issues.push({
+				code: "invalid_format",
+				format: "url",
+				input: payload.value,
+				inst,
+				continue: !def.abort
+			});
+		}
+	};
+});
+var $ZodEmoji = /* @__PURE__ */ $constructor("$ZodEmoji", (inst, def) => {
+	def.pattern ?? (def.pattern = emoji());
+	$ZodStringFormat.init(inst, def);
+});
+var $ZodNanoID = /* @__PURE__ */ $constructor("$ZodNanoID", (inst, def) => {
+	def.pattern ?? (def.pattern = nanoid);
+	$ZodStringFormat.init(inst, def);
+});
+var $ZodCUID = /* @__PURE__ */ $constructor("$ZodCUID", (inst, def) => {
+	def.pattern ?? (def.pattern = cuid);
+	$ZodStringFormat.init(inst, def);
+});
+var $ZodCUID2 = /* @__PURE__ */ $constructor("$ZodCUID2", (inst, def) => {
+	def.pattern ?? (def.pattern = cuid2);
+	$ZodStringFormat.init(inst, def);
+});
+var $ZodULID = /* @__PURE__ */ $constructor("$ZodULID", (inst, def) => {
+	def.pattern ?? (def.pattern = ulid);
+	$ZodStringFormat.init(inst, def);
+});
+var $ZodXID = /* @__PURE__ */ $constructor("$ZodXID", (inst, def) => {
+	def.pattern ?? (def.pattern = xid);
+	$ZodStringFormat.init(inst, def);
+});
+var $ZodKSUID = /* @__PURE__ */ $constructor("$ZodKSUID", (inst, def) => {
+	def.pattern ?? (def.pattern = ksuid);
+	$ZodStringFormat.init(inst, def);
+});
+var $ZodISODateTime = /* @__PURE__ */ $constructor("$ZodISODateTime", (inst, def) => {
+	def.pattern ?? (def.pattern = datetime$1(def));
+	$ZodStringFormat.init(inst, def);
+});
+var $ZodISODate = /* @__PURE__ */ $constructor("$ZodISODate", (inst, def) => {
+	def.pattern ?? (def.pattern = date$1);
+	$ZodStringFormat.init(inst, def);
+});
+var $ZodISOTime = /* @__PURE__ */ $constructor("$ZodISOTime", (inst, def) => {
+	def.pattern ?? (def.pattern = time$1(def));
+	$ZodStringFormat.init(inst, def);
+});
+var $ZodISODuration = /* @__PURE__ */ $constructor("$ZodISODuration", (inst, def) => {
+	def.pattern ?? (def.pattern = duration$1);
+	$ZodStringFormat.init(inst, def);
+});
+var $ZodIPv4 = /* @__PURE__ */ $constructor("$ZodIPv4", (inst, def) => {
+	def.pattern ?? (def.pattern = ipv4);
+	$ZodStringFormat.init(inst, def);
+	inst._zod.bag.format = `ipv4`;
+});
+var $ZodIPv6 = /* @__PURE__ */ $constructor("$ZodIPv6", (inst, def) => {
+	def.pattern ?? (def.pattern = ipv6);
+	$ZodStringFormat.init(inst, def);
+	inst._zod.bag.format = `ipv6`;
+	inst._zod.check = (payload) => {
+		try {
+			new URL(`http://[${payload.value}]`);
+		} catch {
+			payload.issues.push({
+				code: "invalid_format",
+				format: "ipv6",
+				input: payload.value,
+				inst,
+				continue: !def.abort
+			});
+		}
+	};
+});
+var $ZodCIDRv4 = /* @__PURE__ */ $constructor("$ZodCIDRv4", (inst, def) => {
+	def.pattern ?? (def.pattern = cidrv4);
+	$ZodStringFormat.init(inst, def);
+});
+var $ZodCIDRv6 = /* @__PURE__ */ $constructor("$ZodCIDRv6", (inst, def) => {
+	def.pattern ?? (def.pattern = cidrv6);
+	$ZodStringFormat.init(inst, def);
+	inst._zod.check = (payload) => {
+		const parts = payload.value.split("/");
+		try {
+			if (parts.length !== 2) throw new Error();
+			const [address, prefix] = parts;
+			if (!prefix) throw new Error();
+			const prefixNum = Number(prefix);
+			if (`${prefixNum}` !== prefix) throw new Error();
+			if (prefixNum < 0 || prefixNum > 128) throw new Error();
+			new URL(`http://[${address}]`);
+		} catch {
+			payload.issues.push({
+				code: "invalid_format",
+				format: "cidrv6",
+				input: payload.value,
+				inst,
+				continue: !def.abort
+			});
+		}
+	};
+});
+function isValidBase64(data) {
+	if (data === "") return true;
+	if (data.length % 4 !== 0) return false;
+	try {
+		atob(data);
+		return true;
+	} catch {
+		return false;
+	}
+}
+var $ZodBase64 = /* @__PURE__ */ $constructor("$ZodBase64", (inst, def) => {
+	def.pattern ?? (def.pattern = base64);
+	$ZodStringFormat.init(inst, def);
+	inst._zod.bag.contentEncoding = "base64";
+	inst._zod.check = (payload) => {
+		if (isValidBase64(payload.value)) return;
+		payload.issues.push({
+			code: "invalid_format",
+			format: "base64",
+			input: payload.value,
+			inst,
+			continue: !def.abort
+		});
+	};
+});
+function isValidBase64URL(data) {
+	if (!base64url.test(data)) return false;
+	const base64 = data.replace(/[-_]/g, (c) => c === "-" ? "+" : "/");
+	return isValidBase64(base64.padEnd(Math.ceil(base64.length / 4) * 4, "="));
+}
+var $ZodBase64URL = /* @__PURE__ */ $constructor("$ZodBase64URL", (inst, def) => {
+	def.pattern ?? (def.pattern = base64url);
+	$ZodStringFormat.init(inst, def);
+	inst._zod.bag.contentEncoding = "base64url";
+	inst._zod.check = (payload) => {
+		if (isValidBase64URL(payload.value)) return;
+		payload.issues.push({
+			code: "invalid_format",
+			format: "base64url",
+			input: payload.value,
+			inst,
+			continue: !def.abort
+		});
+	};
+});
+var $ZodE164 = /* @__PURE__ */ $constructor("$ZodE164", (inst, def) => {
+	def.pattern ?? (def.pattern = e164);
+	$ZodStringFormat.init(inst, def);
+});
+function isValidJWT(token, algorithm = null) {
+	try {
+		const tokensParts = token.split(".");
+		if (tokensParts.length !== 3) return false;
+		const [header] = tokensParts;
+		if (!header) return false;
+		const parsedHeader = JSON.parse(atob(header));
+		if ("typ" in parsedHeader && parsedHeader?.typ !== "JWT") return false;
+		if (!parsedHeader.alg) return false;
+		if (algorithm && (!("alg" in parsedHeader) || parsedHeader.alg !== algorithm)) return false;
+		return true;
+	} catch {
+		return false;
+	}
+}
+var $ZodJWT = /* @__PURE__ */ $constructor("$ZodJWT", (inst, def) => {
+	$ZodStringFormat.init(inst, def);
+	inst._zod.check = (payload) => {
+		if (isValidJWT(payload.value, def.alg)) return;
+		payload.issues.push({
+			code: "invalid_format",
+			format: "jwt",
+			input: payload.value,
+			inst,
+			continue: !def.abort
+		});
+	};
+});
+var $ZodUnknown = /* @__PURE__ */ $constructor("$ZodUnknown", (inst, def) => {
+	$ZodType.init(inst, def);
+	inst._zod.parse = (payload) => payload;
+});
+var $ZodNever = /* @__PURE__ */ $constructor("$ZodNever", (inst, def) => {
+	$ZodType.init(inst, def);
+	inst._zod.parse = (payload, _ctx) => {
+		payload.issues.push({
+			expected: "never",
+			code: "invalid_type",
+			input: payload.value,
+			inst
+		});
+		return payload;
+	};
+});
+function handleArrayResult(result, final, index) {
+	if (result.issues.length) final.issues.push(...prefixIssues(index, result.issues));
+	final.value[index] = result.value;
+}
+var $ZodArray = /* @__PURE__ */ $constructor("$ZodArray", (inst, def) => {
+	$ZodType.init(inst, def);
+	inst._zod.parse = (payload, ctx) => {
+		const input = payload.value;
+		if (!Array.isArray(input)) {
+			payload.issues.push({
+				expected: "array",
+				code: "invalid_type",
+				input,
+				inst
+			});
+			return payload;
+		}
+		payload.value = Array(input.length);
+		const proms = [];
+		for (let i = 0; i < input.length; i++) {
+			const item = input[i];
+			const result = def.element._zod.run({
+				value: item,
+				issues: []
+			}, ctx);
+			if (result instanceof Promise) proms.push(result.then((result) => handleArrayResult(result, payload, i)));
+			else handleArrayResult(result, payload, i);
+		}
+		if (proms.length) return Promise.all(proms).then(() => payload);
+		return payload;
+	};
+});
+function handlePropertyResult(result, final, key, input, isOptionalOut) {
+	if (result.issues.length) {
+		if (isOptionalOut && !(key in input)) return;
+		final.issues.push(...prefixIssues(key, result.issues));
+	}
+	if (result.value === void 0) {
+		if (key in input) final.value[key] = void 0;
+	} else final.value[key] = result.value;
+}
+function normalizeDef(def) {
+	const keys = Object.keys(def.shape);
+	for (const k of keys) if (!def.shape?.[k]?._zod?.traits?.has("$ZodType")) throw new Error(`Invalid element at key "${k}": expected a Zod schema`);
+	const okeys = optionalKeys(def.shape);
+	return {
+		...def,
+		keys,
+		keySet: new Set(keys),
+		numKeys: keys.length,
+		optionalKeys: new Set(okeys)
+	};
+}
+function handleCatchall(proms, input, payload, ctx, def, inst) {
+	const unrecognized = [];
+	const keySet = def.keySet;
+	const _catchall = def.catchall._zod;
+	const t = _catchall.def.type;
+	const isOptionalOut = _catchall.optout === "optional";
+	for (const key in input) {
+		if (keySet.has(key)) continue;
+		if (t === "never") {
+			unrecognized.push(key);
+			continue;
+		}
+		const r = _catchall.run({
+			value: input[key],
+			issues: []
+		}, ctx);
+		if (r instanceof Promise) proms.push(r.then((r) => handlePropertyResult(r, payload, key, input, isOptionalOut)));
+		else handlePropertyResult(r, payload, key, input, isOptionalOut);
+	}
+	if (unrecognized.length) payload.issues.push({
+		code: "unrecognized_keys",
+		keys: unrecognized,
+		input,
+		inst
+	});
+	if (!proms.length) return payload;
+	return Promise.all(proms).then(() => {
+		return payload;
+	});
+}
+var $ZodObject = /* @__PURE__ */ $constructor("$ZodObject", (inst, def) => {
+	$ZodType.init(inst, def);
+	if (!Object.getOwnPropertyDescriptor(def, "shape")?.get) {
+		const sh = def.shape;
+		Object.defineProperty(def, "shape", { get: () => {
+			const newSh = { ...sh };
+			Object.defineProperty(def, "shape", { value: newSh });
+			return newSh;
+		} });
+	}
+	const _normalized = cached(() => normalizeDef(def));
+	defineLazy(inst._zod, "propValues", () => {
+		const shape = def.shape;
+		const propValues = {};
+		for (const key in shape) {
+			const field = shape[key]._zod;
+			if (field.values) {
+				propValues[key] ?? (propValues[key] = /* @__PURE__ */ new Set());
+				for (const v of field.values) propValues[key].add(v);
+			}
+		}
+		return propValues;
+	});
+	const isObject$3 = isObject;
+	const catchall = def.catchall;
+	let value;
+	inst._zod.parse = (payload, ctx) => {
+		value ?? (value = _normalized.value);
+		const input = payload.value;
+		if (!isObject$3(input)) {
+			payload.issues.push({
+				expected: "object",
+				code: "invalid_type",
+				input,
+				inst
+			});
+			return payload;
+		}
+		payload.value = {};
+		const proms = [];
+		const shape = value.shape;
+		for (const key of value.keys) {
+			const el = shape[key];
+			const isOptionalOut = el._zod.optout === "optional";
+			const r = el._zod.run({
+				value: input[key],
+				issues: []
+			}, ctx);
+			if (r instanceof Promise) proms.push(r.then((r) => handlePropertyResult(r, payload, key, input, isOptionalOut)));
+			else handlePropertyResult(r, payload, key, input, isOptionalOut);
+		}
+		if (!catchall) return proms.length ? Promise.all(proms).then(() => payload) : payload;
+		return handleCatchall(proms, input, payload, ctx, _normalized.value, inst);
+	};
+});
+var $ZodObjectJIT = /* @__PURE__ */ $constructor("$ZodObjectJIT", (inst, def) => {
+	$ZodObject.init(inst, def);
+	const superParse = inst._zod.parse;
+	const _normalized = cached(() => normalizeDef(def));
+	const generateFastpass = (shape) => {
+		const doc = new Doc([
+			"shape",
+			"payload",
+			"ctx"
+		]);
+		const normalized = _normalized.value;
+		const parseStr = (key) => {
+			const k = esc(key);
+			return `shape[${k}]._zod.run({ value: input[${k}], issues: [] }, ctx)`;
+		};
+		doc.write(`const input = payload.value;`);
+		const ids = Object.create(null);
+		let counter = 0;
+		for (const key of normalized.keys) ids[key] = `key_${counter++}`;
+		doc.write(`const newResult = {};`);
+		for (const key of normalized.keys) {
+			const id = ids[key];
+			const k = esc(key);
+			const isOptionalOut = shape[key]?._zod?.optout === "optional";
+			doc.write(`const ${id} = ${parseStr(key)};`);
+			if (isOptionalOut) doc.write(`
+        if (${id}.issues.length) {
+          if (${k} in input) {
+            payload.issues = payload.issues.concat(${id}.issues.map(iss => ({
+              ...iss,
+              path: iss.path ? [${k}, ...iss.path] : [${k}]
+            })));
+          }
+        }
+        
+        if (${id}.value === undefined) {
+          if (${k} in input) {
+            newResult[${k}] = undefined;
+          }
+        } else {
+          newResult[${k}] = ${id}.value;
+        }
+        
+      `);
+			else doc.write(`
+        if (${id}.issues.length) {
+          payload.issues = payload.issues.concat(${id}.issues.map(iss => ({
+            ...iss,
+            path: iss.path ? [${k}, ...iss.path] : [${k}]
+          })));
+        }
+        
+        if (${id}.value === undefined) {
+          if (${k} in input) {
+            newResult[${k}] = undefined;
+          }
+        } else {
+          newResult[${k}] = ${id}.value;
+        }
+        
+      `);
+		}
+		doc.write(`payload.value = newResult;`);
+		doc.write(`return payload;`);
+		const fn = doc.compile();
+		return (payload, ctx) => fn(shape, payload, ctx);
+	};
+	let fastpass;
+	const isObject$2 = isObject;
+	const jit = !globalConfig.jitless;
+	const fastEnabled = jit && allowsEval.value;
+	const catchall = def.catchall;
+	let value;
+	inst._zod.parse = (payload, ctx) => {
+		value ?? (value = _normalized.value);
+		const input = payload.value;
+		if (!isObject$2(input)) {
+			payload.issues.push({
+				expected: "object",
+				code: "invalid_type",
+				input,
+				inst
+			});
+			return payload;
+		}
+		if (jit && fastEnabled && ctx?.async === false && ctx.jitless !== true) {
+			if (!fastpass) fastpass = generateFastpass(def.shape);
+			payload = fastpass(payload, ctx);
+			if (!catchall) return payload;
+			return handleCatchall([], input, payload, ctx, value, inst);
+		}
+		return superParse(payload, ctx);
+	};
+});
+function handleUnionResults(results, final, inst, ctx) {
+	for (const result of results) if (result.issues.length === 0) {
+		final.value = result.value;
+		return final;
+	}
+	const nonaborted = results.filter((r) => !aborted(r));
+	if (nonaborted.length === 1) {
+		final.value = nonaborted[0].value;
+		return nonaborted[0];
+	}
+	final.issues.push({
+		code: "invalid_union",
+		input: final.value,
+		inst,
+		errors: results.map((result) => result.issues.map((iss) => finalizeIssue(iss, ctx, config())))
+	});
+	return final;
+}
+var $ZodUnion = /* @__PURE__ */ $constructor("$ZodUnion", (inst, def) => {
+	$ZodType.init(inst, def);
+	defineLazy(inst._zod, "optin", () => def.options.some((o) => o._zod.optin === "optional") ? "optional" : void 0);
+	defineLazy(inst._zod, "optout", () => def.options.some((o) => o._zod.optout === "optional") ? "optional" : void 0);
+	defineLazy(inst._zod, "values", () => {
+		if (def.options.every((o) => o._zod.values)) return new Set(def.options.flatMap((option) => Array.from(option._zod.values)));
+	});
+	defineLazy(inst._zod, "pattern", () => {
+		if (def.options.every((o) => o._zod.pattern)) {
+			const patterns = def.options.map((o) => o._zod.pattern);
+			return new RegExp(`^(${patterns.map((p) => cleanRegex(p.source)).join("|")})$`);
+		}
+	});
+	const single = def.options.length === 1;
+	const first = def.options[0]._zod.run;
+	inst._zod.parse = (payload, ctx) => {
+		if (single) return first(payload, ctx);
+		let async = false;
+		const results = [];
+		for (const option of def.options) {
+			const result = option._zod.run({
+				value: payload.value,
+				issues: []
+			}, ctx);
+			if (result instanceof Promise) {
+				results.push(result);
+				async = true;
+			} else {
+				if (result.issues.length === 0) return result;
+				results.push(result);
+			}
+		}
+		if (!async) return handleUnionResults(results, payload, inst, ctx);
+		return Promise.all(results).then((results) => {
+			return handleUnionResults(results, payload, inst, ctx);
+		});
+	};
+});
+var $ZodIntersection = /* @__PURE__ */ $constructor("$ZodIntersection", (inst, def) => {
+	$ZodType.init(inst, def);
+	inst._zod.parse = (payload, ctx) => {
+		const input = payload.value;
+		const left = def.left._zod.run({
+			value: input,
+			issues: []
+		}, ctx);
+		const right = def.right._zod.run({
+			value: input,
+			issues: []
+		}, ctx);
+		if (left instanceof Promise || right instanceof Promise) return Promise.all([left, right]).then(([left, right]) => {
+			return handleIntersectionResults(payload, left, right);
+		});
+		return handleIntersectionResults(payload, left, right);
+	};
+});
+function mergeValues(a, b) {
+	if (a === b) return {
+		valid: true,
+		data: a
+	};
+	if (a instanceof Date && b instanceof Date && +a === +b) return {
+		valid: true,
+		data: a
+	};
+	if (isPlainObject(a) && isPlainObject(b)) {
+		const bKeys = Object.keys(b);
+		const sharedKeys = Object.keys(a).filter((key) => bKeys.indexOf(key) !== -1);
+		const newObj = {
+			...a,
+			...b
+		};
+		for (const key of sharedKeys) {
+			const sharedValue = mergeValues(a[key], b[key]);
+			if (!sharedValue.valid) return {
+				valid: false,
+				mergeErrorPath: [key, ...sharedValue.mergeErrorPath]
+			};
+			newObj[key] = sharedValue.data;
+		}
+		return {
+			valid: true,
+			data: newObj
+		};
+	}
+	if (Array.isArray(a) && Array.isArray(b)) {
+		if (a.length !== b.length) return {
+			valid: false,
+			mergeErrorPath: []
+		};
+		const newArray = [];
+		for (let index = 0; index < a.length; index++) {
+			const itemA = a[index];
+			const itemB = b[index];
+			const sharedValue = mergeValues(itemA, itemB);
+			if (!sharedValue.valid) return {
+				valid: false,
+				mergeErrorPath: [index, ...sharedValue.mergeErrorPath]
+			};
+			newArray.push(sharedValue.data);
+		}
+		return {
+			valid: true,
+			data: newArray
+		};
+	}
+	return {
+		valid: false,
+		mergeErrorPath: []
+	};
+}
+function handleIntersectionResults(result, left, right) {
+	const unrecKeys = /* @__PURE__ */ new Map();
+	let unrecIssue;
+	for (const iss of left.issues) if (iss.code === "unrecognized_keys") {
+		unrecIssue ?? (unrecIssue = iss);
+		for (const k of iss.keys) {
+			if (!unrecKeys.has(k)) unrecKeys.set(k, {});
+			unrecKeys.get(k).l = true;
+		}
+	} else result.issues.push(iss);
+	for (const iss of right.issues) if (iss.code === "unrecognized_keys") for (const k of iss.keys) {
+		if (!unrecKeys.has(k)) unrecKeys.set(k, {});
+		unrecKeys.get(k).r = true;
+	}
+	else result.issues.push(iss);
+	const bothKeys = [...unrecKeys].filter(([, f]) => f.l && f.r).map(([k]) => k);
+	if (bothKeys.length && unrecIssue) result.issues.push({
+		...unrecIssue,
+		keys: bothKeys
+	});
+	if (aborted(result)) return result;
+	const merged = mergeValues(left.value, right.value);
+	if (!merged.valid) throw new Error(`Unmergable intersection. Error path: ${JSON.stringify(merged.mergeErrorPath)}`);
+	result.value = merged.data;
+	return result;
+}
+var $ZodEnum = /* @__PURE__ */ $constructor("$ZodEnum", (inst, def) => {
+	$ZodType.init(inst, def);
+	const values = getEnumValues(def.entries);
+	const valuesSet = new Set(values);
+	inst._zod.values = valuesSet;
+	inst._zod.pattern = new RegExp(`^(${values.filter((k) => propertyKeyTypes.has(typeof k)).map((o) => typeof o === "string" ? escapeRegex(o) : o.toString()).join("|")})$`);
+	inst._zod.parse = (payload, _ctx) => {
+		const input = payload.value;
+		if (valuesSet.has(input)) return payload;
+		payload.issues.push({
+			code: "invalid_value",
+			values,
+			input,
+			inst
+		});
+		return payload;
+	};
+});
+var $ZodTransform = /* @__PURE__ */ $constructor("$ZodTransform", (inst, def) => {
+	$ZodType.init(inst, def);
+	inst._zod.parse = (payload, ctx) => {
+		if (ctx.direction === "backward") throw new $ZodEncodeError(inst.constructor.name);
+		const _out = def.transform(payload.value, payload);
+		if (ctx.async) return (_out instanceof Promise ? _out : Promise.resolve(_out)).then((output) => {
+			payload.value = output;
+			return payload;
+		});
+		if (_out instanceof Promise) throw new $ZodAsyncError();
+		payload.value = _out;
+		return payload;
+	};
+});
+function handleOptionalResult(result, input) {
+	if (result.issues.length && input === void 0) return {
+		issues: [],
+		value: void 0
+	};
+	return result;
+}
+var $ZodOptional = /* @__PURE__ */ $constructor("$ZodOptional", (inst, def) => {
+	$ZodType.init(inst, def);
+	inst._zod.optin = "optional";
+	inst._zod.optout = "optional";
+	defineLazy(inst._zod, "values", () => {
+		return def.innerType._zod.values ? new Set([...def.innerType._zod.values, void 0]) : void 0;
+	});
+	defineLazy(inst._zod, "pattern", () => {
+		const pattern = def.innerType._zod.pattern;
+		return pattern ? new RegExp(`^(${cleanRegex(pattern.source)})?$`) : void 0;
+	});
+	inst._zod.parse = (payload, ctx) => {
+		if (def.innerType._zod.optin === "optional") {
+			const result = def.innerType._zod.run(payload, ctx);
+			if (result instanceof Promise) return result.then((r) => handleOptionalResult(r, payload.value));
+			return handleOptionalResult(result, payload.value);
+		}
+		if (payload.value === void 0) return payload;
+		return def.innerType._zod.run(payload, ctx);
+	};
+});
+var $ZodExactOptional = /* @__PURE__ */ $constructor("$ZodExactOptional", (inst, def) => {
+	$ZodOptional.init(inst, def);
+	defineLazy(inst._zod, "values", () => def.innerType._zod.values);
+	defineLazy(inst._zod, "pattern", () => def.innerType._zod.pattern);
+	inst._zod.parse = (payload, ctx) => {
+		return def.innerType._zod.run(payload, ctx);
+	};
+});
+var $ZodNullable = /* @__PURE__ */ $constructor("$ZodNullable", (inst, def) => {
+	$ZodType.init(inst, def);
+	defineLazy(inst._zod, "optin", () => def.innerType._zod.optin);
+	defineLazy(inst._zod, "optout", () => def.innerType._zod.optout);
+	defineLazy(inst._zod, "pattern", () => {
+		const pattern = def.innerType._zod.pattern;
+		return pattern ? new RegExp(`^(${cleanRegex(pattern.source)}|null)$`) : void 0;
+	});
+	defineLazy(inst._zod, "values", () => {
+		return def.innerType._zod.values ? new Set([...def.innerType._zod.values, null]) : void 0;
+	});
+	inst._zod.parse = (payload, ctx) => {
+		if (payload.value === null) return payload;
+		return def.innerType._zod.run(payload, ctx);
+	};
+});
+var $ZodDefault = /* @__PURE__ */ $constructor("$ZodDefault", (inst, def) => {
+	$ZodType.init(inst, def);
+	inst._zod.optin = "optional";
+	defineLazy(inst._zod, "values", () => def.innerType._zod.values);
+	inst._zod.parse = (payload, ctx) => {
+		if (ctx.direction === "backward") return def.innerType._zod.run(payload, ctx);
+		if (payload.value === void 0) {
+			payload.value = def.defaultValue;
+			/**
+			* $ZodDefault returns the default value immediately in forward direction.
+			* It doesn't pass the default value into the validator ("prefault"). There's no reason to pass the default value through validation. The validity of the default is enforced by TypeScript statically. Otherwise, it's the responsibility of the user to ensure the default is valid. In the case of pipes with divergent in/out types, you can specify the default on the `in` schema of your ZodPipe to set a "prefault" for the pipe.   */
+			return payload;
+		}
+		const result = def.innerType._zod.run(payload, ctx);
+		if (result instanceof Promise) return result.then((result) => handleDefaultResult(result, def));
+		return handleDefaultResult(result, def);
+	};
+});
+function handleDefaultResult(payload, def) {
+	if (payload.value === void 0) payload.value = def.defaultValue;
+	return payload;
+}
+var $ZodPrefault = /* @__PURE__ */ $constructor("$ZodPrefault", (inst, def) => {
+	$ZodType.init(inst, def);
+	inst._zod.optin = "optional";
+	defineLazy(inst._zod, "values", () => def.innerType._zod.values);
+	inst._zod.parse = (payload, ctx) => {
+		if (ctx.direction === "backward") return def.innerType._zod.run(payload, ctx);
+		if (payload.value === void 0) payload.value = def.defaultValue;
+		return def.innerType._zod.run(payload, ctx);
+	};
+});
+var $ZodNonOptional = /* @__PURE__ */ $constructor("$ZodNonOptional", (inst, def) => {
+	$ZodType.init(inst, def);
+	defineLazy(inst._zod, "values", () => {
+		const v = def.innerType._zod.values;
+		return v ? new Set([...v].filter((x) => x !== void 0)) : void 0;
+	});
+	inst._zod.parse = (payload, ctx) => {
+		const result = def.innerType._zod.run(payload, ctx);
+		if (result instanceof Promise) return result.then((result) => handleNonOptionalResult(result, inst));
+		return handleNonOptionalResult(result, inst);
+	};
+});
+function handleNonOptionalResult(payload, inst) {
+	if (!payload.issues.length && payload.value === void 0) payload.issues.push({
+		code: "invalid_type",
+		expected: "nonoptional",
+		input: payload.value,
+		inst
+	});
+	return payload;
+}
+var $ZodCatch = /* @__PURE__ */ $constructor("$ZodCatch", (inst, def) => {
+	$ZodType.init(inst, def);
+	defineLazy(inst._zod, "optin", () => def.innerType._zod.optin);
+	defineLazy(inst._zod, "optout", () => def.innerType._zod.optout);
+	defineLazy(inst._zod, "values", () => def.innerType._zod.values);
+	inst._zod.parse = (payload, ctx) => {
+		if (ctx.direction === "backward") return def.innerType._zod.run(payload, ctx);
+		const result = def.innerType._zod.run(payload, ctx);
+		if (result instanceof Promise) return result.then((result) => {
+			payload.value = result.value;
+			if (result.issues.length) {
+				payload.value = def.catchValue({
+					...payload,
+					error: { issues: result.issues.map((iss) => finalizeIssue(iss, ctx, config())) },
+					input: payload.value
+				});
+				payload.issues = [];
+			}
+			return payload;
+		});
+		payload.value = result.value;
+		if (result.issues.length) {
+			payload.value = def.catchValue({
+				...payload,
+				error: { issues: result.issues.map((iss) => finalizeIssue(iss, ctx, config())) },
+				input: payload.value
+			});
+			payload.issues = [];
+		}
+		return payload;
+	};
+});
+var $ZodPipe = /* @__PURE__ */ $constructor("$ZodPipe", (inst, def) => {
+	$ZodType.init(inst, def);
+	defineLazy(inst._zod, "values", () => def.in._zod.values);
+	defineLazy(inst._zod, "optin", () => def.in._zod.optin);
+	defineLazy(inst._zod, "optout", () => def.out._zod.optout);
+	defineLazy(inst._zod, "propValues", () => def.in._zod.propValues);
+	inst._zod.parse = (payload, ctx) => {
+		if (ctx.direction === "backward") {
+			const right = def.out._zod.run(payload, ctx);
+			if (right instanceof Promise) return right.then((right) => handlePipeResult(right, def.in, ctx));
+			return handlePipeResult(right, def.in, ctx);
+		}
+		const left = def.in._zod.run(payload, ctx);
+		if (left instanceof Promise) return left.then((left) => handlePipeResult(left, def.out, ctx));
+		return handlePipeResult(left, def.out, ctx);
+	};
+});
+function handlePipeResult(left, next, ctx) {
+	if (left.issues.length) {
+		left.aborted = true;
+		return left;
+	}
+	return next._zod.run({
+		value: left.value,
+		issues: left.issues
+	}, ctx);
+}
+var $ZodReadonly = /* @__PURE__ */ $constructor("$ZodReadonly", (inst, def) => {
+	$ZodType.init(inst, def);
+	defineLazy(inst._zod, "propValues", () => def.innerType._zod.propValues);
+	defineLazy(inst._zod, "values", () => def.innerType._zod.values);
+	defineLazy(inst._zod, "optin", () => def.innerType?._zod?.optin);
+	defineLazy(inst._zod, "optout", () => def.innerType?._zod?.optout);
+	inst._zod.parse = (payload, ctx) => {
+		if (ctx.direction === "backward") return def.innerType._zod.run(payload, ctx);
+		const result = def.innerType._zod.run(payload, ctx);
+		if (result instanceof Promise) return result.then(handleReadonlyResult);
+		return handleReadonlyResult(result);
+	};
+});
+function handleReadonlyResult(payload) {
+	payload.value = Object.freeze(payload.value);
+	return payload;
+}
+var $ZodCustom = /* @__PURE__ */ $constructor("$ZodCustom", (inst, def) => {
+	$ZodCheck.init(inst, def);
+	$ZodType.init(inst, def);
+	inst._zod.parse = (payload, _) => {
+		return payload;
+	};
+	inst._zod.check = (payload) => {
+		const input = payload.value;
+		const r = def.fn(input);
+		if (r instanceof Promise) return r.then((r) => handleRefineResult(r, payload, input, inst));
+		handleRefineResult(r, payload, input, inst);
+	};
+});
+function handleRefineResult(result, payload, input, inst) {
+	if (!result) {
+		const _iss = {
+			code: "custom",
+			input,
+			inst,
+			path: [...inst._zod.def.path ?? []],
+			continue: !inst._zod.def.abort
+		};
+		if (inst._zod.def.params) _iss.params = inst._zod.def.params;
+		payload.issues.push(issue(_iss));
+	}
+}
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/registries.js
+var _a;
+var $ZodRegistry = class {
+	constructor() {
+		this._map = /* @__PURE__ */ new WeakMap();
+		this._idmap = /* @__PURE__ */ new Map();
+	}
+	add(schema, ..._meta) {
+		const meta = _meta[0];
+		this._map.set(schema, meta);
+		if (meta && typeof meta === "object" && "id" in meta) this._idmap.set(meta.id, schema);
+		return this;
+	}
+	clear() {
+		this._map = /* @__PURE__ */ new WeakMap();
+		this._idmap = /* @__PURE__ */ new Map();
+		return this;
+	}
+	remove(schema) {
+		const meta = this._map.get(schema);
+		if (meta && typeof meta === "object" && "id" in meta) this._idmap.delete(meta.id);
+		this._map.delete(schema);
+		return this;
+	}
+	get(schema) {
+		const p = schema._zod.parent;
+		if (p) {
+			const pm = { ...this.get(p) ?? {} };
+			delete pm.id;
+			const f = {
+				...pm,
+				...this._map.get(schema)
+			};
+			return Object.keys(f).length ? f : void 0;
+		}
+		return this._map.get(schema);
+	}
+	has(schema) {
+		return this._map.has(schema);
+	}
+};
+function registry() {
+	return new $ZodRegistry();
+}
+(_a = globalThis).__zod_globalRegistry ?? (_a.__zod_globalRegistry = registry());
+var globalRegistry = globalThis.__zod_globalRegistry;
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/api.js
+/* @__NO_SIDE_EFFECTS__ */
+function _string(Class, params) {
+	return new Class({
+		type: "string",
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _email(Class, params) {
+	return new Class({
+		type: "string",
+		format: "email",
+		check: "string_format",
+		abort: false,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _guid(Class, params) {
+	return new Class({
+		type: "string",
+		format: "guid",
+		check: "string_format",
+		abort: false,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _uuid(Class, params) {
+	return new Class({
+		type: "string",
+		format: "uuid",
+		check: "string_format",
+		abort: false,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _uuidv4(Class, params) {
+	return new Class({
+		type: "string",
+		format: "uuid",
+		check: "string_format",
+		abort: false,
+		version: "v4",
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _uuidv6(Class, params) {
+	return new Class({
+		type: "string",
+		format: "uuid",
+		check: "string_format",
+		abort: false,
+		version: "v6",
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _uuidv7(Class, params) {
+	return new Class({
+		type: "string",
+		format: "uuid",
+		check: "string_format",
+		abort: false,
+		version: "v7",
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _url(Class, params) {
+	return new Class({
+		type: "string",
+		format: "url",
+		check: "string_format",
+		abort: false,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _emoji(Class, params) {
+	return new Class({
+		type: "string",
+		format: "emoji",
+		check: "string_format",
+		abort: false,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _nanoid(Class, params) {
+	return new Class({
+		type: "string",
+		format: "nanoid",
+		check: "string_format",
+		abort: false,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _cuid(Class, params) {
+	return new Class({
+		type: "string",
+		format: "cuid",
+		check: "string_format",
+		abort: false,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _cuid2(Class, params) {
+	return new Class({
+		type: "string",
+		format: "cuid2",
+		check: "string_format",
+		abort: false,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _ulid(Class, params) {
+	return new Class({
+		type: "string",
+		format: "ulid",
+		check: "string_format",
+		abort: false,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _xid(Class, params) {
+	return new Class({
+		type: "string",
+		format: "xid",
+		check: "string_format",
+		abort: false,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _ksuid(Class, params) {
+	return new Class({
+		type: "string",
+		format: "ksuid",
+		check: "string_format",
+		abort: false,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _ipv4(Class, params) {
+	return new Class({
+		type: "string",
+		format: "ipv4",
+		check: "string_format",
+		abort: false,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _ipv6(Class, params) {
+	return new Class({
+		type: "string",
+		format: "ipv6",
+		check: "string_format",
+		abort: false,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _cidrv4(Class, params) {
+	return new Class({
+		type: "string",
+		format: "cidrv4",
+		check: "string_format",
+		abort: false,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _cidrv6(Class, params) {
+	return new Class({
+		type: "string",
+		format: "cidrv6",
+		check: "string_format",
+		abort: false,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _base64(Class, params) {
+	return new Class({
+		type: "string",
+		format: "base64",
+		check: "string_format",
+		abort: false,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _base64url(Class, params) {
+	return new Class({
+		type: "string",
+		format: "base64url",
+		check: "string_format",
+		abort: false,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _e164(Class, params) {
+	return new Class({
+		type: "string",
+		format: "e164",
+		check: "string_format",
+		abort: false,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _jwt(Class, params) {
+	return new Class({
+		type: "string",
+		format: "jwt",
+		check: "string_format",
+		abort: false,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _isoDateTime(Class, params) {
+	return new Class({
+		type: "string",
+		format: "datetime",
+		check: "string_format",
+		offset: false,
+		local: false,
+		precision: null,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _isoDate(Class, params) {
+	return new Class({
+		type: "string",
+		format: "date",
+		check: "string_format",
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _isoTime(Class, params) {
+	return new Class({
+		type: "string",
+		format: "time",
+		check: "string_format",
+		precision: null,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _isoDuration(Class, params) {
+	return new Class({
+		type: "string",
+		format: "duration",
+		check: "string_format",
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _unknown(Class) {
+	return new Class({ type: "unknown" });
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _never(Class, params) {
+	return new Class({
+		type: "never",
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _maxLength(maximum, params) {
+	return new $ZodCheckMaxLength({
+		check: "max_length",
+		...normalizeParams(params),
+		maximum
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _minLength(minimum, params) {
+	return new $ZodCheckMinLength({
+		check: "min_length",
+		...normalizeParams(params),
+		minimum
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _length(length, params) {
+	return new $ZodCheckLengthEquals({
+		check: "length_equals",
+		...normalizeParams(params),
+		length
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _regex(pattern, params) {
+	return new $ZodCheckRegex({
+		check: "string_format",
+		format: "regex",
+		...normalizeParams(params),
+		pattern
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _lowercase(params) {
+	return new $ZodCheckLowerCase({
+		check: "string_format",
+		format: "lowercase",
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _uppercase(params) {
+	return new $ZodCheckUpperCase({
+		check: "string_format",
+		format: "uppercase",
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _includes(includes, params) {
+	return new $ZodCheckIncludes({
+		check: "string_format",
+		format: "includes",
+		...normalizeParams(params),
+		includes
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _startsWith(prefix, params) {
+	return new $ZodCheckStartsWith({
+		check: "string_format",
+		format: "starts_with",
+		...normalizeParams(params),
+		prefix
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _endsWith(suffix, params) {
+	return new $ZodCheckEndsWith({
+		check: "string_format",
+		format: "ends_with",
+		...normalizeParams(params),
+		suffix
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _overwrite(tx) {
+	return new $ZodCheckOverwrite({
+		check: "overwrite",
+		tx
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _normalize(form) {
+	return /* @__PURE__ */ _overwrite((input) => input.normalize(form));
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _trim() {
+	return /* @__PURE__ */ _overwrite((input) => input.trim());
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _toLowerCase() {
+	return /* @__PURE__ */ _overwrite((input) => input.toLowerCase());
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _toUpperCase() {
+	return /* @__PURE__ */ _overwrite((input) => input.toUpperCase());
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _slugify() {
+	return /* @__PURE__ */ _overwrite((input) => slugify(input));
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _array(Class, element, params) {
+	return new Class({
+		type: "array",
+		element,
+		...normalizeParams(params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _refine(Class, fn, _params) {
+	return new Class({
+		type: "custom",
+		check: "custom",
+		fn,
+		...normalizeParams(_params)
+	});
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _superRefine(fn) {
+	const ch = /* @__PURE__ */ _check((payload) => {
+		payload.addIssue = (issue$2) => {
+			if (typeof issue$2 === "string") payload.issues.push(issue(issue$2, payload.value, ch._zod.def));
+			else {
+				const _issue = issue$2;
+				if (_issue.fatal) _issue.continue = false;
+				_issue.code ?? (_issue.code = "custom");
+				_issue.input ?? (_issue.input = payload.value);
+				_issue.inst ?? (_issue.inst = ch);
+				_issue.continue ?? (_issue.continue = !ch._zod.def.abort);
+				payload.issues.push(issue(_issue));
+			}
+		};
+		return fn(payload.value, payload);
+	});
+	return ch;
+}
+/* @__NO_SIDE_EFFECTS__ */
+function _check(fn, params) {
+	const ch = new $ZodCheck({
+		check: "custom",
+		...normalizeParams(params)
+	});
+	ch._zod.check = fn;
+	return ch;
+}
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/to-json-schema.js
+function initializeContext(params) {
+	let target = params?.target ?? "draft-2020-12";
+	if (target === "draft-4") target = "draft-04";
+	if (target === "draft-7") target = "draft-07";
+	return {
+		processors: params.processors ?? {},
+		metadataRegistry: params?.metadata ?? globalRegistry,
+		target,
+		unrepresentable: params?.unrepresentable ?? "throw",
+		override: params?.override ?? (() => {}),
+		io: params?.io ?? "output",
+		counter: 0,
+		seen: /* @__PURE__ */ new Map(),
+		cycles: params?.cycles ?? "ref",
+		reused: params?.reused ?? "inline",
+		external: params?.external ?? void 0
+	};
+}
+function process$1(schema, ctx, _params = {
+	path: [],
+	schemaPath: []
+}) {
+	var _a;
+	const def = schema._zod.def;
+	const seen = ctx.seen.get(schema);
+	if (seen) {
+		seen.count++;
+		if (_params.schemaPath.includes(schema)) seen.cycle = _params.path;
+		return seen.schema;
+	}
+	const result = {
+		schema: {},
+		count: 1,
+		cycle: void 0,
+		path: _params.path
+	};
+	ctx.seen.set(schema, result);
+	const overrideSchema = schema._zod.toJSONSchema?.();
+	if (overrideSchema) result.schema = overrideSchema;
+	else {
+		const params = {
+			..._params,
+			schemaPath: [..._params.schemaPath, schema],
+			path: _params.path
+		};
+		if (schema._zod.processJSONSchema) schema._zod.processJSONSchema(ctx, result.schema, params);
+		else {
+			const _json = result.schema;
+			const processor = ctx.processors[def.type];
+			if (!processor) throw new Error(`[toJSONSchema]: Non-representable type encountered: ${def.type}`);
+			processor(schema, ctx, _json, params);
+		}
+		const parent = schema._zod.parent;
+		if (parent) {
+			if (!result.ref) result.ref = parent;
+			process$1(parent, ctx, params);
+			ctx.seen.get(parent).isParent = true;
+		}
+	}
+	const meta = ctx.metadataRegistry.get(schema);
+	if (meta) Object.assign(result.schema, meta);
+	if (ctx.io === "input" && isTransforming(schema)) {
+		delete result.schema.examples;
+		delete result.schema.default;
+	}
+	if (ctx.io === "input" && result.schema._prefault) (_a = result.schema).default ?? (_a.default = result.schema._prefault);
+	delete result.schema._prefault;
+	return ctx.seen.get(schema).schema;
+}
+function extractDefs(ctx, schema) {
+	const root = ctx.seen.get(schema);
+	if (!root) throw new Error("Unprocessed schema. This is a bug in Zod.");
+	const idToSchema = /* @__PURE__ */ new Map();
+	for (const entry of ctx.seen.entries()) {
+		const id = ctx.metadataRegistry.get(entry[0])?.id;
+		if (id) {
+			const existing = idToSchema.get(id);
+			if (existing && existing !== entry[0]) throw new Error(`Duplicate schema id "${id}" detected during JSON Schema conversion. Two different schemas cannot share the same id when converted together.`);
+			idToSchema.set(id, entry[0]);
+		}
+	}
+	const makeURI = (entry) => {
+		const defsSegment = ctx.target === "draft-2020-12" ? "$defs" : "definitions";
+		if (ctx.external) {
+			const externalId = ctx.external.registry.get(entry[0])?.id;
+			const uriGenerator = ctx.external.uri ?? ((id) => id);
+			if (externalId) return { ref: uriGenerator(externalId) };
+			const id = entry[1].defId ?? entry[1].schema.id ?? `schema${ctx.counter++}`;
+			entry[1].defId = id;
+			return {
+				defId: id,
+				ref: `${uriGenerator("__shared")}#/${defsSegment}/${id}`
+			};
+		}
+		if (entry[1] === root) return { ref: "#" };
+		const defUriPrefix = `#/${defsSegment}/`;
+		const defId = entry[1].schema.id ?? `__schema${ctx.counter++}`;
+		return {
+			defId,
+			ref: defUriPrefix + defId
+		};
+	};
+	const extractToDef = (entry) => {
+		if (entry[1].schema.$ref) return;
+		const seen = entry[1];
+		const { ref, defId } = makeURI(entry);
+		seen.def = { ...seen.schema };
+		if (defId) seen.defId = defId;
+		const schema = seen.schema;
+		for (const key in schema) delete schema[key];
+		schema.$ref = ref;
+	};
+	if (ctx.cycles === "throw") for (const entry of ctx.seen.entries()) {
+		const seen = entry[1];
+		if (seen.cycle) throw new Error(`Cycle detected: #/${seen.cycle?.join("/")}/<root>
+
+Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.`);
+	}
+	for (const entry of ctx.seen.entries()) {
+		const seen = entry[1];
+		if (schema === entry[0]) {
+			extractToDef(entry);
+			continue;
+		}
+		if (ctx.external) {
+			const ext = ctx.external.registry.get(entry[0])?.id;
+			if (schema !== entry[0] && ext) {
+				extractToDef(entry);
+				continue;
+			}
+		}
+		if (ctx.metadataRegistry.get(entry[0])?.id) {
+			extractToDef(entry);
+			continue;
+		}
+		if (seen.cycle) {
+			extractToDef(entry);
+			continue;
+		}
+		if (seen.count > 1) {
+			if (ctx.reused === "ref") {
+				extractToDef(entry);
+				continue;
+			}
+		}
+	}
+}
+function finalize(ctx, schema) {
+	const root = ctx.seen.get(schema);
+	if (!root) throw new Error("Unprocessed schema. This is a bug in Zod.");
+	const flattenRef = (zodSchema) => {
+		const seen = ctx.seen.get(zodSchema);
+		if (seen.ref === null) return;
+		const schema = seen.def ?? seen.schema;
+		const _cached = { ...schema };
+		const ref = seen.ref;
+		seen.ref = null;
+		if (ref) {
+			flattenRef(ref);
+			const refSeen = ctx.seen.get(ref);
+			const refSchema = refSeen.schema;
+			if (refSchema.$ref && (ctx.target === "draft-07" || ctx.target === "draft-04" || ctx.target === "openapi-3.0")) {
+				schema.allOf = schema.allOf ?? [];
+				schema.allOf.push(refSchema);
+			} else Object.assign(schema, refSchema);
+			Object.assign(schema, _cached);
+			if (zodSchema._zod.parent === ref) for (const key in schema) {
+				if (key === "$ref" || key === "allOf") continue;
+				if (!(key in _cached)) delete schema[key];
+			}
+			if (refSchema.$ref && refSeen.def) for (const key in schema) {
+				if (key === "$ref" || key === "allOf") continue;
+				if (key in refSeen.def && JSON.stringify(schema[key]) === JSON.stringify(refSeen.def[key])) delete schema[key];
+			}
+		}
+		const parent = zodSchema._zod.parent;
+		if (parent && parent !== ref) {
+			flattenRef(parent);
+			const parentSeen = ctx.seen.get(parent);
+			if (parentSeen?.schema.$ref) {
+				schema.$ref = parentSeen.schema.$ref;
+				if (parentSeen.def) for (const key in schema) {
+					if (key === "$ref" || key === "allOf") continue;
+					if (key in parentSeen.def && JSON.stringify(schema[key]) === JSON.stringify(parentSeen.def[key])) delete schema[key];
+				}
+			}
+		}
+		ctx.override({
+			zodSchema,
+			jsonSchema: schema,
+			path: seen.path ?? []
+		});
+	};
+	for (const entry of [...ctx.seen.entries()].reverse()) flattenRef(entry[0]);
+	const result = {};
+	if (ctx.target === "draft-2020-12") result.$schema = "https://json-schema.org/draft/2020-12/schema";
+	else if (ctx.target === "draft-07") result.$schema = "http://json-schema.org/draft-07/schema#";
+	else if (ctx.target === "draft-04") result.$schema = "http://json-schema.org/draft-04/schema#";
+	else if (ctx.target === "openapi-3.0") {}
+	if (ctx.external?.uri) {
+		const id = ctx.external.registry.get(schema)?.id;
+		if (!id) throw new Error("Schema is missing an `id` property");
+		result.$id = ctx.external.uri(id);
+	}
+	Object.assign(result, root.def ?? root.schema);
+	const defs = ctx.external?.defs ?? {};
+	for (const entry of ctx.seen.entries()) {
+		const seen = entry[1];
+		if (seen.def && seen.defId) defs[seen.defId] = seen.def;
+	}
+	if (ctx.external) {} else if (Object.keys(defs).length > 0) if (ctx.target === "draft-2020-12") result.$defs = defs;
+	else result.definitions = defs;
+	try {
+		const finalized = JSON.parse(JSON.stringify(result));
+		Object.defineProperty(finalized, "~standard", {
+			value: {
+				...schema["~standard"],
+				jsonSchema: {
+					input: createStandardJSONSchemaMethod(schema, "input", ctx.processors),
+					output: createStandardJSONSchemaMethod(schema, "output", ctx.processors)
+				}
+			},
+			enumerable: false,
+			writable: false
+		});
+		return finalized;
+	} catch (_err) {
+		throw new Error("Error converting schema to JSON.");
+	}
+}
+function isTransforming(_schema, _ctx) {
+	const ctx = _ctx ?? { seen: /* @__PURE__ */ new Set() };
+	if (ctx.seen.has(_schema)) return false;
+	ctx.seen.add(_schema);
+	const def = _schema._zod.def;
+	if (def.type === "transform") return true;
+	if (def.type === "array") return isTransforming(def.element, ctx);
+	if (def.type === "set") return isTransforming(def.valueType, ctx);
+	if (def.type === "lazy") return isTransforming(def.getter(), ctx);
+	if (def.type === "promise" || def.type === "optional" || def.type === "nonoptional" || def.type === "nullable" || def.type === "readonly" || def.type === "default" || def.type === "prefault") return isTransforming(def.innerType, ctx);
+	if (def.type === "intersection") return isTransforming(def.left, ctx) || isTransforming(def.right, ctx);
+	if (def.type === "record" || def.type === "map") return isTransforming(def.keyType, ctx) || isTransforming(def.valueType, ctx);
+	if (def.type === "pipe") return isTransforming(def.in, ctx) || isTransforming(def.out, ctx);
+	if (def.type === "object") {
+		for (const key in def.shape) if (isTransforming(def.shape[key], ctx)) return true;
+		return false;
+	}
+	if (def.type === "union") {
+		for (const option of def.options) if (isTransforming(option, ctx)) return true;
+		return false;
+	}
+	if (def.type === "tuple") {
+		for (const item of def.items) if (isTransforming(item, ctx)) return true;
+		if (def.rest && isTransforming(def.rest, ctx)) return true;
+		return false;
+	}
+	return false;
+}
+/**
+* Creates a toJSONSchema method for a schema instance.
+* This encapsulates the logic of initializing context, processing, extracting defs, and finalizing.
+*/
+var createToJSONSchemaMethod = (schema, processors = {}) => (params) => {
+	const ctx = initializeContext({
+		...params,
+		processors
+	});
+	process$1(schema, ctx);
+	extractDefs(ctx, schema);
+	return finalize(ctx, schema);
+};
+var createStandardJSONSchemaMethod = (schema, io, processors = {}) => (params) => {
+	const { libraryOptions, target } = params ?? {};
+	const ctx = initializeContext({
+		...libraryOptions ?? {},
+		target,
+		io,
+		processors
+	});
+	process$1(schema, ctx);
+	extractDefs(ctx, schema);
+	return finalize(ctx, schema);
+};
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/core/json-schema-processors.js
+var formatMap = {
+	guid: "uuid",
+	url: "uri",
+	datetime: "date-time",
+	json_string: "json-string",
+	regex: ""
+};
+var stringProcessor = (schema, ctx, _json, _params) => {
+	const json = _json;
+	json.type = "string";
+	const { minimum, maximum, format, patterns, contentEncoding } = schema._zod.bag;
+	if (typeof minimum === "number") json.minLength = minimum;
+	if (typeof maximum === "number") json.maxLength = maximum;
+	if (format) {
+		json.format = formatMap[format] ?? format;
+		if (json.format === "") delete json.format;
+		if (format === "time") delete json.format;
+	}
+	if (contentEncoding) json.contentEncoding = contentEncoding;
+	if (patterns && patterns.size > 0) {
+		const regexes = [...patterns];
+		if (regexes.length === 1) json.pattern = regexes[0].source;
+		else if (regexes.length > 1) json.allOf = [...regexes.map((regex) => ({
+			...ctx.target === "draft-07" || ctx.target === "draft-04" || ctx.target === "openapi-3.0" ? { type: "string" } : {},
+			pattern: regex.source
+		}))];
+	}
+};
+var neverProcessor = (_schema, _ctx, json, _params) => {
+	json.not = {};
+};
+var unknownProcessor = (_schema, _ctx, _json, _params) => {};
+var enumProcessor = (schema, _ctx, json, _params) => {
+	const def = schema._zod.def;
+	const values = getEnumValues(def.entries);
+	if (values.every((v) => typeof v === "number")) json.type = "number";
+	if (values.every((v) => typeof v === "string")) json.type = "string";
+	json.enum = values;
+};
+var customProcessor = (_schema, ctx, _json, _params) => {
+	if (ctx.unrepresentable === "throw") throw new Error("Custom types cannot be represented in JSON Schema");
+};
+var transformProcessor = (_schema, ctx, _json, _params) => {
+	if (ctx.unrepresentable === "throw") throw new Error("Transforms cannot be represented in JSON Schema");
+};
+var arrayProcessor = (schema, ctx, _json, params) => {
+	const json = _json;
+	const def = schema._zod.def;
+	const { minimum, maximum } = schema._zod.bag;
+	if (typeof minimum === "number") json.minItems = minimum;
+	if (typeof maximum === "number") json.maxItems = maximum;
+	json.type = "array";
+	json.items = process$1(def.element, ctx, {
+		...params,
+		path: [...params.path, "items"]
+	});
+};
+var objectProcessor = (schema, ctx, _json, params) => {
+	const json = _json;
+	const def = schema._zod.def;
+	json.type = "object";
+	json.properties = {};
+	const shape = def.shape;
+	for (const key in shape) json.properties[key] = process$1(shape[key], ctx, {
+		...params,
+		path: [
+			...params.path,
+			"properties",
+			key
+		]
+	});
+	const allKeys = new Set(Object.keys(shape));
+	const requiredKeys = new Set([...allKeys].filter((key) => {
+		const v = def.shape[key]._zod;
+		if (ctx.io === "input") return v.optin === void 0;
+		else return v.optout === void 0;
+	}));
+	if (requiredKeys.size > 0) json.required = Array.from(requiredKeys);
+	if (def.catchall?._zod.def.type === "never") json.additionalProperties = false;
+	else if (!def.catchall) {
+		if (ctx.io === "output") json.additionalProperties = false;
+	} else if (def.catchall) json.additionalProperties = process$1(def.catchall, ctx, {
+		...params,
+		path: [...params.path, "additionalProperties"]
+	});
+};
+var unionProcessor = (schema, ctx, json, params) => {
+	const def = schema._zod.def;
+	const isExclusive = def.inclusive === false;
+	const options = def.options.map((x, i) => process$1(x, ctx, {
+		...params,
+		path: [
+			...params.path,
+			isExclusive ? "oneOf" : "anyOf",
+			i
+		]
+	}));
+	if (isExclusive) json.oneOf = options;
+	else json.anyOf = options;
+};
+var intersectionProcessor = (schema, ctx, json, params) => {
+	const def = schema._zod.def;
+	const a = process$1(def.left, ctx, {
+		...params,
+		path: [
+			...params.path,
+			"allOf",
+			0
+		]
+	});
+	const b = process$1(def.right, ctx, {
+		...params,
+		path: [
+			...params.path,
+			"allOf",
+			1
+		]
+	});
+	const isSimpleIntersection = (val) => "allOf" in val && Object.keys(val).length === 1;
+	json.allOf = [...isSimpleIntersection(a) ? a.allOf : [a], ...isSimpleIntersection(b) ? b.allOf : [b]];
+};
+var nullableProcessor = (schema, ctx, json, params) => {
+	const def = schema._zod.def;
+	const inner = process$1(def.innerType, ctx, params);
+	const seen = ctx.seen.get(schema);
+	if (ctx.target === "openapi-3.0") {
+		seen.ref = def.innerType;
+		json.nullable = true;
+	} else json.anyOf = [inner, { type: "null" }];
+};
+var nonoptionalProcessor = (schema, ctx, _json, params) => {
+	const def = schema._zod.def;
+	process$1(def.innerType, ctx, params);
+	const seen = ctx.seen.get(schema);
+	seen.ref = def.innerType;
+};
+var defaultProcessor = (schema, ctx, json, params) => {
+	const def = schema._zod.def;
+	process$1(def.innerType, ctx, params);
+	const seen = ctx.seen.get(schema);
+	seen.ref = def.innerType;
+	json.default = JSON.parse(JSON.stringify(def.defaultValue));
+};
+var prefaultProcessor = (schema, ctx, json, params) => {
+	const def = schema._zod.def;
+	process$1(def.innerType, ctx, params);
+	const seen = ctx.seen.get(schema);
+	seen.ref = def.innerType;
+	if (ctx.io === "input") json._prefault = JSON.parse(JSON.stringify(def.defaultValue));
+};
+var catchProcessor = (schema, ctx, json, params) => {
+	const def = schema._zod.def;
+	process$1(def.innerType, ctx, params);
+	const seen = ctx.seen.get(schema);
+	seen.ref = def.innerType;
+	let catchValue;
+	try {
+		catchValue = def.catchValue(void 0);
+	} catch {
+		throw new Error("Dynamic catch values are not supported in JSON Schema");
+	}
+	json.default = catchValue;
+};
+var pipeProcessor = (schema, ctx, _json, params) => {
+	const def = schema._zod.def;
+	const innerType = ctx.io === "input" ? def.in._zod.def.type === "transform" ? def.out : def.in : def.out;
+	process$1(innerType, ctx, params);
+	const seen = ctx.seen.get(schema);
+	seen.ref = innerType;
+};
+var readonlyProcessor = (schema, ctx, json, params) => {
+	const def = schema._zod.def;
+	process$1(def.innerType, ctx, params);
+	const seen = ctx.seen.get(schema);
+	seen.ref = def.innerType;
+	json.readOnly = true;
+};
+var optionalProcessor = (schema, ctx, _json, params) => {
+	const def = schema._zod.def;
+	process$1(def.innerType, ctx, params);
+	const seen = ctx.seen.get(schema);
+	seen.ref = def.innerType;
+};
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@hookform+resolvers@5.2.2_react-hook-form@7.71.2_react@19.2.4_/node_modules/@hookform/resolvers/zod/dist/zod.mjs
+function t(r, e) {
+	try {
+		var o = r();
+	} catch (r) {
+		return e(r);
+	}
+	return o && o.then ? o.then(void 0, e) : o;
+}
+function s(r, e) {
+	for (var n = {}; r.length;) {
+		var t = r[0], s = t.code, i = t.message, a = t.path.join(".");
+		if (!n[a]) if ("unionErrors" in t) {
+			var u = t.unionErrors[0].errors[0];
+			n[a] = {
+				message: u.message,
+				type: u.code
+			};
+		} else n[a] = {
+			message: i,
+			type: s
+		};
+		if ("unionErrors" in t && t.unionErrors.forEach(function(e) {
+			return e.errors.forEach(function(e) {
+				return r.push(e);
+			});
+		}), e) {
+			var c = n[a].types, f = c && c[t.code];
+			n[a] = appendErrors(a, e, n, s, f ? [].concat(f, t.message) : t.message);
+		}
+		r.shift();
+	}
+	return n;
+}
+function i(r, e) {
+	for (var n = {}; r.length;) {
+		var t = r[0], s = t.code, i = t.message, a = t.path.join(".");
+		if (!n[a]) if ("invalid_union" === t.code && t.errors.length > 0) {
+			var u = t.errors[0][0];
+			n[a] = {
+				message: u.message,
+				type: u.code
+			};
+		} else n[a] = {
+			message: i,
+			type: s
+		};
+		if ("invalid_union" === t.code && t.errors.forEach(function(e) {
+			return e.forEach(function(e) {
+				return r.push(e);
+			});
+		}), e) {
+			var c = n[a].types, f = c && c[t.code];
+			n[a] = appendErrors(a, e, n, s, f ? [].concat(f, t.message) : t.message);
+		}
+		r.shift();
+	}
+	return n;
+}
+function a(o$1, a, u) {
+	if (void 0 === u && (u = {}), function(r) {
+		return "_def" in r && "object" == typeof r._def && "typeName" in r._def;
+	}(o$1)) return function(n, i, c) {
+		try {
+			return Promise.resolve(t(function() {
+				return Promise.resolve(o$1["sync" === u.mode ? "parse" : "parseAsync"](n, a)).then(function(e) {
+					return c.shouldUseNativeValidation && o({}, c), {
+						errors: {},
+						values: u.raw ? Object.assign({}, n) : e
+					};
+				});
+			}, function(r) {
+				if (function(r) {
+					return Array.isArray(null == r ? void 0 : r.issues);
+				}(r)) return {
+					values: {},
+					errors: s$1(s(r.errors, !c.shouldUseNativeValidation && "all" === c.criteriaMode), c)
+				};
+				throw r;
+			}));
+		} catch (r) {
+			return Promise.reject(r);
+		}
+	};
+	if (function(r) {
+		return "_zod" in r && "object" == typeof r._zod;
+	}(o$1)) return function(s, c, f) {
+		try {
+			return Promise.resolve(t(function() {
+				return Promise.resolve(("sync" === u.mode ? parse$1 : parseAsync$1)(o$1, s, a)).then(function(e) {
+					return f.shouldUseNativeValidation && o({}, f), {
+						errors: {},
+						values: u.raw ? Object.assign({}, s) : e
+					};
+				});
+			}, function(r) {
+				if (function(r) {
+					return r instanceof $ZodError;
+				}(r)) return {
+					values: {},
+					errors: s$1(i(r.issues, !f.shouldUseNativeValidation && "all" === f.criteriaMode), f)
+				};
+				throw r;
+			}));
+		} catch (r) {
+			return Promise.reject(r);
+		}
+	};
+	throw new Error("Invalid input: not a Zod schema");
+}
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/iso.js
+var ZodISODateTime = /* @__PURE__ */ $constructor("ZodISODateTime", (inst, def) => {
+	$ZodISODateTime.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+function datetime(params) {
+	return /* @__PURE__ */ _isoDateTime(ZodISODateTime, params);
+}
+var ZodISODate = /* @__PURE__ */ $constructor("ZodISODate", (inst, def) => {
+	$ZodISODate.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+function date(params) {
+	return /* @__PURE__ */ _isoDate(ZodISODate, params);
+}
+var ZodISOTime = /* @__PURE__ */ $constructor("ZodISOTime", (inst, def) => {
+	$ZodISOTime.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+function time(params) {
+	return /* @__PURE__ */ _isoTime(ZodISOTime, params);
+}
+var ZodISODuration = /* @__PURE__ */ $constructor("ZodISODuration", (inst, def) => {
+	$ZodISODuration.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+function duration(params) {
+	return /* @__PURE__ */ _isoDuration(ZodISODuration, params);
+}
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/errors.js
+var initializer = (inst, issues) => {
+	$ZodError.init(inst, issues);
+	inst.name = "ZodError";
+	Object.defineProperties(inst, {
+		format: { value: (mapper) => formatError(inst, mapper) },
+		flatten: { value: (mapper) => flattenError(inst, mapper) },
+		addIssue: { value: (issue) => {
+			inst.issues.push(issue);
+			inst.message = JSON.stringify(inst.issues, jsonStringifyReplacer, 2);
+		} },
+		addIssues: { value: (issues) => {
+			inst.issues.push(...issues);
+			inst.message = JSON.stringify(inst.issues, jsonStringifyReplacer, 2);
+		} },
+		isEmpty: { get() {
+			return inst.issues.length === 0;
+		} }
+	});
+};
+$constructor("ZodError", initializer);
+var ZodRealError = $constructor("ZodError", initializer, { Parent: Error });
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/parse.js
+var parse = /* @__PURE__ */ _parse(ZodRealError);
+var parseAsync = /* @__PURE__ */ _parseAsync(ZodRealError);
+var safeParse = /* @__PURE__ */ _safeParse(ZodRealError);
+var safeParseAsync = /* @__PURE__ */ _safeParseAsync(ZodRealError);
+var encode = /* @__PURE__ */ _encode(ZodRealError);
+var decode = /* @__PURE__ */ _decode(ZodRealError);
+var encodeAsync = /* @__PURE__ */ _encodeAsync(ZodRealError);
+var decodeAsync = /* @__PURE__ */ _decodeAsync(ZodRealError);
+var safeEncode = /* @__PURE__ */ _safeEncode(ZodRealError);
+var safeDecode = /* @__PURE__ */ _safeDecode(ZodRealError);
+var safeEncodeAsync = /* @__PURE__ */ _safeEncodeAsync(ZodRealError);
+var safeDecodeAsync = /* @__PURE__ */ _safeDecodeAsync(ZodRealError);
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/schemas.js
+var ZodType = /* @__PURE__ */ $constructor("ZodType", (inst, def) => {
+	$ZodType.init(inst, def);
+	Object.assign(inst["~standard"], { jsonSchema: {
+		input: createStandardJSONSchemaMethod(inst, "input"),
+		output: createStandardJSONSchemaMethod(inst, "output")
+	} });
+	inst.toJSONSchema = createToJSONSchemaMethod(inst, {});
+	inst.def = def;
+	inst.type = def.type;
+	Object.defineProperty(inst, "_def", { value: def });
+	inst.check = (...checks) => {
+		return inst.clone(mergeDefs(def, { checks: [...def.checks ?? [], ...checks.map((ch) => typeof ch === "function" ? { _zod: {
+			check: ch,
+			def: { check: "custom" },
+			onattach: []
+		} } : ch)] }), { parent: true });
+	};
+	inst.with = inst.check;
+	inst.clone = (def, params) => clone(inst, def, params);
+	inst.brand = () => inst;
+	inst.register = ((reg, meta) => {
+		reg.add(inst, meta);
+		return inst;
+	});
+	inst.parse = (data, params) => parse(inst, data, params, { callee: inst.parse });
+	inst.safeParse = (data, params) => safeParse(inst, data, params);
+	inst.parseAsync = async (data, params) => parseAsync(inst, data, params, { callee: inst.parseAsync });
+	inst.safeParseAsync = async (data, params) => safeParseAsync(inst, data, params);
+	inst.spa = inst.safeParseAsync;
+	inst.encode = (data, params) => encode(inst, data, params);
+	inst.decode = (data, params) => decode(inst, data, params);
+	inst.encodeAsync = async (data, params) => encodeAsync(inst, data, params);
+	inst.decodeAsync = async (data, params) => decodeAsync(inst, data, params);
+	inst.safeEncode = (data, params) => safeEncode(inst, data, params);
+	inst.safeDecode = (data, params) => safeDecode(inst, data, params);
+	inst.safeEncodeAsync = async (data, params) => safeEncodeAsync(inst, data, params);
+	inst.safeDecodeAsync = async (data, params) => safeDecodeAsync(inst, data, params);
+	inst.refine = (check, params) => inst.check(refine(check, params));
+	inst.superRefine = (refinement) => inst.check(superRefine(refinement));
+	inst.overwrite = (fn) => inst.check(/* @__PURE__ */ _overwrite(fn));
+	inst.optional = () => optional(inst);
+	inst.exactOptional = () => exactOptional(inst);
+	inst.nullable = () => nullable(inst);
+	inst.nullish = () => optional(nullable(inst));
+	inst.nonoptional = (params) => nonoptional(inst, params);
+	inst.array = () => array(inst);
+	inst.or = (arg) => union([inst, arg]);
+	inst.and = (arg) => intersection(inst, arg);
+	inst.transform = (tx) => pipe(inst, transform(tx));
+	inst.default = (def) => _default(inst, def);
+	inst.prefault = (def) => prefault(inst, def);
+	inst.catch = (params) => _catch(inst, params);
+	inst.pipe = (target) => pipe(inst, target);
+	inst.readonly = () => readonly(inst);
+	inst.describe = (description) => {
+		const cl = inst.clone();
+		globalRegistry.add(cl, { description });
+		return cl;
+	};
+	Object.defineProperty(inst, "description", {
+		get() {
+			return globalRegistry.get(inst)?.description;
+		},
+		configurable: true
+	});
+	inst.meta = (...args) => {
+		if (args.length === 0) return globalRegistry.get(inst);
+		const cl = inst.clone();
+		globalRegistry.add(cl, args[0]);
+		return cl;
+	};
+	inst.isOptional = () => inst.safeParse(void 0).success;
+	inst.isNullable = () => inst.safeParse(null).success;
+	inst.apply = (fn) => fn(inst);
+	return inst;
+});
+/** @internal */
+var _ZodString = /* @__PURE__ */ $constructor("_ZodString", (inst, def) => {
+	$ZodString.init(inst, def);
+	ZodType.init(inst, def);
+	inst._zod.processJSONSchema = (ctx, json, params) => stringProcessor(inst, ctx, json, params);
+	const bag = inst._zod.bag;
+	inst.format = bag.format ?? null;
+	inst.minLength = bag.minimum ?? null;
+	inst.maxLength = bag.maximum ?? null;
+	inst.regex = (...args) => inst.check(/* @__PURE__ */ _regex(...args));
+	inst.includes = (...args) => inst.check(/* @__PURE__ */ _includes(...args));
+	inst.startsWith = (...args) => inst.check(/* @__PURE__ */ _startsWith(...args));
+	inst.endsWith = (...args) => inst.check(/* @__PURE__ */ _endsWith(...args));
+	inst.min = (...args) => inst.check(/* @__PURE__ */ _minLength(...args));
+	inst.max = (...args) => inst.check(/* @__PURE__ */ _maxLength(...args));
+	inst.length = (...args) => inst.check(/* @__PURE__ */ _length(...args));
+	inst.nonempty = (...args) => inst.check(/* @__PURE__ */ _minLength(1, ...args));
+	inst.lowercase = (params) => inst.check(/* @__PURE__ */ _lowercase(params));
+	inst.uppercase = (params) => inst.check(/* @__PURE__ */ _uppercase(params));
+	inst.trim = () => inst.check(/* @__PURE__ */ _trim());
+	inst.normalize = (...args) => inst.check(/* @__PURE__ */ _normalize(...args));
+	inst.toLowerCase = () => inst.check(/* @__PURE__ */ _toLowerCase());
+	inst.toUpperCase = () => inst.check(/* @__PURE__ */ _toUpperCase());
+	inst.slugify = () => inst.check(/* @__PURE__ */ _slugify());
+});
+var ZodString = /* @__PURE__ */ $constructor("ZodString", (inst, def) => {
+	$ZodString.init(inst, def);
+	_ZodString.init(inst, def);
+	inst.email = (params) => inst.check(/* @__PURE__ */ _email(ZodEmail, params));
+	inst.url = (params) => inst.check(/* @__PURE__ */ _url(ZodURL, params));
+	inst.jwt = (params) => inst.check(/* @__PURE__ */ _jwt(ZodJWT, params));
+	inst.emoji = (params) => inst.check(/* @__PURE__ */ _emoji(ZodEmoji, params));
+	inst.guid = (params) => inst.check(/* @__PURE__ */ _guid(ZodGUID, params));
+	inst.uuid = (params) => inst.check(/* @__PURE__ */ _uuid(ZodUUID, params));
+	inst.uuidv4 = (params) => inst.check(/* @__PURE__ */ _uuidv4(ZodUUID, params));
+	inst.uuidv6 = (params) => inst.check(/* @__PURE__ */ _uuidv6(ZodUUID, params));
+	inst.uuidv7 = (params) => inst.check(/* @__PURE__ */ _uuidv7(ZodUUID, params));
+	inst.nanoid = (params) => inst.check(/* @__PURE__ */ _nanoid(ZodNanoID, params));
+	inst.guid = (params) => inst.check(/* @__PURE__ */ _guid(ZodGUID, params));
+	inst.cuid = (params) => inst.check(/* @__PURE__ */ _cuid(ZodCUID, params));
+	inst.cuid2 = (params) => inst.check(/* @__PURE__ */ _cuid2(ZodCUID2, params));
+	inst.ulid = (params) => inst.check(/* @__PURE__ */ _ulid(ZodULID, params));
+	inst.base64 = (params) => inst.check(/* @__PURE__ */ _base64(ZodBase64, params));
+	inst.base64url = (params) => inst.check(/* @__PURE__ */ _base64url(ZodBase64URL, params));
+	inst.xid = (params) => inst.check(/* @__PURE__ */ _xid(ZodXID, params));
+	inst.ksuid = (params) => inst.check(/* @__PURE__ */ _ksuid(ZodKSUID, params));
+	inst.ipv4 = (params) => inst.check(/* @__PURE__ */ _ipv4(ZodIPv4, params));
+	inst.ipv6 = (params) => inst.check(/* @__PURE__ */ _ipv6(ZodIPv6, params));
+	inst.cidrv4 = (params) => inst.check(/* @__PURE__ */ _cidrv4(ZodCIDRv4, params));
+	inst.cidrv6 = (params) => inst.check(/* @__PURE__ */ _cidrv6(ZodCIDRv6, params));
+	inst.e164 = (params) => inst.check(/* @__PURE__ */ _e164(ZodE164, params));
+	inst.datetime = (params) => inst.check(datetime(params));
+	inst.date = (params) => inst.check(date(params));
+	inst.time = (params) => inst.check(time(params));
+	inst.duration = (params) => inst.check(duration(params));
+});
+function string(params) {
+	return /* @__PURE__ */ _string(ZodString, params);
+}
+var ZodStringFormat = /* @__PURE__ */ $constructor("ZodStringFormat", (inst, def) => {
+	$ZodStringFormat.init(inst, def);
+	_ZodString.init(inst, def);
+});
+var ZodEmail = /* @__PURE__ */ $constructor("ZodEmail", (inst, def) => {
+	$ZodEmail.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+var ZodGUID = /* @__PURE__ */ $constructor("ZodGUID", (inst, def) => {
+	$ZodGUID.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+var ZodUUID = /* @__PURE__ */ $constructor("ZodUUID", (inst, def) => {
+	$ZodUUID.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+var ZodURL = /* @__PURE__ */ $constructor("ZodURL", (inst, def) => {
+	$ZodURL.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+var ZodEmoji = /* @__PURE__ */ $constructor("ZodEmoji", (inst, def) => {
+	$ZodEmoji.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+var ZodNanoID = /* @__PURE__ */ $constructor("ZodNanoID", (inst, def) => {
+	$ZodNanoID.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+var ZodCUID = /* @__PURE__ */ $constructor("ZodCUID", (inst, def) => {
+	$ZodCUID.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+var ZodCUID2 = /* @__PURE__ */ $constructor("ZodCUID2", (inst, def) => {
+	$ZodCUID2.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+var ZodULID = /* @__PURE__ */ $constructor("ZodULID", (inst, def) => {
+	$ZodULID.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+var ZodXID = /* @__PURE__ */ $constructor("ZodXID", (inst, def) => {
+	$ZodXID.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+var ZodKSUID = /* @__PURE__ */ $constructor("ZodKSUID", (inst, def) => {
+	$ZodKSUID.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+var ZodIPv4 = /* @__PURE__ */ $constructor("ZodIPv4", (inst, def) => {
+	$ZodIPv4.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+var ZodIPv6 = /* @__PURE__ */ $constructor("ZodIPv6", (inst, def) => {
+	$ZodIPv6.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+var ZodCIDRv4 = /* @__PURE__ */ $constructor("ZodCIDRv4", (inst, def) => {
+	$ZodCIDRv4.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+var ZodCIDRv6 = /* @__PURE__ */ $constructor("ZodCIDRv6", (inst, def) => {
+	$ZodCIDRv6.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+var ZodBase64 = /* @__PURE__ */ $constructor("ZodBase64", (inst, def) => {
+	$ZodBase64.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+var ZodBase64URL = /* @__PURE__ */ $constructor("ZodBase64URL", (inst, def) => {
+	$ZodBase64URL.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+var ZodE164 = /* @__PURE__ */ $constructor("ZodE164", (inst, def) => {
+	$ZodE164.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+var ZodJWT = /* @__PURE__ */ $constructor("ZodJWT", (inst, def) => {
+	$ZodJWT.init(inst, def);
+	ZodStringFormat.init(inst, def);
+});
+var ZodUnknown = /* @__PURE__ */ $constructor("ZodUnknown", (inst, def) => {
+	$ZodUnknown.init(inst, def);
+	ZodType.init(inst, def);
+	inst._zod.processJSONSchema = (ctx, json, params) => unknownProcessor(inst, ctx, json, params);
+});
+function unknown() {
+	return /* @__PURE__ */ _unknown(ZodUnknown);
+}
+var ZodNever = /* @__PURE__ */ $constructor("ZodNever", (inst, def) => {
+	$ZodNever.init(inst, def);
+	ZodType.init(inst, def);
+	inst._zod.processJSONSchema = (ctx, json, params) => neverProcessor(inst, ctx, json, params);
+});
+function never(params) {
+	return /* @__PURE__ */ _never(ZodNever, params);
+}
+var ZodArray = /* @__PURE__ */ $constructor("ZodArray", (inst, def) => {
+	$ZodArray.init(inst, def);
+	ZodType.init(inst, def);
+	inst._zod.processJSONSchema = (ctx, json, params) => arrayProcessor(inst, ctx, json, params);
+	inst.element = def.element;
+	inst.min = (minLength, params) => inst.check(/* @__PURE__ */ _minLength(minLength, params));
+	inst.nonempty = (params) => inst.check(/* @__PURE__ */ _minLength(1, params));
+	inst.max = (maxLength, params) => inst.check(/* @__PURE__ */ _maxLength(maxLength, params));
+	inst.length = (len, params) => inst.check(/* @__PURE__ */ _length(len, params));
+	inst.unwrap = () => inst.element;
+});
+function array(element, params) {
+	return /* @__PURE__ */ _array(ZodArray, element, params);
+}
+var ZodObject = /* @__PURE__ */ $constructor("ZodObject", (inst, def) => {
+	$ZodObjectJIT.init(inst, def);
+	ZodType.init(inst, def);
+	inst._zod.processJSONSchema = (ctx, json, params) => objectProcessor(inst, ctx, json, params);
+	defineLazy(inst, "shape", () => {
+		return def.shape;
+	});
+	inst.keyof = () => _enum(Object.keys(inst._zod.def.shape));
+	inst.catchall = (catchall) => inst.clone({
+		...inst._zod.def,
+		catchall
+	});
+	inst.passthrough = () => inst.clone({
+		...inst._zod.def,
+		catchall: unknown()
+	});
+	inst.loose = () => inst.clone({
+		...inst._zod.def,
+		catchall: unknown()
+	});
+	inst.strict = () => inst.clone({
+		...inst._zod.def,
+		catchall: never()
+	});
+	inst.strip = () => inst.clone({
+		...inst._zod.def,
+		catchall: void 0
+	});
+	inst.extend = (incoming) => {
+		return extend(inst, incoming);
+	};
+	inst.safeExtend = (incoming) => {
+		return safeExtend(inst, incoming);
+	};
+	inst.merge = (other) => merge(inst, other);
+	inst.pick = (mask) => pick(inst, mask);
+	inst.omit = (mask) => omit(inst, mask);
+	inst.partial = (...args) => partial(ZodOptional, inst, args[0]);
+	inst.required = (...args) => required(ZodNonOptional, inst, args[0]);
+});
+function object(shape, params) {
+	return new ZodObject({
+		type: "object",
+		shape: shape ?? {},
+		...normalizeParams(params)
+	});
+}
+var ZodUnion = /* @__PURE__ */ $constructor("ZodUnion", (inst, def) => {
+	$ZodUnion.init(inst, def);
+	ZodType.init(inst, def);
+	inst._zod.processJSONSchema = (ctx, json, params) => unionProcessor(inst, ctx, json, params);
+	inst.options = def.options;
+});
+function union(options, params) {
+	return new ZodUnion({
+		type: "union",
+		options,
+		...normalizeParams(params)
+	});
+}
+var ZodIntersection = /* @__PURE__ */ $constructor("ZodIntersection", (inst, def) => {
+	$ZodIntersection.init(inst, def);
+	ZodType.init(inst, def);
+	inst._zod.processJSONSchema = (ctx, json, params) => intersectionProcessor(inst, ctx, json, params);
+});
+function intersection(left, right) {
+	return new ZodIntersection({
+		type: "intersection",
+		left,
+		right
+	});
+}
+var ZodEnum = /* @__PURE__ */ $constructor("ZodEnum", (inst, def) => {
+	$ZodEnum.init(inst, def);
+	ZodType.init(inst, def);
+	inst._zod.processJSONSchema = (ctx, json, params) => enumProcessor(inst, ctx, json, params);
+	inst.enum = def.entries;
+	inst.options = Object.values(def.entries);
+	const keys = new Set(Object.keys(def.entries));
+	inst.extract = (values, params) => {
+		const newEntries = {};
+		for (const value of values) if (keys.has(value)) newEntries[value] = def.entries[value];
+		else throw new Error(`Key ${value} not found in enum`);
+		return new ZodEnum({
+			...def,
+			checks: [],
+			...normalizeParams(params),
+			entries: newEntries
+		});
+	};
+	inst.exclude = (values, params) => {
+		const newEntries = { ...def.entries };
+		for (const value of values) if (keys.has(value)) delete newEntries[value];
+		else throw new Error(`Key ${value} not found in enum`);
+		return new ZodEnum({
+			...def,
+			checks: [],
+			...normalizeParams(params),
+			entries: newEntries
+		});
+	};
+});
+function _enum(values, params) {
+	return new ZodEnum({
+		type: "enum",
+		entries: Array.isArray(values) ? Object.fromEntries(values.map((v) => [v, v])) : values,
+		...normalizeParams(params)
+	});
+}
+var ZodTransform = /* @__PURE__ */ $constructor("ZodTransform", (inst, def) => {
+	$ZodTransform.init(inst, def);
+	ZodType.init(inst, def);
+	inst._zod.processJSONSchema = (ctx, json, params) => transformProcessor(inst, ctx, json, params);
+	inst._zod.parse = (payload, _ctx) => {
+		if (_ctx.direction === "backward") throw new $ZodEncodeError(inst.constructor.name);
+		payload.addIssue = (issue$1) => {
+			if (typeof issue$1 === "string") payload.issues.push(issue(issue$1, payload.value, def));
+			else {
+				const _issue = issue$1;
+				if (_issue.fatal) _issue.continue = false;
+				_issue.code ?? (_issue.code = "custom");
+				_issue.input ?? (_issue.input = payload.value);
+				_issue.inst ?? (_issue.inst = inst);
+				payload.issues.push(issue(_issue));
+			}
+		};
+		const output = def.transform(payload.value, payload);
+		if (output instanceof Promise) return output.then((output) => {
+			payload.value = output;
+			return payload;
+		});
+		payload.value = output;
+		return payload;
+	};
+});
+function transform(fn) {
+	return new ZodTransform({
+		type: "transform",
+		transform: fn
+	});
+}
+var ZodOptional = /* @__PURE__ */ $constructor("ZodOptional", (inst, def) => {
+	$ZodOptional.init(inst, def);
+	ZodType.init(inst, def);
+	inst._zod.processJSONSchema = (ctx, json, params) => optionalProcessor(inst, ctx, json, params);
+	inst.unwrap = () => inst._zod.def.innerType;
+});
+function optional(innerType) {
+	return new ZodOptional({
+		type: "optional",
+		innerType
+	});
+}
+var ZodExactOptional = /* @__PURE__ */ $constructor("ZodExactOptional", (inst, def) => {
+	$ZodExactOptional.init(inst, def);
+	ZodType.init(inst, def);
+	inst._zod.processJSONSchema = (ctx, json, params) => optionalProcessor(inst, ctx, json, params);
+	inst.unwrap = () => inst._zod.def.innerType;
+});
+function exactOptional(innerType) {
+	return new ZodExactOptional({
+		type: "optional",
+		innerType
+	});
+}
+var ZodNullable = /* @__PURE__ */ $constructor("ZodNullable", (inst, def) => {
+	$ZodNullable.init(inst, def);
+	ZodType.init(inst, def);
+	inst._zod.processJSONSchema = (ctx, json, params) => nullableProcessor(inst, ctx, json, params);
+	inst.unwrap = () => inst._zod.def.innerType;
+});
+function nullable(innerType) {
+	return new ZodNullable({
+		type: "nullable",
+		innerType
+	});
+}
+var ZodDefault = /* @__PURE__ */ $constructor("ZodDefault", (inst, def) => {
+	$ZodDefault.init(inst, def);
+	ZodType.init(inst, def);
+	inst._zod.processJSONSchema = (ctx, json, params) => defaultProcessor(inst, ctx, json, params);
+	inst.unwrap = () => inst._zod.def.innerType;
+	inst.removeDefault = inst.unwrap;
+});
+function _default(innerType, defaultValue) {
+	return new ZodDefault({
+		type: "default",
+		innerType,
+		get defaultValue() {
+			return typeof defaultValue === "function" ? defaultValue() : shallowClone(defaultValue);
+		}
+	});
+}
+var ZodPrefault = /* @__PURE__ */ $constructor("ZodPrefault", (inst, def) => {
+	$ZodPrefault.init(inst, def);
+	ZodType.init(inst, def);
+	inst._zod.processJSONSchema = (ctx, json, params) => prefaultProcessor(inst, ctx, json, params);
+	inst.unwrap = () => inst._zod.def.innerType;
+});
+function prefault(innerType, defaultValue) {
+	return new ZodPrefault({
+		type: "prefault",
+		innerType,
+		get defaultValue() {
+			return typeof defaultValue === "function" ? defaultValue() : shallowClone(defaultValue);
+		}
+	});
+}
+var ZodNonOptional = /* @__PURE__ */ $constructor("ZodNonOptional", (inst, def) => {
+	$ZodNonOptional.init(inst, def);
+	ZodType.init(inst, def);
+	inst._zod.processJSONSchema = (ctx, json, params) => nonoptionalProcessor(inst, ctx, json, params);
+	inst.unwrap = () => inst._zod.def.innerType;
+});
+function nonoptional(innerType, params) {
+	return new ZodNonOptional({
+		type: "nonoptional",
+		innerType,
+		...normalizeParams(params)
+	});
+}
+var ZodCatch = /* @__PURE__ */ $constructor("ZodCatch", (inst, def) => {
+	$ZodCatch.init(inst, def);
+	ZodType.init(inst, def);
+	inst._zod.processJSONSchema = (ctx, json, params) => catchProcessor(inst, ctx, json, params);
+	inst.unwrap = () => inst._zod.def.innerType;
+	inst.removeCatch = inst.unwrap;
+});
+function _catch(innerType, catchValue) {
+	return new ZodCatch({
+		type: "catch",
+		innerType,
+		catchValue: typeof catchValue === "function" ? catchValue : () => catchValue
+	});
+}
+var ZodPipe = /* @__PURE__ */ $constructor("ZodPipe", (inst, def) => {
+	$ZodPipe.init(inst, def);
+	ZodType.init(inst, def);
+	inst._zod.processJSONSchema = (ctx, json, params) => pipeProcessor(inst, ctx, json, params);
+	inst.in = def.in;
+	inst.out = def.out;
+});
+function pipe(in_, out) {
+	return new ZodPipe({
+		type: "pipe",
+		in: in_,
+		out
+	});
+}
+var ZodReadonly = /* @__PURE__ */ $constructor("ZodReadonly", (inst, def) => {
+	$ZodReadonly.init(inst, def);
+	ZodType.init(inst, def);
+	inst._zod.processJSONSchema = (ctx, json, params) => readonlyProcessor(inst, ctx, json, params);
+	inst.unwrap = () => inst._zod.def.innerType;
+});
+function readonly(innerType) {
+	return new ZodReadonly({
+		type: "readonly",
+		innerType
+	});
+}
+var ZodCustom = /* @__PURE__ */ $constructor("ZodCustom", (inst, def) => {
+	$ZodCustom.init(inst, def);
+	ZodType.init(inst, def);
+	inst._zod.processJSONSchema = (ctx, json, params) => customProcessor(inst, ctx, json, params);
+});
+function refine(fn, _params = {}) {
+	return /* @__PURE__ */ _refine(ZodCustom, fn, _params);
+}
+function superRefine(fn) {
+	return /* @__PURE__ */ _superRefine(fn);
+}
+//#endregion
+//#region src/components/ui/form.tsx
+var Form = FormProvider;
+var FormFieldContext = import_react.createContext({});
+var FormField = ({ ...props }) => {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormFieldContext.Provider, {
+		"data-uid": "src/components/ui/form.tsx:35:5",
+		"data-prohibitions": "[]",
+		value: { name: props.name },
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Controller, {
+			"data-uid": "src/components/ui/form.tsx:36:7",
+			"data-prohibitions": "[editContent]",
+			...props
+		})
+	});
+};
+var useFormField = () => {
+	const fieldContext = import_react.useContext(FormFieldContext);
+	const itemContext = import_react.useContext(FormItemContext);
+	const { getFieldState, formState } = useFormContext();
+	const fieldState = getFieldState(fieldContext.name, formState);
+	if (!fieldContext) throw new Error("useFormField should be used within <FormField>");
+	const { id } = itemContext;
 	return {
 		id,
-		dismiss,
-		update
+		name: fieldContext.name,
+		formItemId: `${id}-form-item`,
+		formDescriptionId: `${id}-form-item-description`,
+		formMessageId: `${id}-form-item-message`,
+		...fieldState
 	};
-}
-function useToast() {
-	const [state, setState] = import_react.useState(memoryState);
-	import_react.useEffect(() => {
-		listeners.push(setState);
-		return () => {
-			const index = listeners.indexOf(setState);
-			if (index > -1) listeners.splice(index, 1);
-		};
-	}, [state]);
-	return {
-		...state,
-		toast: toast$1,
-		dismiss: (toastId) => dispatch({
-			type: "DISMISS_TOAST",
-			toastId
+};
+var FormItemContext = import_react.createContext({});
+var FormItem = import_react.forwardRef(({ className, ...props }, ref) => {
+	const id = import_react.useId();
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormItemContext.Provider, {
+		"data-uid": "src/components/ui/form.tsx:75:7",
+		"data-prohibitions": "[editContent]",
+		value: { id },
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			"data-uid": "src/components/ui/form.tsx:76:9",
+			"data-prohibitions": "[editContent]",
+			ref,
+			className: cn$1("space-y-2", className),
+			...props
 		})
-	};
-}
-//#endregion
-//#region src/components/BackButton.tsx
-function BackButton({ className, onClick, label = "Voltar" }) {
-	const navigate = useNavigate();
-	const handleBack = () => {
-		if (onClick) onClick();
-		else navigate(-1);
-	};
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-		"data-uid": "src/components/BackButton.tsx:24:5",
+	});
+});
+FormItem.displayName = "FormItem";
+var FormLabel = import_react.forwardRef(({ className, ...props }, ref) => {
+	const { error, formItemId } = useFormField();
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+		"data-uid": "src/components/ui/form.tsx:90:5",
 		"data-prohibitions": "[editContent]",
-		variant: "ghost",
-		onClick: handleBack,
-		className: cn$1("gap-1 pl-2.5 hover:bg-secondary text-muted-foreground hover:text-foreground", className),
-		"aria-label": label,
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, {
-			"data-uid": "src/components/BackButton.tsx:33:7",
-			"data-prohibitions": "[editContent]",
-			className: "w-5 h-5"
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-			"data-uid": "src/components/BackButton.tsx:34:7",
-			"data-prohibitions": "[editContent]",
-			className: "font-medium",
-			children: label
-		})]
-	});
-}
-//#endregion
-//#region src/pages/DemandDetail.tsx
-var DemandDetail = () => {
-	const { id } = useParams();
-	const navigate = useNavigate();
-	const { toast } = useToast();
-	const { role, demands } = useApp();
-	const demand = demands.find((d) => d.id === id);
-	if (!demand) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		"data-uid": "src/pages/DemandDetail.tsx:19:12",
-		"data-prohibitions": "[]",
-		className: "p-6 text-center text-muted-foreground",
-		children: "Demanda não encontrada."
-	});
-	const handleProposal = () => {
-		toast({
-			title: "Proposta Enviada!",
-			description: "O cliente receberá sua notificação em breve."
-		});
-		navigate("/demands");
-	};
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/DemandDetail.tsx:31:5",
-		"data-prohibitions": "[editContent]",
-		className: "flex flex-col animate-slide-up relative min-h-full space-y-6 pb-24",
-		children: [
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/DemandDetail.tsx:32:7",
-				"data-prohibitions": "[editContent]",
-				className: "flex items-center gap-2",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BackButton, {
-					"data-uid": "src/pages/DemandDetail.tsx:33:9",
-					"data-prohibitions": "[editContent]",
-					className: "-ml-2"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-					"data-uid": "src/pages/DemandDetail.tsx:34:9",
-					"data-prohibitions": "[editContent]",
-					className: "text-2xl md:text-3xl font-bold text-foreground flex-1 truncate tracking-tight",
-					children: demand.title
-				})]
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/DemandDetail.tsx:39:7",
-				"data-prohibitions": "[editContent]",
-				className: "space-y-8 flex-1",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/DemandDetail.tsx:40:9",
-						"data-prohibitions": "[editContent]",
-						className: "flex flex-wrap gap-4 text-sm text-muted-foreground",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/DemandDetail.tsx:41:11",
-								"data-prohibitions": "[editContent]",
-								className: "flex items-center gap-2 bg-secondary px-4 py-2 rounded-full",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, {
-									"data-uid": "src/pages/DemandDetail.tsx:42:13",
-									"data-prohibitions": "[editContent]",
-									className: "w-4 h-4"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									"data-uid": "src/pages/DemandDetail.tsx:43:13",
-									"data-prohibitions": "[editContent]",
-									className: "font-medium",
-									children: new Date(demand.date).toLocaleDateString("pt-BR")
-								})]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/DemandDetail.tsx:45:11",
-								"data-prohibitions": "[editContent]",
-								className: "flex items-center gap-2 bg-secondary px-4 py-2 rounded-full",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, {
-									"data-uid": "src/pages/DemandDetail.tsx:46:13",
-									"data-prohibitions": "[editContent]",
-									className: "w-4 h-4"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									"data-uid": "src/pages/DemandDetail.tsx:47:13",
-									"data-prohibitions": "[editContent]",
-									className: "font-medium",
-									children: demand.location
-								})]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/DemandDetail.tsx:49:11",
-								"data-prohibitions": "[editContent]",
-								className: "flex items-center gap-2 bg-secondary px-4 py-2 rounded-full",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, {
-									"data-uid": "src/pages/DemandDetail.tsx:50:13",
-									"data-prohibitions": "[editContent]",
-									className: "w-4 h-4"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-									"data-uid": "src/pages/DemandDetail.tsx:51:13",
-									"data-prohibitions": "[editContent]",
-									className: "font-medium",
-									children: [demand.guests, " convidados"]
-								})]
-							})
-						]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
-						"data-uid": "src/pages/DemandDetail.tsx:55:9",
-						"data-prohibitions": "[editContent]",
-						className: "border-border border-l-4 border-l-primary overflow-hidden shadow-sm",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-							"data-uid": "src/pages/DemandDetail.tsx:56:11",
-							"data-prohibitions": "[editContent]",
-							className: "p-6 md:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/DemandDetail.tsx:57:13",
-								"data-prohibitions": "[editContent]",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/pages/DemandDetail.tsx:58:15",
-									"data-prohibitions": "[editContent]",
-									className: "text-xs text-muted-foreground uppercase tracking-wider font-bold mb-2",
-									children: role === "customer" ? "Orçamento Estimado" : "Valor Líquido (-10% Taxa)"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-									"data-uid": "src/pages/DemandDetail.tsx:61:15",
-									"data-prohibitions": "[editContent]",
-									className: "text-4xl font-extrabold text-foreground flex items-center gap-2",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DollarSign, {
-										"data-uid": "src/pages/DemandDetail.tsx:62:17",
-										"data-prohibitions": "[editContent]",
-										className: "w-8 h-8 text-primary"
-									}), new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2 }).format(role === "customer" ? demand.budget : demand.budget * .9)]
-								})]
-							}), role === "customer" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/DemandDetail.tsx:69:15",
-								"data-prohibitions": "[editContent]",
-								className: "sm:text-right bg-secondary p-5 rounded-xl border border-border/50",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/pages/DemandDetail.tsx:70:17",
-									"data-prohibitions": "[]",
-									className: "text-xs text-muted-foreground uppercase tracking-wider font-bold mb-1",
-									children: "Propostas Recebidas"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/pages/DemandDetail.tsx:73:17",
-									"data-prohibitions": "[editContent]",
-									className: "text-3xl font-bold text-foreground",
-									children: demand.proposals
-								})]
-							})]
-						})
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-						"data-uid": "src/pages/DemandDetail.tsx:79:9",
-						"data-prohibitions": "[editContent]",
-						className: "space-y-4",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-							"data-uid": "src/pages/DemandDetail.tsx:80:11",
-							"data-prohibitions": "[]",
-							className: "font-semibold text-foreground text-xl border-b border-border pb-2",
-							children: "Serviços Solicitados"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/pages/DemandDetail.tsx:83:11",
-							"data-prohibitions": "[editContent]",
-							className: "grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 pt-2",
-							children: SERVICES.map(({ id, icon: Icon, label, color, bg }) => {
-								if (!demand.requirements[id]) return null;
-								return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/DemandDetail.tsx:87:17",
-									"data-prohibitions": "[editContent]",
-									className: `${bg} border border-border rounded-xl p-5 flex flex-col items-center justify-center text-center gap-3 transition-transform hover:scale-105`,
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
-										"data-uid": "src/pages/DemandDetail.tsx:91:19",
-										"data-prohibitions": "[editContent]",
-										className: `w-8 h-8 ${color}`
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										"data-uid": "src/pages/DemandDetail.tsx:92:19",
-										"data-prohibitions": "[editContent]",
-										className: "text-sm font-semibold text-foreground",
-										children: label
-									})]
-								}, id);
-							})
-						})]
-					}),
-					demand.requirements.details && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-						"data-uid": "src/pages/DemandDetail.tsx:100:11",
-						"data-prohibitions": "[editContent]",
-						className: "space-y-4",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-							"data-uid": "src/pages/DemandDetail.tsx:101:13",
-							"data-prohibitions": "[]",
-							className: "font-semibold text-foreground text-xl border-b border-border pb-2",
-							children: "Detalhes Adicionais"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/pages/DemandDetail.tsx:104:13",
-							"data-prohibitions": "[editContent]",
-							className: "bg-card border border-border rounded-xl p-6 text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed shadow-sm",
-							children: demand.requirements.details
-						})]
-					})
-				]
-			}),
-			role === "company" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/DemandDetail.tsx:112:9",
-				"data-prohibitions": "[]",
-				className: "fixed bottom-0 left-0 right-0 p-4 bg-background/90 backdrop-blur-md border-t border-border z-40 md:sticky md:bg-transparent md:backdrop-blur-none md:border-t-0 md:p-0",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-					"data-uid": "src/pages/DemandDetail.tsx:113:11",
-					"data-prohibitions": "[]",
-					size: "lg",
-					onClick: handleProposal,
-					className: "w-full h-14 text-lg font-semibold shadow-lg",
-					children: "Responder Demanda"
-				})
-			})
-		]
-	});
-};
-//#endregion
-//#region src/components/create-event/Step1Basic.tsx
-var Step1Basic = ({ formData, updateForm, setConfigs }) => {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/components/create-event/Step1Basic.tsx:14:5",
-		"data-prohibitions": "[]",
-		className: "space-y-6 animate-fade-in",
-		children: [
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/components/create-event/Step1Basic.tsx:15:7",
-				"data-prohibitions": "[]",
-				className: "space-y-2",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-					"data-uid": "src/components/create-event/Step1Basic.tsx:16:9",
-					"data-prohibitions": "[]",
-					children: "Título do Evento"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-					"data-uid": "src/components/create-event/Step1Basic.tsx:17:9",
-					"data-prohibitions": "[editContent]",
-					placeholder: "Ex: Casamento João e Maria",
-					value: formData.title,
-					onChange: (e) => updateForm("title", e.target.value),
-					className: "bg-card border-border"
-				})]
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/components/create-event/Step1Basic.tsx:24:7",
-				"data-prohibitions": "[]",
-				className: "space-y-2",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-					"data-uid": "src/components/create-event/Step1Basic.tsx:25:9",
-					"data-prohibitions": "[]",
-					children: "Número de Convidados (Estimativa Geral)"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-					"data-uid": "src/components/create-event/Step1Basic.tsx:26:9",
-					"data-prohibitions": "[editContent]",
-					type: "number",
-					min: "1",
-					value: formData.guests || "",
-					onChange: (e) => {
-						if (e.target.value === "") {
-							updateForm("guests", 0);
-							return;
-						}
-						const val = parseInt(e.target.value);
-						if (!isNaN(val) && val >= 0) {
-							updateForm("guests", val);
-							setConfigs((p) => ({
-								...p,
-								buffetGuests: p.buffetGuests === formData.guests ? val : p.buffetGuests,
-								cocktailsGuests: p.cocktailsGuests === formData.guests ? val : p.cocktailsGuests,
-								drinksGuests: p.drinksGuests === formData.guests ? val : p.drinksGuests
-							}));
-						}
-					},
-					className: "bg-card border-border"
-				})]
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/components/create-event/Step1Basic.tsx:49:7",
-				"data-prohibitions": "[]",
-				className: "space-y-2",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-					"data-uid": "src/components/create-event/Step1Basic.tsx:50:9",
-					"data-prohibitions": "[]",
-					children: "Data do Evento"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-					"data-uid": "src/components/create-event/Step1Basic.tsx:51:9",
-					"data-prohibitions": "[editContent]",
-					type: "date",
-					value: formData.date,
-					onChange: (e) => updateForm("date", e.target.value),
-					className: "bg-card border-border block w-full text-foreground"
-				})]
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/components/create-event/Step1Basic.tsx:58:7",
-				"data-prohibitions": "[]",
-				className: "space-y-2",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-					"data-uid": "src/components/create-event/Step1Basic.tsx:59:9",
-					"data-prohibitions": "[]",
-					children: "Localização / Cidade"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-					"data-uid": "src/components/create-event/Step1Basic.tsx:60:9",
-					"data-prohibitions": "[editContent]",
-					placeholder: "Ex: São Paulo, SP",
-					value: formData.location,
-					onChange: (e) => updateForm("location", e.target.value),
-					className: "bg-card border-border"
-				})]
-			})
-		]
-	});
-};
-//#endregion
-//#region src/components/ui/textarea.tsx
-var Textarea = import_react.forwardRef(({ className, ...props }, ref) => {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
-		"data-uid": "src/components/ui/textarea.tsx:9:7",
-		"data-prohibitions": "[editContent]",
-		className: cn$1("flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm", className),
 		ref,
+		className: cn$1(error && "text-destructive", className),
+		htmlFor: formItemId,
 		...props
 	});
 });
-Textarea.displayName = "Textarea";
+FormLabel.displayName = "FormLabel";
+var FormControl = import_react.forwardRef(({ ...props }, ref) => {
+	const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Slot$1, {
+		"data-uid": "src/components/ui/form.tsx:107:5",
+		"data-prohibitions": "[editContent]",
+		ref,
+		id: formItemId,
+		"aria-describedby": !error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`,
+		"aria-invalid": !!error,
+		...props
+	});
+});
+FormControl.displayName = "FormControl";
+var FormDescription = import_react.forwardRef(({ className, ...props }, ref) => {
+	const { formDescriptionId } = useFormField();
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+		"data-uid": "src/components/ui/form.tsx:125:5",
+		"data-prohibitions": "[editContent]",
+		ref,
+		id: formDescriptionId,
+		className: cn$1("text-sm text-muted-foreground", className),
+		...props
+	});
+});
+FormDescription.displayName = "FormDescription";
+var FormMessage = import_react.forwardRef(({ className, children, ...props }, ref) => {
+	const { error, formMessageId } = useFormField();
+	const body = error ? String(error?.message ?? "") : children;
+	if (!body) return null;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+		"data-uid": "src/components/ui/form.tsx:147:5",
+		"data-prohibitions": "[editContent]",
+		ref,
+		id: formMessageId,
+		className: cn$1("text-sm font-medium text-destructive", className),
+		...props,
+		children: body
+	});
+});
+FormMessage.displayName = "FormMessage";
 //#endregion
 //#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-collection@1.1.7_@types+react-dom@19.2.3_@types+react@19.2.14__@types+r_161926fa2509d0b7370b60b8bb4eb8b0/node_modules/@radix-ui/react-collection/dist/index.mjs
 function createCollection(name) {
@@ -24268,6 +28738,2102 @@ var RadioGroupItem = import_react.forwardRef(({ className, ...props }, ref) => {
 	});
 });
 RadioGroupItem.displayName = Item2.displayName;
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/sonner@2.0.7_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/sonner/dist/index.mjs
+function __insertCSS(code) {
+	if (!code || typeof document == "undefined") return;
+	let head = document.head || document.getElementsByTagName("head")[0];
+	let style = document.createElement("style");
+	style.type = "text/css";
+	head.appendChild(style);
+	style.styleSheet ? style.styleSheet.cssText = code : style.appendChild(document.createTextNode(code));
+}
+var getAsset = (type) => {
+	switch (type) {
+		case "success": return SuccessIcon;
+		case "info": return InfoIcon;
+		case "warning": return WarningIcon;
+		case "error": return ErrorIcon;
+		default: return null;
+	}
+};
+var bars = Array(12).fill(0);
+var Loader = ({ visible, className }) => {
+	return /* @__PURE__ */ import_react.createElement("div", {
+		className: ["sonner-loading-wrapper", className].filter(Boolean).join(" "),
+		"data-visible": visible
+	}, /* @__PURE__ */ import_react.createElement("div", { className: "sonner-spinner" }, bars.map((_, i) => /* @__PURE__ */ import_react.createElement("div", {
+		className: "sonner-loading-bar",
+		key: `spinner-bar-${i}`
+	}))));
+};
+var SuccessIcon = /* @__PURE__ */ import_react.createElement("svg", {
+	xmlns: "http://www.w3.org/2000/svg",
+	viewBox: "0 0 20 20",
+	fill: "currentColor",
+	height: "20",
+	width: "20"
+}, /* @__PURE__ */ import_react.createElement("path", {
+	fillRule: "evenodd",
+	d: "M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z",
+	clipRule: "evenodd"
+}));
+var WarningIcon = /* @__PURE__ */ import_react.createElement("svg", {
+	xmlns: "http://www.w3.org/2000/svg",
+	viewBox: "0 0 24 24",
+	fill: "currentColor",
+	height: "20",
+	width: "20"
+}, /* @__PURE__ */ import_react.createElement("path", {
+	fillRule: "evenodd",
+	d: "M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z",
+	clipRule: "evenodd"
+}));
+var InfoIcon = /* @__PURE__ */ import_react.createElement("svg", {
+	xmlns: "http://www.w3.org/2000/svg",
+	viewBox: "0 0 20 20",
+	fill: "currentColor",
+	height: "20",
+	width: "20"
+}, /* @__PURE__ */ import_react.createElement("path", {
+	fillRule: "evenodd",
+	d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z",
+	clipRule: "evenodd"
+}));
+var ErrorIcon = /* @__PURE__ */ import_react.createElement("svg", {
+	xmlns: "http://www.w3.org/2000/svg",
+	viewBox: "0 0 20 20",
+	fill: "currentColor",
+	height: "20",
+	width: "20"
+}, /* @__PURE__ */ import_react.createElement("path", {
+	fillRule: "evenodd",
+	d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z",
+	clipRule: "evenodd"
+}));
+var CloseIcon = /* @__PURE__ */ import_react.createElement("svg", {
+	xmlns: "http://www.w3.org/2000/svg",
+	width: "12",
+	height: "12",
+	viewBox: "0 0 24 24",
+	fill: "none",
+	stroke: "currentColor",
+	strokeWidth: "1.5",
+	strokeLinecap: "round",
+	strokeLinejoin: "round"
+}, /* @__PURE__ */ import_react.createElement("line", {
+	x1: "18",
+	y1: "6",
+	x2: "6",
+	y2: "18"
+}), /* @__PURE__ */ import_react.createElement("line", {
+	x1: "6",
+	y1: "6",
+	x2: "18",
+	y2: "18"
+}));
+var useIsDocumentHidden = () => {
+	const [isDocumentHidden, setIsDocumentHidden] = import_react.useState(document.hidden);
+	import_react.useEffect(() => {
+		const callback = () => {
+			setIsDocumentHidden(document.hidden);
+		};
+		document.addEventListener("visibilitychange", callback);
+		return () => window.removeEventListener("visibilitychange", callback);
+	}, []);
+	return isDocumentHidden;
+};
+var toastsCounter = 1;
+var Observer = class {
+	constructor() {
+		this.subscribe = (subscriber) => {
+			this.subscribers.push(subscriber);
+			return () => {
+				const index = this.subscribers.indexOf(subscriber);
+				this.subscribers.splice(index, 1);
+			};
+		};
+		this.publish = (data) => {
+			this.subscribers.forEach((subscriber) => subscriber(data));
+		};
+		this.addToast = (data) => {
+			this.publish(data);
+			this.toasts = [...this.toasts, data];
+		};
+		this.create = (data) => {
+			var _data_id;
+			const { message, ...rest } = data;
+			const id = typeof (data == null ? void 0 : data.id) === "number" || ((_data_id = data.id) == null ? void 0 : _data_id.length) > 0 ? data.id : toastsCounter++;
+			const alreadyExists = this.toasts.find((toast) => {
+				return toast.id === id;
+			});
+			const dismissible = data.dismissible === void 0 ? true : data.dismissible;
+			if (this.dismissedToasts.has(id)) this.dismissedToasts.delete(id);
+			if (alreadyExists) this.toasts = this.toasts.map((toast) => {
+				if (toast.id === id) {
+					this.publish({
+						...toast,
+						...data,
+						id,
+						title: message
+					});
+					return {
+						...toast,
+						...data,
+						id,
+						dismissible,
+						title: message
+					};
+				}
+				return toast;
+			});
+			else this.addToast({
+				title: message,
+				...rest,
+				dismissible,
+				id
+			});
+			return id;
+		};
+		this.dismiss = (id) => {
+			if (id) {
+				this.dismissedToasts.add(id);
+				requestAnimationFrame(() => this.subscribers.forEach((subscriber) => subscriber({
+					id,
+					dismiss: true
+				})));
+			} else this.toasts.forEach((toast) => {
+				this.subscribers.forEach((subscriber) => subscriber({
+					id: toast.id,
+					dismiss: true
+				}));
+			});
+			return id;
+		};
+		this.message = (message, data) => {
+			return this.create({
+				...data,
+				message
+			});
+		};
+		this.error = (message, data) => {
+			return this.create({
+				...data,
+				message,
+				type: "error"
+			});
+		};
+		this.success = (message, data) => {
+			return this.create({
+				...data,
+				type: "success",
+				message
+			});
+		};
+		this.info = (message, data) => {
+			return this.create({
+				...data,
+				type: "info",
+				message
+			});
+		};
+		this.warning = (message, data) => {
+			return this.create({
+				...data,
+				type: "warning",
+				message
+			});
+		};
+		this.loading = (message, data) => {
+			return this.create({
+				...data,
+				type: "loading",
+				message
+			});
+		};
+		this.promise = (promise, data) => {
+			if (!data) return;
+			let id = void 0;
+			if (data.loading !== void 0) id = this.create({
+				...data,
+				promise,
+				type: "loading",
+				message: data.loading,
+				description: typeof data.description !== "function" ? data.description : void 0
+			});
+			const p = Promise.resolve(promise instanceof Function ? promise() : promise);
+			let shouldDismiss = id !== void 0;
+			let result;
+			const originalPromise = p.then(async (response) => {
+				result = ["resolve", response];
+				if (import_react.isValidElement(response)) {
+					shouldDismiss = false;
+					this.create({
+						id,
+						type: "default",
+						message: response
+					});
+				} else if (isHttpResponse(response) && !response.ok) {
+					shouldDismiss = false;
+					const promiseData = typeof data.error === "function" ? await data.error(`HTTP error! status: ${response.status}`) : data.error;
+					const description = typeof data.description === "function" ? await data.description(`HTTP error! status: ${response.status}`) : data.description;
+					const toastSettings = typeof promiseData === "object" && !import_react.isValidElement(promiseData) ? promiseData : { message: promiseData };
+					this.create({
+						id,
+						type: "error",
+						description,
+						...toastSettings
+					});
+				} else if (response instanceof Error) {
+					shouldDismiss = false;
+					const promiseData = typeof data.error === "function" ? await data.error(response) : data.error;
+					const description = typeof data.description === "function" ? await data.description(response) : data.description;
+					const toastSettings = typeof promiseData === "object" && !import_react.isValidElement(promiseData) ? promiseData : { message: promiseData };
+					this.create({
+						id,
+						type: "error",
+						description,
+						...toastSettings
+					});
+				} else if (data.success !== void 0) {
+					shouldDismiss = false;
+					const promiseData = typeof data.success === "function" ? await data.success(response) : data.success;
+					const description = typeof data.description === "function" ? await data.description(response) : data.description;
+					const toastSettings = typeof promiseData === "object" && !import_react.isValidElement(promiseData) ? promiseData : { message: promiseData };
+					this.create({
+						id,
+						type: "success",
+						description,
+						...toastSettings
+					});
+				}
+			}).catch(async (error) => {
+				result = ["reject", error];
+				if (data.error !== void 0) {
+					shouldDismiss = false;
+					const promiseData = typeof data.error === "function" ? await data.error(error) : data.error;
+					const description = typeof data.description === "function" ? await data.description(error) : data.description;
+					const toastSettings = typeof promiseData === "object" && !import_react.isValidElement(promiseData) ? promiseData : { message: promiseData };
+					this.create({
+						id,
+						type: "error",
+						description,
+						...toastSettings
+					});
+				}
+			}).finally(() => {
+				if (shouldDismiss) {
+					this.dismiss(id);
+					id = void 0;
+				}
+				data.finally == null || data.finally.call(data);
+			});
+			const unwrap = () => new Promise((resolve, reject) => originalPromise.then(() => result[0] === "reject" ? reject(result[1]) : resolve(result[1])).catch(reject));
+			if (typeof id !== "string" && typeof id !== "number") return { unwrap };
+			else return Object.assign(id, { unwrap });
+		};
+		this.custom = (jsx, data) => {
+			const id = (data == null ? void 0 : data.id) || toastsCounter++;
+			this.create({
+				jsx: jsx(id),
+				id,
+				...data
+			});
+			return id;
+		};
+		this.getActiveToasts = () => {
+			return this.toasts.filter((toast) => !this.dismissedToasts.has(toast.id));
+		};
+		this.subscribers = [];
+		this.toasts = [];
+		this.dismissedToasts = /* @__PURE__ */ new Set();
+	}
+};
+var ToastState = new Observer();
+var toastFunction = (message, data) => {
+	const id = (data == null ? void 0 : data.id) || toastsCounter++;
+	ToastState.addToast({
+		title: message,
+		...data,
+		id
+	});
+	return id;
+};
+var isHttpResponse = (data) => {
+	return data && typeof data === "object" && "ok" in data && typeof data.ok === "boolean" && "status" in data && typeof data.status === "number";
+};
+var basicToast = toastFunction;
+var getHistory = () => ToastState.toasts;
+var getToasts = () => ToastState.getActiveToasts();
+var toast$1 = Object.assign(basicToast, {
+	success: ToastState.success,
+	info: ToastState.info,
+	warning: ToastState.warning,
+	error: ToastState.error,
+	custom: ToastState.custom,
+	message: ToastState.message,
+	promise: ToastState.promise,
+	dismiss: ToastState.dismiss,
+	loading: ToastState.loading
+}, {
+	getHistory,
+	getToasts
+});
+__insertCSS("[data-sonner-toaster][dir=ltr],html[dir=ltr]{--toast-icon-margin-start:-3px;--toast-icon-margin-end:4px;--toast-svg-margin-start:-1px;--toast-svg-margin-end:0px;--toast-button-margin-start:auto;--toast-button-margin-end:0;--toast-close-button-start:0;--toast-close-button-end:unset;--toast-close-button-transform:translate(-35%, -35%)}[data-sonner-toaster][dir=rtl],html[dir=rtl]{--toast-icon-margin-start:4px;--toast-icon-margin-end:-3px;--toast-svg-margin-start:0px;--toast-svg-margin-end:-1px;--toast-button-margin-start:0;--toast-button-margin-end:auto;--toast-close-button-start:unset;--toast-close-button-end:0;--toast-close-button-transform:translate(35%, -35%)}[data-sonner-toaster]{position:fixed;width:var(--width);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;--gray1:hsl(0, 0%, 99%);--gray2:hsl(0, 0%, 97.3%);--gray3:hsl(0, 0%, 95.1%);--gray4:hsl(0, 0%, 93%);--gray5:hsl(0, 0%, 90.9%);--gray6:hsl(0, 0%, 88.7%);--gray7:hsl(0, 0%, 85.8%);--gray8:hsl(0, 0%, 78%);--gray9:hsl(0, 0%, 56.1%);--gray10:hsl(0, 0%, 52.3%);--gray11:hsl(0, 0%, 43.5%);--gray12:hsl(0, 0%, 9%);--border-radius:8px;box-sizing:border-box;padding:0;margin:0;list-style:none;outline:0;z-index:999999999;transition:transform .4s ease}@media (hover:none) and (pointer:coarse){[data-sonner-toaster][data-lifted=true]{transform:none}}[data-sonner-toaster][data-x-position=right]{right:var(--offset-right)}[data-sonner-toaster][data-x-position=left]{left:var(--offset-left)}[data-sonner-toaster][data-x-position=center]{left:50%;transform:translateX(-50%)}[data-sonner-toaster][data-y-position=top]{top:var(--offset-top)}[data-sonner-toaster][data-y-position=bottom]{bottom:var(--offset-bottom)}[data-sonner-toast]{--y:translateY(100%);--lift-amount:calc(var(--lift) * var(--gap));z-index:var(--z-index);position:absolute;opacity:0;transform:var(--y);touch-action:none;transition:transform .4s,opacity .4s,height .4s,box-shadow .2s;box-sizing:border-box;outline:0;overflow-wrap:anywhere}[data-sonner-toast][data-styled=true]{padding:16px;background:var(--normal-bg);border:1px solid var(--normal-border);color:var(--normal-text);border-radius:var(--border-radius);box-shadow:0 4px 12px rgba(0,0,0,.1);width:var(--width);font-size:13px;display:flex;align-items:center;gap:6px}[data-sonner-toast]:focus-visible{box-shadow:0 4px 12px rgba(0,0,0,.1),0 0 0 2px rgba(0,0,0,.2)}[data-sonner-toast][data-y-position=top]{top:0;--y:translateY(-100%);--lift:1;--lift-amount:calc(1 * var(--gap))}[data-sonner-toast][data-y-position=bottom]{bottom:0;--y:translateY(100%);--lift:-1;--lift-amount:calc(var(--lift) * var(--gap))}[data-sonner-toast][data-styled=true] [data-description]{font-weight:400;line-height:1.4;color:#3f3f3f}[data-rich-colors=true][data-sonner-toast][data-styled=true] [data-description]{color:inherit}[data-sonner-toaster][data-sonner-theme=dark] [data-description]{color:#e8e8e8}[data-sonner-toast][data-styled=true] [data-title]{font-weight:500;line-height:1.5;color:inherit}[data-sonner-toast][data-styled=true] [data-icon]{display:flex;height:16px;width:16px;position:relative;justify-content:flex-start;align-items:center;flex-shrink:0;margin-left:var(--toast-icon-margin-start);margin-right:var(--toast-icon-margin-end)}[data-sonner-toast][data-promise=true] [data-icon]>svg{opacity:0;transform:scale(.8);transform-origin:center;animation:sonner-fade-in .3s ease forwards}[data-sonner-toast][data-styled=true] [data-icon]>*{flex-shrink:0}[data-sonner-toast][data-styled=true] [data-icon] svg{margin-left:var(--toast-svg-margin-start);margin-right:var(--toast-svg-margin-end)}[data-sonner-toast][data-styled=true] [data-content]{display:flex;flex-direction:column;gap:2px}[data-sonner-toast][data-styled=true] [data-button]{border-radius:4px;padding-left:8px;padding-right:8px;height:24px;font-size:12px;color:var(--normal-bg);background:var(--normal-text);margin-left:var(--toast-button-margin-start);margin-right:var(--toast-button-margin-end);border:none;font-weight:500;cursor:pointer;outline:0;display:flex;align-items:center;flex-shrink:0;transition:opacity .4s,box-shadow .2s}[data-sonner-toast][data-styled=true] [data-button]:focus-visible{box-shadow:0 0 0 2px rgba(0,0,0,.4)}[data-sonner-toast][data-styled=true] [data-button]:first-of-type{margin-left:var(--toast-button-margin-start);margin-right:var(--toast-button-margin-end)}[data-sonner-toast][data-styled=true] [data-cancel]{color:var(--normal-text);background:rgba(0,0,0,.08)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast][data-styled=true] [data-cancel]{background:rgba(255,255,255,.3)}[data-sonner-toast][data-styled=true] [data-close-button]{position:absolute;left:var(--toast-close-button-start);right:var(--toast-close-button-end);top:0;height:20px;width:20px;display:flex;justify-content:center;align-items:center;padding:0;color:var(--gray12);background:var(--normal-bg);border:1px solid var(--gray4);transform:var(--toast-close-button-transform);border-radius:50%;cursor:pointer;z-index:1;transition:opacity .1s,background .2s,border-color .2s}[data-sonner-toast][data-styled=true] [data-close-button]:focus-visible{box-shadow:0 4px 12px rgba(0,0,0,.1),0 0 0 2px rgba(0,0,0,.2)}[data-sonner-toast][data-styled=true] [data-disabled=true]{cursor:not-allowed}[data-sonner-toast][data-styled=true]:hover [data-close-button]:hover{background:var(--gray2);border-color:var(--gray5)}[data-sonner-toast][data-swiping=true]::before{content:'';position:absolute;left:-100%;right:-100%;height:100%;z-index:-1}[data-sonner-toast][data-y-position=top][data-swiping=true]::before{bottom:50%;transform:scaleY(3) translateY(50%)}[data-sonner-toast][data-y-position=bottom][data-swiping=true]::before{top:50%;transform:scaleY(3) translateY(-50%)}[data-sonner-toast][data-swiping=false][data-removed=true]::before{content:'';position:absolute;inset:0;transform:scaleY(2)}[data-sonner-toast][data-expanded=true]::after{content:'';position:absolute;left:0;height:calc(var(--gap) + 1px);bottom:100%;width:100%}[data-sonner-toast][data-mounted=true]{--y:translateY(0);opacity:1}[data-sonner-toast][data-expanded=false][data-front=false]{--scale:var(--toasts-before) * 0.05 + 1;--y:translateY(calc(var(--lift-amount) * var(--toasts-before))) scale(calc(-1 * var(--scale)));height:var(--front-toast-height)}[data-sonner-toast]>*{transition:opacity .4s}[data-sonner-toast][data-x-position=right]{right:0}[data-sonner-toast][data-x-position=left]{left:0}[data-sonner-toast][data-expanded=false][data-front=false][data-styled=true]>*{opacity:0}[data-sonner-toast][data-visible=false]{opacity:0;pointer-events:none}[data-sonner-toast][data-mounted=true][data-expanded=true]{--y:translateY(calc(var(--lift) * var(--offset)));height:var(--initial-height)}[data-sonner-toast][data-removed=true][data-front=true][data-swipe-out=false]{--y:translateY(calc(var(--lift) * -100%));opacity:0}[data-sonner-toast][data-removed=true][data-front=false][data-swipe-out=false][data-expanded=true]{--y:translateY(calc(var(--lift) * var(--offset) + var(--lift) * -100%));opacity:0}[data-sonner-toast][data-removed=true][data-front=false][data-swipe-out=false][data-expanded=false]{--y:translateY(40%);opacity:0;transition:transform .5s,opacity .2s}[data-sonner-toast][data-removed=true][data-front=false]::before{height:calc(var(--initial-height) + 20%)}[data-sonner-toast][data-swiping=true]{transform:var(--y) translateY(var(--swipe-amount-y,0)) translateX(var(--swipe-amount-x,0));transition:none}[data-sonner-toast][data-swiped=true]{user-select:none}[data-sonner-toast][data-swipe-out=true][data-y-position=bottom],[data-sonner-toast][data-swipe-out=true][data-y-position=top]{animation-duration:.2s;animation-timing-function:ease-out;animation-fill-mode:forwards}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=left]{animation-name:swipe-out-left}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=right]{animation-name:swipe-out-right}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=up]{animation-name:swipe-out-up}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=down]{animation-name:swipe-out-down}@keyframes swipe-out-left{from{transform:var(--y) translateX(var(--swipe-amount-x));opacity:1}to{transform:var(--y) translateX(calc(var(--swipe-amount-x) - 100%));opacity:0}}@keyframes swipe-out-right{from{transform:var(--y) translateX(var(--swipe-amount-x));opacity:1}to{transform:var(--y) translateX(calc(var(--swipe-amount-x) + 100%));opacity:0}}@keyframes swipe-out-up{from{transform:var(--y) translateY(var(--swipe-amount-y));opacity:1}to{transform:var(--y) translateY(calc(var(--swipe-amount-y) - 100%));opacity:0}}@keyframes swipe-out-down{from{transform:var(--y) translateY(var(--swipe-amount-y));opacity:1}to{transform:var(--y) translateY(calc(var(--swipe-amount-y) + 100%));opacity:0}}@media (max-width:600px){[data-sonner-toaster]{position:fixed;right:var(--mobile-offset-right);left:var(--mobile-offset-left);width:100%}[data-sonner-toaster][dir=rtl]{left:calc(var(--mobile-offset-left) * -1)}[data-sonner-toaster] [data-sonner-toast]{left:0;right:0;width:calc(100% - var(--mobile-offset-left) * 2)}[data-sonner-toaster][data-x-position=left]{left:var(--mobile-offset-left)}[data-sonner-toaster][data-y-position=bottom]{bottom:var(--mobile-offset-bottom)}[data-sonner-toaster][data-y-position=top]{top:var(--mobile-offset-top)}[data-sonner-toaster][data-x-position=center]{left:var(--mobile-offset-left);right:var(--mobile-offset-right);transform:none}}[data-sonner-toaster][data-sonner-theme=light]{--normal-bg:#fff;--normal-border:var(--gray4);--normal-text:var(--gray12);--success-bg:hsl(143, 85%, 96%);--success-border:hsl(145, 92%, 87%);--success-text:hsl(140, 100%, 27%);--info-bg:hsl(208, 100%, 97%);--info-border:hsl(221, 91%, 93%);--info-text:hsl(210, 92%, 45%);--warning-bg:hsl(49, 100%, 97%);--warning-border:hsl(49, 91%, 84%);--warning-text:hsl(31, 92%, 45%);--error-bg:hsl(359, 100%, 97%);--error-border:hsl(359, 100%, 94%);--error-text:hsl(360, 100%, 45%)}[data-sonner-toaster][data-sonner-theme=light] [data-sonner-toast][data-invert=true]{--normal-bg:#000;--normal-border:hsl(0, 0%, 20%);--normal-text:var(--gray1)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast][data-invert=true]{--normal-bg:#fff;--normal-border:var(--gray3);--normal-text:var(--gray12)}[data-sonner-toaster][data-sonner-theme=dark]{--normal-bg:#000;--normal-bg-hover:hsl(0, 0%, 12%);--normal-border:hsl(0, 0%, 20%);--normal-border-hover:hsl(0, 0%, 25%);--normal-text:var(--gray1);--success-bg:hsl(150, 100%, 6%);--success-border:hsl(147, 100%, 12%);--success-text:hsl(150, 86%, 65%);--info-bg:hsl(215, 100%, 6%);--info-border:hsl(223, 43%, 17%);--info-text:hsl(216, 87%, 65%);--warning-bg:hsl(64, 100%, 6%);--warning-border:hsl(60, 100%, 9%);--warning-text:hsl(46, 87%, 65%);--error-bg:hsl(358, 76%, 10%);--error-border:hsl(357, 89%, 16%);--error-text:hsl(358, 100%, 81%)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast] [data-close-button]{background:var(--normal-bg);border-color:var(--normal-border);color:var(--normal-text)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast] [data-close-button]:hover{background:var(--normal-bg-hover);border-color:var(--normal-border-hover)}[data-rich-colors=true][data-sonner-toast][data-type=success]{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text)}[data-rich-colors=true][data-sonner-toast][data-type=success] [data-close-button]{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text)}[data-rich-colors=true][data-sonner-toast][data-type=info]{background:var(--info-bg);border-color:var(--info-border);color:var(--info-text)}[data-rich-colors=true][data-sonner-toast][data-type=info] [data-close-button]{background:var(--info-bg);border-color:var(--info-border);color:var(--info-text)}[data-rich-colors=true][data-sonner-toast][data-type=warning]{background:var(--warning-bg);border-color:var(--warning-border);color:var(--warning-text)}[data-rich-colors=true][data-sonner-toast][data-type=warning] [data-close-button]{background:var(--warning-bg);border-color:var(--warning-border);color:var(--warning-text)}[data-rich-colors=true][data-sonner-toast][data-type=error]{background:var(--error-bg);border-color:var(--error-border);color:var(--error-text)}[data-rich-colors=true][data-sonner-toast][data-type=error] [data-close-button]{background:var(--error-bg);border-color:var(--error-border);color:var(--error-text)}.sonner-loading-wrapper{--size:16px;height:var(--size);width:var(--size);position:absolute;inset:0;z-index:10}.sonner-loading-wrapper[data-visible=false]{transform-origin:center;animation:sonner-fade-out .2s ease forwards}.sonner-spinner{position:relative;top:50%;left:50%;height:var(--size);width:var(--size)}.sonner-loading-bar{animation:sonner-spin 1.2s linear infinite;background:var(--gray11);border-radius:6px;height:8%;left:-10%;position:absolute;top:-3.9%;width:24%}.sonner-loading-bar:first-child{animation-delay:-1.2s;transform:rotate(.0001deg) translate(146%)}.sonner-loading-bar:nth-child(2){animation-delay:-1.1s;transform:rotate(30deg) translate(146%)}.sonner-loading-bar:nth-child(3){animation-delay:-1s;transform:rotate(60deg) translate(146%)}.sonner-loading-bar:nth-child(4){animation-delay:-.9s;transform:rotate(90deg) translate(146%)}.sonner-loading-bar:nth-child(5){animation-delay:-.8s;transform:rotate(120deg) translate(146%)}.sonner-loading-bar:nth-child(6){animation-delay:-.7s;transform:rotate(150deg) translate(146%)}.sonner-loading-bar:nth-child(7){animation-delay:-.6s;transform:rotate(180deg) translate(146%)}.sonner-loading-bar:nth-child(8){animation-delay:-.5s;transform:rotate(210deg) translate(146%)}.sonner-loading-bar:nth-child(9){animation-delay:-.4s;transform:rotate(240deg) translate(146%)}.sonner-loading-bar:nth-child(10){animation-delay:-.3s;transform:rotate(270deg) translate(146%)}.sonner-loading-bar:nth-child(11){animation-delay:-.2s;transform:rotate(300deg) translate(146%)}.sonner-loading-bar:nth-child(12){animation-delay:-.1s;transform:rotate(330deg) translate(146%)}@keyframes sonner-fade-in{0%{opacity:0;transform:scale(.8)}100%{opacity:1;transform:scale(1)}}@keyframes sonner-fade-out{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.8)}}@keyframes sonner-spin{0%{opacity:1}100%{opacity:.15}}@media (prefers-reduced-motion){.sonner-loading-bar,[data-sonner-toast],[data-sonner-toast]>*{transition:none!important;animation:none!important}}.sonner-loader{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);transform-origin:center;transition:opacity .2s,transform .2s}.sonner-loader[data-visible=false]{opacity:0;transform:scale(.8) translate(-50%,-50%)}");
+function isAction(action) {
+	return action.label !== void 0;
+}
+var VISIBLE_TOASTS_AMOUNT = 3;
+var VIEWPORT_OFFSET = "24px";
+var MOBILE_VIEWPORT_OFFSET = "16px";
+var TOAST_LIFETIME = 4e3;
+var TOAST_WIDTH = 356;
+var GAP = 14;
+var SWIPE_THRESHOLD = 45;
+var TIME_BEFORE_UNMOUNT = 200;
+function cn(...classes) {
+	return classes.filter(Boolean).join(" ");
+}
+function getDefaultSwipeDirections(position) {
+	const [y, x] = position.split("-");
+	const directions = [];
+	if (y) directions.push(y);
+	if (x) directions.push(x);
+	return directions;
+}
+var Toast$2 = (props) => {
+	var _toast_classNames, _toast_classNames1, _toast_classNames2, _toast_classNames3, _toast_classNames4, _toast_classNames5, _toast_classNames6, _toast_classNames7, _toast_classNames8;
+	const { invert: ToasterInvert, toast, unstyled, interacting, setHeights, visibleToasts, heights, index, toasts, expanded, removeToast, defaultRichColors, closeButton: closeButtonFromToaster, style, cancelButtonStyle, actionButtonStyle, className = "", descriptionClassName = "", duration: durationFromToaster, position, gap, expandByDefault, classNames, icons, closeButtonAriaLabel = "Close toast" } = props;
+	const [swipeDirection, setSwipeDirection] = import_react.useState(null);
+	const [swipeOutDirection, setSwipeOutDirection] = import_react.useState(null);
+	const [mounted, setMounted] = import_react.useState(false);
+	const [removed, setRemoved] = import_react.useState(false);
+	const [swiping, setSwiping] = import_react.useState(false);
+	const [swipeOut, setSwipeOut] = import_react.useState(false);
+	const [isSwiped, setIsSwiped] = import_react.useState(false);
+	const [offsetBeforeRemove, setOffsetBeforeRemove] = import_react.useState(0);
+	const [initialHeight, setInitialHeight] = import_react.useState(0);
+	const remainingTime = import_react.useRef(toast.duration || durationFromToaster || TOAST_LIFETIME);
+	const dragStartTime = import_react.useRef(null);
+	const toastRef = import_react.useRef(null);
+	const isFront = index === 0;
+	const isVisible = index + 1 <= visibleToasts;
+	const toastType = toast.type;
+	const dismissible = toast.dismissible !== false;
+	const toastClassname = toast.className || "";
+	const toastDescriptionClassname = toast.descriptionClassName || "";
+	const heightIndex = import_react.useMemo(() => heights.findIndex((height) => height.toastId === toast.id) || 0, [heights, toast.id]);
+	const closeButton = import_react.useMemo(() => {
+		var _toast_closeButton;
+		return (_toast_closeButton = toast.closeButton) != null ? _toast_closeButton : closeButtonFromToaster;
+	}, [toast.closeButton, closeButtonFromToaster]);
+	const duration = import_react.useMemo(() => toast.duration || durationFromToaster || TOAST_LIFETIME, [toast.duration, durationFromToaster]);
+	const closeTimerStartTimeRef = import_react.useRef(0);
+	const offset = import_react.useRef(0);
+	const lastCloseTimerStartTimeRef = import_react.useRef(0);
+	const pointerStartRef = import_react.useRef(null);
+	const [y, x] = position.split("-");
+	const toastsHeightBefore = import_react.useMemo(() => {
+		return heights.reduce((prev, curr, reducerIndex) => {
+			if (reducerIndex >= heightIndex) return prev;
+			return prev + curr.height;
+		}, 0);
+	}, [heights, heightIndex]);
+	const isDocumentHidden = useIsDocumentHidden();
+	const invert = toast.invert || ToasterInvert;
+	const disabled = toastType === "loading";
+	offset.current = import_react.useMemo(() => heightIndex * gap + toastsHeightBefore, [heightIndex, toastsHeightBefore]);
+	import_react.useEffect(() => {
+		remainingTime.current = duration;
+	}, [duration]);
+	import_react.useEffect(() => {
+		setMounted(true);
+	}, []);
+	import_react.useEffect(() => {
+		const toastNode = toastRef.current;
+		if (toastNode) {
+			const height = toastNode.getBoundingClientRect().height;
+			setInitialHeight(height);
+			setHeights((h) => [{
+				toastId: toast.id,
+				height,
+				position: toast.position
+			}, ...h]);
+			return () => setHeights((h) => h.filter((height) => height.toastId !== toast.id));
+		}
+	}, [setHeights, toast.id]);
+	import_react.useLayoutEffect(() => {
+		if (!mounted) return;
+		const toastNode = toastRef.current;
+		const originalHeight = toastNode.style.height;
+		toastNode.style.height = "auto";
+		const newHeight = toastNode.getBoundingClientRect().height;
+		toastNode.style.height = originalHeight;
+		setInitialHeight(newHeight);
+		setHeights((heights) => {
+			if (!heights.find((height) => height.toastId === toast.id)) return [{
+				toastId: toast.id,
+				height: newHeight,
+				position: toast.position
+			}, ...heights];
+			else return heights.map((height) => height.toastId === toast.id ? {
+				...height,
+				height: newHeight
+			} : height);
+		});
+	}, [
+		mounted,
+		toast.title,
+		toast.description,
+		setHeights,
+		toast.id,
+		toast.jsx,
+		toast.action,
+		toast.cancel
+	]);
+	const deleteToast = import_react.useCallback(() => {
+		setRemoved(true);
+		setOffsetBeforeRemove(offset.current);
+		setHeights((h) => h.filter((height) => height.toastId !== toast.id));
+		setTimeout(() => {
+			removeToast(toast);
+		}, TIME_BEFORE_UNMOUNT);
+	}, [
+		toast,
+		removeToast,
+		setHeights,
+		offset
+	]);
+	import_react.useEffect(() => {
+		if (toast.promise && toastType === "loading" || toast.duration === Infinity || toast.type === "loading") return;
+		let timeoutId;
+		const pauseTimer = () => {
+			if (lastCloseTimerStartTimeRef.current < closeTimerStartTimeRef.current) {
+				const elapsedTime = (/* @__PURE__ */ new Date()).getTime() - closeTimerStartTimeRef.current;
+				remainingTime.current = remainingTime.current - elapsedTime;
+			}
+			lastCloseTimerStartTimeRef.current = (/* @__PURE__ */ new Date()).getTime();
+		};
+		const startTimer = () => {
+			if (remainingTime.current === Infinity) return;
+			closeTimerStartTimeRef.current = (/* @__PURE__ */ new Date()).getTime();
+			timeoutId = setTimeout(() => {
+				toast.onAutoClose == null || toast.onAutoClose.call(toast, toast);
+				deleteToast();
+			}, remainingTime.current);
+		};
+		if (expanded || interacting || isDocumentHidden) pauseTimer();
+		else startTimer();
+		return () => clearTimeout(timeoutId);
+	}, [
+		expanded,
+		interacting,
+		toast,
+		toastType,
+		isDocumentHidden,
+		deleteToast
+	]);
+	import_react.useEffect(() => {
+		if (toast.delete) {
+			deleteToast();
+			toast.onDismiss == null || toast.onDismiss.call(toast, toast);
+		}
+	}, [deleteToast, toast.delete]);
+	function getLoadingIcon() {
+		var _toast_classNames;
+		if (icons == null ? void 0 : icons.loading) {
+			var _toast_classNames1;
+			return /* @__PURE__ */ import_react.createElement("div", {
+				className: cn(classNames == null ? void 0 : classNames.loader, toast == null ? void 0 : (_toast_classNames1 = toast.classNames) == null ? void 0 : _toast_classNames1.loader, "sonner-loader"),
+				"data-visible": toastType === "loading"
+			}, icons.loading);
+		}
+		return /* @__PURE__ */ import_react.createElement(Loader, {
+			className: cn(classNames == null ? void 0 : classNames.loader, toast == null ? void 0 : (_toast_classNames = toast.classNames) == null ? void 0 : _toast_classNames.loader),
+			visible: toastType === "loading"
+		});
+	}
+	const icon = toast.icon || (icons == null ? void 0 : icons[toastType]) || getAsset(toastType);
+	var _toast_richColors, _icons_close;
+	return /* @__PURE__ */ import_react.createElement("li", {
+		tabIndex: 0,
+		ref: toastRef,
+		className: cn(className, toastClassname, classNames == null ? void 0 : classNames.toast, toast == null ? void 0 : (_toast_classNames = toast.classNames) == null ? void 0 : _toast_classNames.toast, classNames == null ? void 0 : classNames.default, classNames == null ? void 0 : classNames[toastType], toast == null ? void 0 : (_toast_classNames1 = toast.classNames) == null ? void 0 : _toast_classNames1[toastType]),
+		"data-sonner-toast": "",
+		"data-rich-colors": (_toast_richColors = toast.richColors) != null ? _toast_richColors : defaultRichColors,
+		"data-styled": !Boolean(toast.jsx || toast.unstyled || unstyled),
+		"data-mounted": mounted,
+		"data-promise": Boolean(toast.promise),
+		"data-swiped": isSwiped,
+		"data-removed": removed,
+		"data-visible": isVisible,
+		"data-y-position": y,
+		"data-x-position": x,
+		"data-index": index,
+		"data-front": isFront,
+		"data-swiping": swiping,
+		"data-dismissible": dismissible,
+		"data-type": toastType,
+		"data-invert": invert,
+		"data-swipe-out": swipeOut,
+		"data-swipe-direction": swipeOutDirection,
+		"data-expanded": Boolean(expanded || expandByDefault && mounted),
+		"data-testid": toast.testId,
+		style: {
+			"--index": index,
+			"--toasts-before": index,
+			"--z-index": toasts.length - index,
+			"--offset": `${removed ? offsetBeforeRemove : offset.current}px`,
+			"--initial-height": expandByDefault ? "auto" : `${initialHeight}px`,
+			...style,
+			...toast.style
+		},
+		onDragEnd: () => {
+			setSwiping(false);
+			setSwipeDirection(null);
+			pointerStartRef.current = null;
+		},
+		onPointerDown: (event) => {
+			if (event.button === 2) return;
+			if (disabled || !dismissible) return;
+			dragStartTime.current = /* @__PURE__ */ new Date();
+			setOffsetBeforeRemove(offset.current);
+			event.target.setPointerCapture(event.pointerId);
+			if (event.target.tagName === "BUTTON") return;
+			setSwiping(true);
+			pointerStartRef.current = {
+				x: event.clientX,
+				y: event.clientY
+			};
+		},
+		onPointerUp: () => {
+			var _toastRef_current, _toastRef_current1, _dragStartTime_current;
+			if (swipeOut || !dismissible) return;
+			pointerStartRef.current = null;
+			const swipeAmountX = Number(((_toastRef_current = toastRef.current) == null ? void 0 : _toastRef_current.style.getPropertyValue("--swipe-amount-x").replace("px", "")) || 0);
+			const swipeAmountY = Number(((_toastRef_current1 = toastRef.current) == null ? void 0 : _toastRef_current1.style.getPropertyValue("--swipe-amount-y").replace("px", "")) || 0);
+			const timeTaken = (/* @__PURE__ */ new Date()).getTime() - ((_dragStartTime_current = dragStartTime.current) == null ? void 0 : _dragStartTime_current.getTime());
+			const swipeAmount = swipeDirection === "x" ? swipeAmountX : swipeAmountY;
+			const velocity = Math.abs(swipeAmount) / timeTaken;
+			if (Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > .11) {
+				setOffsetBeforeRemove(offset.current);
+				toast.onDismiss == null || toast.onDismiss.call(toast, toast);
+				if (swipeDirection === "x") setSwipeOutDirection(swipeAmountX > 0 ? "right" : "left");
+				else setSwipeOutDirection(swipeAmountY > 0 ? "down" : "up");
+				deleteToast();
+				setSwipeOut(true);
+				return;
+			} else {
+				var _toastRef_current2, _toastRef_current3;
+				(_toastRef_current2 = toastRef.current) == null || _toastRef_current2.style.setProperty("--swipe-amount-x", `0px`);
+				(_toastRef_current3 = toastRef.current) == null || _toastRef_current3.style.setProperty("--swipe-amount-y", `0px`);
+			}
+			setIsSwiped(false);
+			setSwiping(false);
+			setSwipeDirection(null);
+		},
+		onPointerMove: (event) => {
+			var _window_getSelection, _toastRef_current, _toastRef_current1;
+			if (!pointerStartRef.current || !dismissible) return;
+			if (((_window_getSelection = window.getSelection()) == null ? void 0 : _window_getSelection.toString().length) > 0) return;
+			const yDelta = event.clientY - pointerStartRef.current.y;
+			const xDelta = event.clientX - pointerStartRef.current.x;
+			var _props_swipeDirections;
+			const swipeDirections = (_props_swipeDirections = props.swipeDirections) != null ? _props_swipeDirections : getDefaultSwipeDirections(position);
+			if (!swipeDirection && (Math.abs(xDelta) > 1 || Math.abs(yDelta) > 1)) setSwipeDirection(Math.abs(xDelta) > Math.abs(yDelta) ? "x" : "y");
+			let swipeAmount = {
+				x: 0,
+				y: 0
+			};
+			const getDampening = (delta) => {
+				return 1 / (1.5 + Math.abs(delta) / 20);
+			};
+			if (swipeDirection === "y") {
+				if (swipeDirections.includes("top") || swipeDirections.includes("bottom")) if (swipeDirections.includes("top") && yDelta < 0 || swipeDirections.includes("bottom") && yDelta > 0) swipeAmount.y = yDelta;
+				else {
+					const dampenedDelta = yDelta * getDampening(yDelta);
+					swipeAmount.y = Math.abs(dampenedDelta) < Math.abs(yDelta) ? dampenedDelta : yDelta;
+				}
+			} else if (swipeDirection === "x") {
+				if (swipeDirections.includes("left") || swipeDirections.includes("right")) if (swipeDirections.includes("left") && xDelta < 0 || swipeDirections.includes("right") && xDelta > 0) swipeAmount.x = xDelta;
+				else {
+					const dampenedDelta = xDelta * getDampening(xDelta);
+					swipeAmount.x = Math.abs(dampenedDelta) < Math.abs(xDelta) ? dampenedDelta : xDelta;
+				}
+			}
+			if (Math.abs(swipeAmount.x) > 0 || Math.abs(swipeAmount.y) > 0) setIsSwiped(true);
+			(_toastRef_current = toastRef.current) == null || _toastRef_current.style.setProperty("--swipe-amount-x", `${swipeAmount.x}px`);
+			(_toastRef_current1 = toastRef.current) == null || _toastRef_current1.style.setProperty("--swipe-amount-y", `${swipeAmount.y}px`);
+		}
+	}, closeButton && !toast.jsx && toastType !== "loading" ? /* @__PURE__ */ import_react.createElement("button", {
+		"aria-label": closeButtonAriaLabel,
+		"data-disabled": disabled,
+		"data-close-button": true,
+		onClick: disabled || !dismissible ? () => {} : () => {
+			deleteToast();
+			toast.onDismiss == null || toast.onDismiss.call(toast, toast);
+		},
+		className: cn(classNames == null ? void 0 : classNames.closeButton, toast == null ? void 0 : (_toast_classNames2 = toast.classNames) == null ? void 0 : _toast_classNames2.closeButton)
+	}, (_icons_close = icons == null ? void 0 : icons.close) != null ? _icons_close : CloseIcon) : null, (toastType || toast.icon || toast.promise) && toast.icon !== null && ((icons == null ? void 0 : icons[toastType]) !== null || toast.icon) ? /* @__PURE__ */ import_react.createElement("div", {
+		"data-icon": "",
+		className: cn(classNames == null ? void 0 : classNames.icon, toast == null ? void 0 : (_toast_classNames3 = toast.classNames) == null ? void 0 : _toast_classNames3.icon)
+	}, toast.promise || toast.type === "loading" && !toast.icon ? toast.icon || getLoadingIcon() : null, toast.type !== "loading" ? icon : null) : null, /* @__PURE__ */ import_react.createElement("div", {
+		"data-content": "",
+		className: cn(classNames == null ? void 0 : classNames.content, toast == null ? void 0 : (_toast_classNames4 = toast.classNames) == null ? void 0 : _toast_classNames4.content)
+	}, /* @__PURE__ */ import_react.createElement("div", {
+		"data-title": "",
+		className: cn(classNames == null ? void 0 : classNames.title, toast == null ? void 0 : (_toast_classNames5 = toast.classNames) == null ? void 0 : _toast_classNames5.title)
+	}, toast.jsx ? toast.jsx : typeof toast.title === "function" ? toast.title() : toast.title), toast.description ? /* @__PURE__ */ import_react.createElement("div", {
+		"data-description": "",
+		className: cn(descriptionClassName, toastDescriptionClassname, classNames == null ? void 0 : classNames.description, toast == null ? void 0 : (_toast_classNames6 = toast.classNames) == null ? void 0 : _toast_classNames6.description)
+	}, typeof toast.description === "function" ? toast.description() : toast.description) : null), /* @__PURE__ */ import_react.isValidElement(toast.cancel) ? toast.cancel : toast.cancel && isAction(toast.cancel) ? /* @__PURE__ */ import_react.createElement("button", {
+		"data-button": true,
+		"data-cancel": true,
+		style: toast.cancelButtonStyle || cancelButtonStyle,
+		onClick: (event) => {
+			if (!isAction(toast.cancel)) return;
+			if (!dismissible) return;
+			toast.cancel.onClick == null || toast.cancel.onClick.call(toast.cancel, event);
+			deleteToast();
+		},
+		className: cn(classNames == null ? void 0 : classNames.cancelButton, toast == null ? void 0 : (_toast_classNames7 = toast.classNames) == null ? void 0 : _toast_classNames7.cancelButton)
+	}, toast.cancel.label) : null, /* @__PURE__ */ import_react.isValidElement(toast.action) ? toast.action : toast.action && isAction(toast.action) ? /* @__PURE__ */ import_react.createElement("button", {
+		"data-button": true,
+		"data-action": true,
+		style: toast.actionButtonStyle || actionButtonStyle,
+		onClick: (event) => {
+			if (!isAction(toast.action)) return;
+			toast.action.onClick == null || toast.action.onClick.call(toast.action, event);
+			if (event.defaultPrevented) return;
+			deleteToast();
+		},
+		className: cn(classNames == null ? void 0 : classNames.actionButton, toast == null ? void 0 : (_toast_classNames8 = toast.classNames) == null ? void 0 : _toast_classNames8.actionButton)
+	}, toast.action.label) : null);
+};
+function getDocumentDirection() {
+	if (typeof window === "undefined") return "ltr";
+	if (typeof document === "undefined") return "ltr";
+	const dirAttribute = document.documentElement.getAttribute("dir");
+	if (dirAttribute === "auto" || !dirAttribute) return window.getComputedStyle(document.documentElement).direction;
+	return dirAttribute;
+}
+function assignOffset(defaultOffset, mobileOffset) {
+	const styles = {};
+	[defaultOffset, mobileOffset].forEach((offset, index) => {
+		const isMobile = index === 1;
+		const prefix = isMobile ? "--mobile-offset" : "--offset";
+		const defaultValue = isMobile ? MOBILE_VIEWPORT_OFFSET : VIEWPORT_OFFSET;
+		function assignAll(offset) {
+			[
+				"top",
+				"right",
+				"bottom",
+				"left"
+			].forEach((key) => {
+				styles[`${prefix}-${key}`] = typeof offset === "number" ? `${offset}px` : offset;
+			});
+		}
+		if (typeof offset === "number" || typeof offset === "string") assignAll(offset);
+		else if (typeof offset === "object") [
+			"top",
+			"right",
+			"bottom",
+			"left"
+		].forEach((key) => {
+			if (offset[key] === void 0) styles[`${prefix}-${key}`] = defaultValue;
+			else styles[`${prefix}-${key}`] = typeof offset[key] === "number" ? `${offset[key]}px` : offset[key];
+		});
+		else assignAll(defaultValue);
+	});
+	return styles;
+}
+var Toaster$2 = /* @__PURE__ */ import_react.forwardRef(function Toaster(props, ref) {
+	const { id, invert, position = "bottom-right", hotkey = ["altKey", "KeyT"], expand, closeButton, className, offset, mobileOffset, theme = "light", richColors, duration, style, visibleToasts = VISIBLE_TOASTS_AMOUNT, toastOptions, dir = getDocumentDirection(), gap = GAP, icons, containerAriaLabel = "Notifications" } = props;
+	const [toasts, setToasts] = import_react.useState([]);
+	const filteredToasts = import_react.useMemo(() => {
+		if (id) return toasts.filter((toast) => toast.toasterId === id);
+		return toasts.filter((toast) => !toast.toasterId);
+	}, [toasts, id]);
+	const possiblePositions = import_react.useMemo(() => {
+		return Array.from(new Set([position].concat(filteredToasts.filter((toast) => toast.position).map((toast) => toast.position))));
+	}, [filteredToasts, position]);
+	const [heights, setHeights] = import_react.useState([]);
+	const [expanded, setExpanded] = import_react.useState(false);
+	const [interacting, setInteracting] = import_react.useState(false);
+	const [actualTheme, setActualTheme] = import_react.useState(theme !== "system" ? theme : typeof window !== "undefined" ? window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light" : "light");
+	const listRef = import_react.useRef(null);
+	const hotkeyLabel = hotkey.join("+").replace(/Key/g, "").replace(/Digit/g, "");
+	const lastFocusedElementRef = import_react.useRef(null);
+	const isFocusWithinRef = import_react.useRef(false);
+	const removeToast = import_react.useCallback((toastToRemove) => {
+		setToasts((toasts) => {
+			var _toasts_find;
+			if (!((_toasts_find = toasts.find((toast) => toast.id === toastToRemove.id)) == null ? void 0 : _toasts_find.delete)) ToastState.dismiss(toastToRemove.id);
+			return toasts.filter(({ id }) => id !== toastToRemove.id);
+		});
+	}, []);
+	import_react.useEffect(() => {
+		return ToastState.subscribe((toast) => {
+			if (toast.dismiss) {
+				requestAnimationFrame(() => {
+					setToasts((toasts) => toasts.map((t) => t.id === toast.id ? {
+						...t,
+						delete: true
+					} : t));
+				});
+				return;
+			}
+			setTimeout(() => {
+				import_react_dom.flushSync(() => {
+					setToasts((toasts) => {
+						const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
+						if (indexOfExistingToast !== -1) return [
+							...toasts.slice(0, indexOfExistingToast),
+							{
+								...toasts[indexOfExistingToast],
+								...toast
+							},
+							...toasts.slice(indexOfExistingToast + 1)
+						];
+						return [toast, ...toasts];
+					});
+				});
+			});
+		});
+	}, [toasts]);
+	import_react.useEffect(() => {
+		if (theme !== "system") {
+			setActualTheme(theme);
+			return;
+		}
+		if (theme === "system") if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) setActualTheme("dark");
+		else setActualTheme("light");
+		if (typeof window === "undefined") return;
+		const darkMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+		try {
+			darkMediaQuery.addEventListener("change", ({ matches }) => {
+				if (matches) setActualTheme("dark");
+				else setActualTheme("light");
+			});
+		} catch (error) {
+			darkMediaQuery.addListener(({ matches }) => {
+				try {
+					if (matches) setActualTheme("dark");
+					else setActualTheme("light");
+				} catch (e) {
+					console.error(e);
+				}
+			});
+		}
+	}, [theme]);
+	import_react.useEffect(() => {
+		if (toasts.length <= 1) setExpanded(false);
+	}, [toasts]);
+	import_react.useEffect(() => {
+		const handleKeyDown = (event) => {
+			var _listRef_current;
+			if (hotkey.every((key) => event[key] || event.code === key)) {
+				var _listRef_current1;
+				setExpanded(true);
+				(_listRef_current1 = listRef.current) == null || _listRef_current1.focus();
+			}
+			if (event.code === "Escape" && (document.activeElement === listRef.current || ((_listRef_current = listRef.current) == null ? void 0 : _listRef_current.contains(document.activeElement)))) setExpanded(false);
+		};
+		document.addEventListener("keydown", handleKeyDown);
+		return () => document.removeEventListener("keydown", handleKeyDown);
+	}, [hotkey]);
+	import_react.useEffect(() => {
+		if (listRef.current) return () => {
+			if (lastFocusedElementRef.current) {
+				lastFocusedElementRef.current.focus({ preventScroll: true });
+				lastFocusedElementRef.current = null;
+				isFocusWithinRef.current = false;
+			}
+		};
+	}, [listRef.current]);
+	return /* @__PURE__ */ import_react.createElement("section", {
+		ref,
+		"aria-label": `${containerAriaLabel} ${hotkeyLabel}`,
+		tabIndex: -1,
+		"aria-live": "polite",
+		"aria-relevant": "additions text",
+		"aria-atomic": "false",
+		suppressHydrationWarning: true
+	}, possiblePositions.map((position, index) => {
+		var _heights_;
+		const [y, x] = position.split("-");
+		if (!filteredToasts.length) return null;
+		return /* @__PURE__ */ import_react.createElement("ol", {
+			key: position,
+			dir: dir === "auto" ? getDocumentDirection() : dir,
+			tabIndex: -1,
+			ref: listRef,
+			className,
+			"data-sonner-toaster": true,
+			"data-sonner-theme": actualTheme,
+			"data-y-position": y,
+			"data-x-position": x,
+			style: {
+				"--front-toast-height": `${((_heights_ = heights[0]) == null ? void 0 : _heights_.height) || 0}px`,
+				"--width": `${TOAST_WIDTH}px`,
+				"--gap": `${gap}px`,
+				...style,
+				...assignOffset(offset, mobileOffset)
+			},
+			onBlur: (event) => {
+				if (isFocusWithinRef.current && !event.currentTarget.contains(event.relatedTarget)) {
+					isFocusWithinRef.current = false;
+					if (lastFocusedElementRef.current) {
+						lastFocusedElementRef.current.focus({ preventScroll: true });
+						lastFocusedElementRef.current = null;
+					}
+				}
+			},
+			onFocus: (event) => {
+				if (event.target instanceof HTMLElement && event.target.dataset.dismissible === "false") return;
+				if (!isFocusWithinRef.current) {
+					isFocusWithinRef.current = true;
+					lastFocusedElementRef.current = event.relatedTarget;
+				}
+			},
+			onMouseEnter: () => setExpanded(true),
+			onMouseMove: () => setExpanded(true),
+			onMouseLeave: () => {
+				if (!interacting) setExpanded(false);
+			},
+			onDragEnd: () => setExpanded(false),
+			onPointerDown: (event) => {
+				if (event.target instanceof HTMLElement && event.target.dataset.dismissible === "false") return;
+				setInteracting(true);
+			},
+			onPointerUp: () => setInteracting(false)
+		}, filteredToasts.filter((toast) => !toast.position && index === 0 || toast.position === position).map((toast, index) => {
+			var _toastOptions_duration, _toastOptions_closeButton;
+			return /* @__PURE__ */ import_react.createElement(Toast$2, {
+				key: toast.id,
+				icons,
+				index,
+				toast,
+				defaultRichColors: richColors,
+				duration: (_toastOptions_duration = toastOptions == null ? void 0 : toastOptions.duration) != null ? _toastOptions_duration : duration,
+				className: toastOptions == null ? void 0 : toastOptions.className,
+				descriptionClassName: toastOptions == null ? void 0 : toastOptions.descriptionClassName,
+				invert,
+				visibleToasts,
+				closeButton: (_toastOptions_closeButton = toastOptions == null ? void 0 : toastOptions.closeButton) != null ? _toastOptions_closeButton : closeButton,
+				interacting,
+				position,
+				style: toastOptions == null ? void 0 : toastOptions.style,
+				unstyled: toastOptions == null ? void 0 : toastOptions.unstyled,
+				classNames: toastOptions == null ? void 0 : toastOptions.classNames,
+				cancelButtonStyle: toastOptions == null ? void 0 : toastOptions.cancelButtonStyle,
+				actionButtonStyle: toastOptions == null ? void 0 : toastOptions.actionButtonStyle,
+				closeButtonAriaLabel: toastOptions == null ? void 0 : toastOptions.closeButtonAriaLabel,
+				removeToast,
+				toasts: filteredToasts.filter((t) => t.position == toast.position),
+				heights: heights.filter((h) => h.position == toast.position),
+				setHeights,
+				expandByDefault: expand,
+				gap,
+				expanded,
+				swipeDirections: props.swipeDirections
+			});
+		}));
+	}));
+});
+//#endregion
+//#region src/store/AppContext.tsx
+var MOCK_DEMANDS = [{
+	id: "d1",
+	title: "Casamento Sítio das Palmeiras",
+	budget: 65e3,
+	guests: 300,
+	date: "2026-05-20",
+	location: "São Paulo, SP",
+	requirements: {
+		sound: true,
+		light: true,
+		led: false,
+		grid: true,
+		buffet: true,
+		drinks: false,
+		cocktails: true,
+		photo: false,
+		video: false,
+		singer: false,
+		band: true,
+		dj: true,
+		space: false,
+		ceremonial: true,
+		security: false,
+		details: "Preciso de PA para 300 pessoas, iluminação cênica na pista, grid Q30 e banda para festa."
+	},
+	status: "open",
+	proposals: 2,
+	createdAt: (/* @__PURE__ */ new Date()).toISOString()
+}, {
+	id: "d2",
+	title: "Festa Corporativa Tech",
+	budget: 95e3,
+	guests: 150,
+	date: "2026-06-15",
+	location: "Campinas, SP",
+	requirements: {
+		sound: true,
+		light: true,
+		led: true,
+		grid: true,
+		buffet: true,
+		drinks: true,
+		cocktails: false,
+		photo: true,
+		video: true,
+		singer: false,
+		band: false,
+		dj: true,
+		space: true,
+		ceremonial: false,
+		security: true,
+		details: "Painel de LED 4x3 indoor, som para DJ, luz de palco completa e buffet completo."
+	},
+	status: "open",
+	proposals: 5,
+	createdAt: (/* @__PURE__ */ new Date()).toISOString()
+}];
+var AppContext = (0, import_react.createContext)(void 0);
+var AppProvider = ({ children }) => {
+	const [role, setRole] = (0, import_react.useState)("customer");
+	const [isSubscribed, setIsSubscribed] = (0, import_react.useState)(true);
+	const [demands, setDemands] = (0, import_react.useState)(MOCK_DEMANDS);
+	const [companyProfile, setCompanyProfile] = (0, import_react.useState)({
+		name: "JD Eventos Tech",
+		specialties: "Som, Iluminação, Painel de LED",
+		address: "",
+		logo: "",
+		observations: ""
+	});
+	const addDemand = (demandData) => {
+		setDemands([{
+			...demandData,
+			id: Math.random().toString(36).substring(7),
+			status: "open",
+			proposals: 0,
+			createdAt: (/* @__PURE__ */ new Date()).toISOString()
+		}, ...demands]);
+	};
+	const updateCompanyProfile = (profile) => {
+		setCompanyProfile((prev) => ({
+			...prev,
+			...profile
+		}));
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppContext.Provider, {
+		"data-uid": "src/store/AppContext.tsx:148:5",
+		"data-prohibitions": "[editContent]",
+		value: {
+			role,
+			setRole,
+			isSubscribed,
+			setIsSubscribed,
+			demands,
+			addDemand,
+			companyProfile,
+			updateCompanyProfile
+		},
+		children
+	});
+};
+var useApp = () => {
+	const context = (0, import_react.useContext)(AppContext);
+	if (context === void 0) throw new Error("useApp must be used within an AppProvider");
+	return context;
+};
+//#endregion
+//#region src/pages/Register.tsx
+var formSchema = object({
+	name: string().min(2, "Nome deve ter pelo menos 2 caracteres"),
+	email: string().email("Email inválido"),
+	password: string().min(6, "Senha deve ter pelo menos 6 caracteres"),
+	role: _enum(["customer", "company"], { required_error: "Por favor, selecione o tipo de perfil." })
+});
+function Register() {
+	const navigate = useNavigate();
+	const { setRole } = useApp();
+	const [isLoading, setIsLoading] = (0, import_react.useState)(false);
+	const form = useForm({
+		resolver: a(formSchema),
+		defaultValues: {
+			name: "",
+			email: "",
+			password: "",
+			role: void 0
+		}
+	});
+	async function onSubmit(data) {
+		setIsLoading(true);
+		await new Promise((resolve) => setTimeout(resolve, 1e3));
+		setIsLoading(false);
+		setRole(data.role);
+		toast$1.success("Conta criada com sucesso!");
+		navigate("/");
+	}
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		"data-uid": "src/pages/Register.tsx:73:5",
+		"data-prohibitions": "[editContent]",
+		className: "flex min-h-[80vh] items-center justify-center py-12 px-4",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+			"data-uid": "src/pages/Register.tsx:74:7",
+			"data-prohibitions": "[editContent]",
+			className: "w-full max-w-md mx-auto shadow-lg border-primary/10",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+				"data-uid": "src/pages/Register.tsx:75:9",
+				"data-prohibitions": "[]",
+				className: "space-y-4 flex flex-col items-center text-center pt-8",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+					"data-uid": "src/pages/Register.tsx:76:11",
+					"data-prohibitions": "[]",
+					to: "/",
+					className: "transition-transform hover:scale-105",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+						"data-uid": "src/pages/Register.tsx:77:13",
+						"data-prohibitions": "[editContent]",
+						src: e_eventos_novo_62817_default,
+						alt: "e-eventos",
+						className: "h-24 w-24 rounded-[1.5rem] object-contain shadow-md bg-white/5 p-2 border border-white/10"
+					})
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					"data-uid": "src/pages/Register.tsx:83:11",
+					"data-prohibitions": "[]",
+					className: "space-y-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+						"data-uid": "src/pages/Register.tsx:84:13",
+						"data-prohibitions": "[]",
+						className: "text-2xl font-extrabold tracking-tight",
+						children: "Criar Conta"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
+						"data-uid": "src/pages/Register.tsx:85:13",
+						"data-prohibitions": "[]",
+						className: "text-base",
+						children: "Junte-se ao e-eventos e comece agora"
+					})]
+				})]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Form, {
+				"data-uid": "src/pages/Register.tsx:91:9",
+				"data-prohibitions": "[editContent]",
+				...form,
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+					"data-uid": "src/pages/Register.tsx:92:11",
+					"data-prohibitions": "[editContent]",
+					onSubmit: form.handleSubmit(onSubmit),
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+						"data-uid": "src/pages/Register.tsx:93:13",
+						"data-prohibitions": "[]",
+						className: "space-y-5",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+								"data-uid": "src/pages/Register.tsx:94:15",
+								"data-prohibitions": "[editContent]",
+								control: form.control,
+								name: "name",
+								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, {
+									"data-uid": "src/pages/Register.tsx:98:19",
+									"data-prohibitions": "[]",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, {
+											"data-uid": "src/pages/Register.tsx:99:21",
+											"data-prohibitions": "[]",
+											children: "Nome completo"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, {
+											"data-uid": "src/pages/Register.tsx:100:21",
+											"data-prohibitions": "[]",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+												"data-uid": "src/pages/Register.tsx:101:23",
+												"data-prohibitions": "[editContent]",
+												placeholder: "João Silva",
+												className: "h-11",
+												...field
+											})
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {
+											"data-uid": "src/pages/Register.tsx:103:21",
+											"data-prohibitions": "[editContent]"
+										})
+									]
+								})
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+								"data-uid": "src/pages/Register.tsx:108:15",
+								"data-prohibitions": "[editContent]",
+								control: form.control,
+								name: "email",
+								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, {
+									"data-uid": "src/pages/Register.tsx:112:19",
+									"data-prohibitions": "[]",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, {
+											"data-uid": "src/pages/Register.tsx:113:21",
+											"data-prohibitions": "[]",
+											children: "Email"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, {
+											"data-uid": "src/pages/Register.tsx:114:21",
+											"data-prohibitions": "[]",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+												"data-uid": "src/pages/Register.tsx:115:23",
+												"data-prohibitions": "[editContent]",
+												type: "email",
+												placeholder: "m@exemplo.com",
+												className: "h-11",
+												...field
+											})
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {
+											"data-uid": "src/pages/Register.tsx:117:21",
+											"data-prohibitions": "[editContent]"
+										})
+									]
+								})
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+								"data-uid": "src/pages/Register.tsx:122:15",
+								"data-prohibitions": "[editContent]",
+								control: form.control,
+								name: "password",
+								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, {
+									"data-uid": "src/pages/Register.tsx:126:19",
+									"data-prohibitions": "[]",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, {
+											"data-uid": "src/pages/Register.tsx:127:21",
+											"data-prohibitions": "[]",
+											children: "Senha"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, {
+											"data-uid": "src/pages/Register.tsx:128:21",
+											"data-prohibitions": "[]",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+												"data-uid": "src/pages/Register.tsx:129:23",
+												"data-prohibitions": "[editContent]",
+												type: "password",
+												placeholder: "••••••••",
+												className: "h-11",
+												...field
+											})
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {
+											"data-uid": "src/pages/Register.tsx:131:21",
+											"data-prohibitions": "[editContent]"
+										})
+									]
+								})
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+								"data-uid": "src/pages/Register.tsx:136:15",
+								"data-prohibitions": "[editContent]",
+								control: form.control,
+								name: "role",
+								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, {
+									"data-uid": "src/pages/Register.tsx:140:19",
+									"data-prohibitions": "[editContent]",
+									className: "space-y-3",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, {
+											"data-uid": "src/pages/Register.tsx:141:21",
+											"data-prohibitions": "[]",
+											children: "Tipo de Perfil"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, {
+											"data-uid": "src/pages/Register.tsx:142:21",
+											"data-prohibitions": "[editContent]",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(RadioGroup, {
+												"data-uid": "src/pages/Register.tsx:143:23",
+												"data-prohibitions": "[editContent]",
+												onValueChange: field.onChange,
+												defaultValue: field.value,
+												className: "flex flex-col sm:flex-row gap-3",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormItem, {
+													"data-uid": "src/pages/Register.tsx:148:25",
+													"data-prohibitions": "[editContent]",
+													className: "flex-1 space-y-0",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, {
+														"data-uid": "src/pages/Register.tsx:149:27",
+														"data-prohibitions": "[editContent]",
+														children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+															"data-uid": "src/pages/Register.tsx:150:29",
+															"data-prohibitions": "[editContent]",
+															className: "relative",
+															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupItem, {
+																"data-uid": "src/pages/Register.tsx:151:31",
+																"data-prohibitions": "[editContent]",
+																value: "customer",
+																id: "role-customer",
+																className: "peer sr-only"
+															}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
+																"data-uid": "src/pages/Register.tsx:156:31",
+																"data-prohibitions": "[editContent]",
+																htmlFor: "role-customer",
+																className: cn$1("flex flex-col items-center justify-center rounded-lg border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-background cursor-pointer transition-all gap-2", field.value === "customer" ? "border-primary bg-primary/5 text-primary" : "text-muted-foreground"),
+																children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(User, {
+																	"data-uid": "src/pages/Register.tsx:165:33",
+																	"data-prohibitions": "[editContent]",
+																	className: cn$1("h-6 w-6 mb-1", field.value === "customer" ? "text-primary" : "")
+																}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+																	"data-uid": "src/pages/Register.tsx:171:33",
+																	"data-prohibitions": "[editContent]",
+																	className: cn$1("font-semibold text-sm", field.value === "customer" ? "text-foreground" : "text-foreground/80"),
+																	children: "Cliente"
+																})]
+															})]
+														})
+													})
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormItem, {
+													"data-uid": "src/pages/Register.tsx:186:25",
+													"data-prohibitions": "[editContent]",
+													className: "flex-1 space-y-0",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, {
+														"data-uid": "src/pages/Register.tsx:187:27",
+														"data-prohibitions": "[editContent]",
+														children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+															"data-uid": "src/pages/Register.tsx:188:29",
+															"data-prohibitions": "[editContent]",
+															className: "relative",
+															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupItem, {
+																"data-uid": "src/pages/Register.tsx:189:31",
+																"data-prohibitions": "[editContent]",
+																value: "company",
+																id: "role-company",
+																className: "peer sr-only"
+															}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
+																"data-uid": "src/pages/Register.tsx:194:31",
+																"data-prohibitions": "[editContent]",
+																htmlFor: "role-company",
+																className: cn$1("flex flex-col items-center justify-center rounded-lg border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-background cursor-pointer transition-all gap-2", field.value === "company" ? "border-primary bg-primary/5 text-primary" : "text-muted-foreground"),
+																children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Briefcase, {
+																	"data-uid": "src/pages/Register.tsx:203:33",
+																	"data-prohibitions": "[editContent]",
+																	className: cn$1("h-6 w-6 mb-1", field.value === "company" ? "text-primary" : "")
+																}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+																	"data-uid": "src/pages/Register.tsx:209:33",
+																	"data-prohibitions": "[editContent]",
+																	className: cn$1("font-semibold text-sm", field.value === "company" ? "text-foreground" : "text-foreground/80"),
+																	children: "Fornecedor"
+																})]
+															})]
+														})
+													})
+												})]
+											})
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {
+											"data-uid": "src/pages/Register.tsx:225:21",
+											"data-prohibitions": "[editContent]",
+											className: "text-destructive font-medium"
+										})
+									]
+								})
+							})
+						]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardFooter, {
+						"data-uid": "src/pages/Register.tsx:231:13",
+						"data-prohibitions": "[editContent]",
+						className: "flex flex-col space-y-4 pb-8",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+							"data-uid": "src/pages/Register.tsx:232:15",
+							"data-prohibitions": "[editContent]",
+							type: "submit",
+							className: "w-full h-11 text-md",
+							disabled: isLoading,
+							children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, {
+								"data-uid": "src/pages/Register.tsx:235:21",
+								"data-prohibitions": "[editContent]",
+								className: "mr-2 h-4 w-4 animate-spin"
+							}), "Criando conta..."] }) : "Cadastrar"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/pages/Register.tsx:242:15",
+							"data-prohibitions": "[]",
+							className: "text-sm text-center text-muted-foreground",
+							children: [
+								"Já tem uma conta?",
+								" ",
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+									"data-uid": "src/pages/Register.tsx:244:17",
+									"data-prohibitions": "[]",
+									to: "/login",
+									className: "font-semibold text-primary hover:underline",
+									children: "Fazer login"
+								})
+							]
+						})]
+					})]
+				})
+			})]
+		})
+	});
+}
+//#endregion
+//#region src/components/ui/badge.tsx
+var badgeVariants = cva("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2", {
+	variants: { variant: {
+		default: "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
+		secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+		destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
+		outline: "text-foreground"
+	} },
+	defaultVariants: { variant: "default" }
+});
+function Badge({ className, variant, ...props }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		"data-uid": "src/components/ui/badge.tsx:30:10",
+		"data-prohibitions": "[editContent]",
+		className: cn$1(badgeVariants({ variant }), className),
+		...props
+	});
+}
+//#endregion
+//#region src/lib/services.ts
+var SERVICES = [
+	{
+		id: "sound",
+		label: "Som",
+		icon: Speaker,
+		color: "text-blue-400",
+		bg: "bg-blue-500/10"
+	},
+	{
+		id: "light",
+		label: "Luz",
+		icon: Lightbulb,
+		color: "text-yellow-400",
+		bg: "bg-yellow-500/10"
+	},
+	{
+		id: "led",
+		label: "Painel LED",
+		icon: Monitor,
+		color: "text-purple-400",
+		bg: "bg-purple-500/10"
+	},
+	{
+		id: "grid",
+		label: "Estrutura",
+		icon: Layers,
+		color: "text-gray-400",
+		bg: "bg-gray-500/10"
+	},
+	{
+		id: "buffet",
+		label: "Buffet",
+		icon: Utensils,
+		color: "text-orange-400",
+		bg: "bg-orange-500/10"
+	},
+	{
+		id: "drinks",
+		label: "Bebidas",
+		icon: GlassWater,
+		color: "text-cyan-400",
+		bg: "bg-cyan-500/10"
+	},
+	{
+		id: "cocktails",
+		label: "Bar Drinks",
+		icon: Wine,
+		color: "text-pink-400",
+		bg: "bg-pink-500/10"
+	},
+	{
+		id: "photo",
+		label: "Fotografia",
+		icon: Camera,
+		color: "text-teal-400",
+		bg: "bg-teal-500/10"
+	},
+	{
+		id: "video",
+		label: "Videomaker",
+		icon: Video,
+		color: "text-red-400",
+		bg: "bg-red-500/10"
+	},
+	{
+		id: "singer",
+		label: "Cantor",
+		icon: Mic,
+		color: "text-indigo-400",
+		bg: "bg-indigo-500/10"
+	},
+	{
+		id: "band",
+		label: "Banda",
+		icon: Music,
+		color: "text-rose-400",
+		bg: "bg-rose-500/10"
+	},
+	{
+		id: "dj",
+		label: "DJ",
+		icon: Disc,
+		color: "text-violet-400",
+		bg: "bg-violet-500/10"
+	},
+	{
+		id: "space",
+		label: "Espaço",
+		icon: Building,
+		color: "text-emerald-400",
+		bg: "bg-emerald-500/10"
+	},
+	{
+		id: "ceremonial",
+		label: "Cerimonial",
+		icon: ClipboardList,
+		color: "text-amber-400",
+		bg: "bg-amber-500/10"
+	},
+	{
+		id: "security",
+		label: "Seguranças",
+		icon: Shield,
+		color: "text-slate-400",
+		bg: "bg-slate-500/10"
+	}
+];
+//#endregion
+//#region src/pages/Demands.tsx
+var Demands = () => {
+	const { role, demands, isSubscribed } = useApp();
+	if (role === "company" && !isSubscribed) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		"data-uid": "src/pages/Demands.tsx:13:7",
+		"data-prohibitions": "[]",
+		className: "p-6 flex flex-col items-center justify-center min-h-[70vh] text-center animate-slide-up",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+				"data-uid": "src/pages/Demands.tsx:14:9",
+				"data-prohibitions": "[]",
+				className: "text-2xl font-bold mb-3 text-foreground tracking-tight",
+				children: "Acesso Restrito"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				"data-uid": "src/pages/Demands.tsx:15:9",
+				"data-prohibitions": "[]",
+				className: "text-muted-foreground mb-8 max-w-md mx-auto leading-relaxed",
+				children: "Ative sua assinatura premium para visualizar todas as demandas disponíveis na plataforma."
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+				"data-uid": "src/pages/Demands.tsx:18:9",
+				"data-prohibitions": "[]",
+				to: "/subscription",
+				className: "px-8 py-3 bg-primary text-primary-foreground rounded-lg font-medium shadow-md hover:bg-primary/90 transition-all",
+				children: "Assinar Agora"
+			})
+		]
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		"data-uid": "src/pages/Demands.tsx:29:5",
+		"data-prohibitions": "[editContent]",
+		className: "space-y-6 animate-slide-up pb-12",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			"data-uid": "src/pages/Demands.tsx:30:7",
+			"data-prohibitions": "[editContent]",
+			className: "flex items-center justify-between mb-4",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+				"data-uid": "src/pages/Demands.tsx:31:9",
+				"data-prohibitions": "[editContent]",
+				className: "text-3xl font-bold text-foreground tracking-tight",
+				children: role === "customer" ? "Meus Eventos" : "Demandas Disponíveis"
+			})
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			"data-uid": "src/pages/Demands.tsx:36:7",
+			"data-prohibitions": "[editContent]",
+			className: "space-y-4",
+			children: demands.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				"data-uid": "src/pages/Demands.tsx:38:11",
+				"data-prohibitions": "[]",
+				className: "text-center text-muted-foreground py-16 border-2 border-dashed border-border rounded-xl bg-secondary/30",
+				children: "Nenhuma demanda encontrada no momento."
+			}) : demands.map((demand) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+				"data-uid": "src/pages/Demands.tsx:43:13",
+				"data-prohibitions": "[editContent]",
+				to: `/demands/${demand.id}`,
+				className: "block",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
+					"data-uid": "src/pages/Demands.tsx:44:15",
+					"data-prohibitions": "[editContent]",
+					className: "hover:shadow-md transition-all duration-300 border-border group bg-card",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+						"data-uid": "src/pages/Demands.tsx:45:17",
+						"data-prohibitions": "[editContent]",
+						className: "p-0",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/pages/Demands.tsx:46:19",
+							"data-prohibitions": "[editContent]",
+							className: "p-5 md:p-6 space-y-4",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									"data-uid": "src/pages/Demands.tsx:47:21",
+									"data-prohibitions": "[editContent]",
+									className: "flex justify-between items-start gap-4",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+										"data-uid": "src/pages/Demands.tsx:48:23",
+										"data-prohibitions": "[editContent]",
+										className: "font-semibold text-foreground text-lg md:text-xl leading-tight group-hover:text-primary transition-colors",
+										children: demand.title
+									}), demand.status === "open" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+										"data-uid": "src/pages/Demands.tsx:52:25",
+										"data-prohibitions": "[]",
+										variant: "secondary",
+										className: "text-[10px] uppercase tracking-wider font-bold bg-primary/10 text-primary hover:bg-primary/20 shrink-0",
+										children: "Aberto"
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									"data-uid": "src/pages/Demands.tsx:61:21",
+									"data-prohibitions": "[editContent]",
+									className: "flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-sm text-muted-foreground",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										"data-uid": "src/pages/Demands.tsx:62:23",
+										"data-prohibitions": "[editContent]",
+										className: "flex items-center gap-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, {
+											"data-uid": "src/pages/Demands.tsx:63:25",
+											"data-prohibitions": "[editContent]",
+											className: "w-4 h-4"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											"data-uid": "src/pages/Demands.tsx:64:25",
+											"data-prohibitions": "[editContent]",
+											className: "font-medium",
+											children: new Date(demand.date).toLocaleDateString("pt-BR")
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										"data-uid": "src/pages/Demands.tsx:68:23",
+										"data-prohibitions": "[editContent]",
+										className: "flex items-center gap-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, {
+											"data-uid": "src/pages/Demands.tsx:69:25",
+											"data-prohibitions": "[editContent]",
+											className: "w-4 h-4"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											"data-uid": "src/pages/Demands.tsx:70:25",
+											"data-prohibitions": "[editContent]",
+											className: "font-medium",
+											children: demand.location
+										})]
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									"data-uid": "src/pages/Demands.tsx:74:21",
+									"data-prohibitions": "[editContent]",
+									className: "flex items-center justify-between pt-5 border-t border-border",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										"data-uid": "src/pages/Demands.tsx:75:23",
+										"data-prohibitions": "[editContent]",
+										className: "flex gap-2 items-center flex-wrap",
+										children: (() => {
+											const activeReqs = SERVICES.filter((s) => demand.requirements[s.id]);
+											return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [activeReqs.slice(0, 4).map((req) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												"data-uid": "src/pages/Demands.tsx:83:33",
+												"data-prohibitions": "[editContent]",
+												className: `p-2 ${req.bg} rounded-lg`,
+												title: req.label,
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(req.icon, {
+													"data-uid": "src/pages/Demands.tsx:88:35",
+													"data-prohibitions": "[editContent]",
+													className: `w-4 h-4 ${req.color}`
+												})
+											}, req.id)), activeReqs.length > 4 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												"data-uid": "src/pages/Demands.tsx:92:33",
+												"data-prohibitions": "[editContent]",
+												className: "p-2 bg-secondary rounded-lg flex items-center justify-center text-xs font-bold text-muted-foreground min-w-[32px]",
+												children: ["+", activeReqs.length - 4]
+											})] });
+										})()
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										"data-uid": "src/pages/Demands.tsx:100:23",
+										"data-prohibitions": "[editContent]",
+										className: "text-right",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											"data-uid": "src/pages/Demands.tsx:101:25",
+											"data-prohibitions": "[editContent]",
+											className: "text-[10px] text-muted-foreground mb-1 uppercase tracking-wider font-semibold",
+											children: role === "customer" ? "Orçamento" : "Valor Líquido"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											"data-uid": "src/pages/Demands.tsx:104:25",
+											"data-prohibitions": "[editContent]",
+											className: "text-foreground font-bold text-lg md:text-xl",
+											children: new Intl.NumberFormat("pt-BR", {
+												style: "currency",
+												currency: "BRL"
+											}).format(role === "customer" ? demand.budget : demand.budget * .9)
+										})]
+									})]
+								})
+							]
+						})
+					})
+				})
+			}, demand.id))
+		})]
+	});
+};
+//#endregion
+//#region src/hooks/use-toast.ts
+var TOAST_LIMIT = 1;
+var TOAST_REMOVE_DELAY = 1e6;
+var count = 0;
+function genId() {
+	count = (count + 1) % Number.MAX_SAFE_INTEGER;
+	return count.toString();
+}
+var toastTimeouts = /* @__PURE__ */ new Map();
+var addToRemoveQueue = (toastId) => {
+	if (toastTimeouts.has(toastId)) return;
+	const timeout = setTimeout(() => {
+		toastTimeouts.delete(toastId);
+		dispatch({
+			type: "REMOVE_TOAST",
+			toastId
+		});
+	}, TOAST_REMOVE_DELAY);
+	toastTimeouts.set(toastId, timeout);
+};
+var reducer = (state, action) => {
+	switch (action.type) {
+		case "ADD_TOAST": return {
+			...state,
+			toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT)
+		};
+		case "UPDATE_TOAST": return {
+			...state,
+			toasts: state.toasts.map((t) => t.id === action.toast.id ? {
+				...t,
+				...action.toast
+			} : t)
+		};
+		case "DISMISS_TOAST": {
+			const { toastId } = action;
+			if (toastId) addToRemoveQueue(toastId);
+			else state.toasts.forEach((toast) => {
+				addToRemoveQueue(toast.id);
+			});
+			return {
+				...state,
+				toasts: state.toasts.map((t) => t.id === toastId || toastId === void 0 ? {
+					...t,
+					open: false
+				} : t)
+			};
+		}
+		case "REMOVE_TOAST":
+			if (action.toastId === void 0) return {
+				...state,
+				toasts: []
+			};
+			return {
+				...state,
+				toasts: state.toasts.filter((t) => t.id !== action.toastId)
+			};
+	}
+};
+var listeners = [];
+var memoryState = { toasts: [] };
+function dispatch(action) {
+	memoryState = reducer(memoryState, action);
+	listeners.forEach((listener) => {
+		listener(memoryState);
+	});
+}
+function toast({ ...props }) {
+	const id = genId();
+	const update = (props) => dispatch({
+		type: "UPDATE_TOAST",
+		toast: {
+			...props,
+			id
+		}
+	});
+	const dismiss = () => dispatch({
+		type: "DISMISS_TOAST",
+		toastId: id
+	});
+	dispatch({
+		type: "ADD_TOAST",
+		toast: {
+			...props,
+			id,
+			open: true,
+			onOpenChange: (open) => {
+				if (!open) dismiss();
+			}
+		}
+	});
+	return {
+		id,
+		dismiss,
+		update
+	};
+}
+function useToast() {
+	const [state, setState] = import_react.useState(memoryState);
+	import_react.useEffect(() => {
+		listeners.push(setState);
+		return () => {
+			const index = listeners.indexOf(setState);
+			if (index > -1) listeners.splice(index, 1);
+		};
+	}, [state]);
+	return {
+		...state,
+		toast,
+		dismiss: (toastId) => dispatch({
+			type: "DISMISS_TOAST",
+			toastId
+		})
+	};
+}
+//#endregion
+//#region src/components/BackButton.tsx
+function BackButton({ className, onClick, label = "Voltar" }) {
+	const navigate = useNavigate();
+	const handleBack = () => {
+		if (onClick) onClick();
+		else navigate(-1);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+		"data-uid": "src/components/BackButton.tsx:24:5",
+		"data-prohibitions": "[editContent]",
+		variant: "ghost",
+		onClick: handleBack,
+		className: cn$1("gap-1 pl-2.5 hover:bg-secondary text-muted-foreground hover:text-foreground", className),
+		"aria-label": label,
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, {
+			"data-uid": "src/components/BackButton.tsx:33:7",
+			"data-prohibitions": "[editContent]",
+			className: "w-5 h-5"
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+			"data-uid": "src/components/BackButton.tsx:34:7",
+			"data-prohibitions": "[editContent]",
+			className: "font-medium",
+			children: label
+		})]
+	});
+}
+//#endregion
+//#region src/pages/DemandDetail.tsx
+var DemandDetail = () => {
+	const { id } = useParams();
+	const navigate = useNavigate();
+	const { toast } = useToast();
+	const { role, demands } = useApp();
+	const demand = demands.find((d) => d.id === id);
+	if (!demand) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		"data-uid": "src/pages/DemandDetail.tsx:19:12",
+		"data-prohibitions": "[]",
+		className: "p-6 text-center text-muted-foreground",
+		children: "Demanda não encontrada."
+	});
+	const handleProposal = () => {
+		toast({
+			title: "Proposta Enviada!",
+			description: "O cliente receberá sua notificação em breve."
+		});
+		navigate("/demands");
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		"data-uid": "src/pages/DemandDetail.tsx:31:5",
+		"data-prohibitions": "[editContent]",
+		className: "flex flex-col animate-slide-up relative min-h-full space-y-6 pb-24",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				"data-uid": "src/pages/DemandDetail.tsx:32:7",
+				"data-prohibitions": "[editContent]",
+				className: "flex items-center gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BackButton, {
+					"data-uid": "src/pages/DemandDetail.tsx:33:9",
+					"data-prohibitions": "[editContent]",
+					className: "-ml-2"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+					"data-uid": "src/pages/DemandDetail.tsx:34:9",
+					"data-prohibitions": "[editContent]",
+					className: "text-2xl md:text-3xl font-bold text-foreground flex-1 truncate tracking-tight",
+					children: demand.title
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				"data-uid": "src/pages/DemandDetail.tsx:39:7",
+				"data-prohibitions": "[editContent]",
+				className: "space-y-8 flex-1",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						"data-uid": "src/pages/DemandDetail.tsx:40:9",
+						"data-prohibitions": "[editContent]",
+						className: "flex flex-wrap gap-4 text-sm text-muted-foreground",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/pages/DemandDetail.tsx:41:11",
+								"data-prohibitions": "[editContent]",
+								className: "flex items-center gap-2 bg-secondary px-4 py-2 rounded-full",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, {
+									"data-uid": "src/pages/DemandDetail.tsx:42:13",
+									"data-prohibitions": "[editContent]",
+									className: "w-4 h-4"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									"data-uid": "src/pages/DemandDetail.tsx:43:13",
+									"data-prohibitions": "[editContent]",
+									className: "font-medium",
+									children: new Date(demand.date).toLocaleDateString("pt-BR")
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/pages/DemandDetail.tsx:45:11",
+								"data-prohibitions": "[editContent]",
+								className: "flex items-center gap-2 bg-secondary px-4 py-2 rounded-full",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, {
+									"data-uid": "src/pages/DemandDetail.tsx:46:13",
+									"data-prohibitions": "[editContent]",
+									className: "w-4 h-4"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									"data-uid": "src/pages/DemandDetail.tsx:47:13",
+									"data-prohibitions": "[editContent]",
+									className: "font-medium",
+									children: demand.location
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/pages/DemandDetail.tsx:49:11",
+								"data-prohibitions": "[editContent]",
+								className: "flex items-center gap-2 bg-secondary px-4 py-2 rounded-full",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, {
+									"data-uid": "src/pages/DemandDetail.tsx:50:13",
+									"data-prohibitions": "[editContent]",
+									className: "w-4 h-4"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									"data-uid": "src/pages/DemandDetail.tsx:51:13",
+									"data-prohibitions": "[editContent]",
+									className: "font-medium",
+									children: [demand.guests, " convidados"]
+								})]
+							})
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
+						"data-uid": "src/pages/DemandDetail.tsx:55:9",
+						"data-prohibitions": "[editContent]",
+						className: "border-border border-l-4 border-l-primary overflow-hidden shadow-sm",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+							"data-uid": "src/pages/DemandDetail.tsx:56:11",
+							"data-prohibitions": "[editContent]",
+							className: "p-6 md:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/pages/DemandDetail.tsx:57:13",
+								"data-prohibitions": "[editContent]",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									"data-uid": "src/pages/DemandDetail.tsx:58:15",
+									"data-prohibitions": "[editContent]",
+									className: "text-xs text-muted-foreground uppercase tracking-wider font-bold mb-2",
+									children: role === "customer" ? "Orçamento Estimado" : "Valor Líquido (-10% Taxa)"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+									"data-uid": "src/pages/DemandDetail.tsx:61:15",
+									"data-prohibitions": "[editContent]",
+									className: "text-4xl font-extrabold text-foreground flex items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DollarSign, {
+										"data-uid": "src/pages/DemandDetail.tsx:62:17",
+										"data-prohibitions": "[editContent]",
+										className: "w-8 h-8 text-primary"
+									}), new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2 }).format(role === "customer" ? demand.budget : demand.budget * .9)]
+								})]
+							}), role === "customer" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/pages/DemandDetail.tsx:69:15",
+								"data-prohibitions": "[editContent]",
+								className: "sm:text-right bg-secondary p-5 rounded-xl border border-border/50",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									"data-uid": "src/pages/DemandDetail.tsx:70:17",
+									"data-prohibitions": "[]",
+									className: "text-xs text-muted-foreground uppercase tracking-wider font-bold mb-1",
+									children: "Propostas Recebidas"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									"data-uid": "src/pages/DemandDetail.tsx:73:17",
+									"data-prohibitions": "[editContent]",
+									className: "text-3xl font-bold text-foreground",
+									children: demand.proposals
+								})]
+							})]
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+						"data-uid": "src/pages/DemandDetail.tsx:79:9",
+						"data-prohibitions": "[editContent]",
+						className: "space-y-4",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+							"data-uid": "src/pages/DemandDetail.tsx:80:11",
+							"data-prohibitions": "[]",
+							className: "font-semibold text-foreground text-xl border-b border-border pb-2",
+							children: "Serviços Solicitados"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							"data-uid": "src/pages/DemandDetail.tsx:83:11",
+							"data-prohibitions": "[editContent]",
+							className: "grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 pt-2",
+							children: SERVICES.map(({ id, icon: Icon, label, color, bg }) => {
+								if (!demand.requirements[id]) return null;
+								return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									"data-uid": "src/pages/DemandDetail.tsx:87:17",
+									"data-prohibitions": "[editContent]",
+									className: `${bg} border border-border rounded-xl p-5 flex flex-col items-center justify-center text-center gap-3 transition-transform hover:scale-105`,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
+										"data-uid": "src/pages/DemandDetail.tsx:91:19",
+										"data-prohibitions": "[editContent]",
+										className: `w-8 h-8 ${color}`
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										"data-uid": "src/pages/DemandDetail.tsx:92:19",
+										"data-prohibitions": "[editContent]",
+										className: "text-sm font-semibold text-foreground",
+										children: label
+									})]
+								}, id);
+							})
+						})]
+					}),
+					demand.requirements.details && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+						"data-uid": "src/pages/DemandDetail.tsx:100:11",
+						"data-prohibitions": "[editContent]",
+						className: "space-y-4",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+							"data-uid": "src/pages/DemandDetail.tsx:101:13",
+							"data-prohibitions": "[]",
+							className: "font-semibold text-foreground text-xl border-b border-border pb-2",
+							children: "Detalhes Adicionais"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							"data-uid": "src/pages/DemandDetail.tsx:104:13",
+							"data-prohibitions": "[editContent]",
+							className: "bg-card border border-border rounded-xl p-6 text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed shadow-sm",
+							children: demand.requirements.details
+						})]
+					})
+				]
+			}),
+			role === "company" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				"data-uid": "src/pages/DemandDetail.tsx:112:9",
+				"data-prohibitions": "[]",
+				className: "fixed bottom-0 left-0 right-0 p-4 bg-background/90 backdrop-blur-md border-t border-border z-40 md:sticky md:bg-transparent md:backdrop-blur-none md:border-t-0 md:p-0",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+					"data-uid": "src/pages/DemandDetail.tsx:113:11",
+					"data-prohibitions": "[]",
+					size: "lg",
+					onClick: handleProposal,
+					className: "w-full h-14 text-lg font-semibold shadow-lg",
+					children: "Responder Demanda"
+				})
+			})
+		]
+	});
+};
+//#endregion
+//#region src/components/create-event/Step1Basic.tsx
+var Step1Basic = ({ formData, updateForm, setConfigs }) => {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		"data-uid": "src/components/create-event/Step1Basic.tsx:14:5",
+		"data-prohibitions": "[]",
+		className: "space-y-6 animate-fade-in",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				"data-uid": "src/components/create-event/Step1Basic.tsx:15:7",
+				"data-prohibitions": "[]",
+				className: "space-y-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+					"data-uid": "src/components/create-event/Step1Basic.tsx:16:9",
+					"data-prohibitions": "[]",
+					children: "Título do Evento"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+					"data-uid": "src/components/create-event/Step1Basic.tsx:17:9",
+					"data-prohibitions": "[editContent]",
+					placeholder: "Ex: Casamento João e Maria",
+					value: formData.title,
+					onChange: (e) => updateForm("title", e.target.value),
+					className: "bg-card border-border"
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				"data-uid": "src/components/create-event/Step1Basic.tsx:24:7",
+				"data-prohibitions": "[]",
+				className: "space-y-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+					"data-uid": "src/components/create-event/Step1Basic.tsx:25:9",
+					"data-prohibitions": "[]",
+					children: "Número de Convidados (Estimativa Geral)"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+					"data-uid": "src/components/create-event/Step1Basic.tsx:26:9",
+					"data-prohibitions": "[editContent]",
+					type: "number",
+					min: "1",
+					value: formData.guests || "",
+					onChange: (e) => {
+						if (e.target.value === "") {
+							updateForm("guests", 0);
+							return;
+						}
+						const val = parseInt(e.target.value);
+						if (!isNaN(val) && val >= 0) {
+							updateForm("guests", val);
+							setConfigs((p) => ({
+								...p,
+								buffetGuests: p.buffetGuests === formData.guests ? val : p.buffetGuests,
+								cocktailsGuests: p.cocktailsGuests === formData.guests ? val : p.cocktailsGuests,
+								drinksGuests: p.drinksGuests === formData.guests ? val : p.drinksGuests
+							}));
+						}
+					},
+					className: "bg-card border-border"
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				"data-uid": "src/components/create-event/Step1Basic.tsx:49:7",
+				"data-prohibitions": "[]",
+				className: "space-y-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+					"data-uid": "src/components/create-event/Step1Basic.tsx:50:9",
+					"data-prohibitions": "[]",
+					children: "Data do Evento"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+					"data-uid": "src/components/create-event/Step1Basic.tsx:51:9",
+					"data-prohibitions": "[editContent]",
+					type: "date",
+					value: formData.date,
+					onChange: (e) => updateForm("date", e.target.value),
+					className: "bg-card border-border block w-full text-foreground"
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				"data-uid": "src/components/create-event/Step1Basic.tsx:58:7",
+				"data-prohibitions": "[]",
+				className: "space-y-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+					"data-uid": "src/components/create-event/Step1Basic.tsx:59:9",
+					"data-prohibitions": "[]",
+					children: "Localização / Cidade"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+					"data-uid": "src/components/create-event/Step1Basic.tsx:60:9",
+					"data-prohibitions": "[editContent]",
+					placeholder: "Ex: São Paulo, SP",
+					value: formData.location,
+					onChange: (e) => updateForm("location", e.target.value),
+					className: "bg-card border-border"
+				})]
+			})
+		]
+	});
+};
+//#endregion
+//#region src/components/ui/textarea.tsx
+var Textarea = import_react.forwardRef(({ className, ...props }, ref) => {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+		"data-uid": "src/components/ui/textarea.tsx:9:7",
+		"data-prohibitions": "[editContent]",
+		className: cn$1("flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm", className),
+		ref,
+		...props
+	});
+});
+Textarea.displayName = "Textarea";
 //#endregion
 //#region src/components/create-event/Step2Services.tsx
 var Step2Services = ({ formData, setFormData, configs, setConfigs }) => {
@@ -26081,7 +32647,7 @@ var TOAST_SWIPE_START = "toast.swipeStart";
 var TOAST_SWIPE_MOVE = "toast.swipeMove";
 var TOAST_SWIPE_CANCEL = "toast.swipeCancel";
 var TOAST_SWIPE_END = "toast.swipeEnd";
-var Toast$2 = import_react.forwardRef((props, forwardedRef) => {
+var Toast$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { forceMount, open: openProp, defaultOpen, onOpenChange, ...toastProps } = props;
 	const [open, setOpen] = useControllableState({
 		prop: openProp,
@@ -26126,7 +32692,7 @@ var Toast$2 = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-Toast$2.displayName = TOAST_NAME;
+Toast$1.displayName = TOAST_NAME;
 var [ToastInteractiveProvider, useToastInteractiveContext] = createToastContext(TOAST_NAME, { onClose() {} });
 var ToastImpl = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeToast, type = "foreground", duration: durationProp, open, onClose, onEscapeKeyDown, onPause, onResume, onSwipeStart, onSwipeMove, onSwipeCancel, onSwipeEnd, ...toastProps } = props;
@@ -26433,7 +32999,7 @@ function focusFirst(candidates) {
 }
 var Provider$1 = ToastProvider$1;
 var Viewport = ToastViewport$1;
-var Root2$1 = Toast$2;
+var Root2$1 = Toast$1;
 var Title = ToastTitle$1;
 var Description = ToastDescription$1;
 var Action = ToastAction$1;
@@ -26456,7 +33022,7 @@ var toastVariants = cva("group pointer-events-auto relative flex w-full items-ce
 	} },
 	defaultVariants: { variant: "default" }
 });
-var Toast$1 = import_react.forwardRef(({ className, variant, ...props }, ref) => {
+var Toast = import_react.forwardRef(({ className, variant, ...props }, ref) => {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$1, {
 		"data-uid": "src/components/ui/toast.tsx:47:5",
 		"data-prohibitions": "[editContent]",
@@ -26465,7 +33031,7 @@ var Toast$1 = import_react.forwardRef(({ className, variant, ...props }, ref) =>
 		...props
 	});
 });
-Toast$1.displayName = Root2$1.displayName;
+Toast.displayName = Root2$1.displayName;
 var ToastAction = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Action, {
 	"data-uid": "src/components/ui/toast.tsx:60:3",
 	"data-prohibitions": "[editContent]",
@@ -26506,13 +33072,13 @@ var ToastDescription = import_react.forwardRef(({ className, ...props }, ref) =>
 ToastDescription.displayName = Description.displayName;
 //#endregion
 //#region src/components/ui/toaster.tsx
-function Toaster$2() {
+function Toaster$1() {
 	const { toasts } = useToast();
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(ToastProvider, {
 		"data-uid": "src/components/ui/toaster.tsx:16:5",
 		"data-prohibitions": "[editContent]",
 		children: [toasts.map(function({ id, title, description, action, ...props }) {
-			return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Toast$1, {
+			return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Toast, {
 				"data-uid": "src/components/ui/toaster.tsx:19:11",
 				"data-prohibitions": "[editContent]",
 				...props,
@@ -26591,913 +33157,10 @@ import_react.memo(({ forcedTheme: e, storageKey: i, attribute: s, enableSystem: 
 	});
 });
 //#endregion
-//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/sonner@2.0.7_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/sonner/dist/index.mjs
-function __insertCSS(code) {
-	if (!code || typeof document == "undefined") return;
-	let head = document.head || document.getElementsByTagName("head")[0];
-	let style = document.createElement("style");
-	style.type = "text/css";
-	head.appendChild(style);
-	style.styleSheet ? style.styleSheet.cssText = code : style.appendChild(document.createTextNode(code));
-}
-var getAsset = (type) => {
-	switch (type) {
-		case "success": return SuccessIcon;
-		case "info": return InfoIcon;
-		case "warning": return WarningIcon;
-		case "error": return ErrorIcon;
-		default: return null;
-	}
-};
-var bars = Array(12).fill(0);
-var Loader = ({ visible, className }) => {
-	return /* @__PURE__ */ import_react.createElement("div", {
-		className: ["sonner-loading-wrapper", className].filter(Boolean).join(" "),
-		"data-visible": visible
-	}, /* @__PURE__ */ import_react.createElement("div", { className: "sonner-spinner" }, bars.map((_, i) => /* @__PURE__ */ import_react.createElement("div", {
-		className: "sonner-loading-bar",
-		key: `spinner-bar-${i}`
-	}))));
-};
-var SuccessIcon = /* @__PURE__ */ import_react.createElement("svg", {
-	xmlns: "http://www.w3.org/2000/svg",
-	viewBox: "0 0 20 20",
-	fill: "currentColor",
-	height: "20",
-	width: "20"
-}, /* @__PURE__ */ import_react.createElement("path", {
-	fillRule: "evenodd",
-	d: "M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z",
-	clipRule: "evenodd"
-}));
-var WarningIcon = /* @__PURE__ */ import_react.createElement("svg", {
-	xmlns: "http://www.w3.org/2000/svg",
-	viewBox: "0 0 24 24",
-	fill: "currentColor",
-	height: "20",
-	width: "20"
-}, /* @__PURE__ */ import_react.createElement("path", {
-	fillRule: "evenodd",
-	d: "M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z",
-	clipRule: "evenodd"
-}));
-var InfoIcon = /* @__PURE__ */ import_react.createElement("svg", {
-	xmlns: "http://www.w3.org/2000/svg",
-	viewBox: "0 0 20 20",
-	fill: "currentColor",
-	height: "20",
-	width: "20"
-}, /* @__PURE__ */ import_react.createElement("path", {
-	fillRule: "evenodd",
-	d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z",
-	clipRule: "evenodd"
-}));
-var ErrorIcon = /* @__PURE__ */ import_react.createElement("svg", {
-	xmlns: "http://www.w3.org/2000/svg",
-	viewBox: "0 0 20 20",
-	fill: "currentColor",
-	height: "20",
-	width: "20"
-}, /* @__PURE__ */ import_react.createElement("path", {
-	fillRule: "evenodd",
-	d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z",
-	clipRule: "evenodd"
-}));
-var CloseIcon = /* @__PURE__ */ import_react.createElement("svg", {
-	xmlns: "http://www.w3.org/2000/svg",
-	width: "12",
-	height: "12",
-	viewBox: "0 0 24 24",
-	fill: "none",
-	stroke: "currentColor",
-	strokeWidth: "1.5",
-	strokeLinecap: "round",
-	strokeLinejoin: "round"
-}, /* @__PURE__ */ import_react.createElement("line", {
-	x1: "18",
-	y1: "6",
-	x2: "6",
-	y2: "18"
-}), /* @__PURE__ */ import_react.createElement("line", {
-	x1: "6",
-	y1: "6",
-	x2: "18",
-	y2: "18"
-}));
-var useIsDocumentHidden = () => {
-	const [isDocumentHidden, setIsDocumentHidden] = import_react.useState(document.hidden);
-	import_react.useEffect(() => {
-		const callback = () => {
-			setIsDocumentHidden(document.hidden);
-		};
-		document.addEventListener("visibilitychange", callback);
-		return () => window.removeEventListener("visibilitychange", callback);
-	}, []);
-	return isDocumentHidden;
-};
-var toastsCounter = 1;
-var Observer = class {
-	constructor() {
-		this.subscribe = (subscriber) => {
-			this.subscribers.push(subscriber);
-			return () => {
-				const index = this.subscribers.indexOf(subscriber);
-				this.subscribers.splice(index, 1);
-			};
-		};
-		this.publish = (data) => {
-			this.subscribers.forEach((subscriber) => subscriber(data));
-		};
-		this.addToast = (data) => {
-			this.publish(data);
-			this.toasts = [...this.toasts, data];
-		};
-		this.create = (data) => {
-			var _data_id;
-			const { message, ...rest } = data;
-			const id = typeof (data == null ? void 0 : data.id) === "number" || ((_data_id = data.id) == null ? void 0 : _data_id.length) > 0 ? data.id : toastsCounter++;
-			const alreadyExists = this.toasts.find((toast) => {
-				return toast.id === id;
-			});
-			const dismissible = data.dismissible === void 0 ? true : data.dismissible;
-			if (this.dismissedToasts.has(id)) this.dismissedToasts.delete(id);
-			if (alreadyExists) this.toasts = this.toasts.map((toast) => {
-				if (toast.id === id) {
-					this.publish({
-						...toast,
-						...data,
-						id,
-						title: message
-					});
-					return {
-						...toast,
-						...data,
-						id,
-						dismissible,
-						title: message
-					};
-				}
-				return toast;
-			});
-			else this.addToast({
-				title: message,
-				...rest,
-				dismissible,
-				id
-			});
-			return id;
-		};
-		this.dismiss = (id) => {
-			if (id) {
-				this.dismissedToasts.add(id);
-				requestAnimationFrame(() => this.subscribers.forEach((subscriber) => subscriber({
-					id,
-					dismiss: true
-				})));
-			} else this.toasts.forEach((toast) => {
-				this.subscribers.forEach((subscriber) => subscriber({
-					id: toast.id,
-					dismiss: true
-				}));
-			});
-			return id;
-		};
-		this.message = (message, data) => {
-			return this.create({
-				...data,
-				message
-			});
-		};
-		this.error = (message, data) => {
-			return this.create({
-				...data,
-				message,
-				type: "error"
-			});
-		};
-		this.success = (message, data) => {
-			return this.create({
-				...data,
-				type: "success",
-				message
-			});
-		};
-		this.info = (message, data) => {
-			return this.create({
-				...data,
-				type: "info",
-				message
-			});
-		};
-		this.warning = (message, data) => {
-			return this.create({
-				...data,
-				type: "warning",
-				message
-			});
-		};
-		this.loading = (message, data) => {
-			return this.create({
-				...data,
-				type: "loading",
-				message
-			});
-		};
-		this.promise = (promise, data) => {
-			if (!data) return;
-			let id = void 0;
-			if (data.loading !== void 0) id = this.create({
-				...data,
-				promise,
-				type: "loading",
-				message: data.loading,
-				description: typeof data.description !== "function" ? data.description : void 0
-			});
-			const p = Promise.resolve(promise instanceof Function ? promise() : promise);
-			let shouldDismiss = id !== void 0;
-			let result;
-			const originalPromise = p.then(async (response) => {
-				result = ["resolve", response];
-				if (import_react.isValidElement(response)) {
-					shouldDismiss = false;
-					this.create({
-						id,
-						type: "default",
-						message: response
-					});
-				} else if (isHttpResponse(response) && !response.ok) {
-					shouldDismiss = false;
-					const promiseData = typeof data.error === "function" ? await data.error(`HTTP error! status: ${response.status}`) : data.error;
-					const description = typeof data.description === "function" ? await data.description(`HTTP error! status: ${response.status}`) : data.description;
-					const toastSettings = typeof promiseData === "object" && !import_react.isValidElement(promiseData) ? promiseData : { message: promiseData };
-					this.create({
-						id,
-						type: "error",
-						description,
-						...toastSettings
-					});
-				} else if (response instanceof Error) {
-					shouldDismiss = false;
-					const promiseData = typeof data.error === "function" ? await data.error(response) : data.error;
-					const description = typeof data.description === "function" ? await data.description(response) : data.description;
-					const toastSettings = typeof promiseData === "object" && !import_react.isValidElement(promiseData) ? promiseData : { message: promiseData };
-					this.create({
-						id,
-						type: "error",
-						description,
-						...toastSettings
-					});
-				} else if (data.success !== void 0) {
-					shouldDismiss = false;
-					const promiseData = typeof data.success === "function" ? await data.success(response) : data.success;
-					const description = typeof data.description === "function" ? await data.description(response) : data.description;
-					const toastSettings = typeof promiseData === "object" && !import_react.isValidElement(promiseData) ? promiseData : { message: promiseData };
-					this.create({
-						id,
-						type: "success",
-						description,
-						...toastSettings
-					});
-				}
-			}).catch(async (error) => {
-				result = ["reject", error];
-				if (data.error !== void 0) {
-					shouldDismiss = false;
-					const promiseData = typeof data.error === "function" ? await data.error(error) : data.error;
-					const description = typeof data.description === "function" ? await data.description(error) : data.description;
-					const toastSettings = typeof promiseData === "object" && !import_react.isValidElement(promiseData) ? promiseData : { message: promiseData };
-					this.create({
-						id,
-						type: "error",
-						description,
-						...toastSettings
-					});
-				}
-			}).finally(() => {
-				if (shouldDismiss) {
-					this.dismiss(id);
-					id = void 0;
-				}
-				data.finally == null || data.finally.call(data);
-			});
-			const unwrap = () => new Promise((resolve, reject) => originalPromise.then(() => result[0] === "reject" ? reject(result[1]) : resolve(result[1])).catch(reject));
-			if (typeof id !== "string" && typeof id !== "number") return { unwrap };
-			else return Object.assign(id, { unwrap });
-		};
-		this.custom = (jsx, data) => {
-			const id = (data == null ? void 0 : data.id) || toastsCounter++;
-			this.create({
-				jsx: jsx(id),
-				id,
-				...data
-			});
-			return id;
-		};
-		this.getActiveToasts = () => {
-			return this.toasts.filter((toast) => !this.dismissedToasts.has(toast.id));
-		};
-		this.subscribers = [];
-		this.toasts = [];
-		this.dismissedToasts = /* @__PURE__ */ new Set();
-	}
-};
-var ToastState = new Observer();
-var toastFunction = (message, data) => {
-	const id = (data == null ? void 0 : data.id) || toastsCounter++;
-	ToastState.addToast({
-		title: message,
-		...data,
-		id
-	});
-	return id;
-};
-var isHttpResponse = (data) => {
-	return data && typeof data === "object" && "ok" in data && typeof data.ok === "boolean" && "status" in data && typeof data.status === "number";
-};
-var basicToast = toastFunction;
-var getHistory = () => ToastState.toasts;
-var getToasts = () => ToastState.getActiveToasts();
-Object.assign(basicToast, {
-	success: ToastState.success,
-	info: ToastState.info,
-	warning: ToastState.warning,
-	error: ToastState.error,
-	custom: ToastState.custom,
-	message: ToastState.message,
-	promise: ToastState.promise,
-	dismiss: ToastState.dismiss,
-	loading: ToastState.loading
-}, {
-	getHistory,
-	getToasts
-});
-__insertCSS("[data-sonner-toaster][dir=ltr],html[dir=ltr]{--toast-icon-margin-start:-3px;--toast-icon-margin-end:4px;--toast-svg-margin-start:-1px;--toast-svg-margin-end:0px;--toast-button-margin-start:auto;--toast-button-margin-end:0;--toast-close-button-start:0;--toast-close-button-end:unset;--toast-close-button-transform:translate(-35%, -35%)}[data-sonner-toaster][dir=rtl],html[dir=rtl]{--toast-icon-margin-start:4px;--toast-icon-margin-end:-3px;--toast-svg-margin-start:0px;--toast-svg-margin-end:-1px;--toast-button-margin-start:0;--toast-button-margin-end:auto;--toast-close-button-start:unset;--toast-close-button-end:0;--toast-close-button-transform:translate(35%, -35%)}[data-sonner-toaster]{position:fixed;width:var(--width);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;--gray1:hsl(0, 0%, 99%);--gray2:hsl(0, 0%, 97.3%);--gray3:hsl(0, 0%, 95.1%);--gray4:hsl(0, 0%, 93%);--gray5:hsl(0, 0%, 90.9%);--gray6:hsl(0, 0%, 88.7%);--gray7:hsl(0, 0%, 85.8%);--gray8:hsl(0, 0%, 78%);--gray9:hsl(0, 0%, 56.1%);--gray10:hsl(0, 0%, 52.3%);--gray11:hsl(0, 0%, 43.5%);--gray12:hsl(0, 0%, 9%);--border-radius:8px;box-sizing:border-box;padding:0;margin:0;list-style:none;outline:0;z-index:999999999;transition:transform .4s ease}@media (hover:none) and (pointer:coarse){[data-sonner-toaster][data-lifted=true]{transform:none}}[data-sonner-toaster][data-x-position=right]{right:var(--offset-right)}[data-sonner-toaster][data-x-position=left]{left:var(--offset-left)}[data-sonner-toaster][data-x-position=center]{left:50%;transform:translateX(-50%)}[data-sonner-toaster][data-y-position=top]{top:var(--offset-top)}[data-sonner-toaster][data-y-position=bottom]{bottom:var(--offset-bottom)}[data-sonner-toast]{--y:translateY(100%);--lift-amount:calc(var(--lift) * var(--gap));z-index:var(--z-index);position:absolute;opacity:0;transform:var(--y);touch-action:none;transition:transform .4s,opacity .4s,height .4s,box-shadow .2s;box-sizing:border-box;outline:0;overflow-wrap:anywhere}[data-sonner-toast][data-styled=true]{padding:16px;background:var(--normal-bg);border:1px solid var(--normal-border);color:var(--normal-text);border-radius:var(--border-radius);box-shadow:0 4px 12px rgba(0,0,0,.1);width:var(--width);font-size:13px;display:flex;align-items:center;gap:6px}[data-sonner-toast]:focus-visible{box-shadow:0 4px 12px rgba(0,0,0,.1),0 0 0 2px rgba(0,0,0,.2)}[data-sonner-toast][data-y-position=top]{top:0;--y:translateY(-100%);--lift:1;--lift-amount:calc(1 * var(--gap))}[data-sonner-toast][data-y-position=bottom]{bottom:0;--y:translateY(100%);--lift:-1;--lift-amount:calc(var(--lift) * var(--gap))}[data-sonner-toast][data-styled=true] [data-description]{font-weight:400;line-height:1.4;color:#3f3f3f}[data-rich-colors=true][data-sonner-toast][data-styled=true] [data-description]{color:inherit}[data-sonner-toaster][data-sonner-theme=dark] [data-description]{color:#e8e8e8}[data-sonner-toast][data-styled=true] [data-title]{font-weight:500;line-height:1.5;color:inherit}[data-sonner-toast][data-styled=true] [data-icon]{display:flex;height:16px;width:16px;position:relative;justify-content:flex-start;align-items:center;flex-shrink:0;margin-left:var(--toast-icon-margin-start);margin-right:var(--toast-icon-margin-end)}[data-sonner-toast][data-promise=true] [data-icon]>svg{opacity:0;transform:scale(.8);transform-origin:center;animation:sonner-fade-in .3s ease forwards}[data-sonner-toast][data-styled=true] [data-icon]>*{flex-shrink:0}[data-sonner-toast][data-styled=true] [data-icon] svg{margin-left:var(--toast-svg-margin-start);margin-right:var(--toast-svg-margin-end)}[data-sonner-toast][data-styled=true] [data-content]{display:flex;flex-direction:column;gap:2px}[data-sonner-toast][data-styled=true] [data-button]{border-radius:4px;padding-left:8px;padding-right:8px;height:24px;font-size:12px;color:var(--normal-bg);background:var(--normal-text);margin-left:var(--toast-button-margin-start);margin-right:var(--toast-button-margin-end);border:none;font-weight:500;cursor:pointer;outline:0;display:flex;align-items:center;flex-shrink:0;transition:opacity .4s,box-shadow .2s}[data-sonner-toast][data-styled=true] [data-button]:focus-visible{box-shadow:0 0 0 2px rgba(0,0,0,.4)}[data-sonner-toast][data-styled=true] [data-button]:first-of-type{margin-left:var(--toast-button-margin-start);margin-right:var(--toast-button-margin-end)}[data-sonner-toast][data-styled=true] [data-cancel]{color:var(--normal-text);background:rgba(0,0,0,.08)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast][data-styled=true] [data-cancel]{background:rgba(255,255,255,.3)}[data-sonner-toast][data-styled=true] [data-close-button]{position:absolute;left:var(--toast-close-button-start);right:var(--toast-close-button-end);top:0;height:20px;width:20px;display:flex;justify-content:center;align-items:center;padding:0;color:var(--gray12);background:var(--normal-bg);border:1px solid var(--gray4);transform:var(--toast-close-button-transform);border-radius:50%;cursor:pointer;z-index:1;transition:opacity .1s,background .2s,border-color .2s}[data-sonner-toast][data-styled=true] [data-close-button]:focus-visible{box-shadow:0 4px 12px rgba(0,0,0,.1),0 0 0 2px rgba(0,0,0,.2)}[data-sonner-toast][data-styled=true] [data-disabled=true]{cursor:not-allowed}[data-sonner-toast][data-styled=true]:hover [data-close-button]:hover{background:var(--gray2);border-color:var(--gray5)}[data-sonner-toast][data-swiping=true]::before{content:'';position:absolute;left:-100%;right:-100%;height:100%;z-index:-1}[data-sonner-toast][data-y-position=top][data-swiping=true]::before{bottom:50%;transform:scaleY(3) translateY(50%)}[data-sonner-toast][data-y-position=bottom][data-swiping=true]::before{top:50%;transform:scaleY(3) translateY(-50%)}[data-sonner-toast][data-swiping=false][data-removed=true]::before{content:'';position:absolute;inset:0;transform:scaleY(2)}[data-sonner-toast][data-expanded=true]::after{content:'';position:absolute;left:0;height:calc(var(--gap) + 1px);bottom:100%;width:100%}[data-sonner-toast][data-mounted=true]{--y:translateY(0);opacity:1}[data-sonner-toast][data-expanded=false][data-front=false]{--scale:var(--toasts-before) * 0.05 + 1;--y:translateY(calc(var(--lift-amount) * var(--toasts-before))) scale(calc(-1 * var(--scale)));height:var(--front-toast-height)}[data-sonner-toast]>*{transition:opacity .4s}[data-sonner-toast][data-x-position=right]{right:0}[data-sonner-toast][data-x-position=left]{left:0}[data-sonner-toast][data-expanded=false][data-front=false][data-styled=true]>*{opacity:0}[data-sonner-toast][data-visible=false]{opacity:0;pointer-events:none}[data-sonner-toast][data-mounted=true][data-expanded=true]{--y:translateY(calc(var(--lift) * var(--offset)));height:var(--initial-height)}[data-sonner-toast][data-removed=true][data-front=true][data-swipe-out=false]{--y:translateY(calc(var(--lift) * -100%));opacity:0}[data-sonner-toast][data-removed=true][data-front=false][data-swipe-out=false][data-expanded=true]{--y:translateY(calc(var(--lift) * var(--offset) + var(--lift) * -100%));opacity:0}[data-sonner-toast][data-removed=true][data-front=false][data-swipe-out=false][data-expanded=false]{--y:translateY(40%);opacity:0;transition:transform .5s,opacity .2s}[data-sonner-toast][data-removed=true][data-front=false]::before{height:calc(var(--initial-height) + 20%)}[data-sonner-toast][data-swiping=true]{transform:var(--y) translateY(var(--swipe-amount-y,0)) translateX(var(--swipe-amount-x,0));transition:none}[data-sonner-toast][data-swiped=true]{user-select:none}[data-sonner-toast][data-swipe-out=true][data-y-position=bottom],[data-sonner-toast][data-swipe-out=true][data-y-position=top]{animation-duration:.2s;animation-timing-function:ease-out;animation-fill-mode:forwards}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=left]{animation-name:swipe-out-left}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=right]{animation-name:swipe-out-right}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=up]{animation-name:swipe-out-up}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=down]{animation-name:swipe-out-down}@keyframes swipe-out-left{from{transform:var(--y) translateX(var(--swipe-amount-x));opacity:1}to{transform:var(--y) translateX(calc(var(--swipe-amount-x) - 100%));opacity:0}}@keyframes swipe-out-right{from{transform:var(--y) translateX(var(--swipe-amount-x));opacity:1}to{transform:var(--y) translateX(calc(var(--swipe-amount-x) + 100%));opacity:0}}@keyframes swipe-out-up{from{transform:var(--y) translateY(var(--swipe-amount-y));opacity:1}to{transform:var(--y) translateY(calc(var(--swipe-amount-y) - 100%));opacity:0}}@keyframes swipe-out-down{from{transform:var(--y) translateY(var(--swipe-amount-y));opacity:1}to{transform:var(--y) translateY(calc(var(--swipe-amount-y) + 100%));opacity:0}}@media (max-width:600px){[data-sonner-toaster]{position:fixed;right:var(--mobile-offset-right);left:var(--mobile-offset-left);width:100%}[data-sonner-toaster][dir=rtl]{left:calc(var(--mobile-offset-left) * -1)}[data-sonner-toaster] [data-sonner-toast]{left:0;right:0;width:calc(100% - var(--mobile-offset-left) * 2)}[data-sonner-toaster][data-x-position=left]{left:var(--mobile-offset-left)}[data-sonner-toaster][data-y-position=bottom]{bottom:var(--mobile-offset-bottom)}[data-sonner-toaster][data-y-position=top]{top:var(--mobile-offset-top)}[data-sonner-toaster][data-x-position=center]{left:var(--mobile-offset-left);right:var(--mobile-offset-right);transform:none}}[data-sonner-toaster][data-sonner-theme=light]{--normal-bg:#fff;--normal-border:var(--gray4);--normal-text:var(--gray12);--success-bg:hsl(143, 85%, 96%);--success-border:hsl(145, 92%, 87%);--success-text:hsl(140, 100%, 27%);--info-bg:hsl(208, 100%, 97%);--info-border:hsl(221, 91%, 93%);--info-text:hsl(210, 92%, 45%);--warning-bg:hsl(49, 100%, 97%);--warning-border:hsl(49, 91%, 84%);--warning-text:hsl(31, 92%, 45%);--error-bg:hsl(359, 100%, 97%);--error-border:hsl(359, 100%, 94%);--error-text:hsl(360, 100%, 45%)}[data-sonner-toaster][data-sonner-theme=light] [data-sonner-toast][data-invert=true]{--normal-bg:#000;--normal-border:hsl(0, 0%, 20%);--normal-text:var(--gray1)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast][data-invert=true]{--normal-bg:#fff;--normal-border:var(--gray3);--normal-text:var(--gray12)}[data-sonner-toaster][data-sonner-theme=dark]{--normal-bg:#000;--normal-bg-hover:hsl(0, 0%, 12%);--normal-border:hsl(0, 0%, 20%);--normal-border-hover:hsl(0, 0%, 25%);--normal-text:var(--gray1);--success-bg:hsl(150, 100%, 6%);--success-border:hsl(147, 100%, 12%);--success-text:hsl(150, 86%, 65%);--info-bg:hsl(215, 100%, 6%);--info-border:hsl(223, 43%, 17%);--info-text:hsl(216, 87%, 65%);--warning-bg:hsl(64, 100%, 6%);--warning-border:hsl(60, 100%, 9%);--warning-text:hsl(46, 87%, 65%);--error-bg:hsl(358, 76%, 10%);--error-border:hsl(357, 89%, 16%);--error-text:hsl(358, 100%, 81%)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast] [data-close-button]{background:var(--normal-bg);border-color:var(--normal-border);color:var(--normal-text)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast] [data-close-button]:hover{background:var(--normal-bg-hover);border-color:var(--normal-border-hover)}[data-rich-colors=true][data-sonner-toast][data-type=success]{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text)}[data-rich-colors=true][data-sonner-toast][data-type=success] [data-close-button]{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text)}[data-rich-colors=true][data-sonner-toast][data-type=info]{background:var(--info-bg);border-color:var(--info-border);color:var(--info-text)}[data-rich-colors=true][data-sonner-toast][data-type=info] [data-close-button]{background:var(--info-bg);border-color:var(--info-border);color:var(--info-text)}[data-rich-colors=true][data-sonner-toast][data-type=warning]{background:var(--warning-bg);border-color:var(--warning-border);color:var(--warning-text)}[data-rich-colors=true][data-sonner-toast][data-type=warning] [data-close-button]{background:var(--warning-bg);border-color:var(--warning-border);color:var(--warning-text)}[data-rich-colors=true][data-sonner-toast][data-type=error]{background:var(--error-bg);border-color:var(--error-border);color:var(--error-text)}[data-rich-colors=true][data-sonner-toast][data-type=error] [data-close-button]{background:var(--error-bg);border-color:var(--error-border);color:var(--error-text)}.sonner-loading-wrapper{--size:16px;height:var(--size);width:var(--size);position:absolute;inset:0;z-index:10}.sonner-loading-wrapper[data-visible=false]{transform-origin:center;animation:sonner-fade-out .2s ease forwards}.sonner-spinner{position:relative;top:50%;left:50%;height:var(--size);width:var(--size)}.sonner-loading-bar{animation:sonner-spin 1.2s linear infinite;background:var(--gray11);border-radius:6px;height:8%;left:-10%;position:absolute;top:-3.9%;width:24%}.sonner-loading-bar:first-child{animation-delay:-1.2s;transform:rotate(.0001deg) translate(146%)}.sonner-loading-bar:nth-child(2){animation-delay:-1.1s;transform:rotate(30deg) translate(146%)}.sonner-loading-bar:nth-child(3){animation-delay:-1s;transform:rotate(60deg) translate(146%)}.sonner-loading-bar:nth-child(4){animation-delay:-.9s;transform:rotate(90deg) translate(146%)}.sonner-loading-bar:nth-child(5){animation-delay:-.8s;transform:rotate(120deg) translate(146%)}.sonner-loading-bar:nth-child(6){animation-delay:-.7s;transform:rotate(150deg) translate(146%)}.sonner-loading-bar:nth-child(7){animation-delay:-.6s;transform:rotate(180deg) translate(146%)}.sonner-loading-bar:nth-child(8){animation-delay:-.5s;transform:rotate(210deg) translate(146%)}.sonner-loading-bar:nth-child(9){animation-delay:-.4s;transform:rotate(240deg) translate(146%)}.sonner-loading-bar:nth-child(10){animation-delay:-.3s;transform:rotate(270deg) translate(146%)}.sonner-loading-bar:nth-child(11){animation-delay:-.2s;transform:rotate(300deg) translate(146%)}.sonner-loading-bar:nth-child(12){animation-delay:-.1s;transform:rotate(330deg) translate(146%)}@keyframes sonner-fade-in{0%{opacity:0;transform:scale(.8)}100%{opacity:1;transform:scale(1)}}@keyframes sonner-fade-out{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.8)}}@keyframes sonner-spin{0%{opacity:1}100%{opacity:.15}}@media (prefers-reduced-motion){.sonner-loading-bar,[data-sonner-toast],[data-sonner-toast]>*{transition:none!important;animation:none!important}}.sonner-loader{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);transform-origin:center;transition:opacity .2s,transform .2s}.sonner-loader[data-visible=false]{opacity:0;transform:scale(.8) translate(-50%,-50%)}");
-function isAction(action) {
-	return action.label !== void 0;
-}
-var VISIBLE_TOASTS_AMOUNT = 3;
-var VIEWPORT_OFFSET = "24px";
-var MOBILE_VIEWPORT_OFFSET = "16px";
-var TOAST_LIFETIME = 4e3;
-var TOAST_WIDTH = 356;
-var GAP = 14;
-var SWIPE_THRESHOLD = 45;
-var TIME_BEFORE_UNMOUNT = 200;
-function cn(...classes) {
-	return classes.filter(Boolean).join(" ");
-}
-function getDefaultSwipeDirections(position) {
-	const [y, x] = position.split("-");
-	const directions = [];
-	if (y) directions.push(y);
-	if (x) directions.push(x);
-	return directions;
-}
-var Toast = (props) => {
-	var _toast_classNames, _toast_classNames1, _toast_classNames2, _toast_classNames3, _toast_classNames4, _toast_classNames5, _toast_classNames6, _toast_classNames7, _toast_classNames8;
-	const { invert: ToasterInvert, toast, unstyled, interacting, setHeights, visibleToasts, heights, index, toasts, expanded, removeToast, defaultRichColors, closeButton: closeButtonFromToaster, style, cancelButtonStyle, actionButtonStyle, className = "", descriptionClassName = "", duration: durationFromToaster, position, gap, expandByDefault, classNames, icons, closeButtonAriaLabel = "Close toast" } = props;
-	const [swipeDirection, setSwipeDirection] = import_react.useState(null);
-	const [swipeOutDirection, setSwipeOutDirection] = import_react.useState(null);
-	const [mounted, setMounted] = import_react.useState(false);
-	const [removed, setRemoved] = import_react.useState(false);
-	const [swiping, setSwiping] = import_react.useState(false);
-	const [swipeOut, setSwipeOut] = import_react.useState(false);
-	const [isSwiped, setIsSwiped] = import_react.useState(false);
-	const [offsetBeforeRemove, setOffsetBeforeRemove] = import_react.useState(0);
-	const [initialHeight, setInitialHeight] = import_react.useState(0);
-	const remainingTime = import_react.useRef(toast.duration || durationFromToaster || TOAST_LIFETIME);
-	const dragStartTime = import_react.useRef(null);
-	const toastRef = import_react.useRef(null);
-	const isFront = index === 0;
-	const isVisible = index + 1 <= visibleToasts;
-	const toastType = toast.type;
-	const dismissible = toast.dismissible !== false;
-	const toastClassname = toast.className || "";
-	const toastDescriptionClassname = toast.descriptionClassName || "";
-	const heightIndex = import_react.useMemo(() => heights.findIndex((height) => height.toastId === toast.id) || 0, [heights, toast.id]);
-	const closeButton = import_react.useMemo(() => {
-		var _toast_closeButton;
-		return (_toast_closeButton = toast.closeButton) != null ? _toast_closeButton : closeButtonFromToaster;
-	}, [toast.closeButton, closeButtonFromToaster]);
-	const duration = import_react.useMemo(() => toast.duration || durationFromToaster || TOAST_LIFETIME, [toast.duration, durationFromToaster]);
-	const closeTimerStartTimeRef = import_react.useRef(0);
-	const offset = import_react.useRef(0);
-	const lastCloseTimerStartTimeRef = import_react.useRef(0);
-	const pointerStartRef = import_react.useRef(null);
-	const [y, x] = position.split("-");
-	const toastsHeightBefore = import_react.useMemo(() => {
-		return heights.reduce((prev, curr, reducerIndex) => {
-			if (reducerIndex >= heightIndex) return prev;
-			return prev + curr.height;
-		}, 0);
-	}, [heights, heightIndex]);
-	const isDocumentHidden = useIsDocumentHidden();
-	const invert = toast.invert || ToasterInvert;
-	const disabled = toastType === "loading";
-	offset.current = import_react.useMemo(() => heightIndex * gap + toastsHeightBefore, [heightIndex, toastsHeightBefore]);
-	import_react.useEffect(() => {
-		remainingTime.current = duration;
-	}, [duration]);
-	import_react.useEffect(() => {
-		setMounted(true);
-	}, []);
-	import_react.useEffect(() => {
-		const toastNode = toastRef.current;
-		if (toastNode) {
-			const height = toastNode.getBoundingClientRect().height;
-			setInitialHeight(height);
-			setHeights((h) => [{
-				toastId: toast.id,
-				height,
-				position: toast.position
-			}, ...h]);
-			return () => setHeights((h) => h.filter((height) => height.toastId !== toast.id));
-		}
-	}, [setHeights, toast.id]);
-	import_react.useLayoutEffect(() => {
-		if (!mounted) return;
-		const toastNode = toastRef.current;
-		const originalHeight = toastNode.style.height;
-		toastNode.style.height = "auto";
-		const newHeight = toastNode.getBoundingClientRect().height;
-		toastNode.style.height = originalHeight;
-		setInitialHeight(newHeight);
-		setHeights((heights) => {
-			if (!heights.find((height) => height.toastId === toast.id)) return [{
-				toastId: toast.id,
-				height: newHeight,
-				position: toast.position
-			}, ...heights];
-			else return heights.map((height) => height.toastId === toast.id ? {
-				...height,
-				height: newHeight
-			} : height);
-		});
-	}, [
-		mounted,
-		toast.title,
-		toast.description,
-		setHeights,
-		toast.id,
-		toast.jsx,
-		toast.action,
-		toast.cancel
-	]);
-	const deleteToast = import_react.useCallback(() => {
-		setRemoved(true);
-		setOffsetBeforeRemove(offset.current);
-		setHeights((h) => h.filter((height) => height.toastId !== toast.id));
-		setTimeout(() => {
-			removeToast(toast);
-		}, TIME_BEFORE_UNMOUNT);
-	}, [
-		toast,
-		removeToast,
-		setHeights,
-		offset
-	]);
-	import_react.useEffect(() => {
-		if (toast.promise && toastType === "loading" || toast.duration === Infinity || toast.type === "loading") return;
-		let timeoutId;
-		const pauseTimer = () => {
-			if (lastCloseTimerStartTimeRef.current < closeTimerStartTimeRef.current) {
-				const elapsedTime = (/* @__PURE__ */ new Date()).getTime() - closeTimerStartTimeRef.current;
-				remainingTime.current = remainingTime.current - elapsedTime;
-			}
-			lastCloseTimerStartTimeRef.current = (/* @__PURE__ */ new Date()).getTime();
-		};
-		const startTimer = () => {
-			if (remainingTime.current === Infinity) return;
-			closeTimerStartTimeRef.current = (/* @__PURE__ */ new Date()).getTime();
-			timeoutId = setTimeout(() => {
-				toast.onAutoClose == null || toast.onAutoClose.call(toast, toast);
-				deleteToast();
-			}, remainingTime.current);
-		};
-		if (expanded || interacting || isDocumentHidden) pauseTimer();
-		else startTimer();
-		return () => clearTimeout(timeoutId);
-	}, [
-		expanded,
-		interacting,
-		toast,
-		toastType,
-		isDocumentHidden,
-		deleteToast
-	]);
-	import_react.useEffect(() => {
-		if (toast.delete) {
-			deleteToast();
-			toast.onDismiss == null || toast.onDismiss.call(toast, toast);
-		}
-	}, [deleteToast, toast.delete]);
-	function getLoadingIcon() {
-		var _toast_classNames;
-		if (icons == null ? void 0 : icons.loading) {
-			var _toast_classNames1;
-			return /* @__PURE__ */ import_react.createElement("div", {
-				className: cn(classNames == null ? void 0 : classNames.loader, toast == null ? void 0 : (_toast_classNames1 = toast.classNames) == null ? void 0 : _toast_classNames1.loader, "sonner-loader"),
-				"data-visible": toastType === "loading"
-			}, icons.loading);
-		}
-		return /* @__PURE__ */ import_react.createElement(Loader, {
-			className: cn(classNames == null ? void 0 : classNames.loader, toast == null ? void 0 : (_toast_classNames = toast.classNames) == null ? void 0 : _toast_classNames.loader),
-			visible: toastType === "loading"
-		});
-	}
-	const icon = toast.icon || (icons == null ? void 0 : icons[toastType]) || getAsset(toastType);
-	var _toast_richColors, _icons_close;
-	return /* @__PURE__ */ import_react.createElement("li", {
-		tabIndex: 0,
-		ref: toastRef,
-		className: cn(className, toastClassname, classNames == null ? void 0 : classNames.toast, toast == null ? void 0 : (_toast_classNames = toast.classNames) == null ? void 0 : _toast_classNames.toast, classNames == null ? void 0 : classNames.default, classNames == null ? void 0 : classNames[toastType], toast == null ? void 0 : (_toast_classNames1 = toast.classNames) == null ? void 0 : _toast_classNames1[toastType]),
-		"data-sonner-toast": "",
-		"data-rich-colors": (_toast_richColors = toast.richColors) != null ? _toast_richColors : defaultRichColors,
-		"data-styled": !Boolean(toast.jsx || toast.unstyled || unstyled),
-		"data-mounted": mounted,
-		"data-promise": Boolean(toast.promise),
-		"data-swiped": isSwiped,
-		"data-removed": removed,
-		"data-visible": isVisible,
-		"data-y-position": y,
-		"data-x-position": x,
-		"data-index": index,
-		"data-front": isFront,
-		"data-swiping": swiping,
-		"data-dismissible": dismissible,
-		"data-type": toastType,
-		"data-invert": invert,
-		"data-swipe-out": swipeOut,
-		"data-swipe-direction": swipeOutDirection,
-		"data-expanded": Boolean(expanded || expandByDefault && mounted),
-		"data-testid": toast.testId,
-		style: {
-			"--index": index,
-			"--toasts-before": index,
-			"--z-index": toasts.length - index,
-			"--offset": `${removed ? offsetBeforeRemove : offset.current}px`,
-			"--initial-height": expandByDefault ? "auto" : `${initialHeight}px`,
-			...style,
-			...toast.style
-		},
-		onDragEnd: () => {
-			setSwiping(false);
-			setSwipeDirection(null);
-			pointerStartRef.current = null;
-		},
-		onPointerDown: (event) => {
-			if (event.button === 2) return;
-			if (disabled || !dismissible) return;
-			dragStartTime.current = /* @__PURE__ */ new Date();
-			setOffsetBeforeRemove(offset.current);
-			event.target.setPointerCapture(event.pointerId);
-			if (event.target.tagName === "BUTTON") return;
-			setSwiping(true);
-			pointerStartRef.current = {
-				x: event.clientX,
-				y: event.clientY
-			};
-		},
-		onPointerUp: () => {
-			var _toastRef_current, _toastRef_current1, _dragStartTime_current;
-			if (swipeOut || !dismissible) return;
-			pointerStartRef.current = null;
-			const swipeAmountX = Number(((_toastRef_current = toastRef.current) == null ? void 0 : _toastRef_current.style.getPropertyValue("--swipe-amount-x").replace("px", "")) || 0);
-			const swipeAmountY = Number(((_toastRef_current1 = toastRef.current) == null ? void 0 : _toastRef_current1.style.getPropertyValue("--swipe-amount-y").replace("px", "")) || 0);
-			const timeTaken = (/* @__PURE__ */ new Date()).getTime() - ((_dragStartTime_current = dragStartTime.current) == null ? void 0 : _dragStartTime_current.getTime());
-			const swipeAmount = swipeDirection === "x" ? swipeAmountX : swipeAmountY;
-			const velocity = Math.abs(swipeAmount) / timeTaken;
-			if (Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > .11) {
-				setOffsetBeforeRemove(offset.current);
-				toast.onDismiss == null || toast.onDismiss.call(toast, toast);
-				if (swipeDirection === "x") setSwipeOutDirection(swipeAmountX > 0 ? "right" : "left");
-				else setSwipeOutDirection(swipeAmountY > 0 ? "down" : "up");
-				deleteToast();
-				setSwipeOut(true);
-				return;
-			} else {
-				var _toastRef_current2, _toastRef_current3;
-				(_toastRef_current2 = toastRef.current) == null || _toastRef_current2.style.setProperty("--swipe-amount-x", `0px`);
-				(_toastRef_current3 = toastRef.current) == null || _toastRef_current3.style.setProperty("--swipe-amount-y", `0px`);
-			}
-			setIsSwiped(false);
-			setSwiping(false);
-			setSwipeDirection(null);
-		},
-		onPointerMove: (event) => {
-			var _window_getSelection, _toastRef_current, _toastRef_current1;
-			if (!pointerStartRef.current || !dismissible) return;
-			if (((_window_getSelection = window.getSelection()) == null ? void 0 : _window_getSelection.toString().length) > 0) return;
-			const yDelta = event.clientY - pointerStartRef.current.y;
-			const xDelta = event.clientX - pointerStartRef.current.x;
-			var _props_swipeDirections;
-			const swipeDirections = (_props_swipeDirections = props.swipeDirections) != null ? _props_swipeDirections : getDefaultSwipeDirections(position);
-			if (!swipeDirection && (Math.abs(xDelta) > 1 || Math.abs(yDelta) > 1)) setSwipeDirection(Math.abs(xDelta) > Math.abs(yDelta) ? "x" : "y");
-			let swipeAmount = {
-				x: 0,
-				y: 0
-			};
-			const getDampening = (delta) => {
-				return 1 / (1.5 + Math.abs(delta) / 20);
-			};
-			if (swipeDirection === "y") {
-				if (swipeDirections.includes("top") || swipeDirections.includes("bottom")) if (swipeDirections.includes("top") && yDelta < 0 || swipeDirections.includes("bottom") && yDelta > 0) swipeAmount.y = yDelta;
-				else {
-					const dampenedDelta = yDelta * getDampening(yDelta);
-					swipeAmount.y = Math.abs(dampenedDelta) < Math.abs(yDelta) ? dampenedDelta : yDelta;
-				}
-			} else if (swipeDirection === "x") {
-				if (swipeDirections.includes("left") || swipeDirections.includes("right")) if (swipeDirections.includes("left") && xDelta < 0 || swipeDirections.includes("right") && xDelta > 0) swipeAmount.x = xDelta;
-				else {
-					const dampenedDelta = xDelta * getDampening(xDelta);
-					swipeAmount.x = Math.abs(dampenedDelta) < Math.abs(xDelta) ? dampenedDelta : xDelta;
-				}
-			}
-			if (Math.abs(swipeAmount.x) > 0 || Math.abs(swipeAmount.y) > 0) setIsSwiped(true);
-			(_toastRef_current = toastRef.current) == null || _toastRef_current.style.setProperty("--swipe-amount-x", `${swipeAmount.x}px`);
-			(_toastRef_current1 = toastRef.current) == null || _toastRef_current1.style.setProperty("--swipe-amount-y", `${swipeAmount.y}px`);
-		}
-	}, closeButton && !toast.jsx && toastType !== "loading" ? /* @__PURE__ */ import_react.createElement("button", {
-		"aria-label": closeButtonAriaLabel,
-		"data-disabled": disabled,
-		"data-close-button": true,
-		onClick: disabled || !dismissible ? () => {} : () => {
-			deleteToast();
-			toast.onDismiss == null || toast.onDismiss.call(toast, toast);
-		},
-		className: cn(classNames == null ? void 0 : classNames.closeButton, toast == null ? void 0 : (_toast_classNames2 = toast.classNames) == null ? void 0 : _toast_classNames2.closeButton)
-	}, (_icons_close = icons == null ? void 0 : icons.close) != null ? _icons_close : CloseIcon) : null, (toastType || toast.icon || toast.promise) && toast.icon !== null && ((icons == null ? void 0 : icons[toastType]) !== null || toast.icon) ? /* @__PURE__ */ import_react.createElement("div", {
-		"data-icon": "",
-		className: cn(classNames == null ? void 0 : classNames.icon, toast == null ? void 0 : (_toast_classNames3 = toast.classNames) == null ? void 0 : _toast_classNames3.icon)
-	}, toast.promise || toast.type === "loading" && !toast.icon ? toast.icon || getLoadingIcon() : null, toast.type !== "loading" ? icon : null) : null, /* @__PURE__ */ import_react.createElement("div", {
-		"data-content": "",
-		className: cn(classNames == null ? void 0 : classNames.content, toast == null ? void 0 : (_toast_classNames4 = toast.classNames) == null ? void 0 : _toast_classNames4.content)
-	}, /* @__PURE__ */ import_react.createElement("div", {
-		"data-title": "",
-		className: cn(classNames == null ? void 0 : classNames.title, toast == null ? void 0 : (_toast_classNames5 = toast.classNames) == null ? void 0 : _toast_classNames5.title)
-	}, toast.jsx ? toast.jsx : typeof toast.title === "function" ? toast.title() : toast.title), toast.description ? /* @__PURE__ */ import_react.createElement("div", {
-		"data-description": "",
-		className: cn(descriptionClassName, toastDescriptionClassname, classNames == null ? void 0 : classNames.description, toast == null ? void 0 : (_toast_classNames6 = toast.classNames) == null ? void 0 : _toast_classNames6.description)
-	}, typeof toast.description === "function" ? toast.description() : toast.description) : null), /* @__PURE__ */ import_react.isValidElement(toast.cancel) ? toast.cancel : toast.cancel && isAction(toast.cancel) ? /* @__PURE__ */ import_react.createElement("button", {
-		"data-button": true,
-		"data-cancel": true,
-		style: toast.cancelButtonStyle || cancelButtonStyle,
-		onClick: (event) => {
-			if (!isAction(toast.cancel)) return;
-			if (!dismissible) return;
-			toast.cancel.onClick == null || toast.cancel.onClick.call(toast.cancel, event);
-			deleteToast();
-		},
-		className: cn(classNames == null ? void 0 : classNames.cancelButton, toast == null ? void 0 : (_toast_classNames7 = toast.classNames) == null ? void 0 : _toast_classNames7.cancelButton)
-	}, toast.cancel.label) : null, /* @__PURE__ */ import_react.isValidElement(toast.action) ? toast.action : toast.action && isAction(toast.action) ? /* @__PURE__ */ import_react.createElement("button", {
-		"data-button": true,
-		"data-action": true,
-		style: toast.actionButtonStyle || actionButtonStyle,
-		onClick: (event) => {
-			if (!isAction(toast.action)) return;
-			toast.action.onClick == null || toast.action.onClick.call(toast.action, event);
-			if (event.defaultPrevented) return;
-			deleteToast();
-		},
-		className: cn(classNames == null ? void 0 : classNames.actionButton, toast == null ? void 0 : (_toast_classNames8 = toast.classNames) == null ? void 0 : _toast_classNames8.actionButton)
-	}, toast.action.label) : null);
-};
-function getDocumentDirection() {
-	if (typeof window === "undefined") return "ltr";
-	if (typeof document === "undefined") return "ltr";
-	const dirAttribute = document.documentElement.getAttribute("dir");
-	if (dirAttribute === "auto" || !dirAttribute) return window.getComputedStyle(document.documentElement).direction;
-	return dirAttribute;
-}
-function assignOffset(defaultOffset, mobileOffset) {
-	const styles = {};
-	[defaultOffset, mobileOffset].forEach((offset, index) => {
-		const isMobile = index === 1;
-		const prefix = isMobile ? "--mobile-offset" : "--offset";
-		const defaultValue = isMobile ? MOBILE_VIEWPORT_OFFSET : VIEWPORT_OFFSET;
-		function assignAll(offset) {
-			[
-				"top",
-				"right",
-				"bottom",
-				"left"
-			].forEach((key) => {
-				styles[`${prefix}-${key}`] = typeof offset === "number" ? `${offset}px` : offset;
-			});
-		}
-		if (typeof offset === "number" || typeof offset === "string") assignAll(offset);
-		else if (typeof offset === "object") [
-			"top",
-			"right",
-			"bottom",
-			"left"
-		].forEach((key) => {
-			if (offset[key] === void 0) styles[`${prefix}-${key}`] = defaultValue;
-			else styles[`${prefix}-${key}`] = typeof offset[key] === "number" ? `${offset[key]}px` : offset[key];
-		});
-		else assignAll(defaultValue);
-	});
-	return styles;
-}
-var Toaster$1 = /* @__PURE__ */ import_react.forwardRef(function Toaster(props, ref) {
-	const { id, invert, position = "bottom-right", hotkey = ["altKey", "KeyT"], expand, closeButton, className, offset, mobileOffset, theme = "light", richColors, duration, style, visibleToasts = VISIBLE_TOASTS_AMOUNT, toastOptions, dir = getDocumentDirection(), gap = GAP, icons, containerAriaLabel = "Notifications" } = props;
-	const [toasts, setToasts] = import_react.useState([]);
-	const filteredToasts = import_react.useMemo(() => {
-		if (id) return toasts.filter((toast) => toast.toasterId === id);
-		return toasts.filter((toast) => !toast.toasterId);
-	}, [toasts, id]);
-	const possiblePositions = import_react.useMemo(() => {
-		return Array.from(new Set([position].concat(filteredToasts.filter((toast) => toast.position).map((toast) => toast.position))));
-	}, [filteredToasts, position]);
-	const [heights, setHeights] = import_react.useState([]);
-	const [expanded, setExpanded] = import_react.useState(false);
-	const [interacting, setInteracting] = import_react.useState(false);
-	const [actualTheme, setActualTheme] = import_react.useState(theme !== "system" ? theme : typeof window !== "undefined" ? window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light" : "light");
-	const listRef = import_react.useRef(null);
-	const hotkeyLabel = hotkey.join("+").replace(/Key/g, "").replace(/Digit/g, "");
-	const lastFocusedElementRef = import_react.useRef(null);
-	const isFocusWithinRef = import_react.useRef(false);
-	const removeToast = import_react.useCallback((toastToRemove) => {
-		setToasts((toasts) => {
-			var _toasts_find;
-			if (!((_toasts_find = toasts.find((toast) => toast.id === toastToRemove.id)) == null ? void 0 : _toasts_find.delete)) ToastState.dismiss(toastToRemove.id);
-			return toasts.filter(({ id }) => id !== toastToRemove.id);
-		});
-	}, []);
-	import_react.useEffect(() => {
-		return ToastState.subscribe((toast) => {
-			if (toast.dismiss) {
-				requestAnimationFrame(() => {
-					setToasts((toasts) => toasts.map((t) => t.id === toast.id ? {
-						...t,
-						delete: true
-					} : t));
-				});
-				return;
-			}
-			setTimeout(() => {
-				import_react_dom.flushSync(() => {
-					setToasts((toasts) => {
-						const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
-						if (indexOfExistingToast !== -1) return [
-							...toasts.slice(0, indexOfExistingToast),
-							{
-								...toasts[indexOfExistingToast],
-								...toast
-							},
-							...toasts.slice(indexOfExistingToast + 1)
-						];
-						return [toast, ...toasts];
-					});
-				});
-			});
-		});
-	}, [toasts]);
-	import_react.useEffect(() => {
-		if (theme !== "system") {
-			setActualTheme(theme);
-			return;
-		}
-		if (theme === "system") if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) setActualTheme("dark");
-		else setActualTheme("light");
-		if (typeof window === "undefined") return;
-		const darkMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-		try {
-			darkMediaQuery.addEventListener("change", ({ matches }) => {
-				if (matches) setActualTheme("dark");
-				else setActualTheme("light");
-			});
-		} catch (error) {
-			darkMediaQuery.addListener(({ matches }) => {
-				try {
-					if (matches) setActualTheme("dark");
-					else setActualTheme("light");
-				} catch (e) {
-					console.error(e);
-				}
-			});
-		}
-	}, [theme]);
-	import_react.useEffect(() => {
-		if (toasts.length <= 1) setExpanded(false);
-	}, [toasts]);
-	import_react.useEffect(() => {
-		const handleKeyDown = (event) => {
-			var _listRef_current;
-			if (hotkey.every((key) => event[key] || event.code === key)) {
-				var _listRef_current1;
-				setExpanded(true);
-				(_listRef_current1 = listRef.current) == null || _listRef_current1.focus();
-			}
-			if (event.code === "Escape" && (document.activeElement === listRef.current || ((_listRef_current = listRef.current) == null ? void 0 : _listRef_current.contains(document.activeElement)))) setExpanded(false);
-		};
-		document.addEventListener("keydown", handleKeyDown);
-		return () => document.removeEventListener("keydown", handleKeyDown);
-	}, [hotkey]);
-	import_react.useEffect(() => {
-		if (listRef.current) return () => {
-			if (lastFocusedElementRef.current) {
-				lastFocusedElementRef.current.focus({ preventScroll: true });
-				lastFocusedElementRef.current = null;
-				isFocusWithinRef.current = false;
-			}
-		};
-	}, [listRef.current]);
-	return /* @__PURE__ */ import_react.createElement("section", {
-		ref,
-		"aria-label": `${containerAriaLabel} ${hotkeyLabel}`,
-		tabIndex: -1,
-		"aria-live": "polite",
-		"aria-relevant": "additions text",
-		"aria-atomic": "false",
-		suppressHydrationWarning: true
-	}, possiblePositions.map((position, index) => {
-		var _heights_;
-		const [y, x] = position.split("-");
-		if (!filteredToasts.length) return null;
-		return /* @__PURE__ */ import_react.createElement("ol", {
-			key: position,
-			dir: dir === "auto" ? getDocumentDirection() : dir,
-			tabIndex: -1,
-			ref: listRef,
-			className,
-			"data-sonner-toaster": true,
-			"data-sonner-theme": actualTheme,
-			"data-y-position": y,
-			"data-x-position": x,
-			style: {
-				"--front-toast-height": `${((_heights_ = heights[0]) == null ? void 0 : _heights_.height) || 0}px`,
-				"--width": `${TOAST_WIDTH}px`,
-				"--gap": `${gap}px`,
-				...style,
-				...assignOffset(offset, mobileOffset)
-			},
-			onBlur: (event) => {
-				if (isFocusWithinRef.current && !event.currentTarget.contains(event.relatedTarget)) {
-					isFocusWithinRef.current = false;
-					if (lastFocusedElementRef.current) {
-						lastFocusedElementRef.current.focus({ preventScroll: true });
-						lastFocusedElementRef.current = null;
-					}
-				}
-			},
-			onFocus: (event) => {
-				if (event.target instanceof HTMLElement && event.target.dataset.dismissible === "false") return;
-				if (!isFocusWithinRef.current) {
-					isFocusWithinRef.current = true;
-					lastFocusedElementRef.current = event.relatedTarget;
-				}
-			},
-			onMouseEnter: () => setExpanded(true),
-			onMouseMove: () => setExpanded(true),
-			onMouseLeave: () => {
-				if (!interacting) setExpanded(false);
-			},
-			onDragEnd: () => setExpanded(false),
-			onPointerDown: (event) => {
-				if (event.target instanceof HTMLElement && event.target.dataset.dismissible === "false") return;
-				setInteracting(true);
-			},
-			onPointerUp: () => setInteracting(false)
-		}, filteredToasts.filter((toast) => !toast.position && index === 0 || toast.position === position).map((toast, index) => {
-			var _toastOptions_duration, _toastOptions_closeButton;
-			return /* @__PURE__ */ import_react.createElement(Toast, {
-				key: toast.id,
-				icons,
-				index,
-				toast,
-				defaultRichColors: richColors,
-				duration: (_toastOptions_duration = toastOptions == null ? void 0 : toastOptions.duration) != null ? _toastOptions_duration : duration,
-				className: toastOptions == null ? void 0 : toastOptions.className,
-				descriptionClassName: toastOptions == null ? void 0 : toastOptions.descriptionClassName,
-				invert,
-				visibleToasts,
-				closeButton: (_toastOptions_closeButton = toastOptions == null ? void 0 : toastOptions.closeButton) != null ? _toastOptions_closeButton : closeButton,
-				interacting,
-				position,
-				style: toastOptions == null ? void 0 : toastOptions.style,
-				unstyled: toastOptions == null ? void 0 : toastOptions.unstyled,
-				classNames: toastOptions == null ? void 0 : toastOptions.classNames,
-				cancelButtonStyle: toastOptions == null ? void 0 : toastOptions.cancelButtonStyle,
-				actionButtonStyle: toastOptions == null ? void 0 : toastOptions.actionButtonStyle,
-				closeButtonAriaLabel: toastOptions == null ? void 0 : toastOptions.closeButtonAriaLabel,
-				removeToast,
-				toasts: filteredToasts.filter((t) => t.position == toast.position),
-				heights: heights.filter((h) => h.position == toast.position),
-				setHeights,
-				expandByDefault: expand,
-				gap,
-				expanded,
-				swipeDirections: props.swipeDirections
-			});
-		}));
-	}));
-});
-//#endregion
 //#region src/components/ui/sonner.tsx
 var Toaster = ({ ...props }) => {
 	const { theme = "system" } = z();
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Toaster$1, {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Toaster$2, {
 		"data-uid": "src/components/ui/sonner.tsx:12:5",
 		"data-prohibitions": "[editContent]",
 		theme,
@@ -29924,7 +35587,7 @@ function App() {
 			"data-uid": "src/App.tsx:20:7",
 			"data-prohibitions": "[]",
 			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Toaster$2, {
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Toaster$1, {
 					"data-uid": "src/App.tsx:21:9",
 					"data-prohibitions": "[editContent]"
 				}),
@@ -30044,4 +35707,4 @@ function App() {
 }));
 //#endregion
 
-//# sourceMappingURL=index-CQNeoo5H.js.map
+//# sourceMappingURL=index-C-hF7V_2.js.map
