@@ -192,6 +192,19 @@ export type ChatMessage = {
   createdAt: string
 }
 
+export type ClientCRM = {
+  id: string
+  supplierId: string
+  name: string
+  cpf: string
+  rg: string
+  address: string
+  cep: string
+  phone: string
+  email: string
+  createdAt: string
+}
+
 interface AppContextType {
   role: Role
   setRole: (role: Role) => void
@@ -244,6 +257,8 @@ interface AppContextType {
   sendChatMessage: (chatId: string, text: string) => void
   getSafetyIndex: (supplierId: string) => number
   redeemLoyaltyPoints: (points: number, reward: string) => void
+  clientsCRM: ClientCRM[]
+  addClientCRM: (client: Omit<ClientCRM, 'id' | 'createdAt' | 'supplierId'>) => void
 }
 
 const MOCK_USERS: User[] = [
@@ -500,6 +515,33 @@ const MOCK_MESSAGES: ChatMessage[] = [
   },
 ]
 
+const MOCK_CLIENTS_CRM: ClientCRM[] = [
+  {
+    id: 'crm1',
+    supplierId: 'u1',
+    name: 'Carlos Oliveira',
+    email: 'carlos@exemplo.com',
+    cpf: '111.222.333-44',
+    rg: 'MG-12.345.678',
+    cep: '01001-000',
+    address: 'Praça da Sé, s/n - Centro, São Paulo',
+    phone: '(11) 98765-4321',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'crm2',
+    supplierId: 'u1',
+    name: 'Ana Júlia Silva',
+    email: 'anaju@exemplo.com',
+    cpf: '555.666.777-88',
+    rg: 'SP-98.765.432',
+    cep: '13010-111',
+    address: 'Av. Francisco Glicério, 100 - Centro, Campinas',
+    phone: '(19) 91234-5678',
+    createdAt: new Date(Date.now() - 86400000).toISOString(),
+  },
+]
+
 const AppContext = createContext<AppContextType | undefined>(undefined)
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
@@ -520,6 +562,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     useState<ScheduledInvitation[]>(MOCK_SCHEDULED)
   const [chats, setChats] = useState<Chat[]>(MOCK_CHATS)
   const [messages, setMessages] = useState<ChatMessage[]>(MOCK_MESSAGES)
+  const [clientsCRM, setClientsCRM] = useState<ClientCRM[]>(MOCK_CLIENTS_CRM)
 
   const addDemand = (demandData: any) => {
     const newDemand: Demand = {
@@ -930,6 +973,17 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     ])
   }
 
+  const addClientCRM = (clientData: Omit<ClientCRM, 'id' | 'createdAt' | 'supplierId'>) => {
+    if (!currentUser) return
+    const newClient: ClientCRM = {
+      ...clientData,
+      id: Math.random().toString(36).substring(7),
+      supplierId: currentUser.id,
+      createdAt: new Date().toISOString(),
+    }
+    setClientsCRM((prev) => [newClient, ...prev])
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -971,6 +1025,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         sendChatMessage,
         getSafetyIndex,
         redeemLoyaltyPoints,
+        clientsCRM,
+        addClientCRM,
       }}
     >
       {children}

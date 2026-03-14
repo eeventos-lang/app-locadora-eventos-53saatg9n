@@ -86,7 +86,10 @@ export function Layout() {
           { name: 'Favoritos', path: '/favorites', icon: Heart },
           { name: 'Agendamentos', path: '/schedules', icon: CalendarClock },
         ]
-      : [{ name: 'Insights', path: '/insights', icon: LineChart }]),
+      : [
+          { name: 'Insights', path: '/insights', icon: LineChart },
+          { name: 'Clientes', path: '/customers', icon: Users },
+        ]),
     { name: 'Financeiro', path: '/finance', icon: Receipt },
     { name: 'Criar Evento', path: '/create-event', icon: PlusCircle },
     { name: 'Planos', path: '/subscription', icon: CreditCard },
@@ -344,11 +347,18 @@ export function Layout() {
                     </>
                   )}
                   {role === 'company' && (
-                    <li>
-                      <Link to="/insights" className="hover:text-primary transition-colors">
-                        Insights & Desempenho
-                      </Link>
-                    </li>
+                    <>
+                      <li>
+                        <Link to="/insights" className="hover:text-primary transition-colors">
+                          Insights & Desempenho
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/customers" className="hover:text-primary transition-colors">
+                          Gestão de Clientes
+                        </Link>
+                      </li>
+                    </>
                   )}
                   <li>
                     <Link to="/create-event" className="hover:text-primary transition-colors">
