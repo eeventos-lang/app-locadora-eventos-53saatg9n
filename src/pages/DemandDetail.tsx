@@ -50,6 +50,7 @@ const DemandDetail = () => {
     companyProfile,
     reviews,
     addReview,
+    users,
   } = useApp()
 
   const [isProposalOpen, setIsProposalOpen] = useState(false)
@@ -141,6 +142,22 @@ const DemandDetail = () => {
       title: 'Fornecedor Selecionado',
       description: 'O serviço foi marcado como atendido para esta etapa do evento.',
     })
+
+    // Simulate External Sync
+    const prop = proposals.find((p) => p.id === proposalId)
+    if (prop) {
+      const supplier = users.find((u) => u.id === prop.supplierId)
+      const integrations = supplier?.companyProfile?.integrations
+      if (integrations?.google?.connected || integrations?.outlook?.connected) {
+        setTimeout(() => {
+          toast({
+            title: 'Sincronização Externa (Simulada)',
+            description: `A data do evento foi reservada com sucesso no calendário de ${prop.supplierName}.`,
+            variant: 'default',
+          })
+        }, 1500)
+      }
+    }
   }
 
   const handleReviewSubmit = () => {
@@ -930,7 +947,7 @@ const DemandDetail = () => {
       </div>
 
       {role === 'company' && (
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/90 backdrop-blur-md border-t border-border z-40 md:sticky md:bg-transparent md:backdrop-blur-none md:border-t-0 md:p-0 mt-6">
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/90 backdrop-blur-md border-t border-border z-40 md:sticky md:bg-transparent md:backdrop-blur-none md:border-t-0 md:p-0 mt-6 print:hidden">
           {supplierProposal ? (
             <div className="p-5 bg-secondary rounded-xl text-center border border-border shadow-sm flex flex-col items-center gap-2">
               <Badge

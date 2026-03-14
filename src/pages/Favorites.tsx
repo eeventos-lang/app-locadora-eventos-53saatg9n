@@ -23,8 +23,16 @@ import { cn } from '@/lib/utils'
 import { useToast } from '@/hooks/use-toast'
 
 export default function Favorites() {
-  const { users, favorites, toggleFavorite, currentUser, role, reviews, addScheduledInvitation } =
-    useApp()
+  const {
+    users,
+    favorites,
+    toggleFavorite,
+    currentUser,
+    role,
+    reviews,
+    addScheduledInvitation,
+    getSupplierUnavailableDates,
+  } = useApp()
   const { toast } = useToast()
 
   const [isScheduleOpen, setIsScheduleOpen] = useState(false)
@@ -39,6 +47,11 @@ export default function Favorites() {
       .map((f) => f.supplierId)
     return users.filter((u) => favSupplierIds.includes(u.id))
   }, [users, favorites, currentUser])
+
+  const unavailableDateObjs = useMemo(() => {
+    if (!selectedSupplierId) return []
+    return getSupplierUnavailableDates(selectedSupplierId)
+  }, [selectedSupplierId, getSupplierUnavailableDates])
 
   if (role !== 'customer') {
     return (
@@ -220,7 +233,7 @@ export default function Favorites() {
             <DialogTitle>Agendar Convite Recorrente</DialogTitle>
             <DialogDescription>
               Planeje com antecedência! O fornecedor receberá um convite na plataforma 30 dias antes
-              da data selecionada.
+              da data selecionada. Consulte a agenda do profissional abaixo.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-5 py-4">
@@ -235,7 +248,7 @@ export default function Favorites() {
               />
             </div>
             <div className="space-y-2 flex flex-col">
-              <Label>Data do Evento</Label>
+              <Label>Data do Evento (Veja disponibilidade)</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -259,10 +272,27 @@ export default function Favorites() {
                     selected={scheduleDate}
                     onSelect={setScheduleDate}
                     initialFocus
-                    disabled={(date) => date < new Date()}
+                    disabled={(date) => {
+                      if (date < new Date(new Date().setHours(0, 0, 0, 0))) return true
+                      return unavailableDateObjs.some(
+                        (ud) =>
+                          ud.getDate() === date.getDate() &&
+                          ud.getMonth() === date.getMonth() &&
+                          ud.getFullYear() === date.getFullYear(),
+                      )
+                    }}
+                    modifiers={{ blocked: unavailableDateObjs }}
+                    modifiersClassNames={{
+                      blocked:
+                        'text-destructive bg-destructive/10 line-through opacity-70 hover:bg-destructive/10 hover:text-destructive',
+                    }}
                   />
                 </PopoverContent>
               </Popover>
+              <p className="text-[10px] text-muted-foreground font-medium flex items-center gap-2 mt-1">
+                <span className="w-3 h-3 rounded-full bg-destructive/20 inline-block border border-destructive/30"></span>
+                Datas destacadas estão indisponíveis na agenda do fornecedor.
+              </p>
             </div>
           </div>
           <DialogFooter>

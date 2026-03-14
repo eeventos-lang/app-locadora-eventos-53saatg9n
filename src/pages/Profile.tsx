@@ -8,10 +8,25 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
+import { Calendar } from '@/components/ui/calendar'
 import { useToast } from '@/hooks/use-toast'
-import { Upload, BadgeCheck, AlertCircle, ShieldCheck, Trophy, Award } from 'lucide-react'
+import {
+  Upload,
+  BadgeCheck,
+  AlertCircle,
+  ShieldCheck,
+  Trophy,
+  Award,
+  CalendarDays,
+  CalendarSync,
+  RefreshCw,
+  Mail,
+  Chrome,
+  CheckCircle2,
+} from 'lucide-react'
 import { SERVICES } from '@/lib/services'
 import { cn } from '@/lib/utils'
+import { format } from 'date-fns'
 
 const Profile = () => {
   const {
@@ -30,6 +45,7 @@ const Profile = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [localProfile, setLocalProfile] = useState(companyProfile)
+  const [isSyncing, setIsSyncing] = useState<'google' | 'outlook' | null>(null)
 
   useEffect(() => {
     setLocalProfile(companyProfile)
@@ -72,6 +88,35 @@ const Profile = () => {
   const handleLogout = () => {
     logout()
     navigate('/')
+  }
+
+  const handleToggleIntegration = (provider: 'google' | 'outlook') => {
+    setIsSyncing(provider)
+    setTimeout(() => {
+      const current = localProfile.integrations?.[provider]
+      const updatedProfile = {
+        ...localProfile,
+        integrations: {
+          ...localProfile.integrations,
+          [provider]: current?.connected
+            ? { connected: false, lastSync: '' }
+            : {
+                connected: true,
+                lastSync: new Date().toISOString(),
+                account: `agenda.${provider}@empresa.com`,
+              },
+        },
+      }
+      setLocalProfile(updatedProfile)
+      updateCompanyProfile(updatedProfile)
+      setIsSyncing(null)
+      toast({
+        title: current?.connected ? 'Integração Removida' : 'Calendário Sincronizado',
+        description: current?.connected
+          ? `Sua conta ${provider} foi desconectada.`
+          : `A partir de agora, seus eventos confirmados refletirão no ${provider}.`,
+      })
+    }, 1500)
   }
 
   return (
@@ -158,6 +203,121 @@ const Profile = () => {
       </div>
 
       {isCompany && (
+        <>
+          <section className="space-y-6 animate-fade-in mt-8 bg-card border border-border rounded-xl p-6 shadow-sm">
+            <div className="flex items-center gap-2 border-b border-border pb-4 mb-4">
+              <CalendarSync className="w-6 h-6 text-primary" />
+              <h3 className="text-xl font-bold text-foreground">Integrações de Calendário</h3>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+              Sincronize sua agenda do e-eventos com seus calendários externos para evitar conflitos
+              de horários de forma transparente e automatizada.
+            </p>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              {['google', 'outlook'].map((provider) => {
+                const isGoogle = provider === 'google'
+                const status =
+                  localProfile.integrations?.[provider as keyof typeof localProfile.integrations]
+                const Icon = isGoogle ? Chrome : Mail
+
+                return (
+                  <Card
+                    key={provider}
+                    className={cn(
+                      'border transition-colors',
+                      status?.connected ? 'border-primary shadow-sm bg-primary/5' : 'border-border',
+                    )}
+                  >
+                    <CardContent className="p-5 flex flex-col items-center text-center gap-4">
+                      <div
+                        className={cn(
+                          'p-3 rounded-full',
+                          status?.connected ? 'bg-primary text-primary-foreground' : 'bg-secondary',
+                        )}
+                      >
+                        <Icon className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold capitalize text-lg">
+                          {isGoogle ? 'Google Calendar' : 'Outlook Calendar'}
+                        </h4>
+                        {status?.connected ? (
+                          <div className="flex flex-col items-center mt-1">
+                            <span className="text-xs font-semibold text-emerald-500 flex items-center gap-1">
+                              <CheckCircle2 className="w-3.5 h-3.5" /> Sincronizado
+                            </span>
+                            <span className="text-xs text-muted-foreground mt-1">
+                              {status.account}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-xs text-muted-foreground mt-1 block">
+                            Não conectado
+                          </span>
+                        )}
+                      </div>
+                      <Button
+                        variant={status?.connected ? 'outline' : 'default'}
+                        className="w-full mt-2"
+                        onClick={() => handleToggleIntegration(provider as any)}
+                        disabled={isSyncing === provider}
+                      >
+                        {isSyncing === provider ? (
+                          <>
+                            <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> Atualizando...
+                          </>
+                        ) : status?.connected ? (
+                          'Desconectar'
+                        ) : (
+                          'Conectar Conta'
+                        )}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+          </section>
+
+          <section className="space-y-6 animate-fade-in mt-8 bg-card border border-border rounded-xl p-6 shadow-sm">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-4 mb-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <CalendarDays className="w-6 h-6 text-primary" />
+                  <h3 className="text-xl font-bold text-foreground">Gerenciar Disponibilidade</h3>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed mt-2 max-w-xl">
+                  Selecione as datas em que você <strong>não estará disponível</strong>. Clientes
+                  não poderão enviar convites para estes dias.
+                </p>
+              </div>
+              <Button onClick={handleSave} className="shrink-0 shadow-sm">
+                Salvar Agenda
+              </Button>
+            </div>
+
+            <div className="flex justify-center border border-border rounded-xl p-4 bg-background w-fit mx-auto shadow-inner">
+              <Calendar
+                mode="multiple"
+                selected={localProfile.unavailableDates?.map((d) => {
+                  const [y, m, day] = d.split('-').map(Number)
+                  return new Date(y, m - 1, day)
+                })}
+                onSelect={(dates) => {
+                  setLocalProfile((prev) => ({
+                    ...prev,
+                    unavailableDates: dates?.map((d) => format(d, 'yyyy-MM-dd')) || [],
+                  }))
+                }}
+                className="p-3"
+              />
+            </div>
+          </section>
+        </>
+      )}
+
+      {isCompany && (
         <section className="space-y-6 animate-fade-in mt-8 bg-card border border-border rounded-xl p-6 shadow-sm">
           <div className="flex items-center justify-between border-b border-border pb-4 mb-4">
             <div className="flex items-center gap-2">
@@ -211,7 +371,7 @@ const Profile = () => {
         </section>
       )}
 
-      <div className="grid gap-8 md:grid-cols-2">
+      <div className="grid gap-8 md:grid-cols-2 mt-8">
         <section className="space-y-6">
           <h3 className="text-xl font-bold text-foreground border-b border-border pb-2">
             Dados Pessoais
@@ -352,7 +512,7 @@ const Profile = () => {
         )}
       </div>
 
-      <div className="pt-8 border-t border-border">
+      <div className="pt-8 border-t border-border print:hidden">
         <Button
           variant="outline"
           onClick={handleLogout}

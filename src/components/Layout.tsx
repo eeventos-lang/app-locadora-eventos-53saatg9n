@@ -99,7 +99,7 @@ export function Layout() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
-      <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 print:hidden">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Sheet>
@@ -286,11 +286,11 @@ export function Layout() {
         </div>
       </header>
 
-      <main className="flex-1 w-full">
+      <main className="flex-1 w-full print:p-0 print:m-0">
         <Outlet />
       </main>
 
-      <footer className="border-t border-border bg-card/50 pt-12 pb-8 mt-auto">
+      <footer className="border-t border-border bg-card/50 pt-12 pb-8 mt-auto print:hidden">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div className="col-span-1 md:col-span-2">

@@ -74,6 +74,12 @@ export type Notification = {
   customerId?: string
 }
 
+export type IntegrationStatus = {
+  connected: boolean
+  lastSync: string
+  account?: string
+}
+
 export type CompanyProfile = {
   name: string
   specialties: string
@@ -84,6 +90,11 @@ export type CompanyProfile = {
   cnpj?: string
   portfolio?: string
   isVerified?: boolean
+  unavailableDates?: string[]
+  integrations?: {
+    google?: IntegrationStatus
+    outlook?: IntegrationStatus
+  }
 }
 
 export type User = {
@@ -180,6 +191,7 @@ interface AppContextType {
   addScheduledInvitation: (
     invitation: Omit<ScheduledInvitation, 'id' | 'createdAt' | 'status'>,
   ) => void
+  getSupplierUnavailableDates: (supplierId: string) => Date[]
 }
 
 const MOCK_USERS: User[] = [
@@ -207,6 +219,14 @@ const MOCK_USERS: User[] = [
       cnpj: '12.345.678/0001-90',
       portfolio: 'portfolio_jd_2026.pdf',
       isVerified: true,
+      unavailableDates: ['2026-05-15', '2026-05-25'],
+      integrations: {
+        google: {
+          connected: true,
+          lastSync: new Date().toISOString(),
+          account: 'agenda.jd@gmail.com',
+        },
+      },
     },
   },
   {
@@ -229,7 +249,6 @@ const MOCK_USERS: User[] = [
 ]
 
 const MOCK_DEMANDS: Demand[] = [
-  // Keeping original mock demands
   {
     id: 'd1',
     customerId: 'c1',
@@ -280,7 +299,6 @@ const MOCK_PROPOSALS: Proposal[] = []
 const MOCK_TRANSACTIONS: Transaction[] = []
 
 const MOCK_REVIEWS: Review[] = []
-// Inject mock reviews for gamification testing
 for (let i = 0; i < 15; i++) {
   MOCK_REVIEWS.push({
     id: `r_u1_${i}`,
@@ -348,7 +366,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     useState<ScheduledInvitation[]>(MOCK_SCHEDULED)
 
   const addDemand = (demandData: any) => {
-    // ... logic (kept minimal for context snippet brevity, assuming full logic is retained in real app)
     const newDemand: Demand = {
       ...demandData,
       id: Math.random().toString(36).substring(7),
@@ -363,31 +380,33 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const addProposal = (propData: any) => {
-    // ... logic
+    // ...
   }
 
   const acceptProposal = (proposalId: string) => {
-    // ... logic
+    setProposals((prev) =>
+      prev.map((p) => (p.id === proposalId ? { ...p, status: 'accepted' } : p)),
+    )
   }
 
   const signContracts = (demandId: string) => {
-    // ... logic
+    // ...
   }
 
   const payEvent = (demandId: string) => {
-    // ... logic
+    // ...
   }
 
   const updateSectorStatus = (demandId: string, sector: string, status: SectorStatus) => {
-    // ... logic
+    // ...
   }
 
   const disputeService = (demandId: string, sector: string, reason: string) => {
-    // ... logic
+    // ...
   }
 
   const inviteSupplier = (supplierId: string, demandId: string) => {
-    // ... logic
+    // ...
   }
 
   const markNotificationsAsRead = () => {
@@ -395,15 +414,26 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const updateCompanyProfile = (profile: Partial<CompanyProfile>) => {
-    setCompanyProfile((prev) => ({
-      ...prev,
-      ...profile,
-      isVerified: !!((prev.cnpj || profile.cnpj) && (prev.portfolio || profile.portfolio)),
-    }))
+    setCompanyProfile((prev) => {
+      const updated = {
+        ...prev,
+        ...profile,
+        isVerified: !!((prev.cnpj || profile.cnpj) && (prev.portfolio || profile.portfolio)),
+      }
+
+      if (currentUser) {
+        const updatedUsers = users.map((u) =>
+          u.id === currentUser.id ? { ...u, companyProfile: updated } : u,
+        )
+        setUsers(updatedUsers)
+      }
+
+      return updated
+    })
   }
 
   const registerUser = async (userData: any) => {
-    // ... logic
+    // ...
   }
 
   const login = async (email: string, password?: string) => {
@@ -460,6 +490,24 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setScheduledInvitations((prev) => [newInv, ...prev])
   }
 
+  const getSupplierUnavailableDates = (supplierId: string) => {
+    const supplier = users.find((u) => u.id === supplierId)
+    const manualDates = supplier?.companyProfile?.unavailableDates || []
+
+    const contractedProposals = proposals.filter(
+      (p) => p.supplierId === supplierId && p.status === 'accepted',
+    )
+    const contractedDemandIds = contractedProposals.map((p) => p.demandId)
+    const contractedDemands = demands.filter((d) => contractedDemandIds.includes(d.id))
+
+    const allDatesStr = new Set([...manualDates, ...contractedDemands.map((d) => d.date)])
+
+    return Array.from(allDatesStr).map((dStr) => {
+      const [y, m, d] = dStr.split('T')[0].split('-').map(Number)
+      return new Date(y, m - 1, d)
+    })
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -493,6 +541,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         toggleFavorite,
         scheduledInvitations,
         addScheduledInvitation,
+        getSupplierUnavailableDates,
       }}
     >
       {children}
