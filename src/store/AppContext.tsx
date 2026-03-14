@@ -224,6 +224,25 @@ export type SupplierCRM = {
   createdAt: string
 }
 
+export type SupplierDocument = {
+  id: string
+  supplierId: string
+  name: string
+  type: string
+  uploadDate: string
+}
+
+export type SupplierFinanceStatus = 'pending' | 'paid' | 'overdue'
+
+export type SupplierFinance = {
+  id: string
+  supplierId: string
+  description: string
+  amount: number
+  dueDate: string
+  status: SupplierFinanceStatus
+}
+
 interface AppContextType {
   role: Role
   setRole: (role: Role) => void
@@ -280,6 +299,11 @@ interface AppContextType {
   addClientCRM: (client: Omit<ClientCRM, 'id' | 'createdAt' | 'supplierId'>) => void
   suppliersCRM: SupplierCRM[]
   addSupplierCRM: (supplier: Omit<SupplierCRM, 'id' | 'createdAt' | 'companyId'>) => void
+  supplierDocuments: SupplierDocument[]
+  addSupplierDocument: (doc: Omit<SupplierDocument, 'id' | 'uploadDate'>) => void
+  deleteSupplierDocument: (id: string) => void
+  supplierFinances: SupplierFinance[]
+  addSupplierFinance: (fin: Omit<SupplierFinance, 'id'>) => void
 }
 
 const MOCK_USERS: User[] = [
@@ -584,6 +608,42 @@ const MOCK_SUPPLIERS_CRM: SupplierCRM[] = [
   },
 ]
 
+const MOCK_SUPPLIER_DOCS: SupplierDocument[] = [
+  {
+    id: 'doc1',
+    supplierId: 'scrm1',
+    name: 'Alvara_Funcionamento_2026.pdf',
+    type: 'application/pdf',
+    uploadDate: new Date().toISOString(),
+  },
+  {
+    id: 'doc2',
+    supplierId: 'scrm1',
+    name: 'Contrato_Prestacao_Servicos.docx',
+    type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    uploadDate: new Date(Date.now() - 86400000).toISOString(),
+  },
+]
+
+const MOCK_SUPPLIER_FINANCES: SupplierFinance[] = [
+  {
+    id: 'fin1',
+    supplierId: 'scrm1',
+    description: 'Adiantamento - Casamento Sítio das Palmeiras',
+    amount: 2500,
+    dueDate: new Date(Date.now() + 86400000 * 5).toISOString(),
+    status: 'pending',
+  },
+  {
+    id: 'fin2',
+    supplierId: 'scrm1',
+    description: 'Sinal - Evento Corporativo',
+    amount: 1500,
+    dueDate: new Date(Date.now() - 86400000 * 2).toISOString(),
+    status: 'paid',
+  },
+]
+
 const AppContext = createContext<AppContextType | undefined>(undefined)
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
@@ -606,6 +666,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [messages, setMessages] = useState<ChatMessage[]>(MOCK_MESSAGES)
   const [clientsCRM, setClientsCRM] = useState<ClientCRM[]>(MOCK_CLIENTS_CRM)
   const [suppliersCRM, setSuppliersCRM] = useState<SupplierCRM[]>(MOCK_SUPPLIERS_CRM)
+  const [supplierDocuments, setSupplierDocuments] = useState<SupplierDocument[]>(MOCK_SUPPLIER_DOCS)
+  const [supplierFinances, setSupplierFinances] =
+    useState<SupplierFinance[]>(MOCK_SUPPLIER_FINANCES)
 
   const addDemand = (demandData: any) => {
     const newDemand: Demand = {
@@ -1038,6 +1101,28 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setSuppliersCRM((prev) => [newSupplier, ...prev])
   }
 
+  const addSupplierDocument = (docData: Omit<SupplierDocument, 'id' | 'uploadDate'>) => {
+    setSupplierDocuments((prev) => [
+      ...prev,
+      {
+        ...docData,
+        id: Math.random().toString(36).substring(7),
+        uploadDate: new Date().toISOString(),
+      },
+    ])
+  }
+
+  const deleteSupplierDocument = (id: string) => {
+    setSupplierDocuments((prev) => prev.filter((d) => d.id !== id))
+  }
+
+  const addSupplierFinance = (finData: Omit<SupplierFinance, 'id'>) => {
+    setSupplierFinances((prev) => [
+      ...prev,
+      { ...finData, id: Math.random().toString(36).substring(7) },
+    ])
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -1083,6 +1168,11 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         addClientCRM,
         suppliersCRM,
         addSupplierCRM,
+        supplierDocuments,
+        addSupplierDocument,
+        deleteSupplierDocument,
+        supplierFinances,
+        addSupplierFinance,
       }}
     >
       {children}
