@@ -15,7 +15,7 @@ import Transactions from '@/pages/Transactions'
 import Insights from '@/pages/Insights'
 import Schedules from '@/pages/Schedules'
 import Messages from '@/pages/Messages'
-import Customers from '@/pages/Customers'
+import Registrations from '@/pages/Registrations'
 import NotFound from '@/pages/NotFound'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
@@ -144,7 +144,7 @@ function App() {
               <Route path="finance" element={<Transactions />} />
               <Route path="insights" element={<Insights />} />
               <Route path="messages" element={<Messages />} />
-              <Route path="customers" element={<Customers />} />
+              <Route path="registrations" element={<Registrations />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

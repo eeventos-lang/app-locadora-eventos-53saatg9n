@@ -205,6 +205,25 @@ export type ClientCRM = {
   createdAt: string
 }
 
+export type SupplierCRM = {
+  id: string
+  companyId: string
+  name: string
+  cnpjCpf: string
+  stateRegistration: string
+  cep: string
+  street: string
+  number: string
+  complement: string
+  neighborhood: string
+  city: string
+  state: string
+  phone: string
+  email: string
+  category: string
+  createdAt: string
+}
+
 interface AppContextType {
   role: Role
   setRole: (role: Role) => void
@@ -259,6 +278,8 @@ interface AppContextType {
   redeemLoyaltyPoints: (points: number, reward: string) => void
   clientsCRM: ClientCRM[]
   addClientCRM: (client: Omit<ClientCRM, 'id' | 'createdAt' | 'supplierId'>) => void
+  suppliersCRM: SupplierCRM[]
+  addSupplierCRM: (supplier: Omit<SupplierCRM, 'id' | 'createdAt' | 'companyId'>) => void
 }
 
 const MOCK_USERS: User[] = [
@@ -542,6 +563,27 @@ const MOCK_CLIENTS_CRM: ClientCRM[] = [
   },
 ]
 
+const MOCK_SUPPLIERS_CRM: SupplierCRM[] = [
+  {
+    id: 'scrm1',
+    companyId: 'u1',
+    name: 'Flores & Cia',
+    cnpjCpf: '11.222.333/0001-44',
+    stateRegistration: '123456789',
+    cep: '01001-000',
+    street: 'Praça da Sé',
+    number: 's/n',
+    complement: '',
+    neighborhood: 'Centro',
+    city: 'São Paulo',
+    state: 'SP',
+    phone: '(11) 98765-4321',
+    email: 'contato@floresecia.com',
+    category: 'decoracao',
+    createdAt: new Date().toISOString(),
+  },
+]
+
 const AppContext = createContext<AppContextType | undefined>(undefined)
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
@@ -563,6 +605,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [chats, setChats] = useState<Chat[]>(MOCK_CHATS)
   const [messages, setMessages] = useState<ChatMessage[]>(MOCK_MESSAGES)
   const [clientsCRM, setClientsCRM] = useState<ClientCRM[]>(MOCK_CLIENTS_CRM)
+  const [suppliersCRM, setSuppliersCRM] = useState<SupplierCRM[]>(MOCK_SUPPLIERS_CRM)
 
   const addDemand = (demandData: any) => {
     const newDemand: Demand = {
@@ -984,6 +1027,17 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setClientsCRM((prev) => [newClient, ...prev])
   }
 
+  const addSupplierCRM = (supplierData: Omit<SupplierCRM, 'id' | 'createdAt' | 'companyId'>) => {
+    if (!currentUser) return
+    const newSupplier: SupplierCRM = {
+      ...supplierData,
+      id: Math.random().toString(36).substring(7),
+      companyId: currentUser.id,
+      createdAt: new Date().toISOString(),
+    }
+    setSuppliersCRM((prev) => [newSupplier, ...prev])
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -1027,6 +1081,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         redeemLoyaltyPoints,
         clientsCRM,
         addClientCRM,
+        suppliersCRM,
+        addSupplierCRM,
       }}
     >
       {children}

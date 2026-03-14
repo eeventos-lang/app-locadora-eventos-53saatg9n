@@ -88,7 +88,7 @@ export function Layout() {
         ]
       : [
           { name: 'Insights', path: '/insights', icon: LineChart },
-          { name: 'Clientes', path: '/customers', icon: Users },
+          { name: 'Cadastros', path: '/registrations', icon: Users },
         ]),
     { name: 'Financeiro', path: '/finance', icon: Receipt },
     { name: 'Criar Evento', path: '/create-event', icon: PlusCircle },
@@ -354,8 +354,8 @@ export function Layout() {
                         </Link>
                       </li>
                       <li>
-                        <Link to="/customers" className="hover:text-primary transition-colors">
-                          Gestão de Clientes
+                        <Link to="/registrations" className="hover:text-primary transition-colors">
+                          Gestão de Cadastros
                         </Link>
                       </li>
                     </>
