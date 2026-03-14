@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, BadgeCheck, MapPin, Send, FilterX, Heart, Star } from 'lucide-react'
+import { Search, BadgeCheck, MapPin, Send, FilterX, Heart, Star, ShieldCheck } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import {
@@ -25,8 +25,17 @@ import { useToast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'
 
 export default function SupplierSearch() {
-  const { users, demands, inviteSupplier, role, currentUser, favorites, toggleFavorite, reviews } =
-    useApp()
+  const {
+    users,
+    demands,
+    inviteSupplier,
+    role,
+    currentUser,
+    favorites,
+    toggleFavorite,
+    reviews,
+    getSafetyIndex,
+  } = useApp()
   const { toast } = useToast()
 
   const [searchTerm, setSearchTerm] = useState('')
@@ -130,6 +139,7 @@ export default function SupplierSearch() {
             const avgRating = supplierReviews.length
               ? supplierReviews.reduce((sum, r) => sum + r.rating, 0) / supplierReviews.length
               : 0
+            const safetyIndex = getSafetyIndex(supplier.id)
 
             return (
               <Card
@@ -157,7 +167,7 @@ export default function SupplierSearch() {
                 <Link to={`/suppliers/${supplier.id}`} className="flex-1 flex flex-col h-full">
                   <CardContent className="p-0 flex flex-col h-full">
                     <div className="p-6 flex-1 flex flex-col">
-                      <div className="flex items-start gap-4 mb-5 pr-10">
+                      <div className="flex items-start gap-4 mb-4 pr-10">
                         <div className="w-16 h-16 rounded-2xl bg-secondary flex items-center justify-center border border-border shadow-sm shrink-0 overflow-hidden">
                           {profile.logo ? (
                             <img
@@ -181,12 +191,29 @@ export default function SupplierSearch() {
                               />
                             )}
                           </h3>
-                          <div className="flex items-center gap-1 mt-1 text-sm font-medium text-amber-500">
-                            <Star className="w-4 h-4 fill-amber-500" />
-                            {avgRating > 0 ? avgRating.toFixed(1) : 'Novo'}
-                            <span className="text-muted-foreground ml-1">
-                              ({supplierReviews.length})
-                            </span>
+                          <div className="flex flex-col gap-1 mt-1">
+                            <div className="flex items-center gap-1 text-sm font-medium text-amber-500">
+                              <Star className="w-4 h-4 fill-amber-500" />
+                              {avgRating > 0 ? avgRating.toFixed(1) : 'Novo'}
+                              <span className="text-muted-foreground ml-1 text-xs">
+                                ({supplierReviews.length})
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-1 mt-0.5 text-xs font-semibold">
+                              <ShieldCheck
+                                className={cn(
+                                  'w-3.5 h-3.5',
+                                  safetyIndex >= 90 ? 'text-emerald-500' : 'text-amber-500',
+                                )}
+                              />
+                              <span
+                                className={
+                                  safetyIndex >= 90 ? 'text-emerald-500' : 'text-amber-500'
+                                }
+                              >
+                                Índice de Segurança: {safetyIndex}%
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>

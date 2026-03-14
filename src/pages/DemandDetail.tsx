@@ -852,7 +852,7 @@ const DemandDetail = () => {
                     </Button>
                     <Button
                       onClick={() => {
-                        payEvent(demand.id)
+                        payEvent(demand.id, optDelivery || optCancel)
                         setIsPaymentOpen(false)
                         toast({
                           title: 'Pagamento Aprovado!',

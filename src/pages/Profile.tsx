@@ -39,6 +39,7 @@ const Profile = () => {
     currentUser,
     logout,
     reviews,
+    getSafetyIndex,
   } = useApp()
   const { toast } = useToast()
   const navigate = useNavigate()
@@ -61,6 +62,7 @@ const Profile = () => {
 
   const isExpert = fiveStarCount >= 10
   const isHighPerformance = fiveStarCount >= 25
+  const safetyIndex = currentUser ? getSafetyIndex(currentUser.id) : 100
 
   const handleSave = () => {
     updateCompanyProfile(localProfile)
@@ -148,12 +150,22 @@ const Profile = () => {
           </div>
         </div>
 
-        {isCompany && (isHighPerformance || isExpert) && (
+        {isCompany && (
           <div className="flex flex-col gap-2 mt-4 sm:mt-0">
             <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-[-4px]">
-              Badges Recebidos
+              Desempenho e Segurança
             </span>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
+              <Badge
+                className={cn(
+                  'px-3 py-1.5 shadow-sm',
+                  safetyIndex >= 90
+                    ? 'bg-emerald-500/20 text-emerald-600 border-emerald-500/30'
+                    : 'bg-amber-500/20 text-amber-600 border-amber-500/30',
+                )}
+              >
+                <ShieldCheck className="w-4 h-4 mr-1.5" /> Índice de Segurança: {safetyIndex}%
+              </Badge>
               {isHighPerformance && (
                 <Badge className="bg-amber-500/20 text-amber-500 border-amber-500/30 px-3 py-1.5 shadow-sm">
                   <Trophy className="w-4 h-4 mr-1.5" /> Alta Performance

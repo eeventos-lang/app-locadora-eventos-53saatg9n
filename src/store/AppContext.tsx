@@ -48,6 +48,7 @@ export type Demand = {
   sectorStatus: Record<string, SectorStatus>
   contractedProviders: Record<string, string>
   createdAt: string
+  hasInsurance?: boolean
 }
 
 export type Proposal = {
@@ -95,6 +96,7 @@ export type CompanyProfile = {
     google?: IntegrationStatus
     outlook?: IntegrationStatus
   }
+  safetyIndex?: number
 }
 
 export type User = {
@@ -190,7 +192,7 @@ interface AppContextType {
   addProposal: (proposal: Omit<Proposal, 'id' | 'status' | 'createdAt'>) => void
   acceptProposal: (proposalId: string) => void
   signContracts: (demandId: string) => void
-  payEvent: (demandId: string) => void
+  payEvent: (demandId: string, hasInsurance?: boolean) => void
   updateSectorStatus: (demandId: string, sector: string, status: SectorStatus) => void
   disputeService: (demandId: string, sector: string, reason: string) => void
   transactions: Transaction[]
@@ -210,6 +212,7 @@ interface AppContextType {
   messages: ChatMessage[]
   createChat: (participantId: string) => string
   sendChatMessage: (chatId: string, text: string) => void
+  getSafetyIndex: (supplierId: string) => number
 }
 
 const MOCK_USERS: User[] = [
@@ -238,6 +241,7 @@ const MOCK_USERS: User[] = [
       portfolio: 'portfolio_jd_2026.pdf',
       isVerified: true,
       unavailableDates: ['2026-05-15', '2026-05-25'],
+      safetyIndex: 98,
       integrations: {
         google: {
           connected: true,
@@ -262,6 +266,7 @@ const MOCK_USERS: User[] = [
       logo: '',
       observations: '',
       isVerified: false,
+      safetyIndex: 85,
     },
   },
 ]
@@ -310,6 +315,7 @@ const MOCK_DEMANDS: Demand[] = [
     },
     contractedProviders: { decoracao: 'p2' },
     createdAt: new Date().toISOString(),
+    hasInsurance: true,
   },
 ]
 
@@ -418,7 +424,11 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
   const signContracts = (demandId: string) => {}
 
-  const payEvent = (demandId: string) => {}
+  const payEvent = (demandId: string, hasInsurance: boolean = false) => {
+    setDemands((prev) =>
+      prev.map((d) => (d.id === demandId ? { ...d, paymentStatus: 'escrow', hasInsurance } : d)),
+    )
+  }
 
   const updateSectorStatus = (demandId: string, sector: string, status: SectorStatus) => {}
 
@@ -548,6 +558,76 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setChats((prev) =>
       prev.map((c) => (c.id === chatId ? { ...c, updatedAt: new Date().toISOString() } : c)),
     )
+
+    // Simulate receiving a reply to demonstrate PWA Push Notification
+    setTimeout(() => {
+      const chat = chats.find((c) => c.id === chatId)
+      const otherUserId = chat?.participants.find((p) => p !== currentUser.id)
+      const otherUser = users.find((u) => u.id === otherUserId)
+      const senderName = otherUser?.companyProfile?.name || otherUser?.name || 'Usuário'
+
+      const replyMsg: ChatMessage = {
+        id: Math.random().toString(36).substring(7),
+        chatId,
+        senderId: otherUserId || 'system',
+        text: `Simulação de resposta automática de ${senderName}.`,
+        createdAt: new Date().toISOString(),
+      }
+      setMessages((prev) => [...prev, replyMsg])
+      setChats((prev) =>
+        prev.map((c) => (c.id === chatId ? { ...c, updatedAt: new Date().toISOString() } : c)),
+      )
+
+      if ('Notification' in window && Notification.permission === 'granted') {
+        const chatUrl = `${window.location.origin}/messages?chat=${chatId}`
+        const iconUrl = 'https://img.usecurling.com/i?q=chat&color=blue&shape=fill'
+        navigator.serviceWorker.ready
+          .then((registration) => {
+            registration.showNotification(`Nova mensagem de ${senderName}`, {
+              body: replyMsg.text,
+              icon: iconUrl,
+              data: { url: chatUrl },
+            })
+          })
+          .catch(() => {
+            const notification = new Notification(`Nova mensagem de ${senderName}`, {
+              body: replyMsg.text,
+              icon: iconUrl,
+            })
+            notification.onclick = () => {
+              window.open(chatUrl, '_blank')
+            }
+          })
+      }
+    }, 2000)
+  }
+
+  const getSafetyIndex = (supplierId: string) => {
+    const supplier = users.find((u) => u.id === supplierId)
+    if (!supplier || !supplier.companyProfile) return 0
+
+    const contractedProposals = proposals.filter(
+      (p) => p.supplierId === supplierId && p.status === 'accepted',
+    )
+    const relevantDemands = demands.filter(
+      (d) => contractedProposals.some((p) => p.demandId === d.id) && d.hasInsurance,
+    )
+
+    if (relevantDemands.length === 0) return supplier.companyProfile.safetyIndex ?? 100
+
+    let successCount = 0
+    relevantDemands.forEach((d) => {
+      const supplierSectors =
+        contractedProposals.find((p) => p.demandId === d.id)?.offeredSectors || []
+      const hasIssue = supplierSectors.some(
+        (s) => d.sectorStatus[s] === 'disputed' || d.sectorStatus[s] === 'not_delivered',
+      )
+      if (!hasIssue) {
+        successCount++
+      }
+    })
+
+    return Math.round((successCount / relevantDemands.length) * 100)
   }
 
   return (
@@ -588,6 +668,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         messages,
         createChat,
         sendChatMessage,
+        getSafetyIndex,
       }}
     >
       {children}

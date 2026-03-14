@@ -1,6 +1,15 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useApp } from '@/store/AppContext'
-import { MapPin, Star, Heart, BadgeCheck, Trophy, Award, MessageSquare } from 'lucide-react'
+import {
+  MapPin,
+  Star,
+  Heart,
+  BadgeCheck,
+  Trophy,
+  Award,
+  MessageSquare,
+  ShieldCheck,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -11,7 +20,8 @@ import { cn } from '@/lib/utils'
 export default function ProviderProfile() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { users, reviews, favorites, toggleFavorite, currentUser, createChat } = useApp()
+  const { users, reviews, favorites, toggleFavorite, currentUser, createChat, getSafetyIndex } =
+    useApp()
 
   const supplier = users.find((u) => u.id === id)
 
@@ -35,6 +45,7 @@ export default function ProviderProfile() {
 
   const isExpert = fiveStarCount >= 10
   const isHighPerformance = fiveStarCount >= 25
+  const safetyIndex = getSafetyIndex(supplier.id)
 
   const handleMessage = () => {
     if (!currentUser) return
@@ -69,6 +80,17 @@ export default function ProviderProfile() {
             </h2>
 
             <div className="flex flex-col gap-2 mt-3 w-full">
+              <Badge
+                className={cn(
+                  'justify-center py-1.5 shadow-sm',
+                  safetyIndex >= 90
+                    ? 'bg-emerald-500/20 text-emerald-600 border-emerald-500/30'
+                    : 'bg-amber-500/20 text-amber-600 border-amber-500/30',
+                )}
+              >
+                <ShieldCheck className="w-4 h-4 mr-1.5" /> Índice de Segurança: {safetyIndex}%
+              </Badge>
+
               {isHighPerformance && (
                 <Badge className="bg-amber-500/20 text-amber-500 border-amber-500/30 justify-center py-1">
                   <Trophy className="w-3.5 h-3.5 mr-1.5" /> Alta Performance

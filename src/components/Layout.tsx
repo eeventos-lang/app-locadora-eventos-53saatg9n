@@ -43,6 +43,12 @@ export function Layout() {
   const prevNotifsRef = useRef(notifications.length)
 
   useEffect(() => {
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission()
+    }
+  }, [])
+
+  useEffect(() => {
     if (notifications.length > prevNotifsRef.current) {
       const newCount = notifications.length - prevNotifsRef.current
       const newNotifs = notifications.slice(0, newCount)
