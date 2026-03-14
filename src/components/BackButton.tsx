@@ -1,5 +1,6 @@
-import { ArrowLeft } from 'lucide-react'
+import { ChevronLeft } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 interface BackButtonProps {
@@ -8,7 +9,7 @@ interface BackButtonProps {
   label?: string
 }
 
-export function BackButton({ className, onClick, label }: BackButtonProps) {
+export function BackButton({ className, onClick, label = 'Voltar' }: BackButtonProps) {
   const navigate = useNavigate()
 
   const handleBack = () => {
@@ -20,16 +21,17 @@ export function BackButton({ className, onClick, label }: BackButtonProps) {
   }
 
   return (
-    <button
+    <Button
+      variant="ghost"
       onClick={handleBack}
       className={cn(
-        'flex items-center justify-center min-w-[44px] min-h-[44px] rounded-full text-muted-foreground hover:text-white hover:bg-white/10 transition-colors active:scale-95 px-2',
+        'gap-1 pl-2.5 hover:bg-secondary text-muted-foreground hover:text-foreground',
         className,
       )}
-      aria-label={label || 'Voltar'}
+      aria-label={label}
     >
-      <ArrowLeft className="w-6 h-6" />
-      {label && <span className="ml-1 text-sm font-medium">{label}</span>}
-    </button>
+      <ChevronLeft className="w-5 h-5" />
+      <span className="font-medium">{label}</span>
+    </Button>
   )
 }

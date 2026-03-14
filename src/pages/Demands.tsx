@@ -11,11 +11,14 @@ const Demands = () => {
   if (role === 'company' && !isSubscribed) {
     return (
       <div className="p-6 flex flex-col items-center justify-center min-h-[70vh] text-center animate-slide-up">
-        <h2 className="text-xl font-bold mb-2">Acesso Restrito</h2>
-        <p className="text-muted-foreground text-sm mb-6">
-          Ative sua assinatura premium para visualizar as demandas disponíveis.
+        <h2 className="text-2xl font-bold mb-3 text-foreground tracking-tight">Acesso Restrito</h2>
+        <p className="text-muted-foreground mb-8 max-w-md mx-auto leading-relaxed">
+          Ative sua assinatura premium para visualizar todas as demandas disponíveis na plataforma.
         </p>
-        <Link to="/perfil" className="px-6 py-2 bg-primary text-white rounded-md font-medium">
+        <Link
+          to="/perfil"
+          className="px-8 py-3 bg-primary text-primary-foreground rounded-lg font-medium shadow-md hover:bg-primary/90 transition-all"
+        >
           Assinar Agora
         </Link>
       </div>
@@ -23,49 +26,53 @@ const Demands = () => {
   }
 
   return (
-    <div className="p-6 space-y-6 animate-slide-up">
-      <div className="flex items-center justify-between mb-2">
-        <h1 className="text-2xl font-bold">
+    <div className="space-y-6 animate-slide-up pb-12">
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-3xl font-bold text-foreground tracking-tight">
           {role === 'customer' ? 'Meus Eventos' : 'Demandas Disponíveis'}
         </h1>
       </div>
 
       <div className="space-y-4">
         {demands.length === 0 ? (
-          <div className="text-center text-muted-foreground py-10">Nenhuma demanda encontrada.</div>
+          <div className="text-center text-muted-foreground py-16 border-2 border-dashed border-border rounded-xl bg-secondary/30">
+            Nenhuma demanda encontrada no momento.
+          </div>
         ) : (
           demands.map((demand) => (
             <Link key={demand.id} to={`/demanda/${demand.id}`} className="block">
-              <Card className="bg-card border-border hover:border-primary/50 transition-all duration-300 overflow-hidden group">
+              <Card className="hover:shadow-md transition-all duration-300 border-border group bg-card">
                 <CardContent className="p-0">
-                  <div className="p-5 space-y-4">
-                    <div className="flex justify-between items-start">
-                      <h2 className="font-semibold text-white text-lg leading-tight group-hover:text-primary transition-colors">
+                  <div className="p-5 md:p-6 space-y-4">
+                    <div className="flex justify-between items-start gap-4">
+                      <h2 className="font-semibold text-foreground text-lg md:text-xl leading-tight group-hover:text-primary transition-colors">
                         {demand.title}
                       </h2>
                       {demand.status === 'open' && (
                         <Badge
                           variant="secondary"
-                          className="bg-primary/20 text-primary border-none text-[10px] uppercase tracking-wider font-bold"
+                          className="text-[10px] uppercase tracking-wider font-bold bg-primary/10 text-primary hover:bg-primary/20 shrink-0"
                         >
                           Aberto
                         </Badge>
                       )}
                     </div>
 
-                    <div className="flex flex-col gap-2 text-sm text-muted-foreground">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-sm text-muted-foreground">
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
-                        <span>{new Date(demand.date).toLocaleDateString('pt-BR')}</span>
+                        <span className="font-medium">
+                          {new Date(demand.date).toLocaleDateString('pt-BR')}
+                        </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <MapPin className="w-4 h-4" />
-                        <span>{demand.location}</span>
+                        <span className="font-medium">{demand.location}</span>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between pt-4 border-t border-border/50">
-                      <div className="flex gap-1.5 items-center">
+                    <div className="flex items-center justify-between pt-5 border-t border-border">
+                      <div className="flex gap-2 items-center flex-wrap">
                         {(() => {
                           const activeReqs = SERVICES.filter(
                             (s) => demand.requirements[s.id as keyof typeof demand.requirements],
@@ -75,14 +82,14 @@ const Demands = () => {
                               {activeReqs.slice(0, 4).map((req) => (
                                 <div
                                   key={req.id}
-                                  className={`p-1.5 ${req.bg} rounded-md`}
+                                  className={`p-2 ${req.bg} rounded-lg`}
                                   title={req.label}
                                 >
                                   <req.icon className={`w-4 h-4 ${req.color}`} />
                                 </div>
                               ))}
                               {activeReqs.length > 4 && (
-                                <div className="p-1.5 bg-muted rounded-md flex items-center justify-center text-[10px] font-bold text-muted-foreground min-w-[28px]">
+                                <div className="p-2 bg-secondary rounded-lg flex items-center justify-center text-xs font-bold text-muted-foreground min-w-[32px]">
                                   +{activeReqs.length - 4}
                                 </div>
                               )}
@@ -91,10 +98,10 @@ const Demands = () => {
                         })()}
                       </div>
                       <div className="text-right">
-                        <p className="text-[10px] text-muted-foreground mb-0.5">
+                        <p className="text-[10px] text-muted-foreground mb-1 uppercase tracking-wider font-semibold">
                           {role === 'customer' ? 'Orçamento' : 'Valor Líquido'}
                         </p>
-                        <p className="text-accent font-bold text-base">
+                        <p className="text-foreground font-bold text-lg md:text-xl">
                           {new Intl.NumberFormat('pt-BR', {
                             style: 'currency',
                             currency: 'BRL',
