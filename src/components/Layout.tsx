@@ -9,9 +9,18 @@ import {
   UserPlus,
   LogOut,
   User,
+  Bell,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
 import logoImg from '@/assets/e-eventos-novo-62817.png'
 import { useApp } from '@/store/AppContext'
@@ -19,7 +28,8 @@ import { useApp } from '@/store/AppContext'
 export function Layout() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { currentUser, logout } = useApp()
+  const { currentUser, logout, role, companyProfile, notifications, markNotificationsAsRead } =
+    useApp()
 
   const handleLogout = () => {
     logout()
@@ -32,6 +42,13 @@ export function Layout() {
     { name: 'Criar Evento', path: '/create-event', icon: PlusCircle },
     { name: 'Planos', path: '/subscription', icon: CreditCard },
   ]
+
+  const myNotifications =
+    role === 'company'
+      ? notifications.filter((n) => n.sector === companyProfile?.sector).slice(0, 5)
+      : []
+
+  const unreadCount = myNotifications.filter((n) => !n.read).length
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
@@ -145,29 +162,75 @@ export function Layout() {
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center gap-3">
-            {currentUser ? (
-              <div className="flex items-center gap-4">
-                <Link
-                  to="/profile"
-                  className="text-sm font-medium hover:text-primary transition-colors"
-                >
-                  Olá, {currentUser.name.split(' ')[0]}
-                </Link>
-                <Button variant="ghost" size="sm" onClick={handleLogout}>
-                  Sair
-                </Button>
-              </div>
-            ) : (
-              <>
-                <Button variant="ghost" size="sm" asChild>
-                  <Link to="/login">Entrar</Link>
-                </Button>
-                <Button size="sm" asChild>
-                  <Link to="/register">Cadastrar</Link>
-                </Button>
-              </>
+          <div className="flex items-center gap-3">
+            {role === 'company' && (
+              <DropdownMenu
+                onOpenChange={(open) => {
+                  if (!open) markNotificationsAsRead()
+                }}
+              >
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="relative mr-2 md:mr-0">
+                    <Bell className="h-5 w-5" />
+                    {unreadCount > 0 && (
+                      <span className="absolute top-2 right-2 h-2.5 w-2.5 rounded-full bg-destructive border-2 border-background" />
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-80">
+                  <DropdownMenuLabel>Notificações</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {myNotifications.length === 0 ? (
+                    <div className="p-4 text-center text-sm text-muted-foreground">
+                      Nenhuma notificação no momento.
+                    </div>
+                  ) : (
+                    myNotifications.map((notif) => (
+                      <DropdownMenuItem
+                        key={notif.id}
+                        className="flex flex-col items-start gap-1 p-3 cursor-pointer"
+                        onClick={() => navigate(`/demands/${notif.demandId}`)}
+                      >
+                        <div className="flex items-center gap-2">
+                          {!notif.read && (
+                            <div className="h-2 w-2 rounded-full bg-primary shrink-0" />
+                          )}
+                          <span className="font-semibold text-sm">{notif.title}</span>
+                        </div>
+                        <span className="text-xs text-muted-foreground line-clamp-2">
+                          {notif.message}
+                        </span>
+                      </DropdownMenuItem>
+                    ))
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
+
+            <div className="hidden md:flex items-center gap-3">
+              {currentUser ? (
+                <div className="flex items-center gap-4">
+                  <Link
+                    to="/profile"
+                    className="text-sm font-medium hover:text-primary transition-colors"
+                  >
+                    Olá, {currentUser.name.split(' ')[0]}
+                  </Link>
+                  <Button variant="ghost" size="sm" onClick={handleLogout}>
+                    Sair
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/login">Entrar</Link>
+                  </Button>
+                  <Button size="sm" asChild>
+                    <Link to="/register">Cadastrar</Link>
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </header>

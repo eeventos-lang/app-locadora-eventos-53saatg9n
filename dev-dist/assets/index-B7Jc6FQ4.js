@@ -17418,6 +17418,13 @@ var ArrowRight = createLucideIcon("arrow-right", [["path", {
 	d: "m12 5 7 7-7 7",
 	key: "xquz4c"
 }]]);
+var Bell = createLucideIcon("bell", [["path", {
+	d: "M10.268 21a2 2 0 0 0 3.464 0",
+	key: "vwvbt9"
+}], ["path", {
+	d: "M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326",
+	key: "11g9vi"
+}]]);
 var Briefcase = createLucideIcon("briefcase", [["path", {
 	d: "M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16",
 	key: "jecpp"
@@ -17567,6 +17574,10 @@ var ChevronDown = createLucideIcon("chevron-down", [["path", {
 var ChevronLeft = createLucideIcon("chevron-left", [["path", {
 	d: "m15 18-6-6 6-6",
 	key: "1wnfg3"
+}]]);
+var ChevronRight = createLucideIcon("chevron-right", [["path", {
+	d: "m9 18 6-6-6-6",
+	key: "mthhwq"
 }]]);
 var ChevronUp = createLucideIcon("chevron-up", [["path", {
 	d: "m18 15-6-6-6 6",
@@ -17851,7 +17862,7 @@ var Megaphone = createLucideIcon("megaphone", [
 		key: "15ugcq"
 	}]
 ]);
-var Menu = createLucideIcon("menu", [
+var Menu$1 = createLucideIcon("menu", [
 	["path", {
 		d: "M4 5h16",
 		key: "1tepv9"
@@ -17865,6 +17876,10 @@ var Menu = createLucideIcon("menu", [
 		key: "1djgab"
 	}]
 ]);
+var MessageSquare = createLucideIcon("message-square", [["path", {
+	d: "M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z",
+	key: "18887p"
+}]]);
 var Mic = createLucideIcon("mic", [
 	["path", {
 		d: "M12 19v3",
@@ -18413,7 +18428,7 @@ function createSlot$1(ownerName) {
 	Slot2.displayName = `${ownerName}.Slot`;
 	return Slot2;
 }
-var Slot$2 = /* @__PURE__ */ createSlot$1("Slot");
+var Slot$3 = /* @__PURE__ */ createSlot$1("Slot");
 /* @__NO_SIDE_EFFECTS__ */
 function createSlotClone$1(ownerName) {
 	const SlotClone = import_react.forwardRef((props, forwardedRef) => {
@@ -19980,7 +19995,7 @@ var buttonVariants = cva("inline-flex items-center justify-center gap-2 whitespa
 	}
 });
 var Button = import_react.forwardRef(({ className, variant, size, asChild = false, ...props }, ref) => {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(asChild ? Slot$2 : "button", {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(asChild ? Slot$3 : "button", {
 		"data-uid": "src/components/ui/button.tsx:44:7",
 		"data-prohibitions": "[editContent]",
 		className: cn$1(buttonVariants({
@@ -20551,7 +20566,7 @@ var FocusScope = import_react.forwardRef((props, forwardedRef) => {
 				container.addEventListener(AUTOFOCUS_ON_MOUNT, onMountAutoFocus);
 				container.dispatchEvent(mountEvent);
 				if (!mountEvent.defaultPrevented) {
-					focusFirst$2(removeLinks(getTabbableCandidates$1(container)), { select: true });
+					focusFirst$3(removeLinks(getTabbableCandidates$1(container)), { select: true });
 					if (document.activeElement === previouslyFocusedElement) focus(container);
 				}
 			}
@@ -20604,7 +20619,7 @@ var FocusScope = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 FocusScope.displayName = FOCUS_SCOPE_NAME;
-function focusFirst$2(candidates, { select = false } = {}) {
+function focusFirst$3(candidates, { select = false } = {}) {
 	const previouslyFocusedElement = document.activeElement;
 	for (const candidate of candidates) {
 		focus(candidate, { select });
@@ -20674,8 +20689,8 @@ function removeLinks(items) {
 }
 //#endregion
 //#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-portal@1.1.9_@types+react-dom@19.2.3_@types+react@19.2.14__@types+react_7668895bec2444446faa4e0f4eb5244b/node_modules/@radix-ui/react-portal/dist/index.mjs
-var PORTAL_NAME$3 = "Portal";
-var Portal$2 = import_react.forwardRef((props, forwardedRef) => {
+var PORTAL_NAME$5 = "Portal";
+var Portal$3 = import_react.forwardRef((props, forwardedRef) => {
 	const { container: containerProp, ...portalProps } = props;
 	const [mounted, setMounted] = import_react.useState(false);
 	useLayoutEffect2(() => setMounted(true), []);
@@ -20685,7 +20700,7 @@ var Portal$2 = import_react.forwardRef((props, forwardedRef) => {
 		ref: forwardedRef
 	}), container) : null;
 });
-Portal$2.displayName = PORTAL_NAME$3;
+Portal$3.displayName = PORTAL_NAME$5;
 //#endregion
 //#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-presence@1.1.5_@types+react-dom@19.2.3_@types+react@19.2.14__@types+rea_c01c26c80b5ab5e3ecefbda6eca51ad1/node_modules/@radix-ui/react-presence/dist/index.mjs
 function useStateMachine(initialState, machine) {
@@ -21634,7 +21649,7 @@ var hideOthers = function(originalTarget, parentNode, markerName) {
 var DIALOG_NAME = "Dialog";
 var [createDialogContext, createDialogScope] = createContextScope(DIALOG_NAME);
 var [DialogProvider, useDialogContext] = createDialogContext(DIALOG_NAME);
-var Dialog = (props) => {
+var Dialog$1 = (props) => {
 	const { __scopeDialog, children, open: openProp, defaultOpen, onOpenChange, modal = true } = props;
 	const triggerRef = import_react.useRef(null);
 	const contentRef = import_react.useRef(null);
@@ -21658,11 +21673,11 @@ var Dialog = (props) => {
 		children
 	});
 };
-Dialog.displayName = DIALOG_NAME;
-var TRIGGER_NAME$2 = "DialogTrigger";
-var DialogTrigger = import_react.forwardRef((props, forwardedRef) => {
+Dialog$1.displayName = DIALOG_NAME;
+var TRIGGER_NAME$3 = "DialogTrigger";
+var DialogTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeDialog, ...triggerProps } = props;
-	const context = useDialogContext(TRIGGER_NAME$2, __scopeDialog);
+	const context = useDialogContext(TRIGGER_NAME$3, __scopeDialog);
 	const composedTriggerRef = useComposedRefs(forwardedRef, context.triggerRef);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.button, {
 		type: "button",
@@ -21675,18 +21690,18 @@ var DialogTrigger = import_react.forwardRef((props, forwardedRef) => {
 		onClick: composeEventHandlers(props.onClick, context.onOpenToggle)
 	});
 });
-DialogTrigger.displayName = TRIGGER_NAME$2;
-var PORTAL_NAME$2 = "DialogPortal";
-var [PortalProvider$1, usePortalContext$1] = createDialogContext(PORTAL_NAME$2, { forceMount: void 0 });
-var DialogPortal = (props) => {
+DialogTrigger$1.displayName = TRIGGER_NAME$3;
+var PORTAL_NAME$4 = "DialogPortal";
+var [PortalProvider$2, usePortalContext$2] = createDialogContext(PORTAL_NAME$4, { forceMount: void 0 });
+var DialogPortal$1 = (props) => {
 	const { __scopeDialog, forceMount, children, container } = props;
-	const context = useDialogContext(PORTAL_NAME$2, __scopeDialog);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PortalProvider$1, {
+	const context = useDialogContext(PORTAL_NAME$4, __scopeDialog);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PortalProvider$2, {
 		scope: __scopeDialog,
 		forceMount,
 		children: import_react.Children.map(children, (child) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
 			present: forceMount || context.open,
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Portal$2, {
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Portal$3, {
 				asChild: true,
 				container,
 				children: child
@@ -21694,10 +21709,10 @@ var DialogPortal = (props) => {
 		}))
 	});
 };
-DialogPortal.displayName = PORTAL_NAME$2;
+DialogPortal$1.displayName = PORTAL_NAME$4;
 var OVERLAY_NAME = "DialogOverlay";
-var DialogOverlay = import_react.forwardRef((props, forwardedRef) => {
-	const portalContext = usePortalContext$1(OVERLAY_NAME, props.__scopeDialog);
+var DialogOverlay$1 = import_react.forwardRef((props, forwardedRef) => {
+	const portalContext = usePortalContext$2(OVERLAY_NAME, props.__scopeDialog);
 	const { forceMount = portalContext.forceMount, ...overlayProps } = props;
 	const context = useDialogContext(OVERLAY_NAME, props.__scopeDialog);
 	return context.modal ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
@@ -21708,13 +21723,13 @@ var DialogOverlay = import_react.forwardRef((props, forwardedRef) => {
 		})
 	}) : null;
 });
-DialogOverlay.displayName = OVERLAY_NAME;
-var Slot$1 = /* @__PURE__ */ createSlot("DialogOverlay.RemoveScroll");
+DialogOverlay$1.displayName = OVERLAY_NAME;
+var Slot$2 = /* @__PURE__ */ createSlot("DialogOverlay.RemoveScroll");
 var DialogOverlayImpl = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeDialog, ...overlayProps } = props;
 	const context = useDialogContext(OVERLAY_NAME, __scopeDialog);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ReactRemoveScroll, {
-		as: Slot$1,
+		as: Slot$2,
 		allowPinchZoom: true,
 		shards: [context.contentRef],
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.div, {
@@ -21728,11 +21743,11 @@ var DialogOverlayImpl = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-var CONTENT_NAME$3 = "DialogContent";
-var DialogContent = import_react.forwardRef((props, forwardedRef) => {
-	const portalContext = usePortalContext$1(CONTENT_NAME$3, props.__scopeDialog);
+var CONTENT_NAME$5 = "DialogContent";
+var DialogContent$1 = import_react.forwardRef((props, forwardedRef) => {
+	const portalContext = usePortalContext$2(CONTENT_NAME$5, props.__scopeDialog);
 	const { forceMount = portalContext.forceMount, ...contentProps } = props;
-	const context = useDialogContext(CONTENT_NAME$3, props.__scopeDialog);
+	const context = useDialogContext(CONTENT_NAME$5, props.__scopeDialog);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
 		present: forceMount || context.open,
 		children: context.modal ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogContentModal, {
@@ -21744,9 +21759,9 @@ var DialogContent = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-DialogContent.displayName = CONTENT_NAME$3;
+DialogContent$1.displayName = CONTENT_NAME$5;
 var DialogContentModal = import_react.forwardRef((props, forwardedRef) => {
-	const context = useDialogContext(CONTENT_NAME$3, props.__scopeDialog);
+	const context = useDialogContext(CONTENT_NAME$5, props.__scopeDialog);
 	const contentRef = import_react.useRef(null);
 	const composedRefs = useComposedRefs(forwardedRef, context.contentRef, contentRef);
 	import_react.useEffect(() => {
@@ -21771,7 +21786,7 @@ var DialogContentModal = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 var DialogContentNonModal = import_react.forwardRef((props, forwardedRef) => {
-	const context = useDialogContext(CONTENT_NAME$3, props.__scopeDialog);
+	const context = useDialogContext(CONTENT_NAME$5, props.__scopeDialog);
 	const hasInteractedOutsideRef = import_react.useRef(false);
 	const hasPointerDownOutsideRef = import_react.useRef(false);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogContentImpl, {
@@ -21802,7 +21817,7 @@ var DialogContentNonModal = import_react.forwardRef((props, forwardedRef) => {
 });
 var DialogContentImpl = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeDialog, trapFocus, onOpenAutoFocus, onCloseAutoFocus, ...contentProps } = props;
-	const context = useDialogContext(CONTENT_NAME$3, __scopeDialog);
+	const context = useDialogContext(CONTENT_NAME$5, __scopeDialog);
 	const contentRef = import_react.useRef(null);
 	const composedRefs = useComposedRefs(forwardedRef, contentRef);
 	useFocusGuards();
@@ -21828,7 +21843,7 @@ var DialogContentImpl = import_react.forwardRef((props, forwardedRef) => {
 	})] })] });
 });
 var TITLE_NAME$1 = "DialogTitle";
-var DialogTitle = import_react.forwardRef((props, forwardedRef) => {
+var DialogTitle$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeDialog, ...titleProps } = props;
 	const context = useDialogContext(TITLE_NAME$1, __scopeDialog);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.h2, {
@@ -21837,9 +21852,9 @@ var DialogTitle = import_react.forwardRef((props, forwardedRef) => {
 		ref: forwardedRef
 	});
 });
-DialogTitle.displayName = TITLE_NAME$1;
+DialogTitle$1.displayName = TITLE_NAME$1;
 var DESCRIPTION_NAME$1 = "DialogDescription";
-var DialogDescription = import_react.forwardRef((props, forwardedRef) => {
+var DialogDescription$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeDialog, ...descriptionProps } = props;
 	const context = useDialogContext(DESCRIPTION_NAME$1, __scopeDialog);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.p, {
@@ -21848,9 +21863,9 @@ var DialogDescription = import_react.forwardRef((props, forwardedRef) => {
 		ref: forwardedRef
 	});
 });
-DialogDescription.displayName = DESCRIPTION_NAME$1;
+DialogDescription$1.displayName = DESCRIPTION_NAME$1;
 var CLOSE_NAME$1 = "DialogClose";
-var DialogClose = import_react.forwardRef((props, forwardedRef) => {
+var DialogClose$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeDialog, ...closeProps } = props;
 	const context = useDialogContext(CLOSE_NAME$1, __scopeDialog);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.button, {
@@ -21860,13 +21875,13 @@ var DialogClose = import_react.forwardRef((props, forwardedRef) => {
 		onClick: composeEventHandlers(props.onClick, () => context.onOpenChange(false))
 	});
 });
-DialogClose.displayName = CLOSE_NAME$1;
+DialogClose$1.displayName = CLOSE_NAME$1;
 function getState$2(open) {
 	return open ? "open" : "closed";
 }
 var TITLE_WARNING_NAME = "DialogTitleWarning";
 var [WarningProvider, useWarningContext] = createContext2(TITLE_WARNING_NAME, {
-	contentName: CONTENT_NAME$3,
+	contentName: CONTENT_NAME$5,
 	titleName: TITLE_NAME$1,
 	docsSlug: "dialog"
 });
@@ -21899,19 +21914,19 @@ var DescriptionWarning = ({ contentRef, descriptionId }) => {
 	]);
 	return null;
 };
-var Root$5 = Dialog;
-var Trigger$2 = DialogTrigger;
-var Portal$1 = DialogPortal;
-var Overlay = DialogOverlay;
-var Content$1 = DialogContent;
-var Title$1 = DialogTitle;
-var Description$1 = DialogDescription;
-var Close$1 = DialogClose;
+var Root$5 = Dialog$1;
+var Trigger$3 = DialogTrigger$1;
+var Portal$2 = DialogPortal$1;
+var Overlay = DialogOverlay$1;
+var Content$1 = DialogContent$1;
+var Title$1 = DialogTitle$1;
+var Description$1 = DialogDescription$1;
+var Close$1 = DialogClose$1;
 //#endregion
 //#region src/components/ui/sheet.tsx
 var Sheet = Root$5;
-var SheetTrigger = Trigger$2;
-var SheetPortal = Portal$1;
+var SheetTrigger = Trigger$3;
+var SheetPortal = Portal$2;
 var SheetOverlay = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Overlay, {
 	"data-uid": "src/components/ui/sheet.tsx:21:3",
 	"data-prohibitions": "[editContent]",
@@ -21990,6 +22005,3352 @@ var SheetDescription = import_react.forwardRef(({ className, ...props }, ref) =>
 }));
 SheetDescription.displayName = Description$1.displayName;
 //#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-collection@1.1.7_@types+react-dom@19.2.3_@types+react@19.2.14__@types+r_161926fa2509d0b7370b60b8bb4eb8b0/node_modules/@radix-ui/react-collection/dist/index.mjs
+function createCollection(name) {
+	const PROVIDER_NAME = name + "CollectionProvider";
+	const [createCollectionContext, createCollectionScope] = createContextScope(PROVIDER_NAME);
+	const [CollectionProviderImpl, useCollectionContext] = createCollectionContext(PROVIDER_NAME, {
+		collectionRef: { current: null },
+		itemMap: /* @__PURE__ */ new Map()
+	});
+	const CollectionProvider = (props) => {
+		const { scope, children } = props;
+		const ref = import_react.useRef(null);
+		const itemMap = import_react.useRef(/* @__PURE__ */ new Map()).current;
+		return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CollectionProviderImpl, {
+			scope,
+			itemMap,
+			collectionRef: ref,
+			children
+		});
+	};
+	CollectionProvider.displayName = PROVIDER_NAME;
+	const COLLECTION_SLOT_NAME = name + "CollectionSlot";
+	const CollectionSlotImpl = /* @__PURE__ */ createSlot(COLLECTION_SLOT_NAME);
+	const CollectionSlot = import_react.forwardRef((props, forwardedRef) => {
+		const { scope, children } = props;
+		return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CollectionSlotImpl, {
+			ref: useComposedRefs(forwardedRef, useCollectionContext(COLLECTION_SLOT_NAME, scope).collectionRef),
+			children
+		});
+	});
+	CollectionSlot.displayName = COLLECTION_SLOT_NAME;
+	const ITEM_SLOT_NAME = name + "CollectionItemSlot";
+	const ITEM_DATA_ATTR = "data-radix-collection-item";
+	const CollectionItemSlotImpl = /* @__PURE__ */ createSlot(ITEM_SLOT_NAME);
+	const CollectionItemSlot = import_react.forwardRef((props, forwardedRef) => {
+		const { scope, children, ...itemData } = props;
+		const ref = import_react.useRef(null);
+		const composedRefs = useComposedRefs(forwardedRef, ref);
+		const context = useCollectionContext(ITEM_SLOT_NAME, scope);
+		import_react.useEffect(() => {
+			context.itemMap.set(ref, {
+				ref,
+				...itemData
+			});
+			return () => void context.itemMap.delete(ref);
+		});
+		return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CollectionItemSlotImpl, {
+			[ITEM_DATA_ATTR]: "",
+			ref: composedRefs,
+			children
+		});
+	});
+	CollectionItemSlot.displayName = ITEM_SLOT_NAME;
+	function useCollection(scope) {
+		const context = useCollectionContext(name + "CollectionConsumer", scope);
+		return import_react.useCallback(() => {
+			const collectionNode = context.collectionRef.current;
+			if (!collectionNode) return [];
+			const orderedNodes = Array.from(collectionNode.querySelectorAll(`[${ITEM_DATA_ATTR}]`));
+			return Array.from(context.itemMap.values()).sort((a, b) => orderedNodes.indexOf(a.ref.current) - orderedNodes.indexOf(b.ref.current));
+		}, [context.collectionRef, context.itemMap]);
+	}
+	return [
+		{
+			Provider: CollectionProvider,
+			Slot: CollectionSlot,
+			ItemSlot: CollectionItemSlot
+		},
+		useCollection,
+		createCollectionScope
+	];
+}
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-direction@1.1.1_@types+react@19.2.14_react@19.2.4/node_modules/@radix-ui/react-direction/dist/index.mjs
+var DirectionContext = import_react.createContext(void 0);
+function useDirection(localDir) {
+	const globalDir = import_react.useContext(DirectionContext);
+	return localDir || globalDir || "ltr";
+}
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@floating-ui+utils@0.2.11/node_modules/@floating-ui/utils/dist/floating-ui.utils.mjs
+/**
+* Custom positioning reference element.
+* @see https://floating-ui.com/docs/virtual-elements
+*/
+var sides = [
+	"top",
+	"right",
+	"bottom",
+	"left"
+];
+var min = Math.min;
+var max = Math.max;
+var round = Math.round;
+var floor = Math.floor;
+var createCoords = (v) => ({
+	x: v,
+	y: v
+});
+var oppositeSideMap = {
+	left: "right",
+	right: "left",
+	bottom: "top",
+	top: "bottom"
+};
+function clamp$1(start, value, end) {
+	return max(start, min(value, end));
+}
+function evaluate(value, param) {
+	return typeof value === "function" ? value(param) : value;
+}
+function getSide(placement) {
+	return placement.split("-")[0];
+}
+function getAlignment(placement) {
+	return placement.split("-")[1];
+}
+function getOppositeAxis(axis) {
+	return axis === "x" ? "y" : "x";
+}
+function getAxisLength(axis) {
+	return axis === "y" ? "height" : "width";
+}
+function getSideAxis(placement) {
+	const firstChar = placement[0];
+	return firstChar === "t" || firstChar === "b" ? "y" : "x";
+}
+function getAlignmentAxis(placement) {
+	return getOppositeAxis(getSideAxis(placement));
+}
+function getAlignmentSides(placement, rects, rtl) {
+	if (rtl === void 0) rtl = false;
+	const alignment = getAlignment(placement);
+	const alignmentAxis = getAlignmentAxis(placement);
+	const length = getAxisLength(alignmentAxis);
+	let mainAlignmentSide = alignmentAxis === "x" ? alignment === (rtl ? "end" : "start") ? "right" : "left" : alignment === "start" ? "bottom" : "top";
+	if (rects.reference[length] > rects.floating[length]) mainAlignmentSide = getOppositePlacement(mainAlignmentSide);
+	return [mainAlignmentSide, getOppositePlacement(mainAlignmentSide)];
+}
+function getExpandedPlacements(placement) {
+	const oppositePlacement = getOppositePlacement(placement);
+	return [
+		getOppositeAlignmentPlacement(placement),
+		oppositePlacement,
+		getOppositeAlignmentPlacement(oppositePlacement)
+	];
+}
+function getOppositeAlignmentPlacement(placement) {
+	return placement.includes("start") ? placement.replace("start", "end") : placement.replace("end", "start");
+}
+var lrPlacement = ["left", "right"];
+var rlPlacement = ["right", "left"];
+var tbPlacement = ["top", "bottom"];
+var btPlacement = ["bottom", "top"];
+function getSideList(side, isStart, rtl) {
+	switch (side) {
+		case "top":
+		case "bottom":
+			if (rtl) return isStart ? rlPlacement : lrPlacement;
+			return isStart ? lrPlacement : rlPlacement;
+		case "left":
+		case "right": return isStart ? tbPlacement : btPlacement;
+		default: return [];
+	}
+}
+function getOppositeAxisPlacements(placement, flipAlignment, direction, rtl) {
+	const alignment = getAlignment(placement);
+	let list = getSideList(getSide(placement), direction === "start", rtl);
+	if (alignment) {
+		list = list.map((side) => side + "-" + alignment);
+		if (flipAlignment) list = list.concat(list.map(getOppositeAlignmentPlacement));
+	}
+	return list;
+}
+function getOppositePlacement(placement) {
+	const side = getSide(placement);
+	return oppositeSideMap[side] + placement.slice(side.length);
+}
+function expandPaddingObject(padding) {
+	return {
+		top: 0,
+		right: 0,
+		bottom: 0,
+		left: 0,
+		...padding
+	};
+}
+function getPaddingObject(padding) {
+	return typeof padding !== "number" ? expandPaddingObject(padding) : {
+		top: padding,
+		right: padding,
+		bottom: padding,
+		left: padding
+	};
+}
+function rectToClientRect(rect) {
+	const { x, y, width, height } = rect;
+	return {
+		width,
+		height,
+		top: y,
+		left: x,
+		right: x + width,
+		bottom: y + height,
+		x,
+		y
+	};
+}
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@floating-ui+core@1.7.5/node_modules/@floating-ui/core/dist/floating-ui.core.mjs
+function computeCoordsFromPlacement(_ref, placement, rtl) {
+	let { reference, floating } = _ref;
+	const sideAxis = getSideAxis(placement);
+	const alignmentAxis = getAlignmentAxis(placement);
+	const alignLength = getAxisLength(alignmentAxis);
+	const side = getSide(placement);
+	const isVertical = sideAxis === "y";
+	const commonX = reference.x + reference.width / 2 - floating.width / 2;
+	const commonY = reference.y + reference.height / 2 - floating.height / 2;
+	const commonAlign = reference[alignLength] / 2 - floating[alignLength] / 2;
+	let coords;
+	switch (side) {
+		case "top":
+			coords = {
+				x: commonX,
+				y: reference.y - floating.height
+			};
+			break;
+		case "bottom":
+			coords = {
+				x: commonX,
+				y: reference.y + reference.height
+			};
+			break;
+		case "right":
+			coords = {
+				x: reference.x + reference.width,
+				y: commonY
+			};
+			break;
+		case "left":
+			coords = {
+				x: reference.x - floating.width,
+				y: commonY
+			};
+			break;
+		default: coords = {
+			x: reference.x,
+			y: reference.y
+		};
+	}
+	switch (getAlignment(placement)) {
+		case "start":
+			coords[alignmentAxis] -= commonAlign * (rtl && isVertical ? -1 : 1);
+			break;
+		case "end":
+			coords[alignmentAxis] += commonAlign * (rtl && isVertical ? -1 : 1);
+			break;
+	}
+	return coords;
+}
+/**
+* Resolves with an object of overflow side offsets that determine how much the
+* element is overflowing a given clipping boundary on each side.
+* - positive = overflowing the boundary by that number of pixels
+* - negative = how many pixels left before it will overflow
+* - 0 = lies flush with the boundary
+* @see https://floating-ui.com/docs/detectOverflow
+*/
+async function detectOverflow(state, options) {
+	var _await$platform$isEle;
+	if (options === void 0) options = {};
+	const { x, y, platform, rects, elements, strategy } = state;
+	const { boundary = "clippingAncestors", rootBoundary = "viewport", elementContext = "floating", altBoundary = false, padding = 0 } = evaluate(options, state);
+	const paddingObject = getPaddingObject(padding);
+	const element = elements[altBoundary ? elementContext === "floating" ? "reference" : "floating" : elementContext];
+	const clippingClientRect = rectToClientRect(await platform.getClippingRect({
+		element: ((_await$platform$isEle = await (platform.isElement == null ? void 0 : platform.isElement(element))) != null ? _await$platform$isEle : true) ? element : element.contextElement || await (platform.getDocumentElement == null ? void 0 : platform.getDocumentElement(elements.floating)),
+		boundary,
+		rootBoundary,
+		strategy
+	}));
+	const rect = elementContext === "floating" ? {
+		x,
+		y,
+		width: rects.floating.width,
+		height: rects.floating.height
+	} : rects.reference;
+	const offsetParent = await (platform.getOffsetParent == null ? void 0 : platform.getOffsetParent(elements.floating));
+	const offsetScale = await (platform.isElement == null ? void 0 : platform.isElement(offsetParent)) ? await (platform.getScale == null ? void 0 : platform.getScale(offsetParent)) || {
+		x: 1,
+		y: 1
+	} : {
+		x: 1,
+		y: 1
+	};
+	const elementClientRect = rectToClientRect(platform.convertOffsetParentRelativeRectToViewportRelativeRect ? await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
+		elements,
+		rect,
+		offsetParent,
+		strategy
+	}) : rect);
+	return {
+		top: (clippingClientRect.top - elementClientRect.top + paddingObject.top) / offsetScale.y,
+		bottom: (elementClientRect.bottom - clippingClientRect.bottom + paddingObject.bottom) / offsetScale.y,
+		left: (clippingClientRect.left - elementClientRect.left + paddingObject.left) / offsetScale.x,
+		right: (elementClientRect.right - clippingClientRect.right + paddingObject.right) / offsetScale.x
+	};
+}
+var MAX_RESET_COUNT = 50;
+/**
+* Computes the `x` and `y` coordinates that will place the floating element
+* next to a given reference element.
+*
+* This export does not have any `platform` interface logic. You will need to
+* write one for the platform you are using Floating UI with.
+*/
+var computePosition$1 = async (reference, floating, config) => {
+	const { placement = "bottom", strategy = "absolute", middleware = [], platform } = config;
+	const platformWithDetectOverflow = platform.detectOverflow ? platform : {
+		...platform,
+		detectOverflow
+	};
+	const rtl = await (platform.isRTL == null ? void 0 : platform.isRTL(floating));
+	let rects = await platform.getElementRects({
+		reference,
+		floating,
+		strategy
+	});
+	let { x, y } = computeCoordsFromPlacement(rects, placement, rtl);
+	let statefulPlacement = placement;
+	let resetCount = 0;
+	const middlewareData = {};
+	for (let i = 0; i < middleware.length; i++) {
+		const currentMiddleware = middleware[i];
+		if (!currentMiddleware) continue;
+		const { name, fn } = currentMiddleware;
+		const { x: nextX, y: nextY, data, reset } = await fn({
+			x,
+			y,
+			initialPlacement: placement,
+			placement: statefulPlacement,
+			strategy,
+			middlewareData,
+			rects,
+			platform: platformWithDetectOverflow,
+			elements: {
+				reference,
+				floating
+			}
+		});
+		x = nextX != null ? nextX : x;
+		y = nextY != null ? nextY : y;
+		middlewareData[name] = {
+			...middlewareData[name],
+			...data
+		};
+		if (reset && resetCount < MAX_RESET_COUNT) {
+			resetCount++;
+			if (typeof reset === "object") {
+				if (reset.placement) statefulPlacement = reset.placement;
+				if (reset.rects) rects = reset.rects === true ? await platform.getElementRects({
+					reference,
+					floating,
+					strategy
+				}) : reset.rects;
+				({x, y} = computeCoordsFromPlacement(rects, statefulPlacement, rtl));
+			}
+			i = -1;
+		}
+	}
+	return {
+		x,
+		y,
+		placement: statefulPlacement,
+		strategy,
+		middlewareData
+	};
+};
+/**
+* Provides data to position an inner element of the floating element so that it
+* appears centered to the reference element.
+* @see https://floating-ui.com/docs/arrow
+*/
+var arrow$3 = (options) => ({
+	name: "arrow",
+	options,
+	async fn(state) {
+		const { x, y, placement, rects, platform, elements, middlewareData } = state;
+		const { element, padding = 0 } = evaluate(options, state) || {};
+		if (element == null) return {};
+		const paddingObject = getPaddingObject(padding);
+		const coords = {
+			x,
+			y
+		};
+		const axis = getAlignmentAxis(placement);
+		const length = getAxisLength(axis);
+		const arrowDimensions = await platform.getDimensions(element);
+		const isYAxis = axis === "y";
+		const minProp = isYAxis ? "top" : "left";
+		const maxProp = isYAxis ? "bottom" : "right";
+		const clientProp = isYAxis ? "clientHeight" : "clientWidth";
+		const endDiff = rects.reference[length] + rects.reference[axis] - coords[axis] - rects.floating[length];
+		const startDiff = coords[axis] - rects.reference[axis];
+		const arrowOffsetParent = await (platform.getOffsetParent == null ? void 0 : platform.getOffsetParent(element));
+		let clientSize = arrowOffsetParent ? arrowOffsetParent[clientProp] : 0;
+		if (!clientSize || !await (platform.isElement == null ? void 0 : platform.isElement(arrowOffsetParent))) clientSize = elements.floating[clientProp] || rects.floating[length];
+		const centerToReference = endDiff / 2 - startDiff / 2;
+		const largestPossiblePadding = clientSize / 2 - arrowDimensions[length] / 2 - 1;
+		const minPadding = min(paddingObject[minProp], largestPossiblePadding);
+		const maxPadding = min(paddingObject[maxProp], largestPossiblePadding);
+		const min$1 = minPadding;
+		const max = clientSize - arrowDimensions[length] - maxPadding;
+		const center = clientSize / 2 - arrowDimensions[length] / 2 + centerToReference;
+		const offset = clamp$1(min$1, center, max);
+		const shouldAddOffset = !middlewareData.arrow && getAlignment(placement) != null && center !== offset && rects.reference[length] / 2 - (center < min$1 ? minPadding : maxPadding) - arrowDimensions[length] / 2 < 0;
+		const alignmentOffset = shouldAddOffset ? center < min$1 ? center - min$1 : center - max : 0;
+		return {
+			[axis]: coords[axis] + alignmentOffset,
+			data: {
+				[axis]: offset,
+				centerOffset: center - offset - alignmentOffset,
+				...shouldAddOffset && { alignmentOffset }
+			},
+			reset: shouldAddOffset
+		};
+	}
+});
+/**
+* Optimizes the visibility of the floating element by flipping the `placement`
+* in order to keep it in view when the preferred placement(s) will overflow the
+* clipping boundary. Alternative to `autoPlacement`.
+* @see https://floating-ui.com/docs/flip
+*/
+var flip$2 = function(options) {
+	if (options === void 0) options = {};
+	return {
+		name: "flip",
+		options,
+		async fn(state) {
+			var _middlewareData$arrow, _middlewareData$flip;
+			const { placement, middlewareData, rects, initialPlacement, platform, elements } = state;
+			const { mainAxis: checkMainAxis = true, crossAxis: checkCrossAxis = true, fallbackPlacements: specifiedFallbackPlacements, fallbackStrategy = "bestFit", fallbackAxisSideDirection = "none", flipAlignment = true, ...detectOverflowOptions } = evaluate(options, state);
+			if ((_middlewareData$arrow = middlewareData.arrow) != null && _middlewareData$arrow.alignmentOffset) return {};
+			const side = getSide(placement);
+			const initialSideAxis = getSideAxis(initialPlacement);
+			const isBasePlacement = getSide(initialPlacement) === initialPlacement;
+			const rtl = await (platform.isRTL == null ? void 0 : platform.isRTL(elements.floating));
+			const fallbackPlacements = specifiedFallbackPlacements || (isBasePlacement || !flipAlignment ? [getOppositePlacement(initialPlacement)] : getExpandedPlacements(initialPlacement));
+			const hasFallbackAxisSideDirection = fallbackAxisSideDirection !== "none";
+			if (!specifiedFallbackPlacements && hasFallbackAxisSideDirection) fallbackPlacements.push(...getOppositeAxisPlacements(initialPlacement, flipAlignment, fallbackAxisSideDirection, rtl));
+			const placements = [initialPlacement, ...fallbackPlacements];
+			const overflow = await platform.detectOverflow(state, detectOverflowOptions);
+			const overflows = [];
+			let overflowsData = ((_middlewareData$flip = middlewareData.flip) == null ? void 0 : _middlewareData$flip.overflows) || [];
+			if (checkMainAxis) overflows.push(overflow[side]);
+			if (checkCrossAxis) {
+				const sides = getAlignmentSides(placement, rects, rtl);
+				overflows.push(overflow[sides[0]], overflow[sides[1]]);
+			}
+			overflowsData = [...overflowsData, {
+				placement,
+				overflows
+			}];
+			if (!overflows.every((side) => side <= 0)) {
+				var _middlewareData$flip2, _overflowsData$filter;
+				const nextIndex = (((_middlewareData$flip2 = middlewareData.flip) == null ? void 0 : _middlewareData$flip2.index) || 0) + 1;
+				const nextPlacement = placements[nextIndex];
+				if (nextPlacement) {
+					if (!(checkCrossAxis === "alignment" ? initialSideAxis !== getSideAxis(nextPlacement) : false) || overflowsData.every((d) => getSideAxis(d.placement) === initialSideAxis ? d.overflows[0] > 0 : true)) return {
+						data: {
+							index: nextIndex,
+							overflows: overflowsData
+						},
+						reset: { placement: nextPlacement }
+					};
+				}
+				let resetPlacement = (_overflowsData$filter = overflowsData.filter((d) => d.overflows[0] <= 0).sort((a, b) => a.overflows[1] - b.overflows[1])[0]) == null ? void 0 : _overflowsData$filter.placement;
+				if (!resetPlacement) switch (fallbackStrategy) {
+					case "bestFit": {
+						var _overflowsData$filter2;
+						const placement = (_overflowsData$filter2 = overflowsData.filter((d) => {
+							if (hasFallbackAxisSideDirection) {
+								const currentSideAxis = getSideAxis(d.placement);
+								return currentSideAxis === initialSideAxis || currentSideAxis === "y";
+							}
+							return true;
+						}).map((d) => [d.placement, d.overflows.filter((overflow) => overflow > 0).reduce((acc, overflow) => acc + overflow, 0)]).sort((a, b) => a[1] - b[1])[0]) == null ? void 0 : _overflowsData$filter2[0];
+						if (placement) resetPlacement = placement;
+						break;
+					}
+					case "initialPlacement":
+						resetPlacement = initialPlacement;
+						break;
+				}
+				if (placement !== resetPlacement) return { reset: { placement: resetPlacement } };
+			}
+			return {};
+		}
+	};
+};
+function getSideOffsets(overflow, rect) {
+	return {
+		top: overflow.top - rect.height,
+		right: overflow.right - rect.width,
+		bottom: overflow.bottom - rect.height,
+		left: overflow.left - rect.width
+	};
+}
+function isAnySideFullyClipped(overflow) {
+	return sides.some((side) => overflow[side] >= 0);
+}
+/**
+* Provides data to hide the floating element in applicable situations, such as
+* when it is not in the same clipping context as the reference element.
+* @see https://floating-ui.com/docs/hide
+*/
+var hide$2 = function(options) {
+	if (options === void 0) options = {};
+	return {
+		name: "hide",
+		options,
+		async fn(state) {
+			const { rects, platform } = state;
+			const { strategy = "referenceHidden", ...detectOverflowOptions } = evaluate(options, state);
+			switch (strategy) {
+				case "referenceHidden": {
+					const offsets = getSideOffsets(await platform.detectOverflow(state, {
+						...detectOverflowOptions,
+						elementContext: "reference"
+					}), rects.reference);
+					return { data: {
+						referenceHiddenOffsets: offsets,
+						referenceHidden: isAnySideFullyClipped(offsets)
+					} };
+				}
+				case "escaped": {
+					const offsets = getSideOffsets(await platform.detectOverflow(state, {
+						...detectOverflowOptions,
+						altBoundary: true
+					}), rects.floating);
+					return { data: {
+						escapedOffsets: offsets,
+						escaped: isAnySideFullyClipped(offsets)
+					} };
+				}
+				default: return {};
+			}
+		}
+	};
+};
+var originSides = /* @__PURE__ */ new Set(["left", "top"]);
+async function convertValueToCoords(state, options) {
+	const { placement, platform, elements } = state;
+	const rtl = await (platform.isRTL == null ? void 0 : platform.isRTL(elements.floating));
+	const side = getSide(placement);
+	const alignment = getAlignment(placement);
+	const isVertical = getSideAxis(placement) === "y";
+	const mainAxisMulti = originSides.has(side) ? -1 : 1;
+	const crossAxisMulti = rtl && isVertical ? -1 : 1;
+	const rawValue = evaluate(options, state);
+	let { mainAxis, crossAxis, alignmentAxis } = typeof rawValue === "number" ? {
+		mainAxis: rawValue,
+		crossAxis: 0,
+		alignmentAxis: null
+	} : {
+		mainAxis: rawValue.mainAxis || 0,
+		crossAxis: rawValue.crossAxis || 0,
+		alignmentAxis: rawValue.alignmentAxis
+	};
+	if (alignment && typeof alignmentAxis === "number") crossAxis = alignment === "end" ? alignmentAxis * -1 : alignmentAxis;
+	return isVertical ? {
+		x: crossAxis * crossAxisMulti,
+		y: mainAxis * mainAxisMulti
+	} : {
+		x: mainAxis * mainAxisMulti,
+		y: crossAxis * crossAxisMulti
+	};
+}
+/**
+* Modifies the placement by translating the floating element along the
+* specified axes.
+* A number (shorthand for `mainAxis` or distance), or an axes configuration
+* object may be passed.
+* @see https://floating-ui.com/docs/offset
+*/
+var offset$2 = function(options) {
+	if (options === void 0) options = 0;
+	return {
+		name: "offset",
+		options,
+		async fn(state) {
+			var _middlewareData$offse, _middlewareData$arrow;
+			const { x, y, placement, middlewareData } = state;
+			const diffCoords = await convertValueToCoords(state, options);
+			if (placement === ((_middlewareData$offse = middlewareData.offset) == null ? void 0 : _middlewareData$offse.placement) && (_middlewareData$arrow = middlewareData.arrow) != null && _middlewareData$arrow.alignmentOffset) return {};
+			return {
+				x: x + diffCoords.x,
+				y: y + diffCoords.y,
+				data: {
+					...diffCoords,
+					placement
+				}
+			};
+		}
+	};
+};
+/**
+* Optimizes the visibility of the floating element by shifting it in order to
+* keep it in view when it will overflow the clipping boundary.
+* @see https://floating-ui.com/docs/shift
+*/
+var shift$2 = function(options) {
+	if (options === void 0) options = {};
+	return {
+		name: "shift",
+		options,
+		async fn(state) {
+			const { x, y, placement, platform } = state;
+			const { mainAxis: checkMainAxis = true, crossAxis: checkCrossAxis = false, limiter = { fn: (_ref) => {
+				let { x, y } = _ref;
+				return {
+					x,
+					y
+				};
+			} }, ...detectOverflowOptions } = evaluate(options, state);
+			const coords = {
+				x,
+				y
+			};
+			const overflow = await platform.detectOverflow(state, detectOverflowOptions);
+			const crossAxis = getSideAxis(getSide(placement));
+			const mainAxis = getOppositeAxis(crossAxis);
+			let mainAxisCoord = coords[mainAxis];
+			let crossAxisCoord = coords[crossAxis];
+			if (checkMainAxis) {
+				const minSide = mainAxis === "y" ? "top" : "left";
+				const maxSide = mainAxis === "y" ? "bottom" : "right";
+				const min = mainAxisCoord + overflow[minSide];
+				const max = mainAxisCoord - overflow[maxSide];
+				mainAxisCoord = clamp$1(min, mainAxisCoord, max);
+			}
+			if (checkCrossAxis) {
+				const minSide = crossAxis === "y" ? "top" : "left";
+				const maxSide = crossAxis === "y" ? "bottom" : "right";
+				const min = crossAxisCoord + overflow[minSide];
+				const max = crossAxisCoord - overflow[maxSide];
+				crossAxisCoord = clamp$1(min, crossAxisCoord, max);
+			}
+			const limitedCoords = limiter.fn({
+				...state,
+				[mainAxis]: mainAxisCoord,
+				[crossAxis]: crossAxisCoord
+			});
+			return {
+				...limitedCoords,
+				data: {
+					x: limitedCoords.x - x,
+					y: limitedCoords.y - y,
+					enabled: {
+						[mainAxis]: checkMainAxis,
+						[crossAxis]: checkCrossAxis
+					}
+				}
+			};
+		}
+	};
+};
+/**
+* Built-in `limiter` that will stop `shift()` at a certain point.
+*/
+var limitShift$2 = function(options) {
+	if (options === void 0) options = {};
+	return {
+		options,
+		fn(state) {
+			const { x, y, placement, rects, middlewareData } = state;
+			const { offset = 0, mainAxis: checkMainAxis = true, crossAxis: checkCrossAxis = true } = evaluate(options, state);
+			const coords = {
+				x,
+				y
+			};
+			const crossAxis = getSideAxis(placement);
+			const mainAxis = getOppositeAxis(crossAxis);
+			let mainAxisCoord = coords[mainAxis];
+			let crossAxisCoord = coords[crossAxis];
+			const rawOffset = evaluate(offset, state);
+			const computedOffset = typeof rawOffset === "number" ? {
+				mainAxis: rawOffset,
+				crossAxis: 0
+			} : {
+				mainAxis: 0,
+				crossAxis: 0,
+				...rawOffset
+			};
+			if (checkMainAxis) {
+				const len = mainAxis === "y" ? "height" : "width";
+				const limitMin = rects.reference[mainAxis] - rects.floating[len] + computedOffset.mainAxis;
+				const limitMax = rects.reference[mainAxis] + rects.reference[len] - computedOffset.mainAxis;
+				if (mainAxisCoord < limitMin) mainAxisCoord = limitMin;
+				else if (mainAxisCoord > limitMax) mainAxisCoord = limitMax;
+			}
+			if (checkCrossAxis) {
+				var _middlewareData$offse, _middlewareData$offse2;
+				const len = mainAxis === "y" ? "width" : "height";
+				const isOriginSide = originSides.has(getSide(placement));
+				const limitMin = rects.reference[crossAxis] - rects.floating[len] + (isOriginSide ? ((_middlewareData$offse = middlewareData.offset) == null ? void 0 : _middlewareData$offse[crossAxis]) || 0 : 0) + (isOriginSide ? 0 : computedOffset.crossAxis);
+				const limitMax = rects.reference[crossAxis] + rects.reference[len] + (isOriginSide ? 0 : ((_middlewareData$offse2 = middlewareData.offset) == null ? void 0 : _middlewareData$offse2[crossAxis]) || 0) - (isOriginSide ? computedOffset.crossAxis : 0);
+				if (crossAxisCoord < limitMin) crossAxisCoord = limitMin;
+				else if (crossAxisCoord > limitMax) crossAxisCoord = limitMax;
+			}
+			return {
+				[mainAxis]: mainAxisCoord,
+				[crossAxis]: crossAxisCoord
+			};
+		}
+	};
+};
+/**
+* Provides data that allows you to change the size of the floating element —
+* for instance, prevent it from overflowing the clipping boundary or match the
+* width of the reference element.
+* @see https://floating-ui.com/docs/size
+*/
+var size$2 = function(options) {
+	if (options === void 0) options = {};
+	return {
+		name: "size",
+		options,
+		async fn(state) {
+			var _state$middlewareData, _state$middlewareData2;
+			const { placement, rects, platform, elements } = state;
+			const { apply = () => {}, ...detectOverflowOptions } = evaluate(options, state);
+			const overflow = await platform.detectOverflow(state, detectOverflowOptions);
+			const side = getSide(placement);
+			const alignment = getAlignment(placement);
+			const isYAxis = getSideAxis(placement) === "y";
+			const { width, height } = rects.floating;
+			let heightSide;
+			let widthSide;
+			if (side === "top" || side === "bottom") {
+				heightSide = side;
+				widthSide = alignment === (await (platform.isRTL == null ? void 0 : platform.isRTL(elements.floating)) ? "start" : "end") ? "left" : "right";
+			} else {
+				widthSide = side;
+				heightSide = alignment === "end" ? "top" : "bottom";
+			}
+			const maximumClippingHeight = height - overflow.top - overflow.bottom;
+			const maximumClippingWidth = width - overflow.left - overflow.right;
+			const overflowAvailableHeight = min(height - overflow[heightSide], maximumClippingHeight);
+			const overflowAvailableWidth = min(width - overflow[widthSide], maximumClippingWidth);
+			const noShift = !state.middlewareData.shift;
+			let availableHeight = overflowAvailableHeight;
+			let availableWidth = overflowAvailableWidth;
+			if ((_state$middlewareData = state.middlewareData.shift) != null && _state$middlewareData.enabled.x) availableWidth = maximumClippingWidth;
+			if ((_state$middlewareData2 = state.middlewareData.shift) != null && _state$middlewareData2.enabled.y) availableHeight = maximumClippingHeight;
+			if (noShift && !alignment) {
+				const xMin = max(overflow.left, 0);
+				const xMax = max(overflow.right, 0);
+				const yMin = max(overflow.top, 0);
+				const yMax = max(overflow.bottom, 0);
+				if (isYAxis) availableWidth = width - 2 * (xMin !== 0 || xMax !== 0 ? xMin + xMax : max(overflow.left, overflow.right));
+				else availableHeight = height - 2 * (yMin !== 0 || yMax !== 0 ? yMin + yMax : max(overflow.top, overflow.bottom));
+			}
+			await apply({
+				...state,
+				availableWidth,
+				availableHeight
+			});
+			const nextDimensions = await platform.getDimensions(elements.floating);
+			if (width !== nextDimensions.width || height !== nextDimensions.height) return { reset: { rects: true } };
+			return {};
+		}
+	};
+};
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@floating-ui+utils@0.2.11/node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs
+function hasWindow() {
+	return typeof window !== "undefined";
+}
+function getNodeName(node) {
+	if (isNode(node)) return (node.nodeName || "").toLowerCase();
+	return "#document";
+}
+function getWindow(node) {
+	var _node$ownerDocument;
+	return (node == null || (_node$ownerDocument = node.ownerDocument) == null ? void 0 : _node$ownerDocument.defaultView) || window;
+}
+function getDocumentElement(node) {
+	var _ref;
+	return (_ref = (isNode(node) ? node.ownerDocument : node.document) || window.document) == null ? void 0 : _ref.documentElement;
+}
+function isNode(value) {
+	if (!hasWindow()) return false;
+	return value instanceof Node || value instanceof getWindow(value).Node;
+}
+function isElement(value) {
+	if (!hasWindow()) return false;
+	return value instanceof Element || value instanceof getWindow(value).Element;
+}
+function isHTMLElement$2(value) {
+	if (!hasWindow()) return false;
+	return value instanceof HTMLElement || value instanceof getWindow(value).HTMLElement;
+}
+function isShadowRoot(value) {
+	if (!hasWindow() || typeof ShadowRoot === "undefined") return false;
+	return value instanceof ShadowRoot || value instanceof getWindow(value).ShadowRoot;
+}
+function isOverflowElement(element) {
+	const { overflow, overflowX, overflowY, display } = getComputedStyle$1(element);
+	return /auto|scroll|overlay|hidden|clip/.test(overflow + overflowY + overflowX) && display !== "inline" && display !== "contents";
+}
+function isTableElement(element) {
+	return /^(table|td|th)$/.test(getNodeName(element));
+}
+function isTopLayer(element) {
+	try {
+		if (element.matches(":popover-open")) return true;
+	} catch (_e) {}
+	try {
+		return element.matches(":modal");
+	} catch (_e) {
+		return false;
+	}
+}
+var willChangeRe = /transform|translate|scale|rotate|perspective|filter/;
+var containRe = /paint|layout|strict|content/;
+var isNotNone = (value) => !!value && value !== "none";
+var isWebKitValue;
+function isContainingBlock(elementOrCss) {
+	const css = isElement(elementOrCss) ? getComputedStyle$1(elementOrCss) : elementOrCss;
+	return isNotNone(css.transform) || isNotNone(css.translate) || isNotNone(css.scale) || isNotNone(css.rotate) || isNotNone(css.perspective) || !isWebKit() && (isNotNone(css.backdropFilter) || isNotNone(css.filter)) || willChangeRe.test(css.willChange || "") || containRe.test(css.contain || "");
+}
+function getContainingBlock(element) {
+	let currentNode = getParentNode(element);
+	while (isHTMLElement$2(currentNode) && !isLastTraversableNode(currentNode)) {
+		if (isContainingBlock(currentNode)) return currentNode;
+		else if (isTopLayer(currentNode)) return null;
+		currentNode = getParentNode(currentNode);
+	}
+	return null;
+}
+function isWebKit() {
+	if (isWebKitValue == null) isWebKitValue = typeof CSS !== "undefined" && CSS.supports && CSS.supports("-webkit-backdrop-filter", "none");
+	return isWebKitValue;
+}
+function isLastTraversableNode(node) {
+	return /^(html|body|#document)$/.test(getNodeName(node));
+}
+function getComputedStyle$1(element) {
+	return getWindow(element).getComputedStyle(element);
+}
+function getNodeScroll(element) {
+	if (isElement(element)) return {
+		scrollLeft: element.scrollLeft,
+		scrollTop: element.scrollTop
+	};
+	return {
+		scrollLeft: element.scrollX,
+		scrollTop: element.scrollY
+	};
+}
+function getParentNode(node) {
+	if (getNodeName(node) === "html") return node;
+	const result = node.assignedSlot || node.parentNode || isShadowRoot(node) && node.host || getDocumentElement(node);
+	return isShadowRoot(result) ? result.host : result;
+}
+function getNearestOverflowAncestor(node) {
+	const parentNode = getParentNode(node);
+	if (isLastTraversableNode(parentNode)) return node.ownerDocument ? node.ownerDocument.body : node.body;
+	if (isHTMLElement$2(parentNode) && isOverflowElement(parentNode)) return parentNode;
+	return getNearestOverflowAncestor(parentNode);
+}
+function getOverflowAncestors(node, list, traverseIframes) {
+	var _node$ownerDocument2;
+	if (list === void 0) list = [];
+	if (traverseIframes === void 0) traverseIframes = true;
+	const scrollableAncestor = getNearestOverflowAncestor(node);
+	const isBody = scrollableAncestor === ((_node$ownerDocument2 = node.ownerDocument) == null ? void 0 : _node$ownerDocument2.body);
+	const win = getWindow(scrollableAncestor);
+	if (isBody) {
+		const frameElement = getFrameElement(win);
+		return list.concat(win, win.visualViewport || [], isOverflowElement(scrollableAncestor) ? scrollableAncestor : [], frameElement && traverseIframes ? getOverflowAncestors(frameElement) : []);
+	} else return list.concat(scrollableAncestor, getOverflowAncestors(scrollableAncestor, [], traverseIframes));
+}
+function getFrameElement(win) {
+	return win.parent && Object.getPrototypeOf(win.parent) ? win.frameElement : null;
+}
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@floating-ui+dom@1.7.6/node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs
+function getCssDimensions(element) {
+	const css = getComputedStyle$1(element);
+	let width = parseFloat(css.width) || 0;
+	let height = parseFloat(css.height) || 0;
+	const hasOffset = isHTMLElement$2(element);
+	const offsetWidth = hasOffset ? element.offsetWidth : width;
+	const offsetHeight = hasOffset ? element.offsetHeight : height;
+	const shouldFallback = round(width) !== offsetWidth || round(height) !== offsetHeight;
+	if (shouldFallback) {
+		width = offsetWidth;
+		height = offsetHeight;
+	}
+	return {
+		width,
+		height,
+		$: shouldFallback
+	};
+}
+function unwrapElement(element) {
+	return !isElement(element) ? element.contextElement : element;
+}
+function getScale(element) {
+	const domElement = unwrapElement(element);
+	if (!isHTMLElement$2(domElement)) return createCoords(1);
+	const rect = domElement.getBoundingClientRect();
+	const { width, height, $ } = getCssDimensions(domElement);
+	let x = ($ ? round(rect.width) : rect.width) / width;
+	let y = ($ ? round(rect.height) : rect.height) / height;
+	if (!x || !Number.isFinite(x)) x = 1;
+	if (!y || !Number.isFinite(y)) y = 1;
+	return {
+		x,
+		y
+	};
+}
+var noOffsets = /* @__PURE__ */ createCoords(0);
+function getVisualOffsets(element) {
+	const win = getWindow(element);
+	if (!isWebKit() || !win.visualViewport) return noOffsets;
+	return {
+		x: win.visualViewport.offsetLeft,
+		y: win.visualViewport.offsetTop
+	};
+}
+function shouldAddVisualOffsets(element, isFixed, floatingOffsetParent) {
+	if (isFixed === void 0) isFixed = false;
+	if (!floatingOffsetParent || isFixed && floatingOffsetParent !== getWindow(element)) return false;
+	return isFixed;
+}
+function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetParent) {
+	if (includeScale === void 0) includeScale = false;
+	if (isFixedStrategy === void 0) isFixedStrategy = false;
+	const clientRect = element.getBoundingClientRect();
+	const domElement = unwrapElement(element);
+	let scale = createCoords(1);
+	if (includeScale) if (offsetParent) {
+		if (isElement(offsetParent)) scale = getScale(offsetParent);
+	} else scale = getScale(element);
+	const visualOffsets = shouldAddVisualOffsets(domElement, isFixedStrategy, offsetParent) ? getVisualOffsets(domElement) : createCoords(0);
+	let x = (clientRect.left + visualOffsets.x) / scale.x;
+	let y = (clientRect.top + visualOffsets.y) / scale.y;
+	let width = clientRect.width / scale.x;
+	let height = clientRect.height / scale.y;
+	if (domElement) {
+		const win = getWindow(domElement);
+		const offsetWin = offsetParent && isElement(offsetParent) ? getWindow(offsetParent) : offsetParent;
+		let currentWin = win;
+		let currentIFrame = getFrameElement(currentWin);
+		while (currentIFrame && offsetParent && offsetWin !== currentWin) {
+			const iframeScale = getScale(currentIFrame);
+			const iframeRect = currentIFrame.getBoundingClientRect();
+			const css = getComputedStyle$1(currentIFrame);
+			const left = iframeRect.left + (currentIFrame.clientLeft + parseFloat(css.paddingLeft)) * iframeScale.x;
+			const top = iframeRect.top + (currentIFrame.clientTop + parseFloat(css.paddingTop)) * iframeScale.y;
+			x *= iframeScale.x;
+			y *= iframeScale.y;
+			width *= iframeScale.x;
+			height *= iframeScale.y;
+			x += left;
+			y += top;
+			currentWin = getWindow(currentIFrame);
+			currentIFrame = getFrameElement(currentWin);
+		}
+	}
+	return rectToClientRect({
+		width,
+		height,
+		x,
+		y
+	});
+}
+function getWindowScrollBarX(element, rect) {
+	const leftScroll = getNodeScroll(element).scrollLeft;
+	if (!rect) return getBoundingClientRect(getDocumentElement(element)).left + leftScroll;
+	return rect.left + leftScroll;
+}
+function getHTMLOffset(documentElement, scroll) {
+	const htmlRect = documentElement.getBoundingClientRect();
+	return {
+		x: htmlRect.left + scroll.scrollLeft - getWindowScrollBarX(documentElement, htmlRect),
+		y: htmlRect.top + scroll.scrollTop
+	};
+}
+function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
+	let { elements, rect, offsetParent, strategy } = _ref;
+	const isFixed = strategy === "fixed";
+	const documentElement = getDocumentElement(offsetParent);
+	const topLayer = elements ? isTopLayer(elements.floating) : false;
+	if (offsetParent === documentElement || topLayer && isFixed) return rect;
+	let scroll = {
+		scrollLeft: 0,
+		scrollTop: 0
+	};
+	let scale = createCoords(1);
+	const offsets = createCoords(0);
+	const isOffsetParentAnElement = isHTMLElement$2(offsetParent);
+	if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
+		if (getNodeName(offsetParent) !== "body" || isOverflowElement(documentElement)) scroll = getNodeScroll(offsetParent);
+		if (isOffsetParentAnElement) {
+			const offsetRect = getBoundingClientRect(offsetParent);
+			scale = getScale(offsetParent);
+			offsets.x = offsetRect.x + offsetParent.clientLeft;
+			offsets.y = offsetRect.y + offsetParent.clientTop;
+		}
+	}
+	const htmlOffset = documentElement && !isOffsetParentAnElement && !isFixed ? getHTMLOffset(documentElement, scroll) : createCoords(0);
+	return {
+		width: rect.width * scale.x,
+		height: rect.height * scale.y,
+		x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x + htmlOffset.x,
+		y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y + htmlOffset.y
+	};
+}
+function getClientRects(element) {
+	return Array.from(element.getClientRects());
+}
+function getDocumentRect(element) {
+	const html = getDocumentElement(element);
+	const scroll = getNodeScroll(element);
+	const body = element.ownerDocument.body;
+	const width = max(html.scrollWidth, html.clientWidth, body.scrollWidth, body.clientWidth);
+	const height = max(html.scrollHeight, html.clientHeight, body.scrollHeight, body.clientHeight);
+	let x = -scroll.scrollLeft + getWindowScrollBarX(element);
+	const y = -scroll.scrollTop;
+	if (getComputedStyle$1(body).direction === "rtl") x += max(html.clientWidth, body.clientWidth) - width;
+	return {
+		width,
+		height,
+		x,
+		y
+	};
+}
+var SCROLLBAR_MAX = 25;
+function getViewportRect(element, strategy) {
+	const win = getWindow(element);
+	const html = getDocumentElement(element);
+	const visualViewport = win.visualViewport;
+	let width = html.clientWidth;
+	let height = html.clientHeight;
+	let x = 0;
+	let y = 0;
+	if (visualViewport) {
+		width = visualViewport.width;
+		height = visualViewport.height;
+		const visualViewportBased = isWebKit();
+		if (!visualViewportBased || visualViewportBased && strategy === "fixed") {
+			x = visualViewport.offsetLeft;
+			y = visualViewport.offsetTop;
+		}
+	}
+	const windowScrollbarX = getWindowScrollBarX(html);
+	if (windowScrollbarX <= 0) {
+		const doc = html.ownerDocument;
+		const body = doc.body;
+		const bodyStyles = getComputedStyle(body);
+		const bodyMarginInline = doc.compatMode === "CSS1Compat" ? parseFloat(bodyStyles.marginLeft) + parseFloat(bodyStyles.marginRight) || 0 : 0;
+		const clippingStableScrollbarWidth = Math.abs(html.clientWidth - body.clientWidth - bodyMarginInline);
+		if (clippingStableScrollbarWidth <= SCROLLBAR_MAX) width -= clippingStableScrollbarWidth;
+	} else if (windowScrollbarX <= SCROLLBAR_MAX) width += windowScrollbarX;
+	return {
+		width,
+		height,
+		x,
+		y
+	};
+}
+function getInnerBoundingClientRect(element, strategy) {
+	const clientRect = getBoundingClientRect(element, true, strategy === "fixed");
+	const top = clientRect.top + element.clientTop;
+	const left = clientRect.left + element.clientLeft;
+	const scale = isHTMLElement$2(element) ? getScale(element) : createCoords(1);
+	return {
+		width: element.clientWidth * scale.x,
+		height: element.clientHeight * scale.y,
+		x: left * scale.x,
+		y: top * scale.y
+	};
+}
+function getClientRectFromClippingAncestor(element, clippingAncestor, strategy) {
+	let rect;
+	if (clippingAncestor === "viewport") rect = getViewportRect(element, strategy);
+	else if (clippingAncestor === "document") rect = getDocumentRect(getDocumentElement(element));
+	else if (isElement(clippingAncestor)) rect = getInnerBoundingClientRect(clippingAncestor, strategy);
+	else {
+		const visualOffsets = getVisualOffsets(element);
+		rect = {
+			x: clippingAncestor.x - visualOffsets.x,
+			y: clippingAncestor.y - visualOffsets.y,
+			width: clippingAncestor.width,
+			height: clippingAncestor.height
+		};
+	}
+	return rectToClientRect(rect);
+}
+function hasFixedPositionAncestor(element, stopNode) {
+	const parentNode = getParentNode(element);
+	if (parentNode === stopNode || !isElement(parentNode) || isLastTraversableNode(parentNode)) return false;
+	return getComputedStyle$1(parentNode).position === "fixed" || hasFixedPositionAncestor(parentNode, stopNode);
+}
+function getClippingElementAncestors(element, cache) {
+	const cachedResult = cache.get(element);
+	if (cachedResult) return cachedResult;
+	let result = getOverflowAncestors(element, [], false).filter((el) => isElement(el) && getNodeName(el) !== "body");
+	let currentContainingBlockComputedStyle = null;
+	const elementIsFixed = getComputedStyle$1(element).position === "fixed";
+	let currentNode = elementIsFixed ? getParentNode(element) : element;
+	while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
+		const computedStyle = getComputedStyle$1(currentNode);
+		const currentNodeIsContaining = isContainingBlock(currentNode);
+		if (!currentNodeIsContaining && computedStyle.position === "fixed") currentContainingBlockComputedStyle = null;
+		if (elementIsFixed ? !currentNodeIsContaining && !currentContainingBlockComputedStyle : !currentNodeIsContaining && computedStyle.position === "static" && !!currentContainingBlockComputedStyle && (currentContainingBlockComputedStyle.position === "absolute" || currentContainingBlockComputedStyle.position === "fixed") || isOverflowElement(currentNode) && !currentNodeIsContaining && hasFixedPositionAncestor(element, currentNode)) result = result.filter((ancestor) => ancestor !== currentNode);
+		else currentContainingBlockComputedStyle = computedStyle;
+		currentNode = getParentNode(currentNode);
+	}
+	cache.set(element, result);
+	return result;
+}
+function getClippingRect(_ref) {
+	let { element, boundary, rootBoundary, strategy } = _ref;
+	const clippingAncestors = [...boundary === "clippingAncestors" ? isTopLayer(element) ? [] : getClippingElementAncestors(element, this._c) : [].concat(boundary), rootBoundary];
+	const firstRect = getClientRectFromClippingAncestor(element, clippingAncestors[0], strategy);
+	let top = firstRect.top;
+	let right = firstRect.right;
+	let bottom = firstRect.bottom;
+	let left = firstRect.left;
+	for (let i = 1; i < clippingAncestors.length; i++) {
+		const rect = getClientRectFromClippingAncestor(element, clippingAncestors[i], strategy);
+		top = max(rect.top, top);
+		right = min(rect.right, right);
+		bottom = min(rect.bottom, bottom);
+		left = max(rect.left, left);
+	}
+	return {
+		width: right - left,
+		height: bottom - top,
+		x: left,
+		y: top
+	};
+}
+function getDimensions(element) {
+	const { width, height } = getCssDimensions(element);
+	return {
+		width,
+		height
+	};
+}
+function getRectRelativeToOffsetParent(element, offsetParent, strategy) {
+	const isOffsetParentAnElement = isHTMLElement$2(offsetParent);
+	const documentElement = getDocumentElement(offsetParent);
+	const isFixed = strategy === "fixed";
+	const rect = getBoundingClientRect(element, true, isFixed, offsetParent);
+	let scroll = {
+		scrollLeft: 0,
+		scrollTop: 0
+	};
+	const offsets = createCoords(0);
+	function setLeftRTLScrollbarOffset() {
+		offsets.x = getWindowScrollBarX(documentElement);
+	}
+	if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
+		if (getNodeName(offsetParent) !== "body" || isOverflowElement(documentElement)) scroll = getNodeScroll(offsetParent);
+		if (isOffsetParentAnElement) {
+			const offsetRect = getBoundingClientRect(offsetParent, true, isFixed, offsetParent);
+			offsets.x = offsetRect.x + offsetParent.clientLeft;
+			offsets.y = offsetRect.y + offsetParent.clientTop;
+		} else if (documentElement) setLeftRTLScrollbarOffset();
+	}
+	if (isFixed && !isOffsetParentAnElement && documentElement) setLeftRTLScrollbarOffset();
+	const htmlOffset = documentElement && !isOffsetParentAnElement && !isFixed ? getHTMLOffset(documentElement, scroll) : createCoords(0);
+	return {
+		x: rect.left + scroll.scrollLeft - offsets.x - htmlOffset.x,
+		y: rect.top + scroll.scrollTop - offsets.y - htmlOffset.y,
+		width: rect.width,
+		height: rect.height
+	};
+}
+function isStaticPositioned(element) {
+	return getComputedStyle$1(element).position === "static";
+}
+function getTrueOffsetParent(element, polyfill) {
+	if (!isHTMLElement$2(element) || getComputedStyle$1(element).position === "fixed") return null;
+	if (polyfill) return polyfill(element);
+	let rawOffsetParent = element.offsetParent;
+	if (getDocumentElement(element) === rawOffsetParent) rawOffsetParent = rawOffsetParent.ownerDocument.body;
+	return rawOffsetParent;
+}
+function getOffsetParent(element, polyfill) {
+	const win = getWindow(element);
+	if (isTopLayer(element)) return win;
+	if (!isHTMLElement$2(element)) {
+		let svgOffsetParent = getParentNode(element);
+		while (svgOffsetParent && !isLastTraversableNode(svgOffsetParent)) {
+			if (isElement(svgOffsetParent) && !isStaticPositioned(svgOffsetParent)) return svgOffsetParent;
+			svgOffsetParent = getParentNode(svgOffsetParent);
+		}
+		return win;
+	}
+	let offsetParent = getTrueOffsetParent(element, polyfill);
+	while (offsetParent && isTableElement(offsetParent) && isStaticPositioned(offsetParent)) offsetParent = getTrueOffsetParent(offsetParent, polyfill);
+	if (offsetParent && isLastTraversableNode(offsetParent) && isStaticPositioned(offsetParent) && !isContainingBlock(offsetParent)) return win;
+	return offsetParent || getContainingBlock(element) || win;
+}
+var getElementRects = async function(data) {
+	const getOffsetParentFn = this.getOffsetParent || getOffsetParent;
+	const getDimensionsFn = this.getDimensions;
+	const floatingDimensions = await getDimensionsFn(data.floating);
+	return {
+		reference: getRectRelativeToOffsetParent(data.reference, await getOffsetParentFn(data.floating), data.strategy),
+		floating: {
+			x: 0,
+			y: 0,
+			width: floatingDimensions.width,
+			height: floatingDimensions.height
+		}
+	};
+};
+function isRTL(element) {
+	return getComputedStyle$1(element).direction === "rtl";
+}
+var platform = {
+	convertOffsetParentRelativeRectToViewportRelativeRect,
+	getDocumentElement,
+	getClippingRect,
+	getOffsetParent,
+	getElementRects,
+	getClientRects,
+	getDimensions,
+	getScale,
+	isElement,
+	isRTL
+};
+function rectsAreEqual(a, b) {
+	return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
+}
+function observeMove(element, onMove) {
+	let io = null;
+	let timeoutId;
+	const root = getDocumentElement(element);
+	function cleanup() {
+		var _io;
+		clearTimeout(timeoutId);
+		(_io = io) == null || _io.disconnect();
+		io = null;
+	}
+	function refresh(skip, threshold) {
+		if (skip === void 0) skip = false;
+		if (threshold === void 0) threshold = 1;
+		cleanup();
+		const elementRectForRootMargin = element.getBoundingClientRect();
+		const { left, top, width, height } = elementRectForRootMargin;
+		if (!skip) onMove();
+		if (!width || !height) return;
+		const insetTop = floor(top);
+		const insetRight = floor(root.clientWidth - (left + width));
+		const insetBottom = floor(root.clientHeight - (top + height));
+		const insetLeft = floor(left);
+		const options = {
+			rootMargin: -insetTop + "px " + -insetRight + "px " + -insetBottom + "px " + -insetLeft + "px",
+			threshold: max(0, min(1, threshold)) || 1
+		};
+		let isFirstUpdate = true;
+		function handleObserve(entries) {
+			const ratio = entries[0].intersectionRatio;
+			if (ratio !== threshold) {
+				if (!isFirstUpdate) return refresh();
+				if (!ratio) timeoutId = setTimeout(() => {
+					refresh(false, 1e-7);
+				}, 1e3);
+				else refresh(false, ratio);
+			}
+			if (ratio === 1 && !rectsAreEqual(elementRectForRootMargin, element.getBoundingClientRect())) refresh();
+			isFirstUpdate = false;
+		}
+		try {
+			io = new IntersectionObserver(handleObserve, {
+				...options,
+				root: root.ownerDocument
+			});
+		} catch (_e) {
+			io = new IntersectionObserver(handleObserve, options);
+		}
+		io.observe(element);
+	}
+	refresh(true);
+	return cleanup;
+}
+/**
+* Automatically updates the position of the floating element when necessary.
+* Should only be called when the floating element is mounted on the DOM or
+* visible on the screen.
+* @returns cleanup function that should be invoked when the floating element is
+* removed from the DOM or hidden from the screen.
+* @see https://floating-ui.com/docs/autoUpdate
+*/
+function autoUpdate(reference, floating, update, options) {
+	if (options === void 0) options = {};
+	const { ancestorScroll = true, ancestorResize = true, elementResize = typeof ResizeObserver === "function", layoutShift = typeof IntersectionObserver === "function", animationFrame = false } = options;
+	const referenceEl = unwrapElement(reference);
+	const ancestors = ancestorScroll || ancestorResize ? [...referenceEl ? getOverflowAncestors(referenceEl) : [], ...floating ? getOverflowAncestors(floating) : []] : [];
+	ancestors.forEach((ancestor) => {
+		ancestorScroll && ancestor.addEventListener("scroll", update, { passive: true });
+		ancestorResize && ancestor.addEventListener("resize", update);
+	});
+	const cleanupIo = referenceEl && layoutShift ? observeMove(referenceEl, update) : null;
+	let reobserveFrame = -1;
+	let resizeObserver = null;
+	if (elementResize) {
+		resizeObserver = new ResizeObserver((_ref) => {
+			let [firstEntry] = _ref;
+			if (firstEntry && firstEntry.target === referenceEl && resizeObserver && floating) {
+				resizeObserver.unobserve(floating);
+				cancelAnimationFrame(reobserveFrame);
+				reobserveFrame = requestAnimationFrame(() => {
+					var _resizeObserver;
+					(_resizeObserver = resizeObserver) == null || _resizeObserver.observe(floating);
+				});
+			}
+			update();
+		});
+		if (referenceEl && !animationFrame) resizeObserver.observe(referenceEl);
+		if (floating) resizeObserver.observe(floating);
+	}
+	let frameId;
+	let prevRefRect = animationFrame ? getBoundingClientRect(reference) : null;
+	if (animationFrame) frameLoop();
+	function frameLoop() {
+		const nextRefRect = getBoundingClientRect(reference);
+		if (prevRefRect && !rectsAreEqual(prevRefRect, nextRefRect)) update();
+		prevRefRect = nextRefRect;
+		frameId = requestAnimationFrame(frameLoop);
+	}
+	update();
+	return () => {
+		var _resizeObserver2;
+		ancestors.forEach((ancestor) => {
+			ancestorScroll && ancestor.removeEventListener("scroll", update);
+			ancestorResize && ancestor.removeEventListener("resize", update);
+		});
+		cleanupIo?.();
+		(_resizeObserver2 = resizeObserver) == null || _resizeObserver2.disconnect();
+		resizeObserver = null;
+		if (animationFrame) cancelAnimationFrame(frameId);
+	};
+}
+/**
+* Modifies the placement by translating the floating element along the
+* specified axes.
+* A number (shorthand for `mainAxis` or distance), or an axes configuration
+* object may be passed.
+* @see https://floating-ui.com/docs/offset
+*/
+var offset$1 = offset$2;
+/**
+* Optimizes the visibility of the floating element by shifting it in order to
+* keep it in view when it will overflow the clipping boundary.
+* @see https://floating-ui.com/docs/shift
+*/
+var shift$1 = shift$2;
+/**
+* Optimizes the visibility of the floating element by flipping the `placement`
+* in order to keep it in view when the preferred placement(s) will overflow the
+* clipping boundary. Alternative to `autoPlacement`.
+* @see https://floating-ui.com/docs/flip
+*/
+var flip$1 = flip$2;
+/**
+* Provides data that allows you to change the size of the floating element —
+* for instance, prevent it from overflowing the clipping boundary or match the
+* width of the reference element.
+* @see https://floating-ui.com/docs/size
+*/
+var size$1 = size$2;
+/**
+* Provides data to hide the floating element in applicable situations, such as
+* when it is not in the same clipping context as the reference element.
+* @see https://floating-ui.com/docs/hide
+*/
+var hide$1 = hide$2;
+/**
+* Provides data to position an inner element of the floating element so that it
+* appears centered to the reference element.
+* @see https://floating-ui.com/docs/arrow
+*/
+var arrow$2 = arrow$3;
+/**
+* Built-in `limiter` that will stop `shift()` at a certain point.
+*/
+var limitShift$1 = limitShift$2;
+/**
+* Computes the `x` and `y` coordinates that will place the floating element
+* next to a given reference element.
+*/
+var computePosition = (reference, floating, options) => {
+	const cache = /* @__PURE__ */ new Map();
+	const mergedOptions = {
+		platform,
+		...options
+	};
+	const platformWithCache = {
+		...mergedOptions.platform,
+		_c: cache
+	};
+	return computePosition$1(reference, floating, {
+		...mergedOptions,
+		platform: platformWithCache
+	});
+};
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@floating-ui+react-dom@2.1.8_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs
+var index = typeof document !== "undefined" ? import_react.useLayoutEffect : function noop() {};
+function deepEqual$1(a, b) {
+	if (a === b) return true;
+	if (typeof a !== typeof b) return false;
+	if (typeof a === "function" && a.toString() === b.toString()) return true;
+	let length;
+	let i;
+	let keys;
+	if (a && b && typeof a === "object") {
+		if (Array.isArray(a)) {
+			length = a.length;
+			if (length !== b.length) return false;
+			for (i = length; i-- !== 0;) if (!deepEqual$1(a[i], b[i])) return false;
+			return true;
+		}
+		keys = Object.keys(a);
+		length = keys.length;
+		if (length !== Object.keys(b).length) return false;
+		for (i = length; i-- !== 0;) if (!{}.hasOwnProperty.call(b, keys[i])) return false;
+		for (i = length; i-- !== 0;) {
+			const key = keys[i];
+			if (key === "_owner" && a.$$typeof) continue;
+			if (!deepEqual$1(a[key], b[key])) return false;
+		}
+		return true;
+	}
+	return a !== a && b !== b;
+}
+function getDPR(element) {
+	if (typeof window === "undefined") return 1;
+	return (element.ownerDocument.defaultView || window).devicePixelRatio || 1;
+}
+function roundByDPR(element, value) {
+	const dpr = getDPR(element);
+	return Math.round(value * dpr) / dpr;
+}
+function useLatestRef(value) {
+	const ref = import_react.useRef(value);
+	index(() => {
+		ref.current = value;
+	});
+	return ref;
+}
+/**
+* Provides data to position a floating element.
+* @see https://floating-ui.com/docs/useFloating
+*/
+function useFloating(options) {
+	if (options === void 0) options = {};
+	const { placement = "bottom", strategy = "absolute", middleware = [], platform, elements: { reference: externalReference, floating: externalFloating } = {}, transform = true, whileElementsMounted, open } = options;
+	const [data, setData] = import_react.useState({
+		x: 0,
+		y: 0,
+		strategy,
+		placement,
+		middlewareData: {},
+		isPositioned: false
+	});
+	const [latestMiddleware, setLatestMiddleware] = import_react.useState(middleware);
+	if (!deepEqual$1(latestMiddleware, middleware)) setLatestMiddleware(middleware);
+	const [_reference, _setReference] = import_react.useState(null);
+	const [_floating, _setFloating] = import_react.useState(null);
+	const setReference = import_react.useCallback((node) => {
+		if (node !== referenceRef.current) {
+			referenceRef.current = node;
+			_setReference(node);
+		}
+	}, []);
+	const setFloating = import_react.useCallback((node) => {
+		if (node !== floatingRef.current) {
+			floatingRef.current = node;
+			_setFloating(node);
+		}
+	}, []);
+	const referenceEl = externalReference || _reference;
+	const floatingEl = externalFloating || _floating;
+	const referenceRef = import_react.useRef(null);
+	const floatingRef = import_react.useRef(null);
+	const dataRef = import_react.useRef(data);
+	const hasWhileElementsMounted = whileElementsMounted != null;
+	const whileElementsMountedRef = useLatestRef(whileElementsMounted);
+	const platformRef = useLatestRef(platform);
+	const openRef = useLatestRef(open);
+	const update = import_react.useCallback(() => {
+		if (!referenceRef.current || !floatingRef.current) return;
+		const config = {
+			placement,
+			strategy,
+			middleware: latestMiddleware
+		};
+		if (platformRef.current) config.platform = platformRef.current;
+		computePosition(referenceRef.current, floatingRef.current, config).then((data) => {
+			const fullData = {
+				...data,
+				isPositioned: openRef.current !== false
+			};
+			if (isMountedRef.current && !deepEqual$1(dataRef.current, fullData)) {
+				dataRef.current = fullData;
+				import_react_dom.flushSync(() => {
+					setData(fullData);
+				});
+			}
+		});
+	}, [
+		latestMiddleware,
+		placement,
+		strategy,
+		platformRef,
+		openRef
+	]);
+	index(() => {
+		if (open === false && dataRef.current.isPositioned) {
+			dataRef.current.isPositioned = false;
+			setData((data) => ({
+				...data,
+				isPositioned: false
+			}));
+		}
+	}, [open]);
+	const isMountedRef = import_react.useRef(false);
+	index(() => {
+		isMountedRef.current = true;
+		return () => {
+			isMountedRef.current = false;
+		};
+	}, []);
+	index(() => {
+		if (referenceEl) referenceRef.current = referenceEl;
+		if (floatingEl) floatingRef.current = floatingEl;
+		if (referenceEl && floatingEl) {
+			if (whileElementsMountedRef.current) return whileElementsMountedRef.current(referenceEl, floatingEl, update);
+			update();
+		}
+	}, [
+		referenceEl,
+		floatingEl,
+		update,
+		whileElementsMountedRef,
+		hasWhileElementsMounted
+	]);
+	const refs = import_react.useMemo(() => ({
+		reference: referenceRef,
+		floating: floatingRef,
+		setReference,
+		setFloating
+	}), [setReference, setFloating]);
+	const elements = import_react.useMemo(() => ({
+		reference: referenceEl,
+		floating: floatingEl
+	}), [referenceEl, floatingEl]);
+	const floatingStyles = import_react.useMemo(() => {
+		const initialStyles = {
+			position: strategy,
+			left: 0,
+			top: 0
+		};
+		if (!elements.floating) return initialStyles;
+		const x = roundByDPR(elements.floating, data.x);
+		const y = roundByDPR(elements.floating, data.y);
+		if (transform) return {
+			...initialStyles,
+			transform: "translate(" + x + "px, " + y + "px)",
+			...getDPR(elements.floating) >= 1.5 && { willChange: "transform" }
+		};
+		return {
+			position: strategy,
+			left: x,
+			top: y
+		};
+	}, [
+		strategy,
+		transform,
+		elements.floating,
+		data.x,
+		data.y
+	]);
+	return import_react.useMemo(() => ({
+		...data,
+		update,
+		refs,
+		elements,
+		floatingStyles
+	}), [
+		data,
+		update,
+		refs,
+		elements,
+		floatingStyles
+	]);
+}
+/**
+* Provides data to position an inner element of the floating element so that it
+* appears centered to the reference element.
+* This wraps the core `arrow` middleware to allow React refs as the element.
+* @see https://floating-ui.com/docs/arrow
+*/
+var arrow$1 = (options) => {
+	function isRef(value) {
+		return {}.hasOwnProperty.call(value, "current");
+	}
+	return {
+		name: "arrow",
+		options,
+		fn(state) {
+			const { element, padding } = typeof options === "function" ? options(state) : options;
+			if (element && isRef(element)) {
+				if (element.current != null) return arrow$2({
+					element: element.current,
+					padding
+				}).fn(state);
+				return {};
+			}
+			if (element) return arrow$2({
+				element,
+				padding
+			}).fn(state);
+			return {};
+		}
+	};
+};
+/**
+* Modifies the placement by translating the floating element along the
+* specified axes.
+* A number (shorthand for `mainAxis` or distance), or an axes configuration
+* object may be passed.
+* @see https://floating-ui.com/docs/offset
+*/
+var offset = (options, deps) => {
+	const result = offset$1(options);
+	return {
+		name: result.name,
+		fn: result.fn,
+		options: [options, deps]
+	};
+};
+/**
+* Optimizes the visibility of the floating element by shifting it in order to
+* keep it in view when it will overflow the clipping boundary.
+* @see https://floating-ui.com/docs/shift
+*/
+var shift = (options, deps) => {
+	const result = shift$1(options);
+	return {
+		name: result.name,
+		fn: result.fn,
+		options: [options, deps]
+	};
+};
+/**
+* Built-in `limiter` that will stop `shift()` at a certain point.
+*/
+var limitShift = (options, deps) => {
+	return {
+		fn: limitShift$1(options).fn,
+		options: [options, deps]
+	};
+};
+/**
+* Optimizes the visibility of the floating element by flipping the `placement`
+* in order to keep it in view when the preferred placement(s) will overflow the
+* clipping boundary. Alternative to `autoPlacement`.
+* @see https://floating-ui.com/docs/flip
+*/
+var flip = (options, deps) => {
+	const result = flip$1(options);
+	return {
+		name: result.name,
+		fn: result.fn,
+		options: [options, deps]
+	};
+};
+/**
+* Provides data that allows you to change the size of the floating element —
+* for instance, prevent it from overflowing the clipping boundary or match the
+* width of the reference element.
+* @see https://floating-ui.com/docs/size
+*/
+var size = (options, deps) => {
+	const result = size$1(options);
+	return {
+		name: result.name,
+		fn: result.fn,
+		options: [options, deps]
+	};
+};
+/**
+* Provides data to hide the floating element in applicable situations, such as
+* when it is not in the same clipping context as the reference element.
+* @see https://floating-ui.com/docs/hide
+*/
+var hide = (options, deps) => {
+	const result = hide$1(options);
+	return {
+		name: result.name,
+		fn: result.fn,
+		options: [options, deps]
+	};
+};
+/**
+* Provides data to position an inner element of the floating element so that it
+* appears centered to the reference element.
+* This wraps the core `arrow` middleware to allow React refs as the element.
+* @see https://floating-ui.com/docs/arrow
+*/
+var arrow = (options, deps) => {
+	const result = arrow$1(options);
+	return {
+		name: result.name,
+		fn: result.fn,
+		options: [options, deps]
+	};
+};
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-arrow@1.1.7_@types+react-dom@19.2.3_@types+react@19.2.14__@types+react@_e05f2c19a58a99fddf374207b5e3778c/node_modules/@radix-ui/react-arrow/dist/index.mjs
+var NAME$2 = "Arrow";
+var Arrow$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { children, width = 10, height = 5, ...arrowProps } = props;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.svg, {
+		...arrowProps,
+		ref: forwardedRef,
+		width,
+		height,
+		viewBox: "0 0 30 10",
+		preserveAspectRatio: "none",
+		children: props.asChild ? children : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("polygon", { points: "0,0 30,0 15,10" })
+	});
+});
+Arrow$1.displayName = NAME$2;
+var Root$4 = Arrow$1;
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-use-size@1.1.1_@types+react@19.2.14_react@19.2.4/node_modules/@radix-ui/react-use-size/dist/index.mjs
+function useSize(element) {
+	const [size, setSize] = import_react.useState(void 0);
+	useLayoutEffect2(() => {
+		if (element) {
+			setSize({
+				width: element.offsetWidth,
+				height: element.offsetHeight
+			});
+			const resizeObserver = new ResizeObserver((entries) => {
+				if (!Array.isArray(entries)) return;
+				if (!entries.length) return;
+				const entry = entries[0];
+				let width;
+				let height;
+				if ("borderBoxSize" in entry) {
+					const borderSizeEntry = entry["borderBoxSize"];
+					const borderSize = Array.isArray(borderSizeEntry) ? borderSizeEntry[0] : borderSizeEntry;
+					width = borderSize["inlineSize"];
+					height = borderSize["blockSize"];
+				} else {
+					width = element.offsetWidth;
+					height = element.offsetHeight;
+				}
+				setSize({
+					width,
+					height
+				});
+			});
+			resizeObserver.observe(element, { box: "border-box" });
+			return () => resizeObserver.unobserve(element);
+		} else setSize(void 0);
+	}, [element]);
+	return size;
+}
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-popper@1.2.8_@types+react-dom@19.2.3_@types+react@19.2.14__@types+react_13e0521d8aea7ebfbfb8bee1fb615c05/node_modules/@radix-ui/react-popper/dist/index.mjs
+var POPPER_NAME = "Popper";
+var [createPopperContext, createPopperScope] = createContextScope(POPPER_NAME);
+var [PopperProvider, usePopperContext] = createPopperContext(POPPER_NAME);
+var Popper = (props) => {
+	const { __scopePopper, children } = props;
+	const [anchor, setAnchor] = import_react.useState(null);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopperProvider, {
+		scope: __scopePopper,
+		anchor,
+		onAnchorChange: setAnchor,
+		children
+	});
+};
+Popper.displayName = POPPER_NAME;
+var ANCHOR_NAME$1 = "PopperAnchor";
+var PopperAnchor = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopePopper, virtualRef, ...anchorProps } = props;
+	const context = usePopperContext(ANCHOR_NAME$1, __scopePopper);
+	const ref = import_react.useRef(null);
+	const composedRefs = useComposedRefs(forwardedRef, ref);
+	const anchorRef = import_react.useRef(null);
+	import_react.useEffect(() => {
+		const previousAnchor = anchorRef.current;
+		anchorRef.current = virtualRef?.current || ref.current;
+		if (previousAnchor !== anchorRef.current) context.onAnchorChange(anchorRef.current);
+	});
+	return virtualRef ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.div, {
+		...anchorProps,
+		ref: composedRefs
+	});
+});
+PopperAnchor.displayName = ANCHOR_NAME$1;
+var CONTENT_NAME$4 = "PopperContent";
+var [PopperContentProvider, useContentContext] = createPopperContext(CONTENT_NAME$4);
+var PopperContent = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopePopper, side = "bottom", sideOffset = 0, align = "center", alignOffset = 0, arrowPadding = 0, avoidCollisions = true, collisionBoundary = [], collisionPadding: collisionPaddingProp = 0, sticky = "partial", hideWhenDetached = false, updatePositionStrategy = "optimized", onPlaced, ...contentProps } = props;
+	const context = usePopperContext(CONTENT_NAME$4, __scopePopper);
+	const [content, setContent] = import_react.useState(null);
+	const composedRefs = useComposedRefs(forwardedRef, (node) => setContent(node));
+	const [arrow$4, setArrow] = import_react.useState(null);
+	const arrowSize = useSize(arrow$4);
+	const arrowWidth = arrowSize?.width ?? 0;
+	const arrowHeight = arrowSize?.height ?? 0;
+	const desiredPlacement = side + (align !== "center" ? "-" + align : "");
+	const collisionPadding = typeof collisionPaddingProp === "number" ? collisionPaddingProp : {
+		top: 0,
+		right: 0,
+		bottom: 0,
+		left: 0,
+		...collisionPaddingProp
+	};
+	const boundary = Array.isArray(collisionBoundary) ? collisionBoundary : [collisionBoundary];
+	const hasExplicitBoundaries = boundary.length > 0;
+	const detectOverflowOptions = {
+		padding: collisionPadding,
+		boundary: boundary.filter(isNotNull),
+		altBoundary: hasExplicitBoundaries
+	};
+	const { refs, floatingStyles, placement, isPositioned, middlewareData } = useFloating({
+		strategy: "fixed",
+		placement: desiredPlacement,
+		whileElementsMounted: (...args) => {
+			return autoUpdate(...args, { animationFrame: updatePositionStrategy === "always" });
+		},
+		elements: { reference: context.anchor },
+		middleware: [
+			offset({
+				mainAxis: sideOffset + arrowHeight,
+				alignmentAxis: alignOffset
+			}),
+			avoidCollisions && shift({
+				mainAxis: true,
+				crossAxis: false,
+				limiter: sticky === "partial" ? limitShift() : void 0,
+				...detectOverflowOptions
+			}),
+			avoidCollisions && flip({ ...detectOverflowOptions }),
+			size({
+				...detectOverflowOptions,
+				apply: ({ elements, rects, availableWidth, availableHeight }) => {
+					const { width: anchorWidth, height: anchorHeight } = rects.reference;
+					const contentStyle = elements.floating.style;
+					contentStyle.setProperty("--radix-popper-available-width", `${availableWidth}px`);
+					contentStyle.setProperty("--radix-popper-available-height", `${availableHeight}px`);
+					contentStyle.setProperty("--radix-popper-anchor-width", `${anchorWidth}px`);
+					contentStyle.setProperty("--radix-popper-anchor-height", `${anchorHeight}px`);
+				}
+			}),
+			arrow$4 && arrow({
+				element: arrow$4,
+				padding: arrowPadding
+			}),
+			transformOrigin({
+				arrowWidth,
+				arrowHeight
+			}),
+			hideWhenDetached && hide({
+				strategy: "referenceHidden",
+				...detectOverflowOptions
+			})
+		]
+	});
+	const [placedSide, placedAlign] = getSideAndAlignFromPlacement(placement);
+	const handlePlaced = useCallbackRef$1(onPlaced);
+	useLayoutEffect2(() => {
+		if (isPositioned) handlePlaced?.();
+	}, [isPositioned, handlePlaced]);
+	const arrowX = middlewareData.arrow?.x;
+	const arrowY = middlewareData.arrow?.y;
+	const cannotCenterArrow = middlewareData.arrow?.centerOffset !== 0;
+	const [contentZIndex, setContentZIndex] = import_react.useState();
+	useLayoutEffect2(() => {
+		if (content) setContentZIndex(window.getComputedStyle(content).zIndex);
+	}, [content]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		ref: refs.setFloating,
+		"data-radix-popper-content-wrapper": "",
+		style: {
+			...floatingStyles,
+			transform: isPositioned ? floatingStyles.transform : "translate(0, -200%)",
+			minWidth: "max-content",
+			zIndex: contentZIndex,
+			["--radix-popper-transform-origin"]: [middlewareData.transformOrigin?.x, middlewareData.transformOrigin?.y].join(" "),
+			...middlewareData.hide?.referenceHidden && {
+				visibility: "hidden",
+				pointerEvents: "none"
+			}
+		},
+		dir: props.dir,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopperContentProvider, {
+			scope: __scopePopper,
+			placedSide,
+			onArrowChange: setArrow,
+			arrowX,
+			arrowY,
+			shouldHideArrow: cannotCenterArrow,
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.div, {
+				"data-side": placedSide,
+				"data-align": placedAlign,
+				...contentProps,
+				ref: composedRefs,
+				style: {
+					...contentProps.style,
+					animation: !isPositioned ? "none" : void 0
+				}
+			})
+		})
+	});
+});
+PopperContent.displayName = CONTENT_NAME$4;
+var ARROW_NAME$4 = "PopperArrow";
+var OPPOSITE_SIDE = {
+	top: "bottom",
+	right: "left",
+	bottom: "top",
+	left: "right"
+};
+var PopperArrow = import_react.forwardRef(function PopperArrow2(props, forwardedRef) {
+	const { __scopePopper, ...arrowProps } = props;
+	const contentContext = useContentContext(ARROW_NAME$4, __scopePopper);
+	const baseSide = OPPOSITE_SIDE[contentContext.placedSide];
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+		ref: contentContext.onArrowChange,
+		style: {
+			position: "absolute",
+			left: contentContext.arrowX,
+			top: contentContext.arrowY,
+			[baseSide]: 0,
+			transformOrigin: {
+				top: "",
+				right: "0 0",
+				bottom: "center 0",
+				left: "100% 0"
+			}[contentContext.placedSide],
+			transform: {
+				top: "translateY(100%)",
+				right: "translateY(50%) rotate(90deg) translateX(-50%)",
+				bottom: `rotate(180deg)`,
+				left: "translateY(50%) rotate(-90deg) translateX(50%)"
+			}[contentContext.placedSide],
+			visibility: contentContext.shouldHideArrow ? "hidden" : void 0
+		},
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$4, {
+			...arrowProps,
+			ref: forwardedRef,
+			style: {
+				...arrowProps.style,
+				display: "block"
+			}
+		})
+	});
+});
+PopperArrow.displayName = ARROW_NAME$4;
+function isNotNull(value) {
+	return value !== null;
+}
+var transformOrigin = (options) => ({
+	name: "transformOrigin",
+	options,
+	fn(data) {
+		const { placement, rects, middlewareData } = data;
+		const isArrowHidden = middlewareData.arrow?.centerOffset !== 0;
+		const arrowWidth = isArrowHidden ? 0 : options.arrowWidth;
+		const arrowHeight = isArrowHidden ? 0 : options.arrowHeight;
+		const [placedSide, placedAlign] = getSideAndAlignFromPlacement(placement);
+		const noArrowAlign = {
+			start: "0%",
+			center: "50%",
+			end: "100%"
+		}[placedAlign];
+		const arrowXCenter = (middlewareData.arrow?.x ?? 0) + arrowWidth / 2;
+		const arrowYCenter = (middlewareData.arrow?.y ?? 0) + arrowHeight / 2;
+		let x = "";
+		let y = "";
+		if (placedSide === "bottom") {
+			x = isArrowHidden ? noArrowAlign : `${arrowXCenter}px`;
+			y = `${-arrowHeight}px`;
+		} else if (placedSide === "top") {
+			x = isArrowHidden ? noArrowAlign : `${arrowXCenter}px`;
+			y = `${rects.floating.height + arrowHeight}px`;
+		} else if (placedSide === "right") {
+			x = `${-arrowHeight}px`;
+			y = isArrowHidden ? noArrowAlign : `${arrowYCenter}px`;
+		} else if (placedSide === "left") {
+			x = `${rects.floating.width + arrowHeight}px`;
+			y = isArrowHidden ? noArrowAlign : `${arrowYCenter}px`;
+		}
+		return { data: {
+			x,
+			y
+		} };
+	}
+});
+function getSideAndAlignFromPlacement(placement) {
+	const [side, align = "center"] = placement.split("-");
+	return [side, align];
+}
+var Root2$4 = Popper;
+var Anchor = PopperAnchor;
+var Content = PopperContent;
+var Arrow = PopperArrow;
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-roving-focus@1.1.11_@types+react-dom@19.2.3_@types+react@19.2.14__@type_4eeb29c998b846c35358e2f929e7490e/node_modules/@radix-ui/react-roving-focus/dist/index.mjs
+var ENTRY_FOCUS = "rovingFocusGroup.onEntryFocus";
+var EVENT_OPTIONS = {
+	bubbles: false,
+	cancelable: true
+};
+var GROUP_NAME$3 = "RovingFocusGroup";
+var [Collection$3, useCollection$3, createCollectionScope$3] = createCollection(GROUP_NAME$3);
+var [createRovingFocusGroupContext, createRovingFocusGroupScope] = createContextScope(GROUP_NAME$3, [createCollectionScope$3]);
+var [RovingFocusProvider, useRovingFocusContext] = createRovingFocusGroupContext(GROUP_NAME$3);
+var RovingFocusGroup = import_react.forwardRef((props, forwardedRef) => {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Collection$3.Provider, {
+		scope: props.__scopeRovingFocusGroup,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Collection$3.Slot, {
+			scope: props.__scopeRovingFocusGroup,
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RovingFocusGroupImpl, {
+				...props,
+				ref: forwardedRef
+			})
+		})
+	});
+});
+RovingFocusGroup.displayName = GROUP_NAME$3;
+var RovingFocusGroupImpl = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeRovingFocusGroup, orientation, loop = false, dir, currentTabStopId: currentTabStopIdProp, defaultCurrentTabStopId, onCurrentTabStopIdChange, onEntryFocus, preventScrollOnEntryFocus = false, ...groupProps } = props;
+	const ref = import_react.useRef(null);
+	const composedRefs = useComposedRefs(forwardedRef, ref);
+	const direction = useDirection(dir);
+	const [currentTabStopId, setCurrentTabStopId] = useControllableState({
+		prop: currentTabStopIdProp,
+		defaultProp: defaultCurrentTabStopId ?? null,
+		onChange: onCurrentTabStopIdChange,
+		caller: GROUP_NAME$3
+	});
+	const [isTabbingBackOut, setIsTabbingBackOut] = import_react.useState(false);
+	const handleEntryFocus = useCallbackRef$1(onEntryFocus);
+	const getItems = useCollection$3(__scopeRovingFocusGroup);
+	const isClickFocusRef = import_react.useRef(false);
+	const [focusableItemsCount, setFocusableItemsCount] = import_react.useState(0);
+	import_react.useEffect(() => {
+		const node = ref.current;
+		if (node) {
+			node.addEventListener(ENTRY_FOCUS, handleEntryFocus);
+			return () => node.removeEventListener(ENTRY_FOCUS, handleEntryFocus);
+		}
+	}, [handleEntryFocus]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RovingFocusProvider, {
+		scope: __scopeRovingFocusGroup,
+		orientation,
+		dir: direction,
+		loop,
+		currentTabStopId,
+		onItemFocus: import_react.useCallback((tabStopId) => setCurrentTabStopId(tabStopId), [setCurrentTabStopId]),
+		onItemShiftTab: import_react.useCallback(() => setIsTabbingBackOut(true), []),
+		onFocusableItemAdd: import_react.useCallback(() => setFocusableItemsCount((prevCount) => prevCount + 1), []),
+		onFocusableItemRemove: import_react.useCallback(() => setFocusableItemsCount((prevCount) => prevCount - 1), []),
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.div, {
+			tabIndex: isTabbingBackOut || focusableItemsCount === 0 ? -1 : 0,
+			"data-orientation": orientation,
+			...groupProps,
+			ref: composedRefs,
+			style: {
+				outline: "none",
+				...props.style
+			},
+			onMouseDown: composeEventHandlers(props.onMouseDown, () => {
+				isClickFocusRef.current = true;
+			}),
+			onFocus: composeEventHandlers(props.onFocus, (event) => {
+				const isKeyboardFocus = !isClickFocusRef.current;
+				if (event.target === event.currentTarget && isKeyboardFocus && !isTabbingBackOut) {
+					const entryFocusEvent = new CustomEvent(ENTRY_FOCUS, EVENT_OPTIONS);
+					event.currentTarget.dispatchEvent(entryFocusEvent);
+					if (!entryFocusEvent.defaultPrevented) {
+						const items = getItems().filter((item) => item.focusable);
+						focusFirst$2([
+							items.find((item) => item.active),
+							items.find((item) => item.id === currentTabStopId),
+							...items
+						].filter(Boolean).map((item) => item.ref.current), preventScrollOnEntryFocus);
+					}
+				}
+				isClickFocusRef.current = false;
+			}),
+			onBlur: composeEventHandlers(props.onBlur, () => setIsTabbingBackOut(false))
+		})
+	});
+});
+var ITEM_NAME$4 = "RovingFocusGroupItem";
+var RovingFocusGroupItem = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeRovingFocusGroup, focusable = true, active = false, tabStopId, children, ...itemProps } = props;
+	const autoId = useId();
+	const id = tabStopId || autoId;
+	const context = useRovingFocusContext(ITEM_NAME$4, __scopeRovingFocusGroup);
+	const isCurrentTabStop = context.currentTabStopId === id;
+	const getItems = useCollection$3(__scopeRovingFocusGroup);
+	const { onFocusableItemAdd, onFocusableItemRemove, currentTabStopId } = context;
+	import_react.useEffect(() => {
+		if (focusable) {
+			onFocusableItemAdd();
+			return () => onFocusableItemRemove();
+		}
+	}, [
+		focusable,
+		onFocusableItemAdd,
+		onFocusableItemRemove
+	]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Collection$3.ItemSlot, {
+		scope: __scopeRovingFocusGroup,
+		id,
+		focusable,
+		active,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.span, {
+			tabIndex: isCurrentTabStop ? 0 : -1,
+			"data-orientation": context.orientation,
+			...itemProps,
+			ref: forwardedRef,
+			onMouseDown: composeEventHandlers(props.onMouseDown, (event) => {
+				if (!focusable) event.preventDefault();
+				else context.onItemFocus(id);
+			}),
+			onFocus: composeEventHandlers(props.onFocus, () => context.onItemFocus(id)),
+			onKeyDown: composeEventHandlers(props.onKeyDown, (event) => {
+				if (event.key === "Tab" && event.shiftKey) {
+					context.onItemShiftTab();
+					return;
+				}
+				if (event.target !== event.currentTarget) return;
+				const focusIntent = getFocusIntent(event, context.orientation, context.dir);
+				if (focusIntent !== void 0) {
+					if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+					event.preventDefault();
+					let candidateNodes = getItems().filter((item) => item.focusable).map((item) => item.ref.current);
+					if (focusIntent === "last") candidateNodes.reverse();
+					else if (focusIntent === "prev" || focusIntent === "next") {
+						if (focusIntent === "prev") candidateNodes.reverse();
+						const currentIndex = candidateNodes.indexOf(event.currentTarget);
+						candidateNodes = context.loop ? wrapArray$2(candidateNodes, currentIndex + 1) : candidateNodes.slice(currentIndex + 1);
+					}
+					setTimeout(() => focusFirst$2(candidateNodes));
+				}
+			}),
+			children: typeof children === "function" ? children({
+				isCurrentTabStop,
+				hasTabStop: currentTabStopId != null
+			}) : children
+		})
+	});
+});
+RovingFocusGroupItem.displayName = ITEM_NAME$4;
+var MAP_KEY_TO_FOCUS_INTENT = {
+	ArrowLeft: "prev",
+	ArrowUp: "prev",
+	ArrowRight: "next",
+	ArrowDown: "next",
+	PageUp: "first",
+	Home: "first",
+	PageDown: "last",
+	End: "last"
+};
+function getDirectionAwareKey(key, dir) {
+	if (dir !== "rtl") return key;
+	return key === "ArrowLeft" ? "ArrowRight" : key === "ArrowRight" ? "ArrowLeft" : key;
+}
+function getFocusIntent(event, orientation, dir) {
+	const key = getDirectionAwareKey(event.key, dir);
+	if (orientation === "vertical" && ["ArrowLeft", "ArrowRight"].includes(key)) return void 0;
+	if (orientation === "horizontal" && ["ArrowUp", "ArrowDown"].includes(key)) return void 0;
+	return MAP_KEY_TO_FOCUS_INTENT[key];
+}
+function focusFirst$2(candidates, preventScroll = false) {
+	const PREVIOUSLY_FOCUSED_ELEMENT = document.activeElement;
+	for (const candidate of candidates) {
+		if (candidate === PREVIOUSLY_FOCUSED_ELEMENT) return;
+		candidate.focus({ preventScroll });
+		if (document.activeElement !== PREVIOUSLY_FOCUSED_ELEMENT) return;
+	}
+}
+function wrapArray$2(array, startIndex) {
+	return array.map((_, index) => array[(startIndex + index) % array.length]);
+}
+var Root$3 = RovingFocusGroup;
+var Item$1 = RovingFocusGroupItem;
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-menu@2.1.16_@types+react-dom@19.2.3_@types+react@19.2.14__@types+react@_73ff7391b7be14d4dbff03af4dbac090/node_modules/@radix-ui/react-menu/dist/index.mjs
+var SELECTION_KEYS$1 = ["Enter", " "];
+var FIRST_KEYS = [
+	"ArrowDown",
+	"PageUp",
+	"Home"
+];
+var LAST_KEYS = [
+	"ArrowUp",
+	"PageDown",
+	"End"
+];
+var FIRST_LAST_KEYS = [...FIRST_KEYS, ...LAST_KEYS];
+var SUB_OPEN_KEYS = {
+	ltr: [...SELECTION_KEYS$1, "ArrowRight"],
+	rtl: [...SELECTION_KEYS$1, "ArrowLeft"]
+};
+var SUB_CLOSE_KEYS = {
+	ltr: ["ArrowLeft"],
+	rtl: ["ArrowRight"]
+};
+var MENU_NAME = "Menu";
+var [Collection$2, useCollection$2, createCollectionScope$2] = createCollection(MENU_NAME);
+var [createMenuContext, createMenuScope] = createContextScope(MENU_NAME, [
+	createCollectionScope$2,
+	createPopperScope,
+	createRovingFocusGroupScope
+]);
+var usePopperScope$2 = createPopperScope();
+var useRovingFocusGroupScope$1 = createRovingFocusGroupScope();
+var [MenuProvider, useMenuContext] = createMenuContext(MENU_NAME);
+var [MenuRootProvider, useMenuRootContext] = createMenuContext(MENU_NAME);
+var Menu = (props) => {
+	const { __scopeMenu, open = false, children, dir, onOpenChange, modal = true } = props;
+	const popperScope = usePopperScope$2(__scopeMenu);
+	const [content, setContent] = import_react.useState(null);
+	const isUsingKeyboardRef = import_react.useRef(false);
+	const handleOpenChange = useCallbackRef$1(onOpenChange);
+	const direction = useDirection(dir);
+	import_react.useEffect(() => {
+		const handleKeyDown = () => {
+			isUsingKeyboardRef.current = true;
+			document.addEventListener("pointerdown", handlePointer, {
+				capture: true,
+				once: true
+			});
+			document.addEventListener("pointermove", handlePointer, {
+				capture: true,
+				once: true
+			});
+		};
+		const handlePointer = () => isUsingKeyboardRef.current = false;
+		document.addEventListener("keydown", handleKeyDown, { capture: true });
+		return () => {
+			document.removeEventListener("keydown", handleKeyDown, { capture: true });
+			document.removeEventListener("pointerdown", handlePointer, { capture: true });
+			document.removeEventListener("pointermove", handlePointer, { capture: true });
+		};
+	}, []);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$4, {
+		...popperScope,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MenuProvider, {
+			scope: __scopeMenu,
+			open,
+			onOpenChange: handleOpenChange,
+			content,
+			onContentChange: setContent,
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MenuRootProvider, {
+				scope: __scopeMenu,
+				onClose: import_react.useCallback(() => handleOpenChange(false), [handleOpenChange]),
+				isUsingKeyboardRef,
+				dir: direction,
+				modal,
+				children
+			})
+		})
+	});
+};
+Menu.displayName = MENU_NAME;
+var ANCHOR_NAME = "MenuAnchor";
+var MenuAnchor = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeMenu, ...anchorProps } = props;
+	const popperScope = usePopperScope$2(__scopeMenu);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Anchor, {
+		...popperScope,
+		...anchorProps,
+		ref: forwardedRef
+	});
+});
+MenuAnchor.displayName = ANCHOR_NAME;
+var PORTAL_NAME$3 = "MenuPortal";
+var [PortalProvider$1, usePortalContext$1] = createMenuContext(PORTAL_NAME$3, { forceMount: void 0 });
+var MenuPortal = (props) => {
+	const { __scopeMenu, forceMount, children, container } = props;
+	const context = useMenuContext(PORTAL_NAME$3, __scopeMenu);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PortalProvider$1, {
+		scope: __scopeMenu,
+		forceMount,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
+			present: forceMount || context.open,
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Portal$3, {
+				asChild: true,
+				container,
+				children
+			})
+		})
+	});
+};
+MenuPortal.displayName = PORTAL_NAME$3;
+var CONTENT_NAME$3 = "MenuContent";
+var [MenuContentProvider, useMenuContentContext] = createMenuContext(CONTENT_NAME$3);
+var MenuContent = import_react.forwardRef((props, forwardedRef) => {
+	const portalContext = usePortalContext$1(CONTENT_NAME$3, props.__scopeMenu);
+	const { forceMount = portalContext.forceMount, ...contentProps } = props;
+	const context = useMenuContext(CONTENT_NAME$3, props.__scopeMenu);
+	const rootContext = useMenuRootContext(CONTENT_NAME$3, props.__scopeMenu);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Collection$2.Provider, {
+		scope: props.__scopeMenu,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
+			present: forceMount || context.open,
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Collection$2.Slot, {
+				scope: props.__scopeMenu,
+				children: rootContext.modal ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MenuRootContentModal, {
+					...contentProps,
+					ref: forwardedRef
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MenuRootContentNonModal, {
+					...contentProps,
+					ref: forwardedRef
+				})
+			})
+		})
+	});
+});
+var MenuRootContentModal = import_react.forwardRef((props, forwardedRef) => {
+	const context = useMenuContext(CONTENT_NAME$3, props.__scopeMenu);
+	const ref = import_react.useRef(null);
+	const composedRefs = useComposedRefs(forwardedRef, ref);
+	import_react.useEffect(() => {
+		const content = ref.current;
+		if (content) return hideOthers(content);
+	}, []);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MenuContentImpl, {
+		...props,
+		ref: composedRefs,
+		trapFocus: context.open,
+		disableOutsidePointerEvents: context.open,
+		disableOutsideScroll: true,
+		onFocusOutside: composeEventHandlers(props.onFocusOutside, (event) => event.preventDefault(), { checkForDefaultPrevented: false }),
+		onDismiss: () => context.onOpenChange(false)
+	});
+});
+var MenuRootContentNonModal = import_react.forwardRef((props, forwardedRef) => {
+	const context = useMenuContext(CONTENT_NAME$3, props.__scopeMenu);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MenuContentImpl, {
+		...props,
+		ref: forwardedRef,
+		trapFocus: false,
+		disableOutsidePointerEvents: false,
+		disableOutsideScroll: false,
+		onDismiss: () => context.onOpenChange(false)
+	});
+});
+var Slot$1 = /* @__PURE__ */ createSlot("MenuContent.ScrollLock");
+var MenuContentImpl = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeMenu, loop = false, trapFocus, onOpenAutoFocus, onCloseAutoFocus, disableOutsidePointerEvents, onEntryFocus, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss, disableOutsideScroll, ...contentProps } = props;
+	const context = useMenuContext(CONTENT_NAME$3, __scopeMenu);
+	const rootContext = useMenuRootContext(CONTENT_NAME$3, __scopeMenu);
+	const popperScope = usePopperScope$2(__scopeMenu);
+	const rovingFocusGroupScope = useRovingFocusGroupScope$1(__scopeMenu);
+	const getItems = useCollection$2(__scopeMenu);
+	const [currentItemId, setCurrentItemId] = import_react.useState(null);
+	const contentRef = import_react.useRef(null);
+	const composedRefs = useComposedRefs(forwardedRef, contentRef, context.onContentChange);
+	const timerRef = import_react.useRef(0);
+	const searchRef = import_react.useRef("");
+	const pointerGraceTimerRef = import_react.useRef(0);
+	const pointerGraceIntentRef = import_react.useRef(null);
+	const pointerDirRef = import_react.useRef("right");
+	const lastPointerXRef = import_react.useRef(0);
+	const ScrollLockWrapper = disableOutsideScroll ? ReactRemoveScroll : import_react.Fragment;
+	const scrollLockWrapperProps = disableOutsideScroll ? {
+		as: Slot$1,
+		allowPinchZoom: true
+	} : void 0;
+	const handleTypeaheadSearch = (key) => {
+		const search = searchRef.current + key;
+		const items = getItems().filter((item) => !item.disabled);
+		const currentItem = document.activeElement;
+		const currentMatch = items.find((item) => item.ref.current === currentItem)?.textValue;
+		const nextMatch = getNextMatch(items.map((item) => item.textValue), search, currentMatch);
+		const newItem = items.find((item) => item.textValue === nextMatch)?.ref.current;
+		(function updateSearch(value) {
+			searchRef.current = value;
+			window.clearTimeout(timerRef.current);
+			if (value !== "") timerRef.current = window.setTimeout(() => updateSearch(""), 1e3);
+		})(search);
+		if (newItem) setTimeout(() => newItem.focus());
+	};
+	import_react.useEffect(() => {
+		return () => window.clearTimeout(timerRef.current);
+	}, []);
+	useFocusGuards();
+	const isPointerMovingToSubmenu = import_react.useCallback((event) => {
+		return pointerDirRef.current === pointerGraceIntentRef.current?.side && isPointerInGraceArea(event, pointerGraceIntentRef.current?.area);
+	}, []);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MenuContentProvider, {
+		scope: __scopeMenu,
+		searchRef,
+		onItemEnter: import_react.useCallback((event) => {
+			if (isPointerMovingToSubmenu(event)) event.preventDefault();
+		}, [isPointerMovingToSubmenu]),
+		onItemLeave: import_react.useCallback((event) => {
+			if (isPointerMovingToSubmenu(event)) return;
+			contentRef.current?.focus();
+			setCurrentItemId(null);
+		}, [isPointerMovingToSubmenu]),
+		onTriggerLeave: import_react.useCallback((event) => {
+			if (isPointerMovingToSubmenu(event)) event.preventDefault();
+		}, [isPointerMovingToSubmenu]),
+		pointerGraceTimerRef,
+		onPointerGraceIntentChange: import_react.useCallback((intent) => {
+			pointerGraceIntentRef.current = intent;
+		}, []),
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollLockWrapper, {
+			...scrollLockWrapperProps,
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FocusScope, {
+				asChild: true,
+				trapped: trapFocus,
+				onMountAutoFocus: composeEventHandlers(onOpenAutoFocus, (event) => {
+					event.preventDefault();
+					contentRef.current?.focus({ preventScroll: true });
+				}),
+				onUnmountAutoFocus: onCloseAutoFocus,
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DismissableLayer, {
+					asChild: true,
+					disableOutsidePointerEvents,
+					onEscapeKeyDown,
+					onPointerDownOutside,
+					onFocusOutside,
+					onInteractOutside,
+					onDismiss,
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$3, {
+						asChild: true,
+						...rovingFocusGroupScope,
+						dir: rootContext.dir,
+						orientation: "vertical",
+						loop,
+						currentTabStopId: currentItemId,
+						onCurrentTabStopIdChange: setCurrentItemId,
+						onEntryFocus: composeEventHandlers(onEntryFocus, (event) => {
+							if (!rootContext.isUsingKeyboardRef.current) event.preventDefault();
+						}),
+						preventScrollOnEntryFocus: true,
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Content, {
+							role: "menu",
+							"aria-orientation": "vertical",
+							"data-state": getOpenState(context.open),
+							"data-radix-menu-content": "",
+							dir: rootContext.dir,
+							...popperScope,
+							...contentProps,
+							ref: composedRefs,
+							style: {
+								outline: "none",
+								...contentProps.style
+							},
+							onKeyDown: composeEventHandlers(contentProps.onKeyDown, (event) => {
+								const isKeyDownInside = event.target.closest("[data-radix-menu-content]") === event.currentTarget;
+								const isModifierKey = event.ctrlKey || event.altKey || event.metaKey;
+								const isCharacterKey = event.key.length === 1;
+								if (isKeyDownInside) {
+									if (event.key === "Tab") event.preventDefault();
+									if (!isModifierKey && isCharacterKey) handleTypeaheadSearch(event.key);
+								}
+								const content = contentRef.current;
+								if (event.target !== content) return;
+								if (!FIRST_LAST_KEYS.includes(event.key)) return;
+								event.preventDefault();
+								const candidateNodes = getItems().filter((item) => !item.disabled).map((item) => item.ref.current);
+								if (LAST_KEYS.includes(event.key)) candidateNodes.reverse();
+								focusFirst$1(candidateNodes);
+							}),
+							onBlur: composeEventHandlers(props.onBlur, (event) => {
+								if (!event.currentTarget.contains(event.target)) {
+									window.clearTimeout(timerRef.current);
+									searchRef.current = "";
+								}
+							}),
+							onPointerMove: composeEventHandlers(props.onPointerMove, whenMouse((event) => {
+								const target = event.target;
+								const pointerXHasChanged = lastPointerXRef.current !== event.clientX;
+								if (event.currentTarget.contains(target) && pointerXHasChanged) {
+									pointerDirRef.current = event.clientX > lastPointerXRef.current ? "right" : "left";
+									lastPointerXRef.current = event.clientX;
+								}
+							}))
+						})
+					})
+				})
+			})
+		})
+	});
+});
+MenuContent.displayName = CONTENT_NAME$3;
+var GROUP_NAME$2 = "MenuGroup";
+var MenuGroup = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeMenu, ...groupProps } = props;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.div, {
+		role: "group",
+		...groupProps,
+		ref: forwardedRef
+	});
+});
+MenuGroup.displayName = GROUP_NAME$2;
+var LABEL_NAME$2 = "MenuLabel";
+var MenuLabel = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeMenu, ...labelProps } = props;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.div, {
+		...labelProps,
+		ref: forwardedRef
+	});
+});
+MenuLabel.displayName = LABEL_NAME$2;
+var ITEM_NAME$3 = "MenuItem";
+var ITEM_SELECT = "menu.itemSelect";
+var MenuItem = import_react.forwardRef((props, forwardedRef) => {
+	const { disabled = false, onSelect, ...itemProps } = props;
+	const ref = import_react.useRef(null);
+	const rootContext = useMenuRootContext(ITEM_NAME$3, props.__scopeMenu);
+	const contentContext = useMenuContentContext(ITEM_NAME$3, props.__scopeMenu);
+	const composedRefs = useComposedRefs(forwardedRef, ref);
+	const isPointerDownRef = import_react.useRef(false);
+	const handleSelect = () => {
+		const menuItem = ref.current;
+		if (!disabled && menuItem) {
+			const itemSelectEvent = new CustomEvent(ITEM_SELECT, {
+				bubbles: true,
+				cancelable: true
+			});
+			menuItem.addEventListener(ITEM_SELECT, (event) => onSelect?.(event), { once: true });
+			dispatchDiscreteCustomEvent(menuItem, itemSelectEvent);
+			if (itemSelectEvent.defaultPrevented) isPointerDownRef.current = false;
+			else rootContext.onClose();
+		}
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MenuItemImpl, {
+		...itemProps,
+		ref: composedRefs,
+		disabled,
+		onClick: composeEventHandlers(props.onClick, handleSelect),
+		onPointerDown: (event) => {
+			props.onPointerDown?.(event);
+			isPointerDownRef.current = true;
+		},
+		onPointerUp: composeEventHandlers(props.onPointerUp, (event) => {
+			if (!isPointerDownRef.current) event.currentTarget?.click();
+		}),
+		onKeyDown: composeEventHandlers(props.onKeyDown, (event) => {
+			const isTypingAhead = contentContext.searchRef.current !== "";
+			if (disabled || isTypingAhead && event.key === " ") return;
+			if (SELECTION_KEYS$1.includes(event.key)) {
+				event.currentTarget.click();
+				event.preventDefault();
+			}
+		})
+	});
+});
+MenuItem.displayName = ITEM_NAME$3;
+var MenuItemImpl = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeMenu, disabled = false, textValue, ...itemProps } = props;
+	const contentContext = useMenuContentContext(ITEM_NAME$3, __scopeMenu);
+	const rovingFocusGroupScope = useRovingFocusGroupScope$1(__scopeMenu);
+	const ref = import_react.useRef(null);
+	const composedRefs = useComposedRefs(forwardedRef, ref);
+	const [isFocused, setIsFocused] = import_react.useState(false);
+	const [textContent, setTextContent] = import_react.useState("");
+	import_react.useEffect(() => {
+		const menuItem = ref.current;
+		if (menuItem) setTextContent((menuItem.textContent ?? "").trim());
+	}, [itemProps.children]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Collection$2.ItemSlot, {
+		scope: __scopeMenu,
+		disabled,
+		textValue: textValue ?? textContent,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Item$1, {
+			asChild: true,
+			...rovingFocusGroupScope,
+			focusable: !disabled,
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.div, {
+				role: "menuitem",
+				"data-highlighted": isFocused ? "" : void 0,
+				"aria-disabled": disabled || void 0,
+				"data-disabled": disabled ? "" : void 0,
+				...itemProps,
+				ref: composedRefs,
+				onPointerMove: composeEventHandlers(props.onPointerMove, whenMouse((event) => {
+					if (disabled) contentContext.onItemLeave(event);
+					else {
+						contentContext.onItemEnter(event);
+						if (!event.defaultPrevented) event.currentTarget.focus({ preventScroll: true });
+					}
+				})),
+				onPointerLeave: composeEventHandlers(props.onPointerLeave, whenMouse((event) => contentContext.onItemLeave(event))),
+				onFocus: composeEventHandlers(props.onFocus, () => setIsFocused(true)),
+				onBlur: composeEventHandlers(props.onBlur, () => setIsFocused(false))
+			})
+		})
+	});
+});
+var CHECKBOX_ITEM_NAME$1 = "MenuCheckboxItem";
+var MenuCheckboxItem = import_react.forwardRef((props, forwardedRef) => {
+	const { checked = false, onCheckedChange, ...checkboxItemProps } = props;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ItemIndicatorProvider, {
+		scope: props.__scopeMenu,
+		checked,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MenuItem, {
+			role: "menuitemcheckbox",
+			"aria-checked": isIndeterminate(checked) ? "mixed" : checked,
+			...checkboxItemProps,
+			ref: forwardedRef,
+			"data-state": getCheckedState(checked),
+			onSelect: composeEventHandlers(checkboxItemProps.onSelect, () => onCheckedChange?.(isIndeterminate(checked) ? true : !checked), { checkForDefaultPrevented: false })
+		})
+	});
+});
+MenuCheckboxItem.displayName = CHECKBOX_ITEM_NAME$1;
+var RADIO_GROUP_NAME$2 = "MenuRadioGroup";
+var [RadioGroupProvider$1, useRadioGroupContext$1] = createMenuContext(RADIO_GROUP_NAME$2, {
+	value: void 0,
+	onValueChange: () => {}
+});
+var MenuRadioGroup = import_react.forwardRef((props, forwardedRef) => {
+	const { value, onValueChange, ...groupProps } = props;
+	const handleValueChange = useCallbackRef$1(onValueChange);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupProvider$1, {
+		scope: props.__scopeMenu,
+		value,
+		onValueChange: handleValueChange,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MenuGroup, {
+			...groupProps,
+			ref: forwardedRef
+		})
+	});
+});
+MenuRadioGroup.displayName = RADIO_GROUP_NAME$2;
+var RADIO_ITEM_NAME$1 = "MenuRadioItem";
+var MenuRadioItem = import_react.forwardRef((props, forwardedRef) => {
+	const { value, ...radioItemProps } = props;
+	const context = useRadioGroupContext$1(RADIO_ITEM_NAME$1, props.__scopeMenu);
+	const checked = value === context.value;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ItemIndicatorProvider, {
+		scope: props.__scopeMenu,
+		checked,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MenuItem, {
+			role: "menuitemradio",
+			"aria-checked": checked,
+			...radioItemProps,
+			ref: forwardedRef,
+			"data-state": getCheckedState(checked),
+			onSelect: composeEventHandlers(radioItemProps.onSelect, () => context.onValueChange?.(value), { checkForDefaultPrevented: false })
+		})
+	});
+});
+MenuRadioItem.displayName = RADIO_ITEM_NAME$1;
+var ITEM_INDICATOR_NAME$1 = "MenuItemIndicator";
+var [ItemIndicatorProvider, useItemIndicatorContext] = createMenuContext(ITEM_INDICATOR_NAME$1, { checked: false });
+var MenuItemIndicator = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeMenu, forceMount, ...itemIndicatorProps } = props;
+	const indicatorContext = useItemIndicatorContext(ITEM_INDICATOR_NAME$1, __scopeMenu);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
+		present: forceMount || isIndeterminate(indicatorContext.checked) || indicatorContext.checked === true,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.span, {
+			...itemIndicatorProps,
+			ref: forwardedRef,
+			"data-state": getCheckedState(indicatorContext.checked)
+		})
+	});
+});
+MenuItemIndicator.displayName = ITEM_INDICATOR_NAME$1;
+var SEPARATOR_NAME$2 = "MenuSeparator";
+var MenuSeparator = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeMenu, ...separatorProps } = props;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.div, {
+		role: "separator",
+		"aria-orientation": "horizontal",
+		...separatorProps,
+		ref: forwardedRef
+	});
+});
+MenuSeparator.displayName = SEPARATOR_NAME$2;
+var ARROW_NAME$3 = "MenuArrow";
+var MenuArrow = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeMenu, ...arrowProps } = props;
+	const popperScope = usePopperScope$2(__scopeMenu);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Arrow, {
+		...popperScope,
+		...arrowProps,
+		ref: forwardedRef
+	});
+});
+MenuArrow.displayName = ARROW_NAME$3;
+var SUB_NAME = "MenuSub";
+var [MenuSubProvider, useMenuSubContext] = createMenuContext(SUB_NAME);
+var MenuSub = (props) => {
+	const { __scopeMenu, children, open = false, onOpenChange } = props;
+	const parentMenuContext = useMenuContext(SUB_NAME, __scopeMenu);
+	const popperScope = usePopperScope$2(__scopeMenu);
+	const [trigger, setTrigger] = import_react.useState(null);
+	const [content, setContent] = import_react.useState(null);
+	const handleOpenChange = useCallbackRef$1(onOpenChange);
+	import_react.useEffect(() => {
+		if (parentMenuContext.open === false) handleOpenChange(false);
+		return () => handleOpenChange(false);
+	}, [parentMenuContext.open, handleOpenChange]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$4, {
+		...popperScope,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MenuProvider, {
+			scope: __scopeMenu,
+			open,
+			onOpenChange: handleOpenChange,
+			content,
+			onContentChange: setContent,
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MenuSubProvider, {
+				scope: __scopeMenu,
+				contentId: useId(),
+				triggerId: useId(),
+				trigger,
+				onTriggerChange: setTrigger,
+				children
+			})
+		})
+	});
+};
+MenuSub.displayName = SUB_NAME;
+var SUB_TRIGGER_NAME$1 = "MenuSubTrigger";
+var MenuSubTrigger = import_react.forwardRef((props, forwardedRef) => {
+	const context = useMenuContext(SUB_TRIGGER_NAME$1, props.__scopeMenu);
+	const rootContext = useMenuRootContext(SUB_TRIGGER_NAME$1, props.__scopeMenu);
+	const subContext = useMenuSubContext(SUB_TRIGGER_NAME$1, props.__scopeMenu);
+	const contentContext = useMenuContentContext(SUB_TRIGGER_NAME$1, props.__scopeMenu);
+	const openTimerRef = import_react.useRef(null);
+	const { pointerGraceTimerRef, onPointerGraceIntentChange } = contentContext;
+	const scope = { __scopeMenu: props.__scopeMenu };
+	const clearOpenTimer = import_react.useCallback(() => {
+		if (openTimerRef.current) window.clearTimeout(openTimerRef.current);
+		openTimerRef.current = null;
+	}, []);
+	import_react.useEffect(() => clearOpenTimer, [clearOpenTimer]);
+	import_react.useEffect(() => {
+		const pointerGraceTimer = pointerGraceTimerRef.current;
+		return () => {
+			window.clearTimeout(pointerGraceTimer);
+			onPointerGraceIntentChange(null);
+		};
+	}, [pointerGraceTimerRef, onPointerGraceIntentChange]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MenuAnchor, {
+		asChild: true,
+		...scope,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MenuItemImpl, {
+			id: subContext.triggerId,
+			"aria-haspopup": "menu",
+			"aria-expanded": context.open,
+			"aria-controls": subContext.contentId,
+			"data-state": getOpenState(context.open),
+			...props,
+			ref: composeRefs(forwardedRef, subContext.onTriggerChange),
+			onClick: (event) => {
+				props.onClick?.(event);
+				if (props.disabled || event.defaultPrevented) return;
+				event.currentTarget.focus();
+				if (!context.open) context.onOpenChange(true);
+			},
+			onPointerMove: composeEventHandlers(props.onPointerMove, whenMouse((event) => {
+				contentContext.onItemEnter(event);
+				if (event.defaultPrevented) return;
+				if (!props.disabled && !context.open && !openTimerRef.current) {
+					contentContext.onPointerGraceIntentChange(null);
+					openTimerRef.current = window.setTimeout(() => {
+						context.onOpenChange(true);
+						clearOpenTimer();
+					}, 100);
+				}
+			})),
+			onPointerLeave: composeEventHandlers(props.onPointerLeave, whenMouse((event) => {
+				clearOpenTimer();
+				const contentRect = context.content?.getBoundingClientRect();
+				if (contentRect) {
+					const side = context.content?.dataset.side;
+					const rightSide = side === "right";
+					const bleed = rightSide ? -5 : 5;
+					const contentNearEdge = contentRect[rightSide ? "left" : "right"];
+					const contentFarEdge = contentRect[rightSide ? "right" : "left"];
+					contentContext.onPointerGraceIntentChange({
+						area: [
+							{
+								x: event.clientX + bleed,
+								y: event.clientY
+							},
+							{
+								x: contentNearEdge,
+								y: contentRect.top
+							},
+							{
+								x: contentFarEdge,
+								y: contentRect.top
+							},
+							{
+								x: contentFarEdge,
+								y: contentRect.bottom
+							},
+							{
+								x: contentNearEdge,
+								y: contentRect.bottom
+							}
+						],
+						side
+					});
+					window.clearTimeout(pointerGraceTimerRef.current);
+					pointerGraceTimerRef.current = window.setTimeout(() => contentContext.onPointerGraceIntentChange(null), 300);
+				} else {
+					contentContext.onTriggerLeave(event);
+					if (event.defaultPrevented) return;
+					contentContext.onPointerGraceIntentChange(null);
+				}
+			})),
+			onKeyDown: composeEventHandlers(props.onKeyDown, (event) => {
+				const isTypingAhead = contentContext.searchRef.current !== "";
+				if (props.disabled || isTypingAhead && event.key === " ") return;
+				if (SUB_OPEN_KEYS[rootContext.dir].includes(event.key)) {
+					context.onOpenChange(true);
+					context.content?.focus();
+					event.preventDefault();
+				}
+			})
+		})
+	});
+});
+MenuSubTrigger.displayName = SUB_TRIGGER_NAME$1;
+var SUB_CONTENT_NAME$1 = "MenuSubContent";
+var MenuSubContent = import_react.forwardRef((props, forwardedRef) => {
+	const portalContext = usePortalContext$1(CONTENT_NAME$3, props.__scopeMenu);
+	const { forceMount = portalContext.forceMount, ...subContentProps } = props;
+	const context = useMenuContext(CONTENT_NAME$3, props.__scopeMenu);
+	const rootContext = useMenuRootContext(CONTENT_NAME$3, props.__scopeMenu);
+	const subContext = useMenuSubContext(SUB_CONTENT_NAME$1, props.__scopeMenu);
+	const ref = import_react.useRef(null);
+	const composedRefs = useComposedRefs(forwardedRef, ref);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Collection$2.Provider, {
+		scope: props.__scopeMenu,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
+			present: forceMount || context.open,
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Collection$2.Slot, {
+				scope: props.__scopeMenu,
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MenuContentImpl, {
+					id: subContext.contentId,
+					"aria-labelledby": subContext.triggerId,
+					...subContentProps,
+					ref: composedRefs,
+					align: "start",
+					side: rootContext.dir === "rtl" ? "left" : "right",
+					disableOutsidePointerEvents: false,
+					disableOutsideScroll: false,
+					trapFocus: false,
+					onOpenAutoFocus: (event) => {
+						if (rootContext.isUsingKeyboardRef.current) ref.current?.focus();
+						event.preventDefault();
+					},
+					onCloseAutoFocus: (event) => event.preventDefault(),
+					onFocusOutside: composeEventHandlers(props.onFocusOutside, (event) => {
+						if (event.target !== subContext.trigger) context.onOpenChange(false);
+					}),
+					onEscapeKeyDown: composeEventHandlers(props.onEscapeKeyDown, (event) => {
+						rootContext.onClose();
+						event.preventDefault();
+					}),
+					onKeyDown: composeEventHandlers(props.onKeyDown, (event) => {
+						const isKeyDownInside = event.currentTarget.contains(event.target);
+						const isCloseKey = SUB_CLOSE_KEYS[rootContext.dir].includes(event.key);
+						if (isKeyDownInside && isCloseKey) {
+							context.onOpenChange(false);
+							subContext.trigger?.focus();
+							event.preventDefault();
+						}
+					})
+				})
+			})
+		})
+	});
+});
+MenuSubContent.displayName = SUB_CONTENT_NAME$1;
+function getOpenState(open) {
+	return open ? "open" : "closed";
+}
+function isIndeterminate(checked) {
+	return checked === "indeterminate";
+}
+function getCheckedState(checked) {
+	return isIndeterminate(checked) ? "indeterminate" : checked ? "checked" : "unchecked";
+}
+function focusFirst$1(candidates) {
+	const PREVIOUSLY_FOCUSED_ELEMENT = document.activeElement;
+	for (const candidate of candidates) {
+		if (candidate === PREVIOUSLY_FOCUSED_ELEMENT) return;
+		candidate.focus();
+		if (document.activeElement !== PREVIOUSLY_FOCUSED_ELEMENT) return;
+	}
+}
+function wrapArray$1(array, startIndex) {
+	return array.map((_, index) => array[(startIndex + index) % array.length]);
+}
+function getNextMatch(values, search, currentMatch) {
+	const normalizedSearch = search.length > 1 && Array.from(search).every((char) => char === search[0]) ? search[0] : search;
+	const currentMatchIndex = currentMatch ? values.indexOf(currentMatch) : -1;
+	let wrappedValues = wrapArray$1(values, Math.max(currentMatchIndex, 0));
+	if (normalizedSearch.length === 1) wrappedValues = wrappedValues.filter((v) => v !== currentMatch);
+	const nextMatch = wrappedValues.find((value) => value.toLowerCase().startsWith(normalizedSearch.toLowerCase()));
+	return nextMatch !== currentMatch ? nextMatch : void 0;
+}
+function isPointInPolygon$1(point, polygon) {
+	const { x, y } = point;
+	let inside = false;
+	for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+		const ii = polygon[i];
+		const jj = polygon[j];
+		const xi = ii.x;
+		const yi = ii.y;
+		const xj = jj.x;
+		const yj = jj.y;
+		if (yi > y !== yj > y && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside;
+	}
+	return inside;
+}
+function isPointerInGraceArea(event, area) {
+	if (!area) return false;
+	return isPointInPolygon$1({
+		x: event.clientX,
+		y: event.clientY
+	}, area);
+}
+function whenMouse(handler) {
+	return (event) => event.pointerType === "mouse" ? handler(event) : void 0;
+}
+var Root3$1 = Menu;
+var Anchor2 = MenuAnchor;
+var Portal$1 = MenuPortal;
+var Content2$3 = MenuContent;
+var Group$1 = MenuGroup;
+var Label$3 = MenuLabel;
+var Item2$2 = MenuItem;
+var CheckboxItem = MenuCheckboxItem;
+var RadioGroup$2 = MenuRadioGroup;
+var RadioItem = MenuRadioItem;
+var ItemIndicator$1 = MenuItemIndicator;
+var Separator$1 = MenuSeparator;
+var Arrow2 = MenuArrow;
+var SubTrigger = MenuSubTrigger;
+var SubContent = MenuSubContent;
+//#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-dropdown-menu@2.1.16_@types+react-dom@19.2.3_@types+react@19.2.14__@typ_73af8346b6b2e99f5d79f55f5dac0b34/node_modules/@radix-ui/react-dropdown-menu/dist/index.mjs
+var DROPDOWN_MENU_NAME = "DropdownMenu";
+var [createDropdownMenuContext, createDropdownMenuScope] = createContextScope(DROPDOWN_MENU_NAME, [createMenuScope]);
+var useMenuScope = createMenuScope();
+var [DropdownMenuProvider, useDropdownMenuContext] = createDropdownMenuContext(DROPDOWN_MENU_NAME);
+var DropdownMenu$1 = (props) => {
+	const { __scopeDropdownMenu, children, dir, open: openProp, defaultOpen, onOpenChange, modal = true } = props;
+	const menuScope = useMenuScope(__scopeDropdownMenu);
+	const triggerRef = import_react.useRef(null);
+	const [open, setOpen] = useControllableState({
+		prop: openProp,
+		defaultProp: defaultOpen ?? false,
+		onChange: onOpenChange,
+		caller: DROPDOWN_MENU_NAME
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DropdownMenuProvider, {
+		scope: __scopeDropdownMenu,
+		triggerId: useId(),
+		triggerRef,
+		contentId: useId(),
+		open,
+		onOpenChange: setOpen,
+		onOpenToggle: import_react.useCallback(() => setOpen((prevOpen) => !prevOpen), [setOpen]),
+		modal,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root3$1, {
+			...menuScope,
+			open,
+			onOpenChange: setOpen,
+			dir,
+			modal,
+			children
+		})
+	});
+};
+DropdownMenu$1.displayName = DROPDOWN_MENU_NAME;
+var TRIGGER_NAME$2 = "DropdownMenuTrigger";
+var DropdownMenuTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeDropdownMenu, disabled = false, ...triggerProps } = props;
+	const context = useDropdownMenuContext(TRIGGER_NAME$2, __scopeDropdownMenu);
+	const menuScope = useMenuScope(__scopeDropdownMenu);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Anchor2, {
+		asChild: true,
+		...menuScope,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.button, {
+			type: "button",
+			id: context.triggerId,
+			"aria-haspopup": "menu",
+			"aria-expanded": context.open,
+			"aria-controls": context.open ? context.contentId : void 0,
+			"data-state": context.open ? "open" : "closed",
+			"data-disabled": disabled ? "" : void 0,
+			disabled,
+			...triggerProps,
+			ref: composeRefs(forwardedRef, context.triggerRef),
+			onPointerDown: composeEventHandlers(props.onPointerDown, (event) => {
+				if (!disabled && event.button === 0 && event.ctrlKey === false) {
+					context.onOpenToggle();
+					if (!context.open) event.preventDefault();
+				}
+			}),
+			onKeyDown: composeEventHandlers(props.onKeyDown, (event) => {
+				if (disabled) return;
+				if (["Enter", " "].includes(event.key)) context.onOpenToggle();
+				if (event.key === "ArrowDown") context.onOpenChange(true);
+				if ([
+					"Enter",
+					" ",
+					"ArrowDown"
+				].includes(event.key)) event.preventDefault();
+			})
+		})
+	});
+});
+DropdownMenuTrigger$1.displayName = TRIGGER_NAME$2;
+var PORTAL_NAME$2 = "DropdownMenuPortal";
+var DropdownMenuPortal$1 = (props) => {
+	const { __scopeDropdownMenu, ...portalProps } = props;
+	const menuScope = useMenuScope(__scopeDropdownMenu);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Portal$1, {
+		...menuScope,
+		...portalProps
+	});
+};
+DropdownMenuPortal$1.displayName = PORTAL_NAME$2;
+var CONTENT_NAME$2 = "DropdownMenuContent";
+var DropdownMenuContent$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeDropdownMenu, ...contentProps } = props;
+	const context = useDropdownMenuContext(CONTENT_NAME$2, __scopeDropdownMenu);
+	const menuScope = useMenuScope(__scopeDropdownMenu);
+	const hasInteractedOutsideRef = import_react.useRef(false);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Content2$3, {
+		id: context.contentId,
+		"aria-labelledby": context.triggerId,
+		...menuScope,
+		...contentProps,
+		ref: forwardedRef,
+		onCloseAutoFocus: composeEventHandlers(props.onCloseAutoFocus, (event) => {
+			if (!hasInteractedOutsideRef.current) context.triggerRef.current?.focus();
+			hasInteractedOutsideRef.current = false;
+			event.preventDefault();
+		}),
+		onInteractOutside: composeEventHandlers(props.onInteractOutside, (event) => {
+			const originalEvent = event.detail.originalEvent;
+			const ctrlLeftClick = originalEvent.button === 0 && originalEvent.ctrlKey === true;
+			const isRightClick = originalEvent.button === 2 || ctrlLeftClick;
+			if (!context.modal || isRightClick) hasInteractedOutsideRef.current = true;
+		}),
+		style: {
+			...props.style,
+			"--radix-dropdown-menu-content-transform-origin": "var(--radix-popper-transform-origin)",
+			"--radix-dropdown-menu-content-available-width": "var(--radix-popper-available-width)",
+			"--radix-dropdown-menu-content-available-height": "var(--radix-popper-available-height)",
+			"--radix-dropdown-menu-trigger-width": "var(--radix-popper-anchor-width)",
+			"--radix-dropdown-menu-trigger-height": "var(--radix-popper-anchor-height)"
+		}
+	});
+});
+DropdownMenuContent$1.displayName = CONTENT_NAME$2;
+var GROUP_NAME$1 = "DropdownMenuGroup";
+var DropdownMenuGroup$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeDropdownMenu, ...groupProps } = props;
+	const menuScope = useMenuScope(__scopeDropdownMenu);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Group$1, {
+		...menuScope,
+		...groupProps,
+		ref: forwardedRef
+	});
+});
+DropdownMenuGroup$1.displayName = GROUP_NAME$1;
+var LABEL_NAME$1 = "DropdownMenuLabel";
+var DropdownMenuLabel$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeDropdownMenu, ...labelProps } = props;
+	const menuScope = useMenuScope(__scopeDropdownMenu);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$3, {
+		...menuScope,
+		...labelProps,
+		ref: forwardedRef
+	});
+});
+DropdownMenuLabel$1.displayName = LABEL_NAME$1;
+var ITEM_NAME$2 = "DropdownMenuItem";
+var DropdownMenuItem$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeDropdownMenu, ...itemProps } = props;
+	const menuScope = useMenuScope(__scopeDropdownMenu);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Item2$2, {
+		...menuScope,
+		...itemProps,
+		ref: forwardedRef
+	});
+});
+DropdownMenuItem$1.displayName = ITEM_NAME$2;
+var CHECKBOX_ITEM_NAME = "DropdownMenuCheckboxItem";
+var DropdownMenuCheckboxItem$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeDropdownMenu, ...checkboxItemProps } = props;
+	const menuScope = useMenuScope(__scopeDropdownMenu);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckboxItem, {
+		...menuScope,
+		...checkboxItemProps,
+		ref: forwardedRef
+	});
+});
+DropdownMenuCheckboxItem$1.displayName = CHECKBOX_ITEM_NAME;
+var RADIO_GROUP_NAME$1 = "DropdownMenuRadioGroup";
+var DropdownMenuRadioGroup$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeDropdownMenu, ...radioGroupProps } = props;
+	const menuScope = useMenuScope(__scopeDropdownMenu);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroup$2, {
+		...menuScope,
+		...radioGroupProps,
+		ref: forwardedRef
+	});
+});
+DropdownMenuRadioGroup$1.displayName = RADIO_GROUP_NAME$1;
+var RADIO_ITEM_NAME = "DropdownMenuRadioItem";
+var DropdownMenuRadioItem$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeDropdownMenu, ...radioItemProps } = props;
+	const menuScope = useMenuScope(__scopeDropdownMenu);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioItem, {
+		...menuScope,
+		...radioItemProps,
+		ref: forwardedRef
+	});
+});
+DropdownMenuRadioItem$1.displayName = RADIO_ITEM_NAME;
+var INDICATOR_NAME$1 = "DropdownMenuItemIndicator";
+var DropdownMenuItemIndicator = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeDropdownMenu, ...itemIndicatorProps } = props;
+	const menuScope = useMenuScope(__scopeDropdownMenu);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ItemIndicator$1, {
+		...menuScope,
+		...itemIndicatorProps,
+		ref: forwardedRef
+	});
+});
+DropdownMenuItemIndicator.displayName = INDICATOR_NAME$1;
+var SEPARATOR_NAME$1 = "DropdownMenuSeparator";
+var DropdownMenuSeparator$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeDropdownMenu, ...separatorProps } = props;
+	const menuScope = useMenuScope(__scopeDropdownMenu);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Separator$1, {
+		...menuScope,
+		...separatorProps,
+		ref: forwardedRef
+	});
+});
+DropdownMenuSeparator$1.displayName = SEPARATOR_NAME$1;
+var ARROW_NAME$2 = "DropdownMenuArrow";
+var DropdownMenuArrow = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeDropdownMenu, ...arrowProps } = props;
+	const menuScope = useMenuScope(__scopeDropdownMenu);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Arrow2, {
+		...menuScope,
+		...arrowProps,
+		ref: forwardedRef
+	});
+});
+DropdownMenuArrow.displayName = ARROW_NAME$2;
+var SUB_TRIGGER_NAME = "DropdownMenuSubTrigger";
+var DropdownMenuSubTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeDropdownMenu, ...subTriggerProps } = props;
+	const menuScope = useMenuScope(__scopeDropdownMenu);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SubTrigger, {
+		...menuScope,
+		...subTriggerProps,
+		ref: forwardedRef
+	});
+});
+DropdownMenuSubTrigger$1.displayName = SUB_TRIGGER_NAME;
+var SUB_CONTENT_NAME = "DropdownMenuSubContent";
+var DropdownMenuSubContent$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeDropdownMenu, ...subContentProps } = props;
+	const menuScope = useMenuScope(__scopeDropdownMenu);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SubContent, {
+		...menuScope,
+		...subContentProps,
+		ref: forwardedRef,
+		style: {
+			...props.style,
+			"--radix-dropdown-menu-content-transform-origin": "var(--radix-popper-transform-origin)",
+			"--radix-dropdown-menu-content-available-width": "var(--radix-popper-available-width)",
+			"--radix-dropdown-menu-content-available-height": "var(--radix-popper-available-height)",
+			"--radix-dropdown-menu-trigger-width": "var(--radix-popper-anchor-width)",
+			"--radix-dropdown-menu-trigger-height": "var(--radix-popper-anchor-height)"
+		}
+	});
+});
+DropdownMenuSubContent$1.displayName = SUB_CONTENT_NAME;
+var Root2$3 = DropdownMenu$1;
+var Trigger$2 = DropdownMenuTrigger$1;
+var Portal2 = DropdownMenuPortal$1;
+var Content2$2 = DropdownMenuContent$1;
+var Label2 = DropdownMenuLabel$1;
+var Item2$1 = DropdownMenuItem$1;
+var CheckboxItem2 = DropdownMenuCheckboxItem$1;
+var RadioItem2 = DropdownMenuRadioItem$1;
+var ItemIndicator2 = DropdownMenuItemIndicator;
+var Separator2 = DropdownMenuSeparator$1;
+var SubTrigger2 = DropdownMenuSubTrigger$1;
+var SubContent2 = DropdownMenuSubContent$1;
+//#endregion
+//#region src/components/ui/dropdown-menu.tsx
+var DropdownMenu = Root2$3;
+var DropdownMenuTrigger = Trigger$2;
+var DropdownMenuSubTrigger = import_react.forwardRef(({ className, inset, children, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SubTrigger2, {
+	"data-uid": "src/components/ui/dropdown-menu.tsx:26:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent data-[state=open]:bg-accent [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0", inset && "pl-8", className),
+	...props,
+	children: [children, /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, {
+		"data-uid": "src/components/ui/dropdown-menu.tsx:36:5",
+		"data-prohibitions": "[editContent]",
+		className: "ml-auto"
+	})]
+}));
+DropdownMenuSubTrigger.displayName = SubTrigger2.displayName;
+var DropdownMenuSubContent = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SubContent2, {
+	"data-uid": "src/components/ui/dropdown-menu.tsx:45:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-dropdown-menu-content-transform-origin]", className),
+	...props
+}));
+DropdownMenuSubContent.displayName = SubContent2.displayName;
+var DropdownMenuContent = import_react.forwardRef(({ className, sideOffset = 4, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Portal2, {
+	"data-uid": "src/components/ui/dropdown-menu.tsx:60:3",
+	"data-prohibitions": "[editContent]",
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Content2$2, {
+		"data-uid": "src/components/ui/dropdown-menu.tsx:61:5",
+		"data-prohibitions": "[editContent]",
+		ref,
+		sideOffset,
+		className: cn$1("z-50 max-h-[var(--radix-dropdown-menu-content-available-height)] min-w-[8rem] overflow-y-auto overflow-x-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-dropdown-menu-content-transform-origin]", className),
+		...props
+	})
+}));
+DropdownMenuContent.displayName = Content2$2.displayName;
+var DropdownMenuItem = import_react.forwardRef(({ className, inset, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Item2$1, {
+	"data-uid": "src/components/ui/dropdown-menu.tsx:80:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0", inset && "pl-8", className),
+	...props
+}));
+DropdownMenuItem.displayName = Item2$1.displayName;
+var DropdownMenuCheckboxItem = import_react.forwardRef(({ className, children, checked, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CheckboxItem2, {
+	"data-uid": "src/components/ui/dropdown-menu.tsx:96:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50", className),
+	checked,
+	...props,
+	children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+		"data-uid": "src/components/ui/dropdown-menu.tsx:105:5",
+		"data-prohibitions": "[]",
+		className: "absolute left-2 flex h-3.5 w-3.5 items-center justify-center",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ItemIndicator2, {
+			"data-uid": "src/components/ui/dropdown-menu.tsx:106:7",
+			"data-prohibitions": "[]",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, {
+				"data-uid": "src/components/ui/dropdown-menu.tsx:107:9",
+				"data-prohibitions": "[editContent]",
+				className: "h-4 w-4"
+			})
+		})
+	}), children]
+}));
+DropdownMenuCheckboxItem.displayName = CheckboxItem2.displayName;
+var DropdownMenuRadioItem = import_react.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(RadioItem2, {
+	"data-uid": "src/components/ui/dropdown-menu.tsx:119:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50", className),
+	...props,
+	children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+		"data-uid": "src/components/ui/dropdown-menu.tsx:127:5",
+		"data-prohibitions": "[]",
+		className: "absolute left-2 flex h-3.5 w-3.5 items-center justify-center",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ItemIndicator2, {
+			"data-uid": "src/components/ui/dropdown-menu.tsx:128:7",
+			"data-prohibitions": "[]",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Circle, {
+				"data-uid": "src/components/ui/dropdown-menu.tsx:129:9",
+				"data-prohibitions": "[editContent]",
+				className: "h-2 w-2 fill-current"
+			})
+		})
+	}), children]
+}));
+DropdownMenuRadioItem.displayName = RadioItem2.displayName;
+var DropdownMenuLabel = import_react.forwardRef(({ className, inset, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label2, {
+	"data-uid": "src/components/ui/dropdown-menu.tsx:143:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("px-2 py-1.5 text-sm font-semibold", inset && "pl-8", className),
+	...props
+}));
+DropdownMenuLabel.displayName = Label2.displayName;
+var DropdownMenuSeparator = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Separator2, {
+	"data-uid": "src/components/ui/dropdown-menu.tsx:155:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("-mx-1 my-1 h-px bg-muted", className),
+	...props
+}));
+DropdownMenuSeparator.displayName = Separator2.displayName;
+var DropdownMenuShortcut = ({ className, ...props }) => {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+		"data-uid": "src/components/ui/dropdown-menu.tsx:164:10",
+		"data-prohibitions": "[editContent]",
+		className: cn$1("ml-auto text-xs tracking-widest opacity-60", className),
+		...props
+	});
+};
+DropdownMenuShortcut.displayName = "DropdownMenuShortcut";
+//#endregion
 //#region src/assets/e-eventos-novo-62817.png
 var e_eventos_novo_62817_default = "/assets/e-eventos-novo-62817-CiHgfznd.png";
 //#endregion
@@ -22027,8 +25388,7 @@ var MOCK_DEMANDS = [{
 		security: false,
 		details: "Preciso de PA para 300 pessoas, iluminação cênica na pista, grid Q30 e banda para festa."
 	},
-	status: "open",
-	proposals: 2,
+	status: "pending",
 	createdAt: (/* @__PURE__ */ new Date()).toISOString()
 }, {
 	id: "d2",
@@ -22056,8 +25416,17 @@ var MOCK_DEMANDS = [{
 		security: true,
 		details: "Painel de LED 4x3 indoor, som para DJ, luz de palco completa e buffet completo."
 	},
-	status: "open",
-	proposals: 5,
+	status: "negotiating",
+	createdAt: (/* @__PURE__ */ new Date()).toISOString()
+}];
+var MOCK_PROPOSALS = [{
+	id: "p1",
+	demandId: "d2",
+	supplierId: "u2",
+	supplierName: "Empresa XPTO",
+	value: 8500,
+	message: "Podemos fornecer o painel de LED com a melhor qualidade e equipe técnica de apoio. Nossa montagem é rápida e o suporte está incluso no valor total da locação.",
+	status: "pending",
 	createdAt: (/* @__PURE__ */ new Date()).toISOString()
 }];
 var AppContext = (0, import_react.createContext)(void 0);
@@ -22067,6 +25436,8 @@ var AppProvider = ({ children }) => {
 	const [role, setRole] = (0, import_react.useState)("customer");
 	const [isSubscribed, setIsSubscribed] = (0, import_react.useState)(true);
 	const [demands, setDemands] = (0, import_react.useState)(MOCK_DEMANDS);
+	const [proposals, setProposals] = (0, import_react.useState)(MOCK_PROPOSALS);
+	const [notifications, setNotifications] = (0, import_react.useState)([]);
 	const [companyProfile, setCompanyProfile] = (0, import_react.useState)({
 		name: "JD Decorações",
 		specialties: "Casamentos, Cenografia, Flores",
@@ -22076,13 +25447,60 @@ var AppProvider = ({ children }) => {
 		observations: ""
 	});
 	const addDemand = (demandData) => {
-		setDemands([{
+		const newDemand = {
 			...demandData,
 			id: Math.random().toString(36).substring(7),
-			status: "open",
-			proposals: 0,
+			status: "pending",
 			createdAt: (/* @__PURE__ */ new Date()).toISOString()
-		}, ...demands]);
+		};
+		setDemands([newDemand, ...demands]);
+		const newNotifs = Object.entries(demandData.requirements).filter(([_, val]) => val).map(([sector]) => ({
+			id: Math.random().toString(36).substring(7),
+			title: "Nova demanda disponível!",
+			message: newDemand.title,
+			demandId: newDemand.id,
+			sector,
+			read: false,
+			createdAt: (/* @__PURE__ */ new Date()).toISOString()
+		}));
+		setNotifications((prev) => [...newNotifs, ...prev]);
+	};
+	const addProposal = (propData) => {
+		const newProp = {
+			...propData,
+			id: Math.random().toString(36).substring(7),
+			status: "pending",
+			createdAt: (/* @__PURE__ */ new Date()).toISOString()
+		};
+		setProposals((prev) => [newProp, ...prev]);
+		setDemands((prev) => prev.map((d) => d.id === propData.demandId && d.status === "pending" ? {
+			...d,
+			status: "negotiating"
+		} : d));
+	};
+	const acceptProposal = (proposalId) => {
+		const prop = proposals.find((p) => p.id === proposalId);
+		if (!prop) return;
+		setProposals((prev) => prev.map((p) => {
+			if (p.demandId === prop.demandId) return p.id === proposalId ? {
+				...p,
+				status: "accepted"
+			} : {
+				...p,
+				status: "rejected"
+			};
+			return p;
+		}));
+		setDemands((prev) => prev.map((d) => d.id === prop.demandId ? {
+			...d,
+			status: "completed"
+		} : d));
+	};
+	const markNotificationsAsRead = () => {
+		setNotifications((prev) => prev.map((n) => ({
+			...n,
+			read: true
+		})));
 	};
 	const updateCompanyProfile = (profile) => {
 		setCompanyProfile((prev) => ({
@@ -22123,7 +25541,7 @@ var AppProvider = ({ children }) => {
 		setRole("customer");
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppContext.Provider, {
-		"data-uid": "src/store/AppContext.tsx:212:5",
+		"data-uid": "src/store/AppContext.tsx:301:5",
 		"data-prohibitions": "[editContent]",
 		value: {
 			role,
@@ -22138,7 +25556,12 @@ var AppProvider = ({ children }) => {
 			currentUser,
 			registerUser,
 			login,
-			logout
+			logout,
+			proposals,
+			addProposal,
+			acceptProposal,
+			notifications,
+			markNotificationsAsRead
 		},
 		children
 	});
@@ -22153,7 +25576,7 @@ var useApp = () => {
 function Layout() {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const { currentUser, logout } = useApp();
+	const { currentUser, logout, role, companyProfile, notifications, markNotificationsAsRead } = useApp();
 	const handleLogout = () => {
 		logout();
 		navigate("/");
@@ -22180,69 +25603,71 @@ function Layout() {
 			icon: CreditCard
 		}
 	];
+	const myNotifications = role === "company" ? notifications.filter((n) => n.sector === companyProfile?.sector).slice(0, 5) : [];
+	const unreadCount = myNotifications.filter((n) => !n.read).length;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/components/Layout.tsx:37:5",
+		"data-uid": "src/components/Layout.tsx:54:5",
 		"data-prohibitions": "[editContent]",
 		className: "min-h-screen flex flex-col bg-background text-foreground",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", {
-				"data-uid": "src/components/Layout.tsx:38:7",
+				"data-uid": "src/components/Layout.tsx:55:7",
 				"data-prohibitions": "[editContent]",
 				className: "sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/components/Layout.tsx:39:9",
+					"data-uid": "src/components/Layout.tsx:56:9",
 					"data-prohibitions": "[editContent]",
 					className: "container mx-auto px-4 h-16 flex items-center justify-between",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/components/Layout.tsx:40:11",
+							"data-uid": "src/components/Layout.tsx:57:11",
 							"data-prohibitions": "[editContent]",
 							className: "flex items-center gap-4",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Sheet, {
-								"data-uid": "src/components/Layout.tsx:41:13",
+								"data-uid": "src/components/Layout.tsx:58:13",
 								"data-prohibitions": "[editContent]",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SheetTrigger, {
-									"data-uid": "src/components/Layout.tsx:42:15",
+									"data-uid": "src/components/Layout.tsx:59:15",
 									"data-prohibitions": "[]",
 									asChild: true,
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-										"data-uid": "src/components/Layout.tsx:43:17",
+										"data-uid": "src/components/Layout.tsx:60:17",
 										"data-prohibitions": "[]",
 										variant: "ghost",
 										size: "icon",
 										className: "md:hidden",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Menu, {
-											"data-uid": "src/components/Layout.tsx:44:19",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Menu$1, {
+											"data-uid": "src/components/Layout.tsx:61:19",
 											"data-prohibitions": "[editContent]",
 											className: "h-5 w-5"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											"data-uid": "src/components/Layout.tsx:45:19",
+											"data-uid": "src/components/Layout.tsx:62:19",
 											"data-prohibitions": "[]",
 											className: "sr-only",
 											children: "Menu principal"
 										})]
 									})
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SheetContent, {
-									"data-uid": "src/components/Layout.tsx:48:15",
+									"data-uid": "src/components/Layout.tsx:65:15",
 									"data-prohibitions": "[editContent]",
 									side: "left",
 									className: "w-64 sm:max-w-xs flex flex-col",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SheetHeader, {
-											"data-uid": "src/components/Layout.tsx:49:17",
+											"data-uid": "src/components/Layout.tsx:66:17",
 											"data-prohibitions": "[]",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SheetTitle, {
-												"data-uid": "src/components/Layout.tsx:50:19",
+												"data-uid": "src/components/Layout.tsx:67:19",
 												"data-prohibitions": "[]",
 												className: "text-left flex items-center gap-3",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-													"data-uid": "src/components/Layout.tsx:51:21",
+													"data-uid": "src/components/Layout.tsx:68:21",
 													"data-prohibitions": "[editContent]",
 													src: e_eventos_novo_62817_default,
 													alt: "e-eventos",
 													className: "h-8 w-8 rounded-lg object-contain shadow-sm bg-white/5 p-1 border border-white/10"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													"data-uid": "src/components/Layout.tsx:56:21",
+													"data-uid": "src/components/Layout.tsx:73:21",
 													"data-prohibitions": "[]",
 													className: "font-bold tracking-tight text-lg",
 													children: "e-eventos"
@@ -22250,65 +25675,65 @@ function Layout() {
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
-											"data-uid": "src/components/Layout.tsx:59:17",
+											"data-uid": "src/components/Layout.tsx:76:17",
 											"data-prohibitions": "[editContent]",
 											className: "flex flex-col gap-2 mt-6 flex-1",
 											children: [navItems.map((item) => {
 												const Icon = item.icon;
 												return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-													"data-uid": "src/components/Layout.tsx:63:23",
+													"data-uid": "src/components/Layout.tsx:80:23",
 													"data-prohibitions": "[editContent]",
 													to: item.path,
 													className: cn$1("flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors", location.pathname === item.path ? "bg-primary text-primary-foreground" : "hover:bg-muted"),
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
-														"data-uid": "src/components/Layout.tsx:73:25",
+														"data-uid": "src/components/Layout.tsx:90:25",
 														"data-prohibitions": "[editContent]",
 														className: "h-4 w-4"
 													}), item.name]
 												}, item.path);
 											}), currentUser && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-												"data-uid": "src/components/Layout.tsx:79:21",
+												"data-uid": "src/components/Layout.tsx:96:21",
 												"data-prohibitions": "[editContent]",
 												to: "/profile",
 												className: cn$1("flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors", location.pathname === "/profile" ? "bg-primary text-primary-foreground" : "hover:bg-muted"),
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(User, {
-													"data-uid": "src/components/Layout.tsx:88:23",
+													"data-uid": "src/components/Layout.tsx:105:23",
 													"data-prohibitions": "[editContent]",
 													className: "h-4 w-4"
 												}), "Meu Perfil"]
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											"data-uid": "src/components/Layout.tsx:93:17",
+											"data-uid": "src/components/Layout.tsx:110:17",
 											"data-prohibitions": "[editContent]",
 											className: "flex flex-col gap-2 mt-auto pt-6 border-t border-border",
 											children: currentUser ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-												"data-uid": "src/components/Layout.tsx:95:21",
+												"data-uid": "src/components/Layout.tsx:112:21",
 												"data-prohibitions": "[]",
 												onClick: handleLogout,
 												className: "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium hover:bg-muted transition-colors text-destructive",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogOut, {
-													"data-uid": "src/components/Layout.tsx:99:23",
+													"data-uid": "src/components/Layout.tsx:116:23",
 													"data-prohibitions": "[editContent]",
 													className: "h-4 w-4"
 												}), " Sair da conta"]
 											}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-												"data-uid": "src/components/Layout.tsx:103:23",
+												"data-uid": "src/components/Layout.tsx:120:23",
 												"data-prohibitions": "[]",
 												to: "/login",
 												className: "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium hover:bg-muted transition-colors",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogIn, {
-													"data-uid": "src/components/Layout.tsx:107:25",
+													"data-uid": "src/components/Layout.tsx:124:25",
 													"data-prohibitions": "[editContent]",
 													className: "h-4 w-4"
 												}), " Entrar"]
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-												"data-uid": "src/components/Layout.tsx:109:23",
+												"data-uid": "src/components/Layout.tsx:126:23",
 												"data-prohibitions": "[]",
 												to: "/register",
 												className: "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium hover:bg-muted transition-colors text-primary",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserPlus, {
-													"data-uid": "src/components/Layout.tsx:113:25",
+													"data-uid": "src/components/Layout.tsx:130:25",
 													"data-prohibitions": "[editContent]",
 													className: "h-4 w-4"
 												}), " Cadastrar"]
@@ -22317,18 +25742,18 @@ function Layout() {
 									]
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-								"data-uid": "src/components/Layout.tsx:121:13",
+								"data-uid": "src/components/Layout.tsx:138:13",
 								"data-prohibitions": "[]",
 								to: "/",
 								className: "flex items-center gap-3 transition-opacity hover:opacity-90",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-									"data-uid": "src/components/Layout.tsx:122:15",
+									"data-uid": "src/components/Layout.tsx:139:15",
 									"data-prohibitions": "[editContent]",
 									src: e_eventos_novo_62817_default,
 									alt: "e-eventos",
 									className: "h-10 w-10 sm:h-12 sm:w-12 rounded-xl object-contain drop-shadow-sm bg-white/5 p-1 border border-white/10"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									"data-uid": "src/components/Layout.tsx:127:15",
+									"data-uid": "src/components/Layout.tsx:144:15",
 									"data-prohibitions": "[]",
 									className: "hidden sm:inline-block font-extrabold text-xl tracking-tight text-foreground",
 									children: "e-eventos"
@@ -22336,135 +25761,214 @@ function Layout() {
 							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", {
-							"data-uid": "src/components/Layout.tsx:133:11",
+							"data-uid": "src/components/Layout.tsx:150:11",
 							"data-prohibitions": "[editContent]",
 							className: "hidden md:flex items-center gap-6",
 							children: navItems.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-								"data-uid": "src/components/Layout.tsx:135:15",
+								"data-uid": "src/components/Layout.tsx:152:15",
 								"data-prohibitions": "[editContent]",
 								to: item.path,
 								className: cn$1("text-sm font-medium transition-colors hover:text-primary", location.pathname === item.path ? "text-primary" : "text-muted-foreground"),
 								children: item.name
 							}, item.path))
 						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/components/Layout.tsx:148:11",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/components/Layout.tsx:165:11",
 							"data-prohibitions": "[editContent]",
-							className: "hidden md:flex items-center gap-3",
-							children: currentUser ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/Layout.tsx:150:15",
+							className: "flex items-center gap-3",
+							children: [role === "company" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DropdownMenu, {
+								"data-uid": "src/components/Layout.tsx:167:15",
 								"data-prohibitions": "[editContent]",
-								className: "flex items-center gap-4",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-									"data-uid": "src/components/Layout.tsx:151:17",
+								onOpenChange: (open) => {
+									if (!open) markNotificationsAsRead();
+								},
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DropdownMenuTrigger, {
+									"data-uid": "src/components/Layout.tsx:172:17",
 									"data-prohibitions": "[editContent]",
-									to: "/profile",
-									className: "text-sm font-medium hover:text-primary transition-colors",
-									children: ["Olá, ", currentUser.name.split(" ")[0]]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/components/Layout.tsx:157:17",
+									asChild: true,
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+										"data-uid": "src/components/Layout.tsx:173:19",
+										"data-prohibitions": "[editContent]",
+										variant: "ghost",
+										size: "icon",
+										className: "relative mr-2 md:mr-0",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bell, {
+											"data-uid": "src/components/Layout.tsx:174:21",
+											"data-prohibitions": "[editContent]",
+											className: "h-5 w-5"
+										}), unreadCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											"data-uid": "src/components/Layout.tsx:176:23",
+											"data-prohibitions": "[editContent]",
+											className: "absolute top-2 right-2 h-2.5 w-2.5 rounded-full bg-destructive border-2 border-background"
+										})]
+									})
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DropdownMenuContent, {
+									"data-uid": "src/components/Layout.tsx:180:17",
+									"data-prohibitions": "[editContent]",
+									align: "end",
+									className: "w-80",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DropdownMenuLabel, {
+											"data-uid": "src/components/Layout.tsx:181:19",
+											"data-prohibitions": "[]",
+											children: "Notificações"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DropdownMenuSeparator, {
+											"data-uid": "src/components/Layout.tsx:182:19",
+											"data-prohibitions": "[editContent]"
+										}),
+										myNotifications.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											"data-uid": "src/components/Layout.tsx:184:21",
+											"data-prohibitions": "[]",
+											className: "p-4 text-center text-sm text-muted-foreground",
+											children: "Nenhuma notificação no momento."
+										}) : myNotifications.map((notif) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DropdownMenuItem, {
+											"data-uid": "src/components/Layout.tsx:189:23",
+											"data-prohibitions": "[editContent]",
+											className: "flex flex-col items-start gap-1 p-3 cursor-pointer",
+											onClick: () => navigate(`/demands/${notif.demandId}`),
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												"data-uid": "src/components/Layout.tsx:194:25",
+												"data-prohibitions": "[editContent]",
+												className: "flex items-center gap-2",
+												children: [!notif.read && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													"data-uid": "src/components/Layout.tsx:196:29",
+													"data-prohibitions": "[editContent]",
+													className: "h-2 w-2 rounded-full bg-primary shrink-0"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													"data-uid": "src/components/Layout.tsx:198:27",
+													"data-prohibitions": "[editContent]",
+													className: "font-semibold text-sm",
+													children: notif.title
+												})]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												"data-uid": "src/components/Layout.tsx:200:25",
+												"data-prohibitions": "[editContent]",
+												className: "text-xs text-muted-foreground line-clamp-2",
+												children: notif.message
+											})]
+										}, notif.id))
+									]
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								"data-uid": "src/components/Layout.tsx:210:13",
+								"data-prohibitions": "[editContent]",
+								className: "hidden md:flex items-center gap-3",
+								children: currentUser ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									"data-uid": "src/components/Layout.tsx:212:17",
+									"data-prohibitions": "[editContent]",
+									className: "flex items-center gap-4",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+										"data-uid": "src/components/Layout.tsx:213:19",
+										"data-prohibitions": "[editContent]",
+										to: "/profile",
+										className: "text-sm font-medium hover:text-primary transition-colors",
+										children: ["Olá, ", currentUser.name.split(" ")[0]]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+										"data-uid": "src/components/Layout.tsx:219:19",
+										"data-prohibitions": "[]",
+										variant: "ghost",
+										size: "sm",
+										onClick: handleLogout,
+										children: "Sair"
+									})]
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									"data-uid": "src/components/Layout.tsx:225:19",
 									"data-prohibitions": "[]",
 									variant: "ghost",
 									size: "sm",
-									onClick: handleLogout,
-									children: "Sair"
-								})]
-							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-								"data-uid": "src/components/Layout.tsx:163:17",
-								"data-prohibitions": "[]",
-								variant: "ghost",
-								size: "sm",
-								asChild: true,
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-									"data-uid": "src/components/Layout.tsx:164:19",
+									asChild: true,
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+										"data-uid": "src/components/Layout.tsx:226:21",
+										"data-prohibitions": "[]",
+										to: "/login",
+										children: "Entrar"
+									})
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									"data-uid": "src/components/Layout.tsx:228:19",
 									"data-prohibitions": "[]",
-									to: "/login",
-									children: "Entrar"
-								})
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-								"data-uid": "src/components/Layout.tsx:166:17",
-								"data-prohibitions": "[]",
-								size: "sm",
-								asChild: true,
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-									"data-uid": "src/components/Layout.tsx:167:19",
-									"data-prohibitions": "[]",
-									to: "/register",
-									children: "Cadastrar"
-								})
-							})] })
+									size: "sm",
+									asChild: true,
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+										"data-uid": "src/components/Layout.tsx:229:21",
+										"data-prohibitions": "[]",
+										to: "/register",
+										children: "Cadastrar"
+									})
+								})] })
+							})]
 						})
 					]
 				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
-				"data-uid": "src/components/Layout.tsx:175:7",
+				"data-uid": "src/components/Layout.tsx:238:7",
 				"data-prohibitions": "[]",
 				className: "flex-1 w-full",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {
-					"data-uid": "src/components/Layout.tsx:176:9",
+					"data-uid": "src/components/Layout.tsx:239:9",
 					"data-prohibitions": "[editContent]"
 				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("footer", {
-				"data-uid": "src/components/Layout.tsx:179:7",
+				"data-uid": "src/components/Layout.tsx:242:7",
 				"data-prohibitions": "[editContent]",
 				className: "border-t border-border bg-card/50 pt-12 pb-8 mt-auto",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/components/Layout.tsx:180:9",
+					"data-uid": "src/components/Layout.tsx:243:9",
 					"data-prohibitions": "[editContent]",
 					className: "container mx-auto px-4",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/components/Layout.tsx:181:11",
+						"data-uid": "src/components/Layout.tsx:244:11",
 						"data-prohibitions": "[]",
 						className: "grid grid-cols-1 md:grid-cols-4 gap-8 mb-8",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/Layout.tsx:182:13",
+								"data-uid": "src/components/Layout.tsx:245:13",
 								"data-prohibitions": "[]",
 								className: "col-span-1 md:col-span-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-									"data-uid": "src/components/Layout.tsx:183:15",
+									"data-uid": "src/components/Layout.tsx:246:15",
 									"data-prohibitions": "[]",
 									to: "/",
 									className: "flex items-center gap-3 transition-opacity hover:opacity-90 mb-4 inline-flex",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-										"data-uid": "src/components/Layout.tsx:187:17",
+										"data-uid": "src/components/Layout.tsx:250:17",
 										"data-prohibitions": "[editContent]",
 										src: e_eventos_novo_62817_default,
 										alt: "e-eventos",
 										className: "h-10 w-10 rounded-xl object-contain drop-shadow-sm bg-white/5 p-1 border border-white/10"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										"data-uid": "src/components/Layout.tsx:192:17",
+										"data-uid": "src/components/Layout.tsx:255:17",
 										"data-prohibitions": "[]",
 										className: "font-extrabold text-xl tracking-tight text-foreground",
 										children: "e-eventos"
 									})]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/components/Layout.tsx:196:15",
+									"data-uid": "src/components/Layout.tsx:259:15",
 									"data-prohibitions": "[]",
 									className: "text-muted-foreground text-sm max-w-sm",
 									children: "A plataforma líder em locação de equipamentos e serviços para eventos. Conectando você aos melhores fornecedores do mercado."
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/Layout.tsx:201:13",
+								"data-uid": "src/components/Layout.tsx:264:13",
 								"data-prohibitions": "[]",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-									"data-uid": "src/components/Layout.tsx:202:15",
+									"data-uid": "src/components/Layout.tsx:265:15",
 									"data-prohibitions": "[]",
 									className: "font-semibold mb-4 text-foreground",
 									children: "Plataforma"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ul", {
-									"data-uid": "src/components/Layout.tsx:203:15",
+									"data-uid": "src/components/Layout.tsx:266:15",
 									"data-prohibitions": "[]",
 									className: "space-y-2 text-sm text-muted-foreground",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
-											"data-uid": "src/components/Layout.tsx:204:17",
+											"data-uid": "src/components/Layout.tsx:267:17",
 											"data-prohibitions": "[]",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-												"data-uid": "src/components/Layout.tsx:205:19",
+												"data-uid": "src/components/Layout.tsx:268:19",
 												"data-prohibitions": "[]",
 												to: "/demands",
 												className: "hover:text-primary transition-colors",
@@ -22472,10 +25976,10 @@ function Layout() {
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
-											"data-uid": "src/components/Layout.tsx:209:17",
+											"data-uid": "src/components/Layout.tsx:272:17",
 											"data-prohibitions": "[]",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-												"data-uid": "src/components/Layout.tsx:210:19",
+												"data-uid": "src/components/Layout.tsx:273:19",
 												"data-prohibitions": "[]",
 												to: "/create-event",
 												className: "hover:text-primary transition-colors",
@@ -22483,10 +25987,10 @@ function Layout() {
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
-											"data-uid": "src/components/Layout.tsx:214:17",
+											"data-uid": "src/components/Layout.tsx:277:17",
 											"data-prohibitions": "[]",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-												"data-uid": "src/components/Layout.tsx:215:19",
+												"data-uid": "src/components/Layout.tsx:278:19",
 												"data-prohibitions": "[]",
 												to: "/subscription",
 												className: "hover:text-primary transition-colors",
@@ -22497,23 +26001,23 @@ function Layout() {
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/Layout.tsx:221:13",
+								"data-uid": "src/components/Layout.tsx:284:13",
 								"data-prohibitions": "[]",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-									"data-uid": "src/components/Layout.tsx:222:15",
+									"data-uid": "src/components/Layout.tsx:285:15",
 									"data-prohibitions": "[]",
 									className: "font-semibold mb-4 text-foreground",
 									children: "Suporte"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ul", {
-									"data-uid": "src/components/Layout.tsx:223:15",
+									"data-uid": "src/components/Layout.tsx:286:15",
 									"data-prohibitions": "[]",
 									className: "space-y-2 text-sm text-muted-foreground",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
-											"data-uid": "src/components/Layout.tsx:224:17",
+											"data-uid": "src/components/Layout.tsx:287:17",
 											"data-prohibitions": "[]",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-												"data-uid": "src/components/Layout.tsx:225:19",
+												"data-uid": "src/components/Layout.tsx:288:19",
 												"data-prohibitions": "[]",
 												to: "#",
 												className: "hover:text-primary transition-colors",
@@ -22521,10 +26025,10 @@ function Layout() {
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
-											"data-uid": "src/components/Layout.tsx:229:17",
+											"data-uid": "src/components/Layout.tsx:292:17",
 											"data-prohibitions": "[]",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-												"data-uid": "src/components/Layout.tsx:230:19",
+												"data-uid": "src/components/Layout.tsx:293:19",
 												"data-prohibitions": "[]",
 												to: "#",
 												className: "hover:text-primary transition-colors",
@@ -22532,10 +26036,10 @@ function Layout() {
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
-											"data-uid": "src/components/Layout.tsx:234:17",
+											"data-uid": "src/components/Layout.tsx:297:17",
 											"data-prohibitions": "[]",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-												"data-uid": "src/components/Layout.tsx:235:19",
+												"data-uid": "src/components/Layout.tsx:298:19",
 												"data-prohibitions": "[]",
 												to: "#",
 												className: "hover:text-primary transition-colors",
@@ -22547,11 +26051,11 @@ function Layout() {
 							})
 						]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						"data-uid": "src/components/Layout.tsx:242:11",
+						"data-uid": "src/components/Layout.tsx:305:11",
 						"data-prohibitions": "[editContent]",
 						className: "pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-							"data-uid": "src/components/Layout.tsx:243:13",
+							"data-uid": "src/components/Layout.tsx:306:13",
 							"data-prohibitions": "[editContent]",
 							className: "text-sm text-muted-foreground text-center md:text-left",
 							children: [
@@ -22786,7 +26290,7 @@ var Primitive = [
 }, {});
 //#endregion
 //#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-label@2.1.8_@types+react-dom@19.2.3_@types+react@19.2.14__@types+react@_55fa612a976b7bdfbf4dcdd93d861aab/node_modules/@radix-ui/react-label/dist/index.mjs
-var NAME$2 = "Label";
+var NAME$1 = "Label";
 var Label$2 = import_react.forwardRef((props, forwardedRef) => {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.label, {
 		...props,
@@ -22798,19 +26302,19 @@ var Label$2 = import_react.forwardRef((props, forwardedRef) => {
 		}
 	});
 });
-Label$2.displayName = NAME$2;
-var Root$4 = Label$2;
+Label$2.displayName = NAME$1;
+var Root$2 = Label$2;
 //#endregion
 //#region src/components/ui/label.tsx
 var labelVariants = cva("text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70");
-var Label$1 = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$4, {
+var Label$1 = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$2, {
 	"data-uid": "src/components/ui/label.tsx:16:3",
 	"data-prohibitions": "[editContent]",
 	ref,
 	className: cn$1(labelVariants(), className),
 	...props
 }));
-Label$1.displayName = Root$4.displayName;
+Label$1.displayName = Root$2.displayName;
 //#endregion
 //#region src/components/ui/card.tsx
 var Card = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -24092,7 +27596,7 @@ var generateWatchOutput = (names, _names, formValues, isGlobal, defaultValue) =>
 	return formValues;
 };
 var isPrimitive = (value) => isNullOrUndefined(value) || !isObjectType(value);
-function deepEqual$1(object1, object2, _internal_visited = /* @__PURE__ */ new WeakSet()) {
+function deepEqual(object1, object2, _internal_visited = /* @__PURE__ */ new WeakSet()) {
 	if (isPrimitive(object1) || isPrimitive(object2)) return Object.is(object1, object2);
 	if (isDateObject(object1) && isDateObject(object2)) return Object.is(object1.getTime(), object2.getTime());
 	const keys1 = Object.keys(object1);
@@ -24106,7 +27610,7 @@ function deepEqual$1(object1, object2, _internal_visited = /* @__PURE__ */ new W
 		if (!keys2.includes(key)) return false;
 		if (key !== "ref") {
 			const val2 = object2[key];
-			if (isDateObject(val1) && isDateObject(val2) || isObject$1(val1) && isObject$1(val2) || Array.isArray(val1) && Array.isArray(val2) ? !deepEqual$1(val1, val2, _internal_visited) : !Object.is(val1, val2)) return false;
+			if (isDateObject(val1) && isDateObject(val2) || isObject$1(val1) && isObject$1(val2) || Array.isArray(val1) && Array.isArray(val2) ? !deepEqual(val1, val2, _internal_visited) : !Object.is(val1, val2)) return false;
 		}
 	}
 	return true;
@@ -24153,7 +27657,7 @@ function useWatch(props) {
 			const formValues = generateWatchOutput(name, control._names, values || control._formValues, false, _defaultValue.current);
 			if (_compute.current) {
 				const computedFormValues = _compute.current(formValues);
-				if (!deepEqual$1(computedFormValues, _computeFormValues.current)) {
+				if (!deepEqual(computedFormValues, _computeFormValues.current)) {
 					updateValue(computedFormValues);
 					_computeFormValues.current = computedFormValues;
 				}
@@ -24166,7 +27670,7 @@ function useWatch(props) {
 		name
 	]);
 	useIsomorphicLayoutEffect(() => {
-		if (_prevControl.current !== control || !deepEqual$1(_prevName.current, name)) {
+		if (_prevControl.current !== control || !deepEqual(_prevName.current, name)) {
 			_prevControl.current = control;
 			_prevName.current = name;
 			refreshValue();
@@ -24190,7 +27694,7 @@ function useWatch(props) {
 	const prevName = _prevName.current;
 	const computedOutput = import_react.useMemo(() => {
 		if (disabled) return null;
-		const nameChanged = !controlChanged && !deepEqual$1(prevName, name);
+		const nameChanged = !controlChanged && !deepEqual(prevName, name);
 		return controlChanged || nameChanged ? getCurrentOutput() : null;
 	}, [
 		disabled,
@@ -24551,7 +28055,7 @@ function extractFormValues(fieldsState, formValues) {
 }
 var isEmptyObject = (value) => isObject$1(value) && !Object.keys(value).length;
 var isFileInput = (element) => element.type === "file";
-var isHTMLElement$2 = (value) => {
+var isHTMLElement$1 = (value) => {
 	if (!isWeb) return false;
 	const owner = value ? value.ownerDocument : 0;
 	return value instanceof (owner && owner.defaultView ? owner.defaultView.HTMLElement : HTMLElement);
@@ -24559,7 +28063,7 @@ var isHTMLElement$2 = (value) => {
 var isMultipleSelect = (element) => element.type === `select-multiple`;
 var isRadioInput = (element) => element.type === "radio";
 var isRadioOrCheckbox = (ref) => isRadioInput(ref) || isCheckBoxInput(ref);
-var live = (ref) => isHTMLElement$2(ref) && ref.isConnected;
+var live = (ref) => isHTMLElement$1(ref) && ref.isConnected;
 function baseGet(object, updatePath) {
 	const length = updatePath.slice(0, -1).length;
 	let index = 0;
@@ -24604,7 +28108,7 @@ function getDirtyFields(data, formValues, dirtyFieldsFromValues) {
 		else getDirtyFields(value, isNullOrUndefined(formValues) ? {} : formValues[key], dirtyFieldsFromValues[key]);
 		else {
 			const formValue = formValues[key];
-			dirtyFieldsFromValues[key] = !deepEqual$1(value, formValue);
+			dirtyFieldsFromValues[key] = !deepEqual(value, formValue);
 		}
 	}
 	return dirtyFieldsFromValues;
@@ -24761,7 +28265,7 @@ var validateField = async (field, disabledFieldNames, formValues, validateAllFie
 	const isRadio = isRadioInput(ref);
 	const isCheckBox = isCheckBoxInput(ref);
 	const isRadioOrCheckbox = isRadio || isCheckBox;
-	const isEmpty = (valueAsNumber || isFileInput(ref)) && isUndefined(ref.value) && isUndefined(inputValue) || isHTMLElement$2(ref) && ref.value === "" || inputValue === "" || Array.isArray(inputValue) && !inputValue.length;
+	const isEmpty = (valueAsNumber || isFileInput(ref)) && isUndefined(ref.value) && isUndefined(inputValue) || isHTMLElement$1(ref) && ref.value === "" || inputValue === "" || Array.isArray(inputValue) && !inputValue.length;
 	const appendErrorsCurry = appendErrors.bind(null, name, validateAllFieldCriteria, error);
 	const getMinMaxMessage = (exceedMax, maxLengthMessage, minLengthMessage, maxType = INPUT_VALIDATION_RULES.maxLength, minType = INPUT_VALIDATION_RULES.minLength) => {
 		const message = exceedMax ? maxLengthMessage : minLengthMessage;
@@ -25024,7 +28528,7 @@ function createFormControl(props = {}) {
 					_formState.isDirty = output.isDirty = _getDirty();
 					shouldUpdateField = isPreviousDirty !== output.isDirty;
 				}
-				const isCurrentFieldPristine = deepEqual$1(get(_defaultValues, name), fieldValue);
+				const isCurrentFieldPristine = deepEqual(get(_defaultValues, name), fieldValue);
 				isPreviousDirty = !!get(_formState.dirtyFields, name);
 				isCurrentFieldPristine ? unset(_formState.dirtyFields, name) : set(_formState.dirtyFields, name, true);
 				output.dirtyFields = _formState.dirtyFields;
@@ -25053,7 +28557,7 @@ function createFormControl(props = {}) {
 			delayErrorCallback = null;
 			error ? set(_formState.errors, name, error) : unset(_formState.errors, name);
 		}
-		if ((error ? !deepEqual$1(previousFieldError, error) : previousFieldError) || !isEmptyObject(fieldState) || shouldUpdateValid) {
+		if ((error ? !deepEqual(previousFieldError, error) : previousFieldError) || !isEmptyObject(fieldState) || shouldUpdateValid) {
 			const updatedFormState = {
 				...fieldState,
 				...shouldUpdateValid && isBoolean(isValid) ? { isValid } : {},
@@ -25110,7 +28614,7 @@ function createFormControl(props = {}) {
 		}
 		_names.unMount = /* @__PURE__ */ new Set();
 	};
-	const _getDirty = (name, data) => !_options.disabled && (name && data && set(_formValues, name, data), !deepEqual$1(getValues(), _defaultValues));
+	const _getDirty = (name, data) => !_options.disabled && (name && data && set(_formValues, name, data), !deepEqual(getValues(), _defaultValues));
 	const _getWatch = (names, defaultValue, isGlobal) => generateWatchOutput(names, _names, { ..._state.mount ? _formValues : isUndefined(defaultValue) ? _defaultValues : isString(names) ? { [names]: defaultValue } : defaultValue }, isGlobal, defaultValue);
 	const _getFieldArray = (name) => compact(get(_state.mount ? _formValues : _defaultValues, name, _options.shouldUnregister ? get(_defaultValues, name, []) : []));
 	const setFieldValue = (name, value, options = {}) => {
@@ -25120,7 +28624,7 @@ function createFormControl(props = {}) {
 			const fieldReference = field._f;
 			if (fieldReference) {
 				!fieldReference.disabled && set(_formValues, name, getFieldValueAs(value, fieldReference));
-				fieldValue = isHTMLElement$2(fieldReference.ref) && isNullOrUndefined(value) ? "" : value;
+				fieldValue = isHTMLElement$1(fieldReference.ref) && isNullOrUndefined(value) ? "" : value;
 				if (isMultipleSelect(fieldReference.ref)) [...fieldReference.ref.options].forEach((optionRef) => optionRef.selected = fieldValue.includes(optionRef.value));
 				else if (fieldReference.refs) if (isCheckBoxInput(fieldReference.ref)) fieldReference.refs.forEach((checkboxRef) => {
 					if (!checkboxRef.defaultChecked || !checkboxRef.disabled) if (Array.isArray(fieldValue)) checkboxRef.checked = !!fieldValue.find((data) => data === checkboxRef.value);
@@ -25182,7 +28686,7 @@ function createFormControl(props = {}) {
 		let isFieldValueUpdated = true;
 		const field = get(_fields, name);
 		const _updateIsFieldValueUpdated = (fieldValue) => {
-			isFieldValueUpdated = Number.isNaN(fieldValue) || isDateObject(fieldValue) && isNaN(fieldValue.getTime()) || deepEqual$1(fieldValue, get(_formValues, name, fieldValue));
+			isFieldValueUpdated = Number.isNaN(fieldValue) || isDateObject(fieldValue) && isNaN(fieldValue.getTime()) || deepEqual(fieldValue, get(_formValues, name, fieldValue));
 		};
 		const validationModeBeforeSubmit = getValidationModes(_options.mode);
 		const validationModeAfterSubmit = getValidationModes(_options.reValidateMode);
@@ -25518,7 +29022,7 @@ function createFormControl(props = {}) {
 					const field = get(_fields, name);
 					if (field && field._f) {
 						const fieldReference = Array.isArray(field._f.refs) ? field._f.refs[0] : field._f.ref;
-						if (isHTMLElement$2(fieldReference)) {
+						if (isHTMLElement$1(fieldReference)) {
 							const form = fieldReference.closest("form");
 							if (form) {
 								form.reset();
@@ -25550,7 +29054,7 @@ function createFormControl(props = {}) {
 		if (!keepStateOptions.keepErrors) _formState.errors = {};
 		_subjects.state.next({
 			submitCount: keepStateOptions.keepSubmitCount ? _formState.submitCount : 0,
-			isDirty: isEmptyResetValues ? false : keepStateOptions.keepDirty ? _formState.isDirty : !!(keepStateOptions.keepDefaultValues && !deepEqual$1(formValues, _defaultValues)),
+			isDirty: isEmptyResetValues ? false : keepStateOptions.keepDirty ? _formState.isDirty : !!(keepStateOptions.keepDefaultValues && !deepEqual(formValues, _defaultValues)),
 			isSubmitted: keepStateOptions.keepIsSubmitted ? _formState.isSubmitted : false,
 			dirtyFields: isEmptyResetValues ? {} : keepStateOptions.keepDirtyValues ? keepStateOptions.keepDefaultValues && _formValues ? getDirtyFields(_defaultValues, _formValues) : _formState.dirtyFields : keepStateOptions.keepDefaultValues && formValues ? getDirtyFields(_defaultValues, formValues) : keepStateOptions.keepDirty ? _formState.dirtyFields : {},
 			touchedFields: keepStateOptions.keepTouched ? _formState.touchedFields : {},
@@ -25766,7 +29270,7 @@ function useForm(props = {}) {
 	}, [control, formState.isDirty]);
 	import_react.useEffect(() => {
 		var _a;
-		if (props.values && !deepEqual$1(props.values, _values.current)) {
+		if (props.values && !deepEqual(props.values, _values.current)) {
 			control._reset(props.values, {
 				keepFieldsRef: true,
 				...control._options.resetOptions
@@ -29338,7 +32842,7 @@ var FormLabel = import_react.forwardRef(({ className, ...props }, ref) => {
 FormLabel.displayName = "FormLabel";
 var FormControl = import_react.forwardRef(({ ...props }, ref) => {
 	const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Slot$2, {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Slot$3, {
 		"data-uid": "src/components/ui/form.tsx:107:5",
 		"data-prohibitions": "[editContent]",
 		ref,
@@ -29376,305 +32880,6 @@ var FormMessage = import_react.forwardRef(({ className, children, ...props }, re
 	});
 });
 FormMessage.displayName = "FormMessage";
-//#endregion
-//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-collection@1.1.7_@types+react-dom@19.2.3_@types+react@19.2.14__@types+r_161926fa2509d0b7370b60b8bb4eb8b0/node_modules/@radix-ui/react-collection/dist/index.mjs
-function createCollection(name) {
-	const PROVIDER_NAME = name + "CollectionProvider";
-	const [createCollectionContext, createCollectionScope] = createContextScope(PROVIDER_NAME);
-	const [CollectionProviderImpl, useCollectionContext] = createCollectionContext(PROVIDER_NAME, {
-		collectionRef: { current: null },
-		itemMap: /* @__PURE__ */ new Map()
-	});
-	const CollectionProvider = (props) => {
-		const { scope, children } = props;
-		const ref = import_react.useRef(null);
-		const itemMap = import_react.useRef(/* @__PURE__ */ new Map()).current;
-		return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CollectionProviderImpl, {
-			scope,
-			itemMap,
-			collectionRef: ref,
-			children
-		});
-	};
-	CollectionProvider.displayName = PROVIDER_NAME;
-	const COLLECTION_SLOT_NAME = name + "CollectionSlot";
-	const CollectionSlotImpl = /* @__PURE__ */ createSlot(COLLECTION_SLOT_NAME);
-	const CollectionSlot = import_react.forwardRef((props, forwardedRef) => {
-		const { scope, children } = props;
-		return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CollectionSlotImpl, {
-			ref: useComposedRefs(forwardedRef, useCollectionContext(COLLECTION_SLOT_NAME, scope).collectionRef),
-			children
-		});
-	});
-	CollectionSlot.displayName = COLLECTION_SLOT_NAME;
-	const ITEM_SLOT_NAME = name + "CollectionItemSlot";
-	const ITEM_DATA_ATTR = "data-radix-collection-item";
-	const CollectionItemSlotImpl = /* @__PURE__ */ createSlot(ITEM_SLOT_NAME);
-	const CollectionItemSlot = import_react.forwardRef((props, forwardedRef) => {
-		const { scope, children, ...itemData } = props;
-		const ref = import_react.useRef(null);
-		const composedRefs = useComposedRefs(forwardedRef, ref);
-		const context = useCollectionContext(ITEM_SLOT_NAME, scope);
-		import_react.useEffect(() => {
-			context.itemMap.set(ref, {
-				ref,
-				...itemData
-			});
-			return () => void context.itemMap.delete(ref);
-		});
-		return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CollectionItemSlotImpl, {
-			[ITEM_DATA_ATTR]: "",
-			ref: composedRefs,
-			children
-		});
-	});
-	CollectionItemSlot.displayName = ITEM_SLOT_NAME;
-	function useCollection(scope) {
-		const context = useCollectionContext(name + "CollectionConsumer", scope);
-		return import_react.useCallback(() => {
-			const collectionNode = context.collectionRef.current;
-			if (!collectionNode) return [];
-			const orderedNodes = Array.from(collectionNode.querySelectorAll(`[${ITEM_DATA_ATTR}]`));
-			return Array.from(context.itemMap.values()).sort((a, b) => orderedNodes.indexOf(a.ref.current) - orderedNodes.indexOf(b.ref.current));
-		}, [context.collectionRef, context.itemMap]);
-	}
-	return [
-		{
-			Provider: CollectionProvider,
-			Slot: CollectionSlot,
-			ItemSlot: CollectionItemSlot
-		},
-		useCollection,
-		createCollectionScope
-	];
-}
-//#endregion
-//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-direction@1.1.1_@types+react@19.2.14_react@19.2.4/node_modules/@radix-ui/react-direction/dist/index.mjs
-var DirectionContext = import_react.createContext(void 0);
-function useDirection(localDir) {
-	const globalDir = import_react.useContext(DirectionContext);
-	return localDir || globalDir || "ltr";
-}
-//#endregion
-//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-roving-focus@1.1.11_@types+react-dom@19.2.3_@types+react@19.2.14__@type_4eeb29c998b846c35358e2f929e7490e/node_modules/@radix-ui/react-roving-focus/dist/index.mjs
-var ENTRY_FOCUS = "rovingFocusGroup.onEntryFocus";
-var EVENT_OPTIONS = {
-	bubbles: false,
-	cancelable: true
-};
-var GROUP_NAME$1 = "RovingFocusGroup";
-var [Collection$2, useCollection$2, createCollectionScope$2] = createCollection(GROUP_NAME$1);
-var [createRovingFocusGroupContext, createRovingFocusGroupScope] = createContextScope(GROUP_NAME$1, [createCollectionScope$2]);
-var [RovingFocusProvider, useRovingFocusContext] = createRovingFocusGroupContext(GROUP_NAME$1);
-var RovingFocusGroup = import_react.forwardRef((props, forwardedRef) => {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Collection$2.Provider, {
-		scope: props.__scopeRovingFocusGroup,
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Collection$2.Slot, {
-			scope: props.__scopeRovingFocusGroup,
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RovingFocusGroupImpl, {
-				...props,
-				ref: forwardedRef
-			})
-		})
-	});
-});
-RovingFocusGroup.displayName = GROUP_NAME$1;
-var RovingFocusGroupImpl = import_react.forwardRef((props, forwardedRef) => {
-	const { __scopeRovingFocusGroup, orientation, loop = false, dir, currentTabStopId: currentTabStopIdProp, defaultCurrentTabStopId, onCurrentTabStopIdChange, onEntryFocus, preventScrollOnEntryFocus = false, ...groupProps } = props;
-	const ref = import_react.useRef(null);
-	const composedRefs = useComposedRefs(forwardedRef, ref);
-	const direction = useDirection(dir);
-	const [currentTabStopId, setCurrentTabStopId] = useControllableState({
-		prop: currentTabStopIdProp,
-		defaultProp: defaultCurrentTabStopId ?? null,
-		onChange: onCurrentTabStopIdChange,
-		caller: GROUP_NAME$1
-	});
-	const [isTabbingBackOut, setIsTabbingBackOut] = import_react.useState(false);
-	const handleEntryFocus = useCallbackRef$1(onEntryFocus);
-	const getItems = useCollection$2(__scopeRovingFocusGroup);
-	const isClickFocusRef = import_react.useRef(false);
-	const [focusableItemsCount, setFocusableItemsCount] = import_react.useState(0);
-	import_react.useEffect(() => {
-		const node = ref.current;
-		if (node) {
-			node.addEventListener(ENTRY_FOCUS, handleEntryFocus);
-			return () => node.removeEventListener(ENTRY_FOCUS, handleEntryFocus);
-		}
-	}, [handleEntryFocus]);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RovingFocusProvider, {
-		scope: __scopeRovingFocusGroup,
-		orientation,
-		dir: direction,
-		loop,
-		currentTabStopId,
-		onItemFocus: import_react.useCallback((tabStopId) => setCurrentTabStopId(tabStopId), [setCurrentTabStopId]),
-		onItemShiftTab: import_react.useCallback(() => setIsTabbingBackOut(true), []),
-		onFocusableItemAdd: import_react.useCallback(() => setFocusableItemsCount((prevCount) => prevCount + 1), []),
-		onFocusableItemRemove: import_react.useCallback(() => setFocusableItemsCount((prevCount) => prevCount - 1), []),
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.div, {
-			tabIndex: isTabbingBackOut || focusableItemsCount === 0 ? -1 : 0,
-			"data-orientation": orientation,
-			...groupProps,
-			ref: composedRefs,
-			style: {
-				outline: "none",
-				...props.style
-			},
-			onMouseDown: composeEventHandlers(props.onMouseDown, () => {
-				isClickFocusRef.current = true;
-			}),
-			onFocus: composeEventHandlers(props.onFocus, (event) => {
-				const isKeyboardFocus = !isClickFocusRef.current;
-				if (event.target === event.currentTarget && isKeyboardFocus && !isTabbingBackOut) {
-					const entryFocusEvent = new CustomEvent(ENTRY_FOCUS, EVENT_OPTIONS);
-					event.currentTarget.dispatchEvent(entryFocusEvent);
-					if (!entryFocusEvent.defaultPrevented) {
-						const items = getItems().filter((item) => item.focusable);
-						focusFirst$1([
-							items.find((item) => item.active),
-							items.find((item) => item.id === currentTabStopId),
-							...items
-						].filter(Boolean).map((item) => item.ref.current), preventScrollOnEntryFocus);
-					}
-				}
-				isClickFocusRef.current = false;
-			}),
-			onBlur: composeEventHandlers(props.onBlur, () => setIsTabbingBackOut(false))
-		})
-	});
-});
-var ITEM_NAME$2 = "RovingFocusGroupItem";
-var RovingFocusGroupItem = import_react.forwardRef((props, forwardedRef) => {
-	const { __scopeRovingFocusGroup, focusable = true, active = false, tabStopId, children, ...itemProps } = props;
-	const autoId = useId();
-	const id = tabStopId || autoId;
-	const context = useRovingFocusContext(ITEM_NAME$2, __scopeRovingFocusGroup);
-	const isCurrentTabStop = context.currentTabStopId === id;
-	const getItems = useCollection$2(__scopeRovingFocusGroup);
-	const { onFocusableItemAdd, onFocusableItemRemove, currentTabStopId } = context;
-	import_react.useEffect(() => {
-		if (focusable) {
-			onFocusableItemAdd();
-			return () => onFocusableItemRemove();
-		}
-	}, [
-		focusable,
-		onFocusableItemAdd,
-		onFocusableItemRemove
-	]);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Collection$2.ItemSlot, {
-		scope: __scopeRovingFocusGroup,
-		id,
-		focusable,
-		active,
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.span, {
-			tabIndex: isCurrentTabStop ? 0 : -1,
-			"data-orientation": context.orientation,
-			...itemProps,
-			ref: forwardedRef,
-			onMouseDown: composeEventHandlers(props.onMouseDown, (event) => {
-				if (!focusable) event.preventDefault();
-				else context.onItemFocus(id);
-			}),
-			onFocus: composeEventHandlers(props.onFocus, () => context.onItemFocus(id)),
-			onKeyDown: composeEventHandlers(props.onKeyDown, (event) => {
-				if (event.key === "Tab" && event.shiftKey) {
-					context.onItemShiftTab();
-					return;
-				}
-				if (event.target !== event.currentTarget) return;
-				const focusIntent = getFocusIntent(event, context.orientation, context.dir);
-				if (focusIntent !== void 0) {
-					if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
-					event.preventDefault();
-					let candidateNodes = getItems().filter((item) => item.focusable).map((item) => item.ref.current);
-					if (focusIntent === "last") candidateNodes.reverse();
-					else if (focusIntent === "prev" || focusIntent === "next") {
-						if (focusIntent === "prev") candidateNodes.reverse();
-						const currentIndex = candidateNodes.indexOf(event.currentTarget);
-						candidateNodes = context.loop ? wrapArray$1(candidateNodes, currentIndex + 1) : candidateNodes.slice(currentIndex + 1);
-					}
-					setTimeout(() => focusFirst$1(candidateNodes));
-				}
-			}),
-			children: typeof children === "function" ? children({
-				isCurrentTabStop,
-				hasTabStop: currentTabStopId != null
-			}) : children
-		})
-	});
-});
-RovingFocusGroupItem.displayName = ITEM_NAME$2;
-var MAP_KEY_TO_FOCUS_INTENT = {
-	ArrowLeft: "prev",
-	ArrowUp: "prev",
-	ArrowRight: "next",
-	ArrowDown: "next",
-	PageUp: "first",
-	Home: "first",
-	PageDown: "last",
-	End: "last"
-};
-function getDirectionAwareKey(key, dir) {
-	if (dir !== "rtl") return key;
-	return key === "ArrowLeft" ? "ArrowRight" : key === "ArrowRight" ? "ArrowLeft" : key;
-}
-function getFocusIntent(event, orientation, dir) {
-	const key = getDirectionAwareKey(event.key, dir);
-	if (orientation === "vertical" && ["ArrowLeft", "ArrowRight"].includes(key)) return void 0;
-	if (orientation === "horizontal" && ["ArrowUp", "ArrowDown"].includes(key)) return void 0;
-	return MAP_KEY_TO_FOCUS_INTENT[key];
-}
-function focusFirst$1(candidates, preventScroll = false) {
-	const PREVIOUSLY_FOCUSED_ELEMENT = document.activeElement;
-	for (const candidate of candidates) {
-		if (candidate === PREVIOUSLY_FOCUSED_ELEMENT) return;
-		candidate.focus({ preventScroll });
-		if (document.activeElement !== PREVIOUSLY_FOCUSED_ELEMENT) return;
-	}
-}
-function wrapArray$1(array, startIndex) {
-	return array.map((_, index) => array[(startIndex + index) % array.length]);
-}
-var Root$3 = RovingFocusGroup;
-var Item$1 = RovingFocusGroupItem;
-//#endregion
-//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-use-size@1.1.1_@types+react@19.2.14_react@19.2.4/node_modules/@radix-ui/react-use-size/dist/index.mjs
-function useSize(element) {
-	const [size, setSize] = import_react.useState(void 0);
-	useLayoutEffect2(() => {
-		if (element) {
-			setSize({
-				width: element.offsetWidth,
-				height: element.offsetHeight
-			});
-			const resizeObserver = new ResizeObserver((entries) => {
-				if (!Array.isArray(entries)) return;
-				if (!entries.length) return;
-				const entry = entries[0];
-				let width;
-				let height;
-				if ("borderBoxSize" in entry) {
-					const borderSizeEntry = entry["borderBoxSize"];
-					const borderSize = Array.isArray(borderSizeEntry) ? borderSizeEntry[0] : borderSizeEntry;
-					width = borderSize["inlineSize"];
-					height = borderSize["blockSize"];
-				} else {
-					width = element.offsetWidth;
-					height = element.offsetHeight;
-				}
-				setSize({
-					width,
-					height
-				});
-			});
-			resizeObserver.observe(element, { box: "border-box" });
-			return () => resizeObserver.unobserve(element);
-		} else setSize(void 0);
-	}, [element]);
-	return size;
-}
 //#endregion
 //#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-use-previous@1.1.1_@types+react@19.2.14_react@19.2.4/node_modules/@radix-ui/react-use-previous/dist/index.mjs
 function usePrevious(value) {
@@ -29897,13 +33102,13 @@ var RadioGroupIndicator = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 RadioGroupIndicator.displayName = INDICATOR_NAME2;
-var Root2$3 = RadioGroup$1;
+var Root2$2 = RadioGroup$1;
 var Item2 = RadioGroupItem$1;
 var Indicator = RadioGroupIndicator;
 //#endregion
 //#region src/components/ui/radio-group.tsx
 var RadioGroup = import_react.forwardRef(({ className, ...props }, ref) => {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$3, {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$2, {
 		"data-uid": "src/components/ui/radio-group.tsx:12:10",
 		"data-prohibitions": "[editContent]",
 		className: cn$1("grid gap-2", className),
@@ -29911,7 +33116,7 @@ var RadioGroup = import_react.forwardRef(({ className, ...props }, ref) => {
 		ref
 	});
 });
-RadioGroup.displayName = Root2$3.displayName;
+RadioGroup.displayName = Root2$2.displayName;
 var RadioGroupItem = import_react.forwardRef(({ className, ...props }, ref) => {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Item2, {
 		"data-uid": "src/components/ui/radio-group.tsx:21:5",
@@ -30402,7 +33607,7 @@ var SERVICES = [
 //#endregion
 //#region src/pages/Demands.tsx
 var Demands = () => {
-	const { role, demands, isSubscribed, companyProfile } = useApp();
+	const { role, demands, isSubscribed, companyProfile, proposals } = useApp();
 	const activeSector = SERVICES.find((s) => s.id === companyProfile?.sector);
 	const filteredDemands = (0, import_react.useMemo)(() => {
 		if (role === "customer") return demands;
@@ -30413,25 +33618,48 @@ var Demands = () => {
 		role,
 		companyProfile?.sector
 	]);
+	const getStatusBadge = (status) => {
+		switch (status) {
+			case "pending": return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+				"data-uid": "src/pages/Demands.tsx:26:11",
+				"data-prohibitions": "[]",
+				className: "bg-orange-500/10 text-orange-500 hover:bg-orange-500/20 border-orange-500/20 text-[10px] uppercase tracking-wider font-bold shrink-0",
+				children: "Pendente"
+			});
+			case "negotiating": return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+				"data-uid": "src/pages/Demands.tsx:32:11",
+				"data-prohibitions": "[]",
+				className: "bg-blue-500/10 text-blue-500 hover:bg-blue-500/20 border-blue-500/20 text-[10px] uppercase tracking-wider font-bold shrink-0",
+				children: "Em negociação"
+			});
+			case "completed": return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+				"data-uid": "src/pages/Demands.tsx:38:11",
+				"data-prohibitions": "[]",
+				className: "bg-green-500/10 text-green-500 hover:bg-green-500/20 border-green-500/20 text-[10px] uppercase tracking-wider font-bold shrink-0",
+				children: "Concluído"
+			});
+			default: return null;
+		}
+	};
 	if (role === "company" && !isSubscribed) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/Demands.tsx:24:7",
+		"data-uid": "src/pages/Demands.tsx:49:7",
 		"data-prohibitions": "[]",
 		className: "p-6 flex flex-col items-center justify-center min-h-[70vh] text-center animate-slide-up",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-				"data-uid": "src/pages/Demands.tsx:25:9",
+				"data-uid": "src/pages/Demands.tsx:50:9",
 				"data-prohibitions": "[]",
 				className: "text-2xl font-bold mb-3 text-foreground tracking-tight",
 				children: "Acesso Restrito"
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-				"data-uid": "src/pages/Demands.tsx:26:9",
+				"data-uid": "src/pages/Demands.tsx:51:9",
 				"data-prohibitions": "[]",
 				className: "text-muted-foreground mb-8 max-w-md mx-auto leading-relaxed",
 				children: "Ative sua assinatura premium para visualizar todas as demandas disponíveis na plataforma."
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-				"data-uid": "src/pages/Demands.tsx:29:9",
+				"data-uid": "src/pages/Demands.tsx:54:9",
 				"data-prohibitions": "[]",
 				to: "/subscription",
 				className: "px-8 py-3 bg-primary text-primary-foreground rounded-lg font-medium shadow-md hover:bg-primary/90 transition-all",
@@ -30440,152 +33668,248 @@ var Demands = () => {
 		]
 	});
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/Demands.tsx:40:5",
+		"data-uid": "src/pages/Demands.tsx:65:5",
 		"data-prohibitions": "[editContent]",
-		className: "space-y-6 animate-slide-up pb-12",
+		className: "space-y-6 animate-slide-up pb-12 p-4 sm:p-6 max-w-7xl mx-auto",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			"data-uid": "src/pages/Demands.tsx:41:7",
+			"data-uid": "src/pages/Demands.tsx:66:7",
 			"data-prohibitions": "[editContent]",
 			className: "flex items-center justify-between mb-4",
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-				"data-uid": "src/pages/Demands.tsx:42:9",
+				"data-uid": "src/pages/Demands.tsx:67:9",
 				"data-prohibitions": "[editContent]",
 				className: "text-3xl font-bold text-foreground tracking-tight",
 				children: role === "customer" ? "Meus Eventos" : activeSector ? `Oportunidades: ${activeSector.label}` : "Demandas Disponíveis"
 			})
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			"data-uid": "src/pages/Demands.tsx:51:7",
+			"data-uid": "src/pages/Demands.tsx:76:7",
 			"data-prohibitions": "[editContent]",
 			className: "space-y-4",
 			children: filteredDemands.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/Demands.tsx:53:11",
+				"data-uid": "src/pages/Demands.tsx:78:11",
 				"data-prohibitions": "[editContent]",
 				className: "text-center text-muted-foreground py-16 border-2 border-dashed border-border rounded-xl bg-secondary/30",
 				children: role === "company" && companyProfile?.sector ? `Não há demandas de ${activeSector?.label.toLowerCase()} no momento.` : role === "company" ? "Configure seu setor no perfil para ver oportunidades." : "Nenhuma demanda encontrada no momento."
-			}) : filteredDemands.map((demand) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-				"data-uid": "src/pages/Demands.tsx:62:13",
-				"data-prohibitions": "[editContent]",
-				to: `/demands/${demand.id}`,
-				className: "block",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
-					"data-uid": "src/pages/Demands.tsx:63:15",
+			}) : filteredDemands.map((demand) => {
+				const demandProposalsCount = proposals.filter((p) => p.demandId === demand.id).length;
+				return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+					"data-uid": "src/pages/Demands.tsx:89:15",
 					"data-prohibitions": "[editContent]",
-					className: "hover:shadow-md transition-all duration-300 border-border group bg-card",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-						"data-uid": "src/pages/Demands.tsx:64:17",
+					to: `/demands/${demand.id}`,
+					className: "block",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
+						"data-uid": "src/pages/Demands.tsx:90:17",
 						"data-prohibitions": "[editContent]",
-						className: "p-0",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/Demands.tsx:65:19",
+						className: "hover:shadow-md transition-all duration-300 border-border group bg-card",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+							"data-uid": "src/pages/Demands.tsx:91:19",
 							"data-prohibitions": "[editContent]",
-							className: "p-5 md:p-6 space-y-4",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Demands.tsx:66:21",
-									"data-prohibitions": "[editContent]",
-									className: "flex justify-between items-start gap-4",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-										"data-uid": "src/pages/Demands.tsx:67:23",
+							className: "p-0",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/pages/Demands.tsx:92:21",
+								"data-prohibitions": "[editContent]",
+								className: "p-5 md:p-6 space-y-4",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										"data-uid": "src/pages/Demands.tsx:93:23",
 										"data-prohibitions": "[editContent]",
-										className: "font-semibold text-foreground text-lg md:text-xl leading-tight group-hover:text-primary transition-colors",
-										children: demand.title
-									}), demand.status === "open" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
-										"data-uid": "src/pages/Demands.tsx:71:25",
-										"data-prohibitions": "[]",
-										variant: "secondary",
-										className: "text-[10px] uppercase tracking-wider font-bold bg-primary/10 text-primary hover:bg-primary/20 shrink-0",
-										children: "Aberto"
-									})]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Demands.tsx:80:21",
-									"data-prohibitions": "[editContent]",
-									className: "flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-sm text-muted-foreground",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/Demands.tsx:81:23",
+										className: "flex justify-between items-start gap-4",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+											"data-uid": "src/pages/Demands.tsx:94:25",
+											"data-prohibitions": "[editContent]",
+											className: "font-semibold text-foreground text-lg md:text-xl leading-tight group-hover:text-primary transition-colors",
+											children: demand.title
+										}), getStatusBadge(demand.status)]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										"data-uid": "src/pages/Demands.tsx:100:23",
 										"data-prohibitions": "[editContent]",
-										className: "flex items-center gap-2",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, {
-											"data-uid": "src/pages/Demands.tsx:82:25",
-											"data-prohibitions": "[editContent]",
-											className: "w-4 h-4"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											"data-uid": "src/pages/Demands.tsx:83:25",
-											"data-prohibitions": "[editContent]",
-											className: "font-medium",
-											children: new Date(demand.date).toLocaleDateString("pt-BR")
-										})]
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/Demands.tsx:87:23",
-										"data-prohibitions": "[editContent]",
-										className: "flex items-center gap-2",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, {
-											"data-uid": "src/pages/Demands.tsx:88:25",
-											"data-prohibitions": "[editContent]",
-											className: "w-4 h-4"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											"data-uid": "src/pages/Demands.tsx:89:25",
-											"data-prohibitions": "[editContent]",
-											className: "font-medium",
-											children: demand.location
-										})]
-									})]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Demands.tsx:93:21",
-									"data-prohibitions": "[editContent]",
-									className: "flex items-center justify-between pt-5 border-t border-border",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										"data-uid": "src/pages/Demands.tsx:94:23",
-										"data-prohibitions": "[editContent]",
-										className: "flex gap-2 items-center flex-wrap",
-										children: (() => {
-											const activeReqs = SERVICES.filter((s) => demand.requirements[s.id]);
-											return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [activeReqs.slice(0, 4).map((req) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												"data-uid": "src/pages/Demands.tsx:102:33",
+										className: "flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-sm text-muted-foreground",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												"data-uid": "src/pages/Demands.tsx:101:25",
 												"data-prohibitions": "[editContent]",
-												className: `p-2 ${req.bg} rounded-lg`,
-												title: req.label,
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(req.icon, {
-													"data-uid": "src/pages/Demands.tsx:107:35",
+												className: "flex items-center gap-2",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, {
+													"data-uid": "src/pages/Demands.tsx:102:27",
 													"data-prohibitions": "[editContent]",
-													className: `w-4 h-4 ${req.color}`
-												})
-											}, req.id)), activeReqs.length > 4 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												"data-uid": "src/pages/Demands.tsx:111:33",
+													className: "w-4 h-4"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													"data-uid": "src/pages/Demands.tsx:103:27",
+													"data-prohibitions": "[editContent]",
+													className: "font-medium",
+													children: new Date(demand.date).toLocaleDateString("pt-BR")
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												"data-uid": "src/pages/Demands.tsx:107:25",
 												"data-prohibitions": "[editContent]",
-												className: "p-2 bg-secondary rounded-lg flex items-center justify-center text-xs font-bold text-muted-foreground min-w-[32px]",
-												children: ["+", activeReqs.length - 4]
-											})] });
-										})()
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/Demands.tsx:119:23",
+												className: "flex items-center gap-2",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, {
+													"data-uid": "src/pages/Demands.tsx:108:27",
+													"data-prohibitions": "[editContent]",
+													className: "w-4 h-4"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													"data-uid": "src/pages/Demands.tsx:109:27",
+													"data-prohibitions": "[editContent]",
+													className: "font-medium",
+													children: demand.location
+												})]
+											}),
+											role === "customer" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												"data-uid": "src/pages/Demands.tsx:112:27",
+												"data-prohibitions": "[editContent]",
+												className: "flex items-center gap-2 text-primary",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+													"data-uid": "src/pages/Demands.tsx:113:29",
+													"data-prohibitions": "[editContent]",
+													className: "font-semibold",
+													children: [demandProposalsCount, " propostas"]
+												})
+											})
+										]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										"data-uid": "src/pages/Demands.tsx:118:23",
 										"data-prohibitions": "[editContent]",
-										className: "text-right",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-											"data-uid": "src/pages/Demands.tsx:120:25",
+										className: "flex items-center justify-between pt-5 border-t border-border",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											"data-uid": "src/pages/Demands.tsx:119:25",
 											"data-prohibitions": "[editContent]",
-											className: "text-[10px] text-muted-foreground mb-1 uppercase tracking-wider font-semibold",
-											children: role === "customer" ? "Orçamento" : "Valor Líquido"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-											"data-uid": "src/pages/Demands.tsx:123:25",
+											className: "flex gap-2 items-center flex-wrap",
+											children: (() => {
+												const activeReqs = SERVICES.filter((s) => demand.requirements[s.id]);
+												return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [activeReqs.slice(0, 4).map((req) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													"data-uid": "src/pages/Demands.tsx:127:35",
+													"data-prohibitions": "[editContent]",
+													className: `p-2 ${req.bg} rounded-lg`,
+													title: req.label,
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(req.icon, {
+														"data-uid": "src/pages/Demands.tsx:132:37",
+														"data-prohibitions": "[editContent]",
+														className: `w-4 h-4 ${req.color}`
+													})
+												}, req.id)), activeReqs.length > 4 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													"data-uid": "src/pages/Demands.tsx:136:35",
+													"data-prohibitions": "[editContent]",
+													className: "p-2 bg-secondary rounded-lg flex items-center justify-center text-xs font-bold text-muted-foreground min-w-[32px]",
+													children: ["+", activeReqs.length - 4]
+												})] });
+											})()
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											"data-uid": "src/pages/Demands.tsx:144:25",
 											"data-prohibitions": "[editContent]",
-											className: "text-foreground font-bold text-lg md:text-xl",
-											children: new Intl.NumberFormat("pt-BR", {
-												style: "currency",
-												currency: "BRL"
-											}).format(role === "customer" ? demand.budget : demand.budget * .9)
+											className: "text-right",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												"data-uid": "src/pages/Demands.tsx:145:27",
+												"data-prohibitions": "[editContent]",
+												className: "text-[10px] text-muted-foreground mb-1 uppercase tracking-wider font-semibold",
+												children: role === "customer" ? "Orçamento" : "Valor Líquido"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												"data-uid": "src/pages/Demands.tsx:148:27",
+												"data-prohibitions": "[editContent]",
+												className: "text-foreground font-bold text-lg md:text-xl",
+												children: new Intl.NumberFormat("pt-BR", {
+													style: "currency",
+													currency: "BRL"
+												}).format(role === "customer" ? demand.budget : demand.budget * .9)
+											})]
 										})]
-									})]
-								})
-							]
+									})
+								]
+							})
 						})
 					})
-				})
-			}, demand.id))
+				}, demand.id);
+			})
 		})]
 	});
 };
+//#endregion
+//#region src/components/ui/dialog.tsx
+var Dialog = Root$5;
+var DialogTrigger = Trigger$3;
+var DialogPortal = Portal$2;
+var DialogOverlay = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Overlay, {
+	"data-uid": "src/components/ui/dialog.tsx:20:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0", className),
+	...props
+}));
+DialogOverlay.displayName = Overlay.displayName;
+var DialogContent = import_react.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogPortal, {
+	"data-uid": "src/components/ui/dialog.tsx:35:3",
+	"data-prohibitions": "[editContent]",
+	children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogOverlay, {
+		"data-uid": "src/components/ui/dialog.tsx:36:5",
+		"data-prohibitions": "[editContent]"
+	}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Content$1, {
+		"data-uid": "src/components/ui/dialog.tsx:37:5",
+		"data-prohibitions": "[editContent]",
+		ref,
+		className: cn$1("fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg overflow-y-auto max-h-screen", className),
+		...props,
+		children: [children, /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Close$1, {
+			"data-uid": "src/components/ui/dialog.tsx:46:7",
+			"data-prohibitions": "[]",
+			className: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, {
+				"data-uid": "src/components/ui/dialog.tsx:47:9",
+				"data-prohibitions": "[editContent]",
+				className: "h-4 w-4"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				"data-uid": "src/components/ui/dialog.tsx:48:9",
+				"data-prohibitions": "[]",
+				className: "sr-only",
+				children: "Close"
+			})]
+		})]
+	})]
+}));
+DialogContent.displayName = Content$1.displayName;
+var DialogHeader = ({ className, ...props }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	"data-uid": "src/components/ui/dialog.tsx:56:3",
+	"data-prohibitions": "[editContent]",
+	className: cn$1("flex flex-col space-y-1.5 text-center sm:text-left", className),
+	...props
+});
+DialogHeader.displayName = "DialogHeader";
+var DialogFooter = ({ className, ...props }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	"data-uid": "src/components/ui/dialog.tsx:61:3",
+	"data-prohibitions": "[editContent]",
+	className: cn$1("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className),
+	...props
+});
+DialogFooter.displayName = "DialogFooter";
+var DialogTitle = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Title$1, {
+	"data-uid": "src/components/ui/dialog.tsx:72:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("text-lg font-semibold leading-none tracking-tight", className),
+	...props
+}));
+DialogTitle.displayName = Title$1.displayName;
+var DialogDescription = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Description$1, {
+	"data-uid": "src/components/ui/dialog.tsx:84:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("text-sm text-muted-foreground", className),
+	...props
+}));
+DialogDescription.displayName = Description$1.displayName;
+//#endregion
+//#region src/components/ui/textarea.tsx
+var Textarea = import_react.forwardRef(({ className, ...props }, ref) => {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+		"data-uid": "src/components/ui/textarea.tsx:9:7",
+		"data-prohibitions": "[editContent]",
+		className: cn$1("flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm", className),
+		ref,
+		...props
+	});
+});
+Textarea.displayName = "Textarea";
 //#endregion
 //#region src/hooks/use-toast.ts
 var TOAST_LIMIT = 1;
@@ -30732,93 +34056,148 @@ function BackButton({ className, onClick, label = "Voltar" }) {
 //#region src/pages/DemandDetail.tsx
 var DemandDetail = () => {
 	const { id } = useParams();
-	const navigate = useNavigate();
+	useNavigate();
 	const { toast } = useToast();
-	const { role, demands } = useApp();
+	const { role, demands, proposals, addProposal, acceptProposal, currentUser, companyProfile } = useApp();
+	const [isProposalOpen, setIsProposalOpen] = (0, import_react.useState)(false);
+	const [proposalValue, setProposalValue] = (0, import_react.useState)("");
+	const [proposalMessage, setProposalMessage] = (0, import_react.useState)("");
 	const demand = demands.find((d) => d.id === id);
 	if (!demand) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		"data-uid": "src/pages/DemandDetail.tsx:19:12",
+		"data-uid": "src/pages/DemandDetail.tsx:38:12",
 		"data-prohibitions": "[]",
 		className: "p-6 text-center text-muted-foreground",
 		children: "Demanda não encontrada."
 	});
-	const handleProposal = () => {
+	const demandProposals = proposals.filter((p) => p.demandId === demand.id);
+	const supplierProposal = role === "company" ? demandProposals.find((p) => p.supplierId === currentUser?.id) : null;
+	const handleSubmitProposal = () => {
+		if (!proposalValue || !proposalMessage) {
+			toast({
+				title: "Atenção",
+				description: "Preencha o valor e a mensagem.",
+				variant: "destructive"
+			});
+			return;
+		}
+		addProposal({
+			demandId: demand.id,
+			supplierId: currentUser?.id || "unknown",
+			supplierName: companyProfile?.name || currentUser?.name || "Fornecedor",
+			value: Number(proposalValue),
+			message: proposalMessage
+		});
 		toast({
 			title: "Proposta Enviada!",
 			description: "O cliente receberá sua notificação em breve."
 		});
-		navigate("/demands");
+		setIsProposalOpen(false);
+	};
+	const handleAccept = (proposalId) => {
+		acceptProposal(proposalId);
+		toast({
+			title: "Proposta Aceita",
+			description: "O fornecedor será notificado. Evento concluído com sucesso!"
+		});
+	};
+	const getStatusBadge = (status) => {
+		switch (status) {
+			case "pending": return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+				"data-uid": "src/pages/DemandDetail.tsx:83:11",
+				"data-prohibitions": "[]",
+				className: "bg-orange-500/10 text-orange-500 hover:bg-orange-500/20 border-orange-500/20 uppercase tracking-wider font-bold shrink-0",
+				children: "Pendente"
+			});
+			case "negotiating": return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+				"data-uid": "src/pages/DemandDetail.tsx:89:11",
+				"data-prohibitions": "[]",
+				className: "bg-blue-500/10 text-blue-500 hover:bg-blue-500/20 border-blue-500/20 uppercase tracking-wider font-bold shrink-0",
+				children: "Em negociação"
+			});
+			case "completed": return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+				"data-uid": "src/pages/DemandDetail.tsx:95:11",
+				"data-prohibitions": "[]",
+				className: "bg-green-500/10 text-green-500 hover:bg-green-500/20 border-green-500/20 uppercase tracking-wider font-bold shrink-0",
+				children: "Concluído"
+			});
+			default: return null;
+		}
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/DemandDetail.tsx:31:5",
+		"data-uid": "src/pages/DemandDetail.tsx:105:5",
 		"data-prohibitions": "[editContent]",
-		className: "flex flex-col animate-slide-up relative min-h-full space-y-6 pb-24",
+		className: "flex flex-col animate-slide-up relative min-h-full space-y-6 pb-24 p-4 sm:p-6 max-w-5xl mx-auto w-full",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/DemandDetail.tsx:32:7",
+				"data-uid": "src/pages/DemandDetail.tsx:106:7",
 				"data-prohibitions": "[editContent]",
-				className: "flex items-center gap-2",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BackButton, {
-					"data-uid": "src/pages/DemandDetail.tsx:33:9",
+				className: "flex items-center justify-between gap-4 mb-2 flex-wrap",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					"data-uid": "src/pages/DemandDetail.tsx:107:9",
 					"data-prohibitions": "[editContent]",
-					className: "-ml-2"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-					"data-uid": "src/pages/DemandDetail.tsx:34:9",
-					"data-prohibitions": "[editContent]",
-					className: "text-2xl md:text-3xl font-bold text-foreground flex-1 truncate tracking-tight",
-					children: demand.title
-				})]
+					className: "flex items-center gap-2 min-w-0",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BackButton, {
+						"data-uid": "src/pages/DemandDetail.tsx:108:11",
+						"data-prohibitions": "[editContent]",
+						className: "-ml-2"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+						"data-uid": "src/pages/DemandDetail.tsx:109:11",
+						"data-prohibitions": "[editContent]",
+						className: "text-2xl md:text-3xl font-bold text-foreground truncate tracking-tight",
+						children: demand.title
+					})]
+				}), getStatusBadge(demand.status)]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/DemandDetail.tsx:39:7",
+				"data-uid": "src/pages/DemandDetail.tsx:116:7",
 				"data-prohibitions": "[editContent]",
 				className: "space-y-8 flex-1",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/DemandDetail.tsx:40:9",
+						"data-uid": "src/pages/DemandDetail.tsx:117:9",
 						"data-prohibitions": "[editContent]",
 						className: "flex flex-wrap gap-4 text-sm text-muted-foreground",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/DemandDetail.tsx:41:11",
+								"data-uid": "src/pages/DemandDetail.tsx:118:11",
 								"data-prohibitions": "[editContent]",
 								className: "flex items-center gap-2 bg-secondary px-4 py-2 rounded-full",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, {
-									"data-uid": "src/pages/DemandDetail.tsx:42:13",
+									"data-uid": "src/pages/DemandDetail.tsx:119:13",
 									"data-prohibitions": "[editContent]",
 									className: "w-4 h-4"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									"data-uid": "src/pages/DemandDetail.tsx:43:13",
+									"data-uid": "src/pages/DemandDetail.tsx:120:13",
 									"data-prohibitions": "[editContent]",
 									className: "font-medium",
 									children: new Date(demand.date).toLocaleDateString("pt-BR")
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/DemandDetail.tsx:45:11",
+								"data-uid": "src/pages/DemandDetail.tsx:122:11",
 								"data-prohibitions": "[editContent]",
 								className: "flex items-center gap-2 bg-secondary px-4 py-2 rounded-full",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, {
-									"data-uid": "src/pages/DemandDetail.tsx:46:13",
+									"data-uid": "src/pages/DemandDetail.tsx:123:13",
 									"data-prohibitions": "[editContent]",
 									className: "w-4 h-4"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									"data-uid": "src/pages/DemandDetail.tsx:47:13",
+									"data-uid": "src/pages/DemandDetail.tsx:124:13",
 									"data-prohibitions": "[editContent]",
 									className: "font-medium",
 									children: demand.location
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/DemandDetail.tsx:49:11",
+								"data-uid": "src/pages/DemandDetail.tsx:126:11",
 								"data-prohibitions": "[editContent]",
 								className: "flex items-center gap-2 bg-secondary px-4 py-2 rounded-full",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, {
-									"data-uid": "src/pages/DemandDetail.tsx:50:13",
+									"data-uid": "src/pages/DemandDetail.tsx:127:13",
 									"data-prohibitions": "[editContent]",
 									className: "w-4 h-4"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-									"data-uid": "src/pages/DemandDetail.tsx:51:13",
+									"data-uid": "src/pages/DemandDetail.tsx:128:13",
 									"data-prohibitions": "[editContent]",
 									className: "font-medium",
 									children: [demand.guests, " convidados"]
@@ -30827,74 +34206,74 @@ var DemandDetail = () => {
 						]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
-						"data-uid": "src/pages/DemandDetail.tsx:55:9",
+						"data-uid": "src/pages/DemandDetail.tsx:132:9",
 						"data-prohibitions": "[editContent]",
 						className: "border-border border-l-4 border-l-primary overflow-hidden shadow-sm",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-							"data-uid": "src/pages/DemandDetail.tsx:56:11",
+							"data-uid": "src/pages/DemandDetail.tsx:133:11",
 							"data-prohibitions": "[editContent]",
 							className: "p-6 md:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/DemandDetail.tsx:57:13",
+								"data-uid": "src/pages/DemandDetail.tsx:134:13",
 								"data-prohibitions": "[editContent]",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/pages/DemandDetail.tsx:58:15",
+									"data-uid": "src/pages/DemandDetail.tsx:135:15",
 									"data-prohibitions": "[editContent]",
 									className: "text-xs text-muted-foreground uppercase tracking-wider font-bold mb-2",
 									children: role === "customer" ? "Orçamento Estimado" : "Valor Líquido (-10% Taxa)"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-									"data-uid": "src/pages/DemandDetail.tsx:61:15",
+									"data-uid": "src/pages/DemandDetail.tsx:138:15",
 									"data-prohibitions": "[editContent]",
 									className: "text-4xl font-extrabold text-foreground flex items-center gap-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DollarSign, {
-										"data-uid": "src/pages/DemandDetail.tsx:62:17",
+										"data-uid": "src/pages/DemandDetail.tsx:139:17",
 										"data-prohibitions": "[editContent]",
 										className: "w-8 h-8 text-primary"
 									}), new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2 }).format(role === "customer" ? demand.budget : demand.budget * .9)]
 								})]
 							}), role === "customer" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/DemandDetail.tsx:69:15",
+								"data-uid": "src/pages/DemandDetail.tsx:146:15",
 								"data-prohibitions": "[editContent]",
 								className: "sm:text-right bg-secondary p-5 rounded-xl border border-border/50",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/pages/DemandDetail.tsx:70:17",
+									"data-uid": "src/pages/DemandDetail.tsx:147:17",
 									"data-prohibitions": "[]",
 									className: "text-xs text-muted-foreground uppercase tracking-wider font-bold mb-1",
 									children: "Propostas Recebidas"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/pages/DemandDetail.tsx:73:17",
+									"data-uid": "src/pages/DemandDetail.tsx:150:17",
 									"data-prohibitions": "[editContent]",
 									className: "text-3xl font-bold text-foreground",
-									children: demand.proposals
+									children: demandProposals.length
 								})]
 							})]
 						})
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-						"data-uid": "src/pages/DemandDetail.tsx:79:9",
+						"data-uid": "src/pages/DemandDetail.tsx:156:9",
 						"data-prohibitions": "[editContent]",
 						className: "space-y-4",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-							"data-uid": "src/pages/DemandDetail.tsx:80:11",
+							"data-uid": "src/pages/DemandDetail.tsx:157:11",
 							"data-prohibitions": "[]",
 							className: "font-semibold text-foreground text-xl border-b border-border pb-2",
 							children: "Serviços Solicitados"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/pages/DemandDetail.tsx:83:11",
+							"data-uid": "src/pages/DemandDetail.tsx:160:11",
 							"data-prohibitions": "[editContent]",
 							className: "grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 pt-2",
 							children: SERVICES.map(({ id, icon: Icon, label, color, bg }) => {
 								if (!demand.requirements[id]) return null;
 								return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/DemandDetail.tsx:87:17",
+									"data-uid": "src/pages/DemandDetail.tsx:164:17",
 									"data-prohibitions": "[editContent]",
 									className: `${bg} border border-border rounded-xl p-5 flex flex-col items-center justify-center text-center gap-3 transition-transform hover:scale-105`,
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
-										"data-uid": "src/pages/DemandDetail.tsx:91:19",
+										"data-uid": "src/pages/DemandDetail.tsx:168:19",
 										"data-prohibitions": "[editContent]",
 										className: `w-8 h-8 ${color}`
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										"data-uid": "src/pages/DemandDetail.tsx:92:19",
+										"data-uid": "src/pages/DemandDetail.tsx:169:19",
 										"data-prohibitions": "[editContent]",
 										className: "text-sm font-semibold text-foreground",
 										children: label
@@ -30904,34 +34283,266 @@ var DemandDetail = () => {
 						})]
 					}),
 					demand.requirements.details && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-						"data-uid": "src/pages/DemandDetail.tsx:100:11",
+						"data-uid": "src/pages/DemandDetail.tsx:177:11",
 						"data-prohibitions": "[editContent]",
 						className: "space-y-4",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-							"data-uid": "src/pages/DemandDetail.tsx:101:13",
+							"data-uid": "src/pages/DemandDetail.tsx:178:13",
 							"data-prohibitions": "[]",
 							className: "font-semibold text-foreground text-xl border-b border-border pb-2",
 							children: "Detalhes Adicionais"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/pages/DemandDetail.tsx:104:13",
+							"data-uid": "src/pages/DemandDetail.tsx:181:13",
 							"data-prohibitions": "[editContent]",
 							className: "bg-card border border-border rounded-xl p-6 text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed shadow-sm",
 							children: demand.requirements.details
+						})]
+					}),
+					role === "customer" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+						"data-uid": "src/pages/DemandDetail.tsx:188:11",
+						"data-prohibitions": "[editContent]",
+						className: "space-y-4 mt-8 animate-fade-in",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+							"data-uid": "src/pages/DemandDetail.tsx:189:13",
+							"data-prohibitions": "[editContent]",
+							className: "font-semibold text-foreground text-xl border-b border-border pb-2",
+							children: [
+								"Propostas Recebidas (",
+								demandProposals.length,
+								")"
+							]
+						}), demandProposals.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							"data-uid": "src/pages/DemandDetail.tsx:193:15",
+							"data-prohibitions": "[]",
+							className: "bg-secondary/30 border-2 border-dashed border-border rounded-xl p-8 text-sm text-muted-foreground text-center",
+							children: "Nenhuma proposta recebida até o momento."
+						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							"data-uid": "src/pages/DemandDetail.tsx:197:15",
+							"data-prohibitions": "[editContent]",
+							className: "space-y-4",
+							children: demandProposals.map((proposal) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
+								"data-uid": "src/pages/DemandDetail.tsx:199:19",
+								"data-prohibitions": "[editContent]",
+								className: "border-border shadow-sm hover:border-primary/50 transition-colors bg-card",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+									"data-uid": "src/pages/DemandDetail.tsx:203:21",
+									"data-prohibitions": "[editContent]",
+									className: "p-6",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										"data-uid": "src/pages/DemandDetail.tsx:204:23",
+										"data-prohibitions": "[editContent]",
+										className: "flex flex-col md:flex-row justify-between gap-6",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											"data-uid": "src/pages/DemandDetail.tsx:205:25",
+											"data-prohibitions": "[editContent]",
+											className: "flex-1",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h4", {
+												"data-uid": "src/pages/DemandDetail.tsx:206:27",
+												"data-prohibitions": "[editContent]",
+												className: "font-bold text-lg text-foreground flex items-center gap-2 flex-wrap",
+												children: [
+													proposal.supplierName,
+													proposal.status === "accepted" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+														"data-uid": "src/pages/DemandDetail.tsx:209:31",
+														"data-prohibitions": "[]",
+														className: "bg-green-500/10 text-green-500 hover:bg-green-500/20 border-green-500/20",
+														children: "Aceita"
+													}),
+													proposal.status === "rejected" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+														"data-uid": "src/pages/DemandDetail.tsx:214:31",
+														"data-prohibitions": "[]",
+														variant: "secondary",
+														children: "Recusada"
+													})
+												]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												"data-uid": "src/pages/DemandDetail.tsx:217:27",
+												"data-prohibitions": "[editContent]",
+												className: "mt-4 flex items-start gap-3 bg-secondary/50 p-4 rounded-lg",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MessageSquare, {
+													"data-uid": "src/pages/DemandDetail.tsx:218:29",
+													"data-prohibitions": "[editContent]",
+													className: "w-5 h-5 text-muted-foreground shrink-0 mt-0.5"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													"data-uid": "src/pages/DemandDetail.tsx:219:29",
+													"data-prohibitions": "[editContent]",
+													className: "text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed",
+													children: proposal.message
+												})]
+											})]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											"data-uid": "src/pages/DemandDetail.tsx:224:25",
+											"data-prohibitions": "[editContent]",
+											className: "flex flex-col items-start md:items-end justify-between min-w-[140px] border-t md:border-t-0 md:border-l border-border pt-4 md:pt-0 md:pl-6",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												"data-uid": "src/pages/DemandDetail.tsx:225:27",
+												"data-prohibitions": "[editContent]",
+												className: "text-left md:text-right w-full mb-4",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													"data-uid": "src/pages/DemandDetail.tsx:226:29",
+													"data-prohibitions": "[]",
+													className: "text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-1",
+													children: "Valor Proposto"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													"data-uid": "src/pages/DemandDetail.tsx:229:29",
+													"data-prohibitions": "[editContent]",
+													className: "text-2xl font-bold text-primary",
+													children: new Intl.NumberFormat("pt-BR", {
+														style: "currency",
+														currency: "BRL"
+													}).format(proposal.value)
+												})]
+											}), proposal.status === "pending" && demand.status !== "completed" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+												"data-uid": "src/pages/DemandDetail.tsx:237:29",
+												"data-prohibitions": "[]",
+												onClick: () => handleAccept(proposal.id),
+												className: "w-full shadow-sm",
+												children: "Aceitar Proposta"
+											})]
+										})]
+									})
+								})
+							}, proposal.id))
 						})]
 					})
 				]
 			}),
 			role === "company" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/DemandDetail.tsx:112:9",
-				"data-prohibitions": "[]",
-				className: "fixed bottom-0 left-0 right-0 p-4 bg-background/90 backdrop-blur-md border-t border-border z-40 md:sticky md:bg-transparent md:backdrop-blur-none md:border-t-0 md:p-0",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-					"data-uid": "src/pages/DemandDetail.tsx:113:11",
+				"data-uid": "src/pages/DemandDetail.tsx:256:9",
+				"data-prohibitions": "[editContent]",
+				className: "fixed bottom-0 left-0 right-0 p-4 bg-background/90 backdrop-blur-md border-t border-border z-40 md:sticky md:bg-transparent md:backdrop-blur-none md:border-t-0 md:p-0 mt-6",
+				children: supplierProposal ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					"data-uid": "src/pages/DemandDetail.tsx:258:13",
+					"data-prohibitions": "[editContent]",
+					className: "p-5 bg-secondary rounded-xl text-center border border-border shadow-sm flex flex-col items-center gap-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+						"data-uid": "src/pages/DemandDetail.tsx:259:15",
+						"data-prohibitions": "[editContent]",
+						variant: supplierProposal.status === "accepted" ? "default" : "secondary",
+						className: "mb-1 text-xs",
+						children: supplierProposal.status === "accepted" ? "Proposta Aceita" : supplierProposal.status === "rejected" ? "Proposta Recusada" : "Proposta Enviada"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+						"data-uid": "src/pages/DemandDetail.tsx:269:15",
+						"data-prohibitions": "[editContent]",
+						className: "text-sm text-muted-foreground",
+						children: [
+							"Sua proposta de",
+							" ",
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+								"data-uid": "src/pages/DemandDetail.tsx:271:17",
+								"data-prohibitions": "[editContent]",
+								className: "text-foreground",
+								children: new Intl.NumberFormat("pt-BR", {
+									style: "currency",
+									currency: "BRL"
+								}).format(supplierProposal.value)
+							}),
+							" ",
+							"foi registrada."
+						]
+					})]
+				}) : demand.status === "completed" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					"data-uid": "src/pages/DemandDetail.tsx:280:13",
 					"data-prohibitions": "[]",
-					size: "lg",
-					onClick: handleProposal,
-					className: "w-full h-14 text-lg font-semibold shadow-lg",
-					children: "Responder Demanda"
+					className: "p-5 bg-secondary rounded-xl text-center border border-border shadow-sm text-muted-foreground",
+					children: "Esta demanda já foi concluída."
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Dialog, {
+					"data-uid": "src/pages/DemandDetail.tsx:284:13",
+					"data-prohibitions": "[]",
+					open: isProposalOpen,
+					onOpenChange: setIsProposalOpen,
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTrigger, {
+						"data-uid": "src/pages/DemandDetail.tsx:285:15",
+						"data-prohibitions": "[]",
+						asChild: true,
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+							"data-uid": "src/pages/DemandDetail.tsx:286:17",
+							"data-prohibitions": "[]",
+							size: "lg",
+							className: "w-full h-14 text-lg font-semibold shadow-lg",
+							children: "Enviar Proposta"
+						})
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
+						"data-uid": "src/pages/DemandDetail.tsx:290:15",
+						"data-prohibitions": "[]",
+						className: "sm:max-w-[425px]",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogHeader, {
+								"data-uid": "src/pages/DemandDetail.tsx:291:17",
+								"data-prohibitions": "[]",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, {
+									"data-uid": "src/pages/DemandDetail.tsx:292:19",
+									"data-prohibitions": "[]",
+									children: "Enviar Proposta Comercial"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription, {
+									"data-uid": "src/pages/DemandDetail.tsx:293:19",
+									"data-prohibitions": "[]",
+									children: "Descreva os detalhes da sua oferta e o valor final. O cliente será notificado instantaneamente."
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/pages/DemandDetail.tsx:298:17",
+								"data-prohibitions": "[]",
+								className: "grid gap-4 py-4",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									"data-uid": "src/pages/DemandDetail.tsx:299:19",
+									"data-prohibitions": "[]",
+									className: "space-y-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
+										"data-uid": "src/pages/DemandDetail.tsx:300:21",
+										"data-prohibitions": "[]",
+										htmlFor: "value",
+										className: "font-semibold",
+										children: "Valor da Proposta (R$)"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										"data-uid": "src/pages/DemandDetail.tsx:303:21",
+										"data-prohibitions": "[editContent]",
+										id: "value",
+										type: "number",
+										placeholder: "Ex: 5000",
+										value: proposalValue,
+										onChange: (e) => setProposalValue(e.target.value),
+										className: "h-11"
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									"data-uid": "src/pages/DemandDetail.tsx:312:19",
+									"data-prohibitions": "[]",
+									className: "space-y-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
+										"data-uid": "src/pages/DemandDetail.tsx:313:21",
+										"data-prohibitions": "[]",
+										htmlFor: "message",
+										className: "font-semibold",
+										children: "Mensagem / Detalhes"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
+										"data-uid": "src/pages/DemandDetail.tsx:316:21",
+										"data-prohibitions": "[editContent]",
+										id: "message",
+										placeholder: "Descreva o que está incluso no seu serviço, prazos, etc...",
+										className: "min-h-[120px] resize-none",
+										value: proposalMessage,
+										onChange: (e) => setProposalMessage(e.target.value)
+									})]
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogFooter, {
+								"data-uid": "src/pages/DemandDetail.tsx:325:17",
+								"data-prohibitions": "[]",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									"data-uid": "src/pages/DemandDetail.tsx:326:19",
+									"data-prohibitions": "[]",
+									variant: "outline",
+									onClick: () => setIsProposalOpen(false),
+									children: "Cancelar"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									"data-uid": "src/pages/DemandDetail.tsx:329:19",
+									"data-prohibitions": "[]",
+									onClick: handleSubmitProposal,
+									children: "Enviar ao Cliente"
+								})]
+							})
+						]
+					})]
 				})
 			})
 		]
@@ -31032,18 +34643,6 @@ var Step1Basic = ({ formData, updateForm, setConfigs }) => {
 		]
 	});
 };
-//#endregion
-//#region src/components/ui/textarea.tsx
-var Textarea = import_react.forwardRef(({ className, ...props }, ref) => {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
-		"data-uid": "src/components/ui/textarea.tsx:9:7",
-		"data-prohibitions": "[editContent]",
-		className: cn$1("flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm", className),
-		ref,
-		...props
-	});
-});
-Textarea.displayName = "Textarea";
 //#endregion
 //#region src/components/create-event/Step2Services.tsx
 var Step2Services = ({ formData, setFormData, configs, setConfigs }) => {
@@ -31803,11 +35402,11 @@ SwitchBubbleInput.displayName = BUBBLE_INPUT_NAME$1;
 function getState(checked) {
 	return checked ? "checked" : "unchecked";
 }
-var Root$2 = Switch$1;
+var Root$1 = Switch$1;
 var Thumb = SwitchThumb;
 //#endregion
 //#region src/components/ui/switch.tsx
-var Switch = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$2, {
+var Switch = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$1, {
 	"data-uid": "src/components/ui/switch.tsx:11:3",
 	"data-prohibitions": "[editContent]",
 	className: cn$1("peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input", className),
@@ -31819,1925 +35418,12 @@ var Switch = import_react.forwardRef(({ className, ...props }, ref) => /* @__PUR
 		className: cn$1("pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0")
 	})
 }));
-Switch.displayName = Root$2.displayName;
+Switch.displayName = Root$1.displayName;
 //#endregion
 //#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+number@1.1.1/node_modules/@radix-ui/number/dist/index.mjs
-function clamp$1(value, [min, max]) {
+function clamp(value, [min, max]) {
 	return Math.min(max, Math.max(min, value));
 }
-//#endregion
-//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@floating-ui+utils@0.2.11/node_modules/@floating-ui/utils/dist/floating-ui.utils.mjs
-/**
-* Custom positioning reference element.
-* @see https://floating-ui.com/docs/virtual-elements
-*/
-var sides = [
-	"top",
-	"right",
-	"bottom",
-	"left"
-];
-var min = Math.min;
-var max = Math.max;
-var round = Math.round;
-var floor = Math.floor;
-var createCoords = (v) => ({
-	x: v,
-	y: v
-});
-var oppositeSideMap = {
-	left: "right",
-	right: "left",
-	bottom: "top",
-	top: "bottom"
-};
-function clamp(start, value, end) {
-	return max(start, min(value, end));
-}
-function evaluate(value, param) {
-	return typeof value === "function" ? value(param) : value;
-}
-function getSide(placement) {
-	return placement.split("-")[0];
-}
-function getAlignment(placement) {
-	return placement.split("-")[1];
-}
-function getOppositeAxis(axis) {
-	return axis === "x" ? "y" : "x";
-}
-function getAxisLength(axis) {
-	return axis === "y" ? "height" : "width";
-}
-function getSideAxis(placement) {
-	const firstChar = placement[0];
-	return firstChar === "t" || firstChar === "b" ? "y" : "x";
-}
-function getAlignmentAxis(placement) {
-	return getOppositeAxis(getSideAxis(placement));
-}
-function getAlignmentSides(placement, rects, rtl) {
-	if (rtl === void 0) rtl = false;
-	const alignment = getAlignment(placement);
-	const alignmentAxis = getAlignmentAxis(placement);
-	const length = getAxisLength(alignmentAxis);
-	let mainAlignmentSide = alignmentAxis === "x" ? alignment === (rtl ? "end" : "start") ? "right" : "left" : alignment === "start" ? "bottom" : "top";
-	if (rects.reference[length] > rects.floating[length]) mainAlignmentSide = getOppositePlacement(mainAlignmentSide);
-	return [mainAlignmentSide, getOppositePlacement(mainAlignmentSide)];
-}
-function getExpandedPlacements(placement) {
-	const oppositePlacement = getOppositePlacement(placement);
-	return [
-		getOppositeAlignmentPlacement(placement),
-		oppositePlacement,
-		getOppositeAlignmentPlacement(oppositePlacement)
-	];
-}
-function getOppositeAlignmentPlacement(placement) {
-	return placement.includes("start") ? placement.replace("start", "end") : placement.replace("end", "start");
-}
-var lrPlacement = ["left", "right"];
-var rlPlacement = ["right", "left"];
-var tbPlacement = ["top", "bottom"];
-var btPlacement = ["bottom", "top"];
-function getSideList(side, isStart, rtl) {
-	switch (side) {
-		case "top":
-		case "bottom":
-			if (rtl) return isStart ? rlPlacement : lrPlacement;
-			return isStart ? lrPlacement : rlPlacement;
-		case "left":
-		case "right": return isStart ? tbPlacement : btPlacement;
-		default: return [];
-	}
-}
-function getOppositeAxisPlacements(placement, flipAlignment, direction, rtl) {
-	const alignment = getAlignment(placement);
-	let list = getSideList(getSide(placement), direction === "start", rtl);
-	if (alignment) {
-		list = list.map((side) => side + "-" + alignment);
-		if (flipAlignment) list = list.concat(list.map(getOppositeAlignmentPlacement));
-	}
-	return list;
-}
-function getOppositePlacement(placement) {
-	const side = getSide(placement);
-	return oppositeSideMap[side] + placement.slice(side.length);
-}
-function expandPaddingObject(padding) {
-	return {
-		top: 0,
-		right: 0,
-		bottom: 0,
-		left: 0,
-		...padding
-	};
-}
-function getPaddingObject(padding) {
-	return typeof padding !== "number" ? expandPaddingObject(padding) : {
-		top: padding,
-		right: padding,
-		bottom: padding,
-		left: padding
-	};
-}
-function rectToClientRect(rect) {
-	const { x, y, width, height } = rect;
-	return {
-		width,
-		height,
-		top: y,
-		left: x,
-		right: x + width,
-		bottom: y + height,
-		x,
-		y
-	};
-}
-//#endregion
-//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@floating-ui+core@1.7.5/node_modules/@floating-ui/core/dist/floating-ui.core.mjs
-function computeCoordsFromPlacement(_ref, placement, rtl) {
-	let { reference, floating } = _ref;
-	const sideAxis = getSideAxis(placement);
-	const alignmentAxis = getAlignmentAxis(placement);
-	const alignLength = getAxisLength(alignmentAxis);
-	const side = getSide(placement);
-	const isVertical = sideAxis === "y";
-	const commonX = reference.x + reference.width / 2 - floating.width / 2;
-	const commonY = reference.y + reference.height / 2 - floating.height / 2;
-	const commonAlign = reference[alignLength] / 2 - floating[alignLength] / 2;
-	let coords;
-	switch (side) {
-		case "top":
-			coords = {
-				x: commonX,
-				y: reference.y - floating.height
-			};
-			break;
-		case "bottom":
-			coords = {
-				x: commonX,
-				y: reference.y + reference.height
-			};
-			break;
-		case "right":
-			coords = {
-				x: reference.x + reference.width,
-				y: commonY
-			};
-			break;
-		case "left":
-			coords = {
-				x: reference.x - floating.width,
-				y: commonY
-			};
-			break;
-		default: coords = {
-			x: reference.x,
-			y: reference.y
-		};
-	}
-	switch (getAlignment(placement)) {
-		case "start":
-			coords[alignmentAxis] -= commonAlign * (rtl && isVertical ? -1 : 1);
-			break;
-		case "end":
-			coords[alignmentAxis] += commonAlign * (rtl && isVertical ? -1 : 1);
-			break;
-	}
-	return coords;
-}
-/**
-* Resolves with an object of overflow side offsets that determine how much the
-* element is overflowing a given clipping boundary on each side.
-* - positive = overflowing the boundary by that number of pixels
-* - negative = how many pixels left before it will overflow
-* - 0 = lies flush with the boundary
-* @see https://floating-ui.com/docs/detectOverflow
-*/
-async function detectOverflow(state, options) {
-	var _await$platform$isEle;
-	if (options === void 0) options = {};
-	const { x, y, platform, rects, elements, strategy } = state;
-	const { boundary = "clippingAncestors", rootBoundary = "viewport", elementContext = "floating", altBoundary = false, padding = 0 } = evaluate(options, state);
-	const paddingObject = getPaddingObject(padding);
-	const element = elements[altBoundary ? elementContext === "floating" ? "reference" : "floating" : elementContext];
-	const clippingClientRect = rectToClientRect(await platform.getClippingRect({
-		element: ((_await$platform$isEle = await (platform.isElement == null ? void 0 : platform.isElement(element))) != null ? _await$platform$isEle : true) ? element : element.contextElement || await (platform.getDocumentElement == null ? void 0 : platform.getDocumentElement(elements.floating)),
-		boundary,
-		rootBoundary,
-		strategy
-	}));
-	const rect = elementContext === "floating" ? {
-		x,
-		y,
-		width: rects.floating.width,
-		height: rects.floating.height
-	} : rects.reference;
-	const offsetParent = await (platform.getOffsetParent == null ? void 0 : platform.getOffsetParent(elements.floating));
-	const offsetScale = await (platform.isElement == null ? void 0 : platform.isElement(offsetParent)) ? await (platform.getScale == null ? void 0 : platform.getScale(offsetParent)) || {
-		x: 1,
-		y: 1
-	} : {
-		x: 1,
-		y: 1
-	};
-	const elementClientRect = rectToClientRect(platform.convertOffsetParentRelativeRectToViewportRelativeRect ? await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
-		elements,
-		rect,
-		offsetParent,
-		strategy
-	}) : rect);
-	return {
-		top: (clippingClientRect.top - elementClientRect.top + paddingObject.top) / offsetScale.y,
-		bottom: (elementClientRect.bottom - clippingClientRect.bottom + paddingObject.bottom) / offsetScale.y,
-		left: (clippingClientRect.left - elementClientRect.left + paddingObject.left) / offsetScale.x,
-		right: (elementClientRect.right - clippingClientRect.right + paddingObject.right) / offsetScale.x
-	};
-}
-var MAX_RESET_COUNT = 50;
-/**
-* Computes the `x` and `y` coordinates that will place the floating element
-* next to a given reference element.
-*
-* This export does not have any `platform` interface logic. You will need to
-* write one for the platform you are using Floating UI with.
-*/
-var computePosition$1 = async (reference, floating, config) => {
-	const { placement = "bottom", strategy = "absolute", middleware = [], platform } = config;
-	const platformWithDetectOverflow = platform.detectOverflow ? platform : {
-		...platform,
-		detectOverflow
-	};
-	const rtl = await (platform.isRTL == null ? void 0 : platform.isRTL(floating));
-	let rects = await platform.getElementRects({
-		reference,
-		floating,
-		strategy
-	});
-	let { x, y } = computeCoordsFromPlacement(rects, placement, rtl);
-	let statefulPlacement = placement;
-	let resetCount = 0;
-	const middlewareData = {};
-	for (let i = 0; i < middleware.length; i++) {
-		const currentMiddleware = middleware[i];
-		if (!currentMiddleware) continue;
-		const { name, fn } = currentMiddleware;
-		const { x: nextX, y: nextY, data, reset } = await fn({
-			x,
-			y,
-			initialPlacement: placement,
-			placement: statefulPlacement,
-			strategy,
-			middlewareData,
-			rects,
-			platform: platformWithDetectOverflow,
-			elements: {
-				reference,
-				floating
-			}
-		});
-		x = nextX != null ? nextX : x;
-		y = nextY != null ? nextY : y;
-		middlewareData[name] = {
-			...middlewareData[name],
-			...data
-		};
-		if (reset && resetCount < MAX_RESET_COUNT) {
-			resetCount++;
-			if (typeof reset === "object") {
-				if (reset.placement) statefulPlacement = reset.placement;
-				if (reset.rects) rects = reset.rects === true ? await platform.getElementRects({
-					reference,
-					floating,
-					strategy
-				}) : reset.rects;
-				({x, y} = computeCoordsFromPlacement(rects, statefulPlacement, rtl));
-			}
-			i = -1;
-		}
-	}
-	return {
-		x,
-		y,
-		placement: statefulPlacement,
-		strategy,
-		middlewareData
-	};
-};
-/**
-* Provides data to position an inner element of the floating element so that it
-* appears centered to the reference element.
-* @see https://floating-ui.com/docs/arrow
-*/
-var arrow$3 = (options) => ({
-	name: "arrow",
-	options,
-	async fn(state) {
-		const { x, y, placement, rects, platform, elements, middlewareData } = state;
-		const { element, padding = 0 } = evaluate(options, state) || {};
-		if (element == null) return {};
-		const paddingObject = getPaddingObject(padding);
-		const coords = {
-			x,
-			y
-		};
-		const axis = getAlignmentAxis(placement);
-		const length = getAxisLength(axis);
-		const arrowDimensions = await platform.getDimensions(element);
-		const isYAxis = axis === "y";
-		const minProp = isYAxis ? "top" : "left";
-		const maxProp = isYAxis ? "bottom" : "right";
-		const clientProp = isYAxis ? "clientHeight" : "clientWidth";
-		const endDiff = rects.reference[length] + rects.reference[axis] - coords[axis] - rects.floating[length];
-		const startDiff = coords[axis] - rects.reference[axis];
-		const arrowOffsetParent = await (platform.getOffsetParent == null ? void 0 : platform.getOffsetParent(element));
-		let clientSize = arrowOffsetParent ? arrowOffsetParent[clientProp] : 0;
-		if (!clientSize || !await (platform.isElement == null ? void 0 : platform.isElement(arrowOffsetParent))) clientSize = elements.floating[clientProp] || rects.floating[length];
-		const centerToReference = endDiff / 2 - startDiff / 2;
-		const largestPossiblePadding = clientSize / 2 - arrowDimensions[length] / 2 - 1;
-		const minPadding = min(paddingObject[minProp], largestPossiblePadding);
-		const maxPadding = min(paddingObject[maxProp], largestPossiblePadding);
-		const min$1 = minPadding;
-		const max = clientSize - arrowDimensions[length] - maxPadding;
-		const center = clientSize / 2 - arrowDimensions[length] / 2 + centerToReference;
-		const offset = clamp(min$1, center, max);
-		const shouldAddOffset = !middlewareData.arrow && getAlignment(placement) != null && center !== offset && rects.reference[length] / 2 - (center < min$1 ? minPadding : maxPadding) - arrowDimensions[length] / 2 < 0;
-		const alignmentOffset = shouldAddOffset ? center < min$1 ? center - min$1 : center - max : 0;
-		return {
-			[axis]: coords[axis] + alignmentOffset,
-			data: {
-				[axis]: offset,
-				centerOffset: center - offset - alignmentOffset,
-				...shouldAddOffset && { alignmentOffset }
-			},
-			reset: shouldAddOffset
-		};
-	}
-});
-/**
-* Optimizes the visibility of the floating element by flipping the `placement`
-* in order to keep it in view when the preferred placement(s) will overflow the
-* clipping boundary. Alternative to `autoPlacement`.
-* @see https://floating-ui.com/docs/flip
-*/
-var flip$2 = function(options) {
-	if (options === void 0) options = {};
-	return {
-		name: "flip",
-		options,
-		async fn(state) {
-			var _middlewareData$arrow, _middlewareData$flip;
-			const { placement, middlewareData, rects, initialPlacement, platform, elements } = state;
-			const { mainAxis: checkMainAxis = true, crossAxis: checkCrossAxis = true, fallbackPlacements: specifiedFallbackPlacements, fallbackStrategy = "bestFit", fallbackAxisSideDirection = "none", flipAlignment = true, ...detectOverflowOptions } = evaluate(options, state);
-			if ((_middlewareData$arrow = middlewareData.arrow) != null && _middlewareData$arrow.alignmentOffset) return {};
-			const side = getSide(placement);
-			const initialSideAxis = getSideAxis(initialPlacement);
-			const isBasePlacement = getSide(initialPlacement) === initialPlacement;
-			const rtl = await (platform.isRTL == null ? void 0 : platform.isRTL(elements.floating));
-			const fallbackPlacements = specifiedFallbackPlacements || (isBasePlacement || !flipAlignment ? [getOppositePlacement(initialPlacement)] : getExpandedPlacements(initialPlacement));
-			const hasFallbackAxisSideDirection = fallbackAxisSideDirection !== "none";
-			if (!specifiedFallbackPlacements && hasFallbackAxisSideDirection) fallbackPlacements.push(...getOppositeAxisPlacements(initialPlacement, flipAlignment, fallbackAxisSideDirection, rtl));
-			const placements = [initialPlacement, ...fallbackPlacements];
-			const overflow = await platform.detectOverflow(state, detectOverflowOptions);
-			const overflows = [];
-			let overflowsData = ((_middlewareData$flip = middlewareData.flip) == null ? void 0 : _middlewareData$flip.overflows) || [];
-			if (checkMainAxis) overflows.push(overflow[side]);
-			if (checkCrossAxis) {
-				const sides = getAlignmentSides(placement, rects, rtl);
-				overflows.push(overflow[sides[0]], overflow[sides[1]]);
-			}
-			overflowsData = [...overflowsData, {
-				placement,
-				overflows
-			}];
-			if (!overflows.every((side) => side <= 0)) {
-				var _middlewareData$flip2, _overflowsData$filter;
-				const nextIndex = (((_middlewareData$flip2 = middlewareData.flip) == null ? void 0 : _middlewareData$flip2.index) || 0) + 1;
-				const nextPlacement = placements[nextIndex];
-				if (nextPlacement) {
-					if (!(checkCrossAxis === "alignment" ? initialSideAxis !== getSideAxis(nextPlacement) : false) || overflowsData.every((d) => getSideAxis(d.placement) === initialSideAxis ? d.overflows[0] > 0 : true)) return {
-						data: {
-							index: nextIndex,
-							overflows: overflowsData
-						},
-						reset: { placement: nextPlacement }
-					};
-				}
-				let resetPlacement = (_overflowsData$filter = overflowsData.filter((d) => d.overflows[0] <= 0).sort((a, b) => a.overflows[1] - b.overflows[1])[0]) == null ? void 0 : _overflowsData$filter.placement;
-				if (!resetPlacement) switch (fallbackStrategy) {
-					case "bestFit": {
-						var _overflowsData$filter2;
-						const placement = (_overflowsData$filter2 = overflowsData.filter((d) => {
-							if (hasFallbackAxisSideDirection) {
-								const currentSideAxis = getSideAxis(d.placement);
-								return currentSideAxis === initialSideAxis || currentSideAxis === "y";
-							}
-							return true;
-						}).map((d) => [d.placement, d.overflows.filter((overflow) => overflow > 0).reduce((acc, overflow) => acc + overflow, 0)]).sort((a, b) => a[1] - b[1])[0]) == null ? void 0 : _overflowsData$filter2[0];
-						if (placement) resetPlacement = placement;
-						break;
-					}
-					case "initialPlacement":
-						resetPlacement = initialPlacement;
-						break;
-				}
-				if (placement !== resetPlacement) return { reset: { placement: resetPlacement } };
-			}
-			return {};
-		}
-	};
-};
-function getSideOffsets(overflow, rect) {
-	return {
-		top: overflow.top - rect.height,
-		right: overflow.right - rect.width,
-		bottom: overflow.bottom - rect.height,
-		left: overflow.left - rect.width
-	};
-}
-function isAnySideFullyClipped(overflow) {
-	return sides.some((side) => overflow[side] >= 0);
-}
-/**
-* Provides data to hide the floating element in applicable situations, such as
-* when it is not in the same clipping context as the reference element.
-* @see https://floating-ui.com/docs/hide
-*/
-var hide$2 = function(options) {
-	if (options === void 0) options = {};
-	return {
-		name: "hide",
-		options,
-		async fn(state) {
-			const { rects, platform } = state;
-			const { strategy = "referenceHidden", ...detectOverflowOptions } = evaluate(options, state);
-			switch (strategy) {
-				case "referenceHidden": {
-					const offsets = getSideOffsets(await platform.detectOverflow(state, {
-						...detectOverflowOptions,
-						elementContext: "reference"
-					}), rects.reference);
-					return { data: {
-						referenceHiddenOffsets: offsets,
-						referenceHidden: isAnySideFullyClipped(offsets)
-					} };
-				}
-				case "escaped": {
-					const offsets = getSideOffsets(await platform.detectOverflow(state, {
-						...detectOverflowOptions,
-						altBoundary: true
-					}), rects.floating);
-					return { data: {
-						escapedOffsets: offsets,
-						escaped: isAnySideFullyClipped(offsets)
-					} };
-				}
-				default: return {};
-			}
-		}
-	};
-};
-var originSides = /* @__PURE__ */ new Set(["left", "top"]);
-async function convertValueToCoords(state, options) {
-	const { placement, platform, elements } = state;
-	const rtl = await (platform.isRTL == null ? void 0 : platform.isRTL(elements.floating));
-	const side = getSide(placement);
-	const alignment = getAlignment(placement);
-	const isVertical = getSideAxis(placement) === "y";
-	const mainAxisMulti = originSides.has(side) ? -1 : 1;
-	const crossAxisMulti = rtl && isVertical ? -1 : 1;
-	const rawValue = evaluate(options, state);
-	let { mainAxis, crossAxis, alignmentAxis } = typeof rawValue === "number" ? {
-		mainAxis: rawValue,
-		crossAxis: 0,
-		alignmentAxis: null
-	} : {
-		mainAxis: rawValue.mainAxis || 0,
-		crossAxis: rawValue.crossAxis || 0,
-		alignmentAxis: rawValue.alignmentAxis
-	};
-	if (alignment && typeof alignmentAxis === "number") crossAxis = alignment === "end" ? alignmentAxis * -1 : alignmentAxis;
-	return isVertical ? {
-		x: crossAxis * crossAxisMulti,
-		y: mainAxis * mainAxisMulti
-	} : {
-		x: mainAxis * mainAxisMulti,
-		y: crossAxis * crossAxisMulti
-	};
-}
-/**
-* Modifies the placement by translating the floating element along the
-* specified axes.
-* A number (shorthand for `mainAxis` or distance), or an axes configuration
-* object may be passed.
-* @see https://floating-ui.com/docs/offset
-*/
-var offset$2 = function(options) {
-	if (options === void 0) options = 0;
-	return {
-		name: "offset",
-		options,
-		async fn(state) {
-			var _middlewareData$offse, _middlewareData$arrow;
-			const { x, y, placement, middlewareData } = state;
-			const diffCoords = await convertValueToCoords(state, options);
-			if (placement === ((_middlewareData$offse = middlewareData.offset) == null ? void 0 : _middlewareData$offse.placement) && (_middlewareData$arrow = middlewareData.arrow) != null && _middlewareData$arrow.alignmentOffset) return {};
-			return {
-				x: x + diffCoords.x,
-				y: y + diffCoords.y,
-				data: {
-					...diffCoords,
-					placement
-				}
-			};
-		}
-	};
-};
-/**
-* Optimizes the visibility of the floating element by shifting it in order to
-* keep it in view when it will overflow the clipping boundary.
-* @see https://floating-ui.com/docs/shift
-*/
-var shift$2 = function(options) {
-	if (options === void 0) options = {};
-	return {
-		name: "shift",
-		options,
-		async fn(state) {
-			const { x, y, placement, platform } = state;
-			const { mainAxis: checkMainAxis = true, crossAxis: checkCrossAxis = false, limiter = { fn: (_ref) => {
-				let { x, y } = _ref;
-				return {
-					x,
-					y
-				};
-			} }, ...detectOverflowOptions } = evaluate(options, state);
-			const coords = {
-				x,
-				y
-			};
-			const overflow = await platform.detectOverflow(state, detectOverflowOptions);
-			const crossAxis = getSideAxis(getSide(placement));
-			const mainAxis = getOppositeAxis(crossAxis);
-			let mainAxisCoord = coords[mainAxis];
-			let crossAxisCoord = coords[crossAxis];
-			if (checkMainAxis) {
-				const minSide = mainAxis === "y" ? "top" : "left";
-				const maxSide = mainAxis === "y" ? "bottom" : "right";
-				const min = mainAxisCoord + overflow[minSide];
-				const max = mainAxisCoord - overflow[maxSide];
-				mainAxisCoord = clamp(min, mainAxisCoord, max);
-			}
-			if (checkCrossAxis) {
-				const minSide = crossAxis === "y" ? "top" : "left";
-				const maxSide = crossAxis === "y" ? "bottom" : "right";
-				const min = crossAxisCoord + overflow[minSide];
-				const max = crossAxisCoord - overflow[maxSide];
-				crossAxisCoord = clamp(min, crossAxisCoord, max);
-			}
-			const limitedCoords = limiter.fn({
-				...state,
-				[mainAxis]: mainAxisCoord,
-				[crossAxis]: crossAxisCoord
-			});
-			return {
-				...limitedCoords,
-				data: {
-					x: limitedCoords.x - x,
-					y: limitedCoords.y - y,
-					enabled: {
-						[mainAxis]: checkMainAxis,
-						[crossAxis]: checkCrossAxis
-					}
-				}
-			};
-		}
-	};
-};
-/**
-* Built-in `limiter` that will stop `shift()` at a certain point.
-*/
-var limitShift$2 = function(options) {
-	if (options === void 0) options = {};
-	return {
-		options,
-		fn(state) {
-			const { x, y, placement, rects, middlewareData } = state;
-			const { offset = 0, mainAxis: checkMainAxis = true, crossAxis: checkCrossAxis = true } = evaluate(options, state);
-			const coords = {
-				x,
-				y
-			};
-			const crossAxis = getSideAxis(placement);
-			const mainAxis = getOppositeAxis(crossAxis);
-			let mainAxisCoord = coords[mainAxis];
-			let crossAxisCoord = coords[crossAxis];
-			const rawOffset = evaluate(offset, state);
-			const computedOffset = typeof rawOffset === "number" ? {
-				mainAxis: rawOffset,
-				crossAxis: 0
-			} : {
-				mainAxis: 0,
-				crossAxis: 0,
-				...rawOffset
-			};
-			if (checkMainAxis) {
-				const len = mainAxis === "y" ? "height" : "width";
-				const limitMin = rects.reference[mainAxis] - rects.floating[len] + computedOffset.mainAxis;
-				const limitMax = rects.reference[mainAxis] + rects.reference[len] - computedOffset.mainAxis;
-				if (mainAxisCoord < limitMin) mainAxisCoord = limitMin;
-				else if (mainAxisCoord > limitMax) mainAxisCoord = limitMax;
-			}
-			if (checkCrossAxis) {
-				var _middlewareData$offse, _middlewareData$offse2;
-				const len = mainAxis === "y" ? "width" : "height";
-				const isOriginSide = originSides.has(getSide(placement));
-				const limitMin = rects.reference[crossAxis] - rects.floating[len] + (isOriginSide ? ((_middlewareData$offse = middlewareData.offset) == null ? void 0 : _middlewareData$offse[crossAxis]) || 0 : 0) + (isOriginSide ? 0 : computedOffset.crossAxis);
-				const limitMax = rects.reference[crossAxis] + rects.reference[len] + (isOriginSide ? 0 : ((_middlewareData$offse2 = middlewareData.offset) == null ? void 0 : _middlewareData$offse2[crossAxis]) || 0) - (isOriginSide ? computedOffset.crossAxis : 0);
-				if (crossAxisCoord < limitMin) crossAxisCoord = limitMin;
-				else if (crossAxisCoord > limitMax) crossAxisCoord = limitMax;
-			}
-			return {
-				[mainAxis]: mainAxisCoord,
-				[crossAxis]: crossAxisCoord
-			};
-		}
-	};
-};
-/**
-* Provides data that allows you to change the size of the floating element —
-* for instance, prevent it from overflowing the clipping boundary or match the
-* width of the reference element.
-* @see https://floating-ui.com/docs/size
-*/
-var size$2 = function(options) {
-	if (options === void 0) options = {};
-	return {
-		name: "size",
-		options,
-		async fn(state) {
-			var _state$middlewareData, _state$middlewareData2;
-			const { placement, rects, platform, elements } = state;
-			const { apply = () => {}, ...detectOverflowOptions } = evaluate(options, state);
-			const overflow = await platform.detectOverflow(state, detectOverflowOptions);
-			const side = getSide(placement);
-			const alignment = getAlignment(placement);
-			const isYAxis = getSideAxis(placement) === "y";
-			const { width, height } = rects.floating;
-			let heightSide;
-			let widthSide;
-			if (side === "top" || side === "bottom") {
-				heightSide = side;
-				widthSide = alignment === (await (platform.isRTL == null ? void 0 : platform.isRTL(elements.floating)) ? "start" : "end") ? "left" : "right";
-			} else {
-				widthSide = side;
-				heightSide = alignment === "end" ? "top" : "bottom";
-			}
-			const maximumClippingHeight = height - overflow.top - overflow.bottom;
-			const maximumClippingWidth = width - overflow.left - overflow.right;
-			const overflowAvailableHeight = min(height - overflow[heightSide], maximumClippingHeight);
-			const overflowAvailableWidth = min(width - overflow[widthSide], maximumClippingWidth);
-			const noShift = !state.middlewareData.shift;
-			let availableHeight = overflowAvailableHeight;
-			let availableWidth = overflowAvailableWidth;
-			if ((_state$middlewareData = state.middlewareData.shift) != null && _state$middlewareData.enabled.x) availableWidth = maximumClippingWidth;
-			if ((_state$middlewareData2 = state.middlewareData.shift) != null && _state$middlewareData2.enabled.y) availableHeight = maximumClippingHeight;
-			if (noShift && !alignment) {
-				const xMin = max(overflow.left, 0);
-				const xMax = max(overflow.right, 0);
-				const yMin = max(overflow.top, 0);
-				const yMax = max(overflow.bottom, 0);
-				if (isYAxis) availableWidth = width - 2 * (xMin !== 0 || xMax !== 0 ? xMin + xMax : max(overflow.left, overflow.right));
-				else availableHeight = height - 2 * (yMin !== 0 || yMax !== 0 ? yMin + yMax : max(overflow.top, overflow.bottom));
-			}
-			await apply({
-				...state,
-				availableWidth,
-				availableHeight
-			});
-			const nextDimensions = await platform.getDimensions(elements.floating);
-			if (width !== nextDimensions.width || height !== nextDimensions.height) return { reset: { rects: true } };
-			return {};
-		}
-	};
-};
-//#endregion
-//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@floating-ui+utils@0.2.11/node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs
-function hasWindow() {
-	return typeof window !== "undefined";
-}
-function getNodeName(node) {
-	if (isNode(node)) return (node.nodeName || "").toLowerCase();
-	return "#document";
-}
-function getWindow(node) {
-	var _node$ownerDocument;
-	return (node == null || (_node$ownerDocument = node.ownerDocument) == null ? void 0 : _node$ownerDocument.defaultView) || window;
-}
-function getDocumentElement(node) {
-	var _ref;
-	return (_ref = (isNode(node) ? node.ownerDocument : node.document) || window.document) == null ? void 0 : _ref.documentElement;
-}
-function isNode(value) {
-	if (!hasWindow()) return false;
-	return value instanceof Node || value instanceof getWindow(value).Node;
-}
-function isElement(value) {
-	if (!hasWindow()) return false;
-	return value instanceof Element || value instanceof getWindow(value).Element;
-}
-function isHTMLElement$1(value) {
-	if (!hasWindow()) return false;
-	return value instanceof HTMLElement || value instanceof getWindow(value).HTMLElement;
-}
-function isShadowRoot(value) {
-	if (!hasWindow() || typeof ShadowRoot === "undefined") return false;
-	return value instanceof ShadowRoot || value instanceof getWindow(value).ShadowRoot;
-}
-function isOverflowElement(element) {
-	const { overflow, overflowX, overflowY, display } = getComputedStyle$1(element);
-	return /auto|scroll|overlay|hidden|clip/.test(overflow + overflowY + overflowX) && display !== "inline" && display !== "contents";
-}
-function isTableElement(element) {
-	return /^(table|td|th)$/.test(getNodeName(element));
-}
-function isTopLayer(element) {
-	try {
-		if (element.matches(":popover-open")) return true;
-	} catch (_e) {}
-	try {
-		return element.matches(":modal");
-	} catch (_e) {
-		return false;
-	}
-}
-var willChangeRe = /transform|translate|scale|rotate|perspective|filter/;
-var containRe = /paint|layout|strict|content/;
-var isNotNone = (value) => !!value && value !== "none";
-var isWebKitValue;
-function isContainingBlock(elementOrCss) {
-	const css = isElement(elementOrCss) ? getComputedStyle$1(elementOrCss) : elementOrCss;
-	return isNotNone(css.transform) || isNotNone(css.translate) || isNotNone(css.scale) || isNotNone(css.rotate) || isNotNone(css.perspective) || !isWebKit() && (isNotNone(css.backdropFilter) || isNotNone(css.filter)) || willChangeRe.test(css.willChange || "") || containRe.test(css.contain || "");
-}
-function getContainingBlock(element) {
-	let currentNode = getParentNode(element);
-	while (isHTMLElement$1(currentNode) && !isLastTraversableNode(currentNode)) {
-		if (isContainingBlock(currentNode)) return currentNode;
-		else if (isTopLayer(currentNode)) return null;
-		currentNode = getParentNode(currentNode);
-	}
-	return null;
-}
-function isWebKit() {
-	if (isWebKitValue == null) isWebKitValue = typeof CSS !== "undefined" && CSS.supports && CSS.supports("-webkit-backdrop-filter", "none");
-	return isWebKitValue;
-}
-function isLastTraversableNode(node) {
-	return /^(html|body|#document)$/.test(getNodeName(node));
-}
-function getComputedStyle$1(element) {
-	return getWindow(element).getComputedStyle(element);
-}
-function getNodeScroll(element) {
-	if (isElement(element)) return {
-		scrollLeft: element.scrollLeft,
-		scrollTop: element.scrollTop
-	};
-	return {
-		scrollLeft: element.scrollX,
-		scrollTop: element.scrollY
-	};
-}
-function getParentNode(node) {
-	if (getNodeName(node) === "html") return node;
-	const result = node.assignedSlot || node.parentNode || isShadowRoot(node) && node.host || getDocumentElement(node);
-	return isShadowRoot(result) ? result.host : result;
-}
-function getNearestOverflowAncestor(node) {
-	const parentNode = getParentNode(node);
-	if (isLastTraversableNode(parentNode)) return node.ownerDocument ? node.ownerDocument.body : node.body;
-	if (isHTMLElement$1(parentNode) && isOverflowElement(parentNode)) return parentNode;
-	return getNearestOverflowAncestor(parentNode);
-}
-function getOverflowAncestors(node, list, traverseIframes) {
-	var _node$ownerDocument2;
-	if (list === void 0) list = [];
-	if (traverseIframes === void 0) traverseIframes = true;
-	const scrollableAncestor = getNearestOverflowAncestor(node);
-	const isBody = scrollableAncestor === ((_node$ownerDocument2 = node.ownerDocument) == null ? void 0 : _node$ownerDocument2.body);
-	const win = getWindow(scrollableAncestor);
-	if (isBody) {
-		const frameElement = getFrameElement(win);
-		return list.concat(win, win.visualViewport || [], isOverflowElement(scrollableAncestor) ? scrollableAncestor : [], frameElement && traverseIframes ? getOverflowAncestors(frameElement) : []);
-	} else return list.concat(scrollableAncestor, getOverflowAncestors(scrollableAncestor, [], traverseIframes));
-}
-function getFrameElement(win) {
-	return win.parent && Object.getPrototypeOf(win.parent) ? win.frameElement : null;
-}
-//#endregion
-//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@floating-ui+dom@1.7.6/node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs
-function getCssDimensions(element) {
-	const css = getComputedStyle$1(element);
-	let width = parseFloat(css.width) || 0;
-	let height = parseFloat(css.height) || 0;
-	const hasOffset = isHTMLElement$1(element);
-	const offsetWidth = hasOffset ? element.offsetWidth : width;
-	const offsetHeight = hasOffset ? element.offsetHeight : height;
-	const shouldFallback = round(width) !== offsetWidth || round(height) !== offsetHeight;
-	if (shouldFallback) {
-		width = offsetWidth;
-		height = offsetHeight;
-	}
-	return {
-		width,
-		height,
-		$: shouldFallback
-	};
-}
-function unwrapElement(element) {
-	return !isElement(element) ? element.contextElement : element;
-}
-function getScale(element) {
-	const domElement = unwrapElement(element);
-	if (!isHTMLElement$1(domElement)) return createCoords(1);
-	const rect = domElement.getBoundingClientRect();
-	const { width, height, $ } = getCssDimensions(domElement);
-	let x = ($ ? round(rect.width) : rect.width) / width;
-	let y = ($ ? round(rect.height) : rect.height) / height;
-	if (!x || !Number.isFinite(x)) x = 1;
-	if (!y || !Number.isFinite(y)) y = 1;
-	return {
-		x,
-		y
-	};
-}
-var noOffsets = /* @__PURE__ */ createCoords(0);
-function getVisualOffsets(element) {
-	const win = getWindow(element);
-	if (!isWebKit() || !win.visualViewport) return noOffsets;
-	return {
-		x: win.visualViewport.offsetLeft,
-		y: win.visualViewport.offsetTop
-	};
-}
-function shouldAddVisualOffsets(element, isFixed, floatingOffsetParent) {
-	if (isFixed === void 0) isFixed = false;
-	if (!floatingOffsetParent || isFixed && floatingOffsetParent !== getWindow(element)) return false;
-	return isFixed;
-}
-function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetParent) {
-	if (includeScale === void 0) includeScale = false;
-	if (isFixedStrategy === void 0) isFixedStrategy = false;
-	const clientRect = element.getBoundingClientRect();
-	const domElement = unwrapElement(element);
-	let scale = createCoords(1);
-	if (includeScale) if (offsetParent) {
-		if (isElement(offsetParent)) scale = getScale(offsetParent);
-	} else scale = getScale(element);
-	const visualOffsets = shouldAddVisualOffsets(domElement, isFixedStrategy, offsetParent) ? getVisualOffsets(domElement) : createCoords(0);
-	let x = (clientRect.left + visualOffsets.x) / scale.x;
-	let y = (clientRect.top + visualOffsets.y) / scale.y;
-	let width = clientRect.width / scale.x;
-	let height = clientRect.height / scale.y;
-	if (domElement) {
-		const win = getWindow(domElement);
-		const offsetWin = offsetParent && isElement(offsetParent) ? getWindow(offsetParent) : offsetParent;
-		let currentWin = win;
-		let currentIFrame = getFrameElement(currentWin);
-		while (currentIFrame && offsetParent && offsetWin !== currentWin) {
-			const iframeScale = getScale(currentIFrame);
-			const iframeRect = currentIFrame.getBoundingClientRect();
-			const css = getComputedStyle$1(currentIFrame);
-			const left = iframeRect.left + (currentIFrame.clientLeft + parseFloat(css.paddingLeft)) * iframeScale.x;
-			const top = iframeRect.top + (currentIFrame.clientTop + parseFloat(css.paddingTop)) * iframeScale.y;
-			x *= iframeScale.x;
-			y *= iframeScale.y;
-			width *= iframeScale.x;
-			height *= iframeScale.y;
-			x += left;
-			y += top;
-			currentWin = getWindow(currentIFrame);
-			currentIFrame = getFrameElement(currentWin);
-		}
-	}
-	return rectToClientRect({
-		width,
-		height,
-		x,
-		y
-	});
-}
-function getWindowScrollBarX(element, rect) {
-	const leftScroll = getNodeScroll(element).scrollLeft;
-	if (!rect) return getBoundingClientRect(getDocumentElement(element)).left + leftScroll;
-	return rect.left + leftScroll;
-}
-function getHTMLOffset(documentElement, scroll) {
-	const htmlRect = documentElement.getBoundingClientRect();
-	return {
-		x: htmlRect.left + scroll.scrollLeft - getWindowScrollBarX(documentElement, htmlRect),
-		y: htmlRect.top + scroll.scrollTop
-	};
-}
-function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
-	let { elements, rect, offsetParent, strategy } = _ref;
-	const isFixed = strategy === "fixed";
-	const documentElement = getDocumentElement(offsetParent);
-	const topLayer = elements ? isTopLayer(elements.floating) : false;
-	if (offsetParent === documentElement || topLayer && isFixed) return rect;
-	let scroll = {
-		scrollLeft: 0,
-		scrollTop: 0
-	};
-	let scale = createCoords(1);
-	const offsets = createCoords(0);
-	const isOffsetParentAnElement = isHTMLElement$1(offsetParent);
-	if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
-		if (getNodeName(offsetParent) !== "body" || isOverflowElement(documentElement)) scroll = getNodeScroll(offsetParent);
-		if (isOffsetParentAnElement) {
-			const offsetRect = getBoundingClientRect(offsetParent);
-			scale = getScale(offsetParent);
-			offsets.x = offsetRect.x + offsetParent.clientLeft;
-			offsets.y = offsetRect.y + offsetParent.clientTop;
-		}
-	}
-	const htmlOffset = documentElement && !isOffsetParentAnElement && !isFixed ? getHTMLOffset(documentElement, scroll) : createCoords(0);
-	return {
-		width: rect.width * scale.x,
-		height: rect.height * scale.y,
-		x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x + htmlOffset.x,
-		y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y + htmlOffset.y
-	};
-}
-function getClientRects(element) {
-	return Array.from(element.getClientRects());
-}
-function getDocumentRect(element) {
-	const html = getDocumentElement(element);
-	const scroll = getNodeScroll(element);
-	const body = element.ownerDocument.body;
-	const width = max(html.scrollWidth, html.clientWidth, body.scrollWidth, body.clientWidth);
-	const height = max(html.scrollHeight, html.clientHeight, body.scrollHeight, body.clientHeight);
-	let x = -scroll.scrollLeft + getWindowScrollBarX(element);
-	const y = -scroll.scrollTop;
-	if (getComputedStyle$1(body).direction === "rtl") x += max(html.clientWidth, body.clientWidth) - width;
-	return {
-		width,
-		height,
-		x,
-		y
-	};
-}
-var SCROLLBAR_MAX = 25;
-function getViewportRect(element, strategy) {
-	const win = getWindow(element);
-	const html = getDocumentElement(element);
-	const visualViewport = win.visualViewport;
-	let width = html.clientWidth;
-	let height = html.clientHeight;
-	let x = 0;
-	let y = 0;
-	if (visualViewport) {
-		width = visualViewport.width;
-		height = visualViewport.height;
-		const visualViewportBased = isWebKit();
-		if (!visualViewportBased || visualViewportBased && strategy === "fixed") {
-			x = visualViewport.offsetLeft;
-			y = visualViewport.offsetTop;
-		}
-	}
-	const windowScrollbarX = getWindowScrollBarX(html);
-	if (windowScrollbarX <= 0) {
-		const doc = html.ownerDocument;
-		const body = doc.body;
-		const bodyStyles = getComputedStyle(body);
-		const bodyMarginInline = doc.compatMode === "CSS1Compat" ? parseFloat(bodyStyles.marginLeft) + parseFloat(bodyStyles.marginRight) || 0 : 0;
-		const clippingStableScrollbarWidth = Math.abs(html.clientWidth - body.clientWidth - bodyMarginInline);
-		if (clippingStableScrollbarWidth <= SCROLLBAR_MAX) width -= clippingStableScrollbarWidth;
-	} else if (windowScrollbarX <= SCROLLBAR_MAX) width += windowScrollbarX;
-	return {
-		width,
-		height,
-		x,
-		y
-	};
-}
-function getInnerBoundingClientRect(element, strategy) {
-	const clientRect = getBoundingClientRect(element, true, strategy === "fixed");
-	const top = clientRect.top + element.clientTop;
-	const left = clientRect.left + element.clientLeft;
-	const scale = isHTMLElement$1(element) ? getScale(element) : createCoords(1);
-	return {
-		width: element.clientWidth * scale.x,
-		height: element.clientHeight * scale.y,
-		x: left * scale.x,
-		y: top * scale.y
-	};
-}
-function getClientRectFromClippingAncestor(element, clippingAncestor, strategy) {
-	let rect;
-	if (clippingAncestor === "viewport") rect = getViewportRect(element, strategy);
-	else if (clippingAncestor === "document") rect = getDocumentRect(getDocumentElement(element));
-	else if (isElement(clippingAncestor)) rect = getInnerBoundingClientRect(clippingAncestor, strategy);
-	else {
-		const visualOffsets = getVisualOffsets(element);
-		rect = {
-			x: clippingAncestor.x - visualOffsets.x,
-			y: clippingAncestor.y - visualOffsets.y,
-			width: clippingAncestor.width,
-			height: clippingAncestor.height
-		};
-	}
-	return rectToClientRect(rect);
-}
-function hasFixedPositionAncestor(element, stopNode) {
-	const parentNode = getParentNode(element);
-	if (parentNode === stopNode || !isElement(parentNode) || isLastTraversableNode(parentNode)) return false;
-	return getComputedStyle$1(parentNode).position === "fixed" || hasFixedPositionAncestor(parentNode, stopNode);
-}
-function getClippingElementAncestors(element, cache) {
-	const cachedResult = cache.get(element);
-	if (cachedResult) return cachedResult;
-	let result = getOverflowAncestors(element, [], false).filter((el) => isElement(el) && getNodeName(el) !== "body");
-	let currentContainingBlockComputedStyle = null;
-	const elementIsFixed = getComputedStyle$1(element).position === "fixed";
-	let currentNode = elementIsFixed ? getParentNode(element) : element;
-	while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
-		const computedStyle = getComputedStyle$1(currentNode);
-		const currentNodeIsContaining = isContainingBlock(currentNode);
-		if (!currentNodeIsContaining && computedStyle.position === "fixed") currentContainingBlockComputedStyle = null;
-		if (elementIsFixed ? !currentNodeIsContaining && !currentContainingBlockComputedStyle : !currentNodeIsContaining && computedStyle.position === "static" && !!currentContainingBlockComputedStyle && (currentContainingBlockComputedStyle.position === "absolute" || currentContainingBlockComputedStyle.position === "fixed") || isOverflowElement(currentNode) && !currentNodeIsContaining && hasFixedPositionAncestor(element, currentNode)) result = result.filter((ancestor) => ancestor !== currentNode);
-		else currentContainingBlockComputedStyle = computedStyle;
-		currentNode = getParentNode(currentNode);
-	}
-	cache.set(element, result);
-	return result;
-}
-function getClippingRect(_ref) {
-	let { element, boundary, rootBoundary, strategy } = _ref;
-	const clippingAncestors = [...boundary === "clippingAncestors" ? isTopLayer(element) ? [] : getClippingElementAncestors(element, this._c) : [].concat(boundary), rootBoundary];
-	const firstRect = getClientRectFromClippingAncestor(element, clippingAncestors[0], strategy);
-	let top = firstRect.top;
-	let right = firstRect.right;
-	let bottom = firstRect.bottom;
-	let left = firstRect.left;
-	for (let i = 1; i < clippingAncestors.length; i++) {
-		const rect = getClientRectFromClippingAncestor(element, clippingAncestors[i], strategy);
-		top = max(rect.top, top);
-		right = min(rect.right, right);
-		bottom = min(rect.bottom, bottom);
-		left = max(rect.left, left);
-	}
-	return {
-		width: right - left,
-		height: bottom - top,
-		x: left,
-		y: top
-	};
-}
-function getDimensions(element) {
-	const { width, height } = getCssDimensions(element);
-	return {
-		width,
-		height
-	};
-}
-function getRectRelativeToOffsetParent(element, offsetParent, strategy) {
-	const isOffsetParentAnElement = isHTMLElement$1(offsetParent);
-	const documentElement = getDocumentElement(offsetParent);
-	const isFixed = strategy === "fixed";
-	const rect = getBoundingClientRect(element, true, isFixed, offsetParent);
-	let scroll = {
-		scrollLeft: 0,
-		scrollTop: 0
-	};
-	const offsets = createCoords(0);
-	function setLeftRTLScrollbarOffset() {
-		offsets.x = getWindowScrollBarX(documentElement);
-	}
-	if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
-		if (getNodeName(offsetParent) !== "body" || isOverflowElement(documentElement)) scroll = getNodeScroll(offsetParent);
-		if (isOffsetParentAnElement) {
-			const offsetRect = getBoundingClientRect(offsetParent, true, isFixed, offsetParent);
-			offsets.x = offsetRect.x + offsetParent.clientLeft;
-			offsets.y = offsetRect.y + offsetParent.clientTop;
-		} else if (documentElement) setLeftRTLScrollbarOffset();
-	}
-	if (isFixed && !isOffsetParentAnElement && documentElement) setLeftRTLScrollbarOffset();
-	const htmlOffset = documentElement && !isOffsetParentAnElement && !isFixed ? getHTMLOffset(documentElement, scroll) : createCoords(0);
-	return {
-		x: rect.left + scroll.scrollLeft - offsets.x - htmlOffset.x,
-		y: rect.top + scroll.scrollTop - offsets.y - htmlOffset.y,
-		width: rect.width,
-		height: rect.height
-	};
-}
-function isStaticPositioned(element) {
-	return getComputedStyle$1(element).position === "static";
-}
-function getTrueOffsetParent(element, polyfill) {
-	if (!isHTMLElement$1(element) || getComputedStyle$1(element).position === "fixed") return null;
-	if (polyfill) return polyfill(element);
-	let rawOffsetParent = element.offsetParent;
-	if (getDocumentElement(element) === rawOffsetParent) rawOffsetParent = rawOffsetParent.ownerDocument.body;
-	return rawOffsetParent;
-}
-function getOffsetParent(element, polyfill) {
-	const win = getWindow(element);
-	if (isTopLayer(element)) return win;
-	if (!isHTMLElement$1(element)) {
-		let svgOffsetParent = getParentNode(element);
-		while (svgOffsetParent && !isLastTraversableNode(svgOffsetParent)) {
-			if (isElement(svgOffsetParent) && !isStaticPositioned(svgOffsetParent)) return svgOffsetParent;
-			svgOffsetParent = getParentNode(svgOffsetParent);
-		}
-		return win;
-	}
-	let offsetParent = getTrueOffsetParent(element, polyfill);
-	while (offsetParent && isTableElement(offsetParent) && isStaticPositioned(offsetParent)) offsetParent = getTrueOffsetParent(offsetParent, polyfill);
-	if (offsetParent && isLastTraversableNode(offsetParent) && isStaticPositioned(offsetParent) && !isContainingBlock(offsetParent)) return win;
-	return offsetParent || getContainingBlock(element) || win;
-}
-var getElementRects = async function(data) {
-	const getOffsetParentFn = this.getOffsetParent || getOffsetParent;
-	const getDimensionsFn = this.getDimensions;
-	const floatingDimensions = await getDimensionsFn(data.floating);
-	return {
-		reference: getRectRelativeToOffsetParent(data.reference, await getOffsetParentFn(data.floating), data.strategy),
-		floating: {
-			x: 0,
-			y: 0,
-			width: floatingDimensions.width,
-			height: floatingDimensions.height
-		}
-	};
-};
-function isRTL(element) {
-	return getComputedStyle$1(element).direction === "rtl";
-}
-var platform = {
-	convertOffsetParentRelativeRectToViewportRelativeRect,
-	getDocumentElement,
-	getClippingRect,
-	getOffsetParent,
-	getElementRects,
-	getClientRects,
-	getDimensions,
-	getScale,
-	isElement,
-	isRTL
-};
-function rectsAreEqual(a, b) {
-	return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
-}
-function observeMove(element, onMove) {
-	let io = null;
-	let timeoutId;
-	const root = getDocumentElement(element);
-	function cleanup() {
-		var _io;
-		clearTimeout(timeoutId);
-		(_io = io) == null || _io.disconnect();
-		io = null;
-	}
-	function refresh(skip, threshold) {
-		if (skip === void 0) skip = false;
-		if (threshold === void 0) threshold = 1;
-		cleanup();
-		const elementRectForRootMargin = element.getBoundingClientRect();
-		const { left, top, width, height } = elementRectForRootMargin;
-		if (!skip) onMove();
-		if (!width || !height) return;
-		const insetTop = floor(top);
-		const insetRight = floor(root.clientWidth - (left + width));
-		const insetBottom = floor(root.clientHeight - (top + height));
-		const insetLeft = floor(left);
-		const options = {
-			rootMargin: -insetTop + "px " + -insetRight + "px " + -insetBottom + "px " + -insetLeft + "px",
-			threshold: max(0, min(1, threshold)) || 1
-		};
-		let isFirstUpdate = true;
-		function handleObserve(entries) {
-			const ratio = entries[0].intersectionRatio;
-			if (ratio !== threshold) {
-				if (!isFirstUpdate) return refresh();
-				if (!ratio) timeoutId = setTimeout(() => {
-					refresh(false, 1e-7);
-				}, 1e3);
-				else refresh(false, ratio);
-			}
-			if (ratio === 1 && !rectsAreEqual(elementRectForRootMargin, element.getBoundingClientRect())) refresh();
-			isFirstUpdate = false;
-		}
-		try {
-			io = new IntersectionObserver(handleObserve, {
-				...options,
-				root: root.ownerDocument
-			});
-		} catch (_e) {
-			io = new IntersectionObserver(handleObserve, options);
-		}
-		io.observe(element);
-	}
-	refresh(true);
-	return cleanup;
-}
-/**
-* Automatically updates the position of the floating element when necessary.
-* Should only be called when the floating element is mounted on the DOM or
-* visible on the screen.
-* @returns cleanup function that should be invoked when the floating element is
-* removed from the DOM or hidden from the screen.
-* @see https://floating-ui.com/docs/autoUpdate
-*/
-function autoUpdate(reference, floating, update, options) {
-	if (options === void 0) options = {};
-	const { ancestorScroll = true, ancestorResize = true, elementResize = typeof ResizeObserver === "function", layoutShift = typeof IntersectionObserver === "function", animationFrame = false } = options;
-	const referenceEl = unwrapElement(reference);
-	const ancestors = ancestorScroll || ancestorResize ? [...referenceEl ? getOverflowAncestors(referenceEl) : [], ...floating ? getOverflowAncestors(floating) : []] : [];
-	ancestors.forEach((ancestor) => {
-		ancestorScroll && ancestor.addEventListener("scroll", update, { passive: true });
-		ancestorResize && ancestor.addEventListener("resize", update);
-	});
-	const cleanupIo = referenceEl && layoutShift ? observeMove(referenceEl, update) : null;
-	let reobserveFrame = -1;
-	let resizeObserver = null;
-	if (elementResize) {
-		resizeObserver = new ResizeObserver((_ref) => {
-			let [firstEntry] = _ref;
-			if (firstEntry && firstEntry.target === referenceEl && resizeObserver && floating) {
-				resizeObserver.unobserve(floating);
-				cancelAnimationFrame(reobserveFrame);
-				reobserveFrame = requestAnimationFrame(() => {
-					var _resizeObserver;
-					(_resizeObserver = resizeObserver) == null || _resizeObserver.observe(floating);
-				});
-			}
-			update();
-		});
-		if (referenceEl && !animationFrame) resizeObserver.observe(referenceEl);
-		if (floating) resizeObserver.observe(floating);
-	}
-	let frameId;
-	let prevRefRect = animationFrame ? getBoundingClientRect(reference) : null;
-	if (animationFrame) frameLoop();
-	function frameLoop() {
-		const nextRefRect = getBoundingClientRect(reference);
-		if (prevRefRect && !rectsAreEqual(prevRefRect, nextRefRect)) update();
-		prevRefRect = nextRefRect;
-		frameId = requestAnimationFrame(frameLoop);
-	}
-	update();
-	return () => {
-		var _resizeObserver2;
-		ancestors.forEach((ancestor) => {
-			ancestorScroll && ancestor.removeEventListener("scroll", update);
-			ancestorResize && ancestor.removeEventListener("resize", update);
-		});
-		cleanupIo?.();
-		(_resizeObserver2 = resizeObserver) == null || _resizeObserver2.disconnect();
-		resizeObserver = null;
-		if (animationFrame) cancelAnimationFrame(frameId);
-	};
-}
-/**
-* Modifies the placement by translating the floating element along the
-* specified axes.
-* A number (shorthand for `mainAxis` or distance), or an axes configuration
-* object may be passed.
-* @see https://floating-ui.com/docs/offset
-*/
-var offset$1 = offset$2;
-/**
-* Optimizes the visibility of the floating element by shifting it in order to
-* keep it in view when it will overflow the clipping boundary.
-* @see https://floating-ui.com/docs/shift
-*/
-var shift$1 = shift$2;
-/**
-* Optimizes the visibility of the floating element by flipping the `placement`
-* in order to keep it in view when the preferred placement(s) will overflow the
-* clipping boundary. Alternative to `autoPlacement`.
-* @see https://floating-ui.com/docs/flip
-*/
-var flip$1 = flip$2;
-/**
-* Provides data that allows you to change the size of the floating element —
-* for instance, prevent it from overflowing the clipping boundary or match the
-* width of the reference element.
-* @see https://floating-ui.com/docs/size
-*/
-var size$1 = size$2;
-/**
-* Provides data to hide the floating element in applicable situations, such as
-* when it is not in the same clipping context as the reference element.
-* @see https://floating-ui.com/docs/hide
-*/
-var hide$1 = hide$2;
-/**
-* Provides data to position an inner element of the floating element so that it
-* appears centered to the reference element.
-* @see https://floating-ui.com/docs/arrow
-*/
-var arrow$2 = arrow$3;
-/**
-* Built-in `limiter` that will stop `shift()` at a certain point.
-*/
-var limitShift$1 = limitShift$2;
-/**
-* Computes the `x` and `y` coordinates that will place the floating element
-* next to a given reference element.
-*/
-var computePosition = (reference, floating, options) => {
-	const cache = /* @__PURE__ */ new Map();
-	const mergedOptions = {
-		platform,
-		...options
-	};
-	const platformWithCache = {
-		...mergedOptions.platform,
-		_c: cache
-	};
-	return computePosition$1(reference, floating, {
-		...mergedOptions,
-		platform: platformWithCache
-	});
-};
-//#endregion
-//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@floating-ui+react-dom@2.1.8_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs
-var index = typeof document !== "undefined" ? import_react.useLayoutEffect : function noop() {};
-function deepEqual(a, b) {
-	if (a === b) return true;
-	if (typeof a !== typeof b) return false;
-	if (typeof a === "function" && a.toString() === b.toString()) return true;
-	let length;
-	let i;
-	let keys;
-	if (a && b && typeof a === "object") {
-		if (Array.isArray(a)) {
-			length = a.length;
-			if (length !== b.length) return false;
-			for (i = length; i-- !== 0;) if (!deepEqual(a[i], b[i])) return false;
-			return true;
-		}
-		keys = Object.keys(a);
-		length = keys.length;
-		if (length !== Object.keys(b).length) return false;
-		for (i = length; i-- !== 0;) if (!{}.hasOwnProperty.call(b, keys[i])) return false;
-		for (i = length; i-- !== 0;) {
-			const key = keys[i];
-			if (key === "_owner" && a.$$typeof) continue;
-			if (!deepEqual(a[key], b[key])) return false;
-		}
-		return true;
-	}
-	return a !== a && b !== b;
-}
-function getDPR(element) {
-	if (typeof window === "undefined") return 1;
-	return (element.ownerDocument.defaultView || window).devicePixelRatio || 1;
-}
-function roundByDPR(element, value) {
-	const dpr = getDPR(element);
-	return Math.round(value * dpr) / dpr;
-}
-function useLatestRef(value) {
-	const ref = import_react.useRef(value);
-	index(() => {
-		ref.current = value;
-	});
-	return ref;
-}
-/**
-* Provides data to position a floating element.
-* @see https://floating-ui.com/docs/useFloating
-*/
-function useFloating(options) {
-	if (options === void 0) options = {};
-	const { placement = "bottom", strategy = "absolute", middleware = [], platform, elements: { reference: externalReference, floating: externalFloating } = {}, transform = true, whileElementsMounted, open } = options;
-	const [data, setData] = import_react.useState({
-		x: 0,
-		y: 0,
-		strategy,
-		placement,
-		middlewareData: {},
-		isPositioned: false
-	});
-	const [latestMiddleware, setLatestMiddleware] = import_react.useState(middleware);
-	if (!deepEqual(latestMiddleware, middleware)) setLatestMiddleware(middleware);
-	const [_reference, _setReference] = import_react.useState(null);
-	const [_floating, _setFloating] = import_react.useState(null);
-	const setReference = import_react.useCallback((node) => {
-		if (node !== referenceRef.current) {
-			referenceRef.current = node;
-			_setReference(node);
-		}
-	}, []);
-	const setFloating = import_react.useCallback((node) => {
-		if (node !== floatingRef.current) {
-			floatingRef.current = node;
-			_setFloating(node);
-		}
-	}, []);
-	const referenceEl = externalReference || _reference;
-	const floatingEl = externalFloating || _floating;
-	const referenceRef = import_react.useRef(null);
-	const floatingRef = import_react.useRef(null);
-	const dataRef = import_react.useRef(data);
-	const hasWhileElementsMounted = whileElementsMounted != null;
-	const whileElementsMountedRef = useLatestRef(whileElementsMounted);
-	const platformRef = useLatestRef(platform);
-	const openRef = useLatestRef(open);
-	const update = import_react.useCallback(() => {
-		if (!referenceRef.current || !floatingRef.current) return;
-		const config = {
-			placement,
-			strategy,
-			middleware: latestMiddleware
-		};
-		if (platformRef.current) config.platform = platformRef.current;
-		computePosition(referenceRef.current, floatingRef.current, config).then((data) => {
-			const fullData = {
-				...data,
-				isPositioned: openRef.current !== false
-			};
-			if (isMountedRef.current && !deepEqual(dataRef.current, fullData)) {
-				dataRef.current = fullData;
-				import_react_dom.flushSync(() => {
-					setData(fullData);
-				});
-			}
-		});
-	}, [
-		latestMiddleware,
-		placement,
-		strategy,
-		platformRef,
-		openRef
-	]);
-	index(() => {
-		if (open === false && dataRef.current.isPositioned) {
-			dataRef.current.isPositioned = false;
-			setData((data) => ({
-				...data,
-				isPositioned: false
-			}));
-		}
-	}, [open]);
-	const isMountedRef = import_react.useRef(false);
-	index(() => {
-		isMountedRef.current = true;
-		return () => {
-			isMountedRef.current = false;
-		};
-	}, []);
-	index(() => {
-		if (referenceEl) referenceRef.current = referenceEl;
-		if (floatingEl) floatingRef.current = floatingEl;
-		if (referenceEl && floatingEl) {
-			if (whileElementsMountedRef.current) return whileElementsMountedRef.current(referenceEl, floatingEl, update);
-			update();
-		}
-	}, [
-		referenceEl,
-		floatingEl,
-		update,
-		whileElementsMountedRef,
-		hasWhileElementsMounted
-	]);
-	const refs = import_react.useMemo(() => ({
-		reference: referenceRef,
-		floating: floatingRef,
-		setReference,
-		setFloating
-	}), [setReference, setFloating]);
-	const elements = import_react.useMemo(() => ({
-		reference: referenceEl,
-		floating: floatingEl
-	}), [referenceEl, floatingEl]);
-	const floatingStyles = import_react.useMemo(() => {
-		const initialStyles = {
-			position: strategy,
-			left: 0,
-			top: 0
-		};
-		if (!elements.floating) return initialStyles;
-		const x = roundByDPR(elements.floating, data.x);
-		const y = roundByDPR(elements.floating, data.y);
-		if (transform) return {
-			...initialStyles,
-			transform: "translate(" + x + "px, " + y + "px)",
-			...getDPR(elements.floating) >= 1.5 && { willChange: "transform" }
-		};
-		return {
-			position: strategy,
-			left: x,
-			top: y
-		};
-	}, [
-		strategy,
-		transform,
-		elements.floating,
-		data.x,
-		data.y
-	]);
-	return import_react.useMemo(() => ({
-		...data,
-		update,
-		refs,
-		elements,
-		floatingStyles
-	}), [
-		data,
-		update,
-		refs,
-		elements,
-		floatingStyles
-	]);
-}
-/**
-* Provides data to position an inner element of the floating element so that it
-* appears centered to the reference element.
-* This wraps the core `arrow` middleware to allow React refs as the element.
-* @see https://floating-ui.com/docs/arrow
-*/
-var arrow$1 = (options) => {
-	function isRef(value) {
-		return {}.hasOwnProperty.call(value, "current");
-	}
-	return {
-		name: "arrow",
-		options,
-		fn(state) {
-			const { element, padding } = typeof options === "function" ? options(state) : options;
-			if (element && isRef(element)) {
-				if (element.current != null) return arrow$2({
-					element: element.current,
-					padding
-				}).fn(state);
-				return {};
-			}
-			if (element) return arrow$2({
-				element,
-				padding
-			}).fn(state);
-			return {};
-		}
-	};
-};
-/**
-* Modifies the placement by translating the floating element along the
-* specified axes.
-* A number (shorthand for `mainAxis` or distance), or an axes configuration
-* object may be passed.
-* @see https://floating-ui.com/docs/offset
-*/
-var offset = (options, deps) => {
-	const result = offset$1(options);
-	return {
-		name: result.name,
-		fn: result.fn,
-		options: [options, deps]
-	};
-};
-/**
-* Optimizes the visibility of the floating element by shifting it in order to
-* keep it in view when it will overflow the clipping boundary.
-* @see https://floating-ui.com/docs/shift
-*/
-var shift = (options, deps) => {
-	const result = shift$1(options);
-	return {
-		name: result.name,
-		fn: result.fn,
-		options: [options, deps]
-	};
-};
-/**
-* Built-in `limiter` that will stop `shift()` at a certain point.
-*/
-var limitShift = (options, deps) => {
-	return {
-		fn: limitShift$1(options).fn,
-		options: [options, deps]
-	};
-};
-/**
-* Optimizes the visibility of the floating element by flipping the `placement`
-* in order to keep it in view when the preferred placement(s) will overflow the
-* clipping boundary. Alternative to `autoPlacement`.
-* @see https://floating-ui.com/docs/flip
-*/
-var flip = (options, deps) => {
-	const result = flip$1(options);
-	return {
-		name: result.name,
-		fn: result.fn,
-		options: [options, deps]
-	};
-};
-/**
-* Provides data that allows you to change the size of the floating element —
-* for instance, prevent it from overflowing the clipping boundary or match the
-* width of the reference element.
-* @see https://floating-ui.com/docs/size
-*/
-var size = (options, deps) => {
-	const result = size$1(options);
-	return {
-		name: result.name,
-		fn: result.fn,
-		options: [options, deps]
-	};
-};
-/**
-* Provides data to hide the floating element in applicable situations, such as
-* when it is not in the same clipping context as the reference element.
-* @see https://floating-ui.com/docs/hide
-*/
-var hide = (options, deps) => {
-	const result = hide$1(options);
-	return {
-		name: result.name,
-		fn: result.fn,
-		options: [options, deps]
-	};
-};
-/**
-* Provides data to position an inner element of the floating element so that it
-* appears centered to the reference element.
-* This wraps the core `arrow` middleware to allow React refs as the element.
-* @see https://floating-ui.com/docs/arrow
-*/
-var arrow = (options, deps) => {
-	const result = arrow$1(options);
-	return {
-		name: result.name,
-		fn: result.fn,
-		options: [options, deps]
-	};
-};
-//#endregion
-//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-arrow@1.1.7_@types+react-dom@19.2.3_@types+react@19.2.14__@types+react@_e05f2c19a58a99fddf374207b5e3778c/node_modules/@radix-ui/react-arrow/dist/index.mjs
-var NAME$1 = "Arrow";
-var Arrow$1 = import_react.forwardRef((props, forwardedRef) => {
-	const { children, width = 10, height = 5, ...arrowProps } = props;
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.svg, {
-		...arrowProps,
-		ref: forwardedRef,
-		width,
-		height,
-		viewBox: "0 0 30 10",
-		preserveAspectRatio: "none",
-		children: props.asChild ? children : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("polygon", { points: "0,0 30,0 15,10" })
-	});
-});
-Arrow$1.displayName = NAME$1;
-var Root$1 = Arrow$1;
-//#endregion
-//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-popper@1.2.8_@types+react-dom@19.2.3_@types+react@19.2.14__@types+react_13e0521d8aea7ebfbfb8bee1fb615c05/node_modules/@radix-ui/react-popper/dist/index.mjs
-var POPPER_NAME = "Popper";
-var [createPopperContext, createPopperScope] = createContextScope(POPPER_NAME);
-var [PopperProvider, usePopperContext] = createPopperContext(POPPER_NAME);
-var Popper = (props) => {
-	const { __scopePopper, children } = props;
-	const [anchor, setAnchor] = import_react.useState(null);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopperProvider, {
-		scope: __scopePopper,
-		anchor,
-		onAnchorChange: setAnchor,
-		children
-	});
-};
-Popper.displayName = POPPER_NAME;
-var ANCHOR_NAME = "PopperAnchor";
-var PopperAnchor = import_react.forwardRef((props, forwardedRef) => {
-	const { __scopePopper, virtualRef, ...anchorProps } = props;
-	const context = usePopperContext(ANCHOR_NAME, __scopePopper);
-	const ref = import_react.useRef(null);
-	const composedRefs = useComposedRefs(forwardedRef, ref);
-	const anchorRef = import_react.useRef(null);
-	import_react.useEffect(() => {
-		const previousAnchor = anchorRef.current;
-		anchorRef.current = virtualRef?.current || ref.current;
-		if (previousAnchor !== anchorRef.current) context.onAnchorChange(anchorRef.current);
-	});
-	return virtualRef ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.div, {
-		...anchorProps,
-		ref: composedRefs
-	});
-});
-PopperAnchor.displayName = ANCHOR_NAME;
-var CONTENT_NAME$2 = "PopperContent";
-var [PopperContentProvider, useContentContext] = createPopperContext(CONTENT_NAME$2);
-var PopperContent = import_react.forwardRef((props, forwardedRef) => {
-	const { __scopePopper, side = "bottom", sideOffset = 0, align = "center", alignOffset = 0, arrowPadding = 0, avoidCollisions = true, collisionBoundary = [], collisionPadding: collisionPaddingProp = 0, sticky = "partial", hideWhenDetached = false, updatePositionStrategy = "optimized", onPlaced, ...contentProps } = props;
-	const context = usePopperContext(CONTENT_NAME$2, __scopePopper);
-	const [content, setContent] = import_react.useState(null);
-	const composedRefs = useComposedRefs(forwardedRef, (node) => setContent(node));
-	const [arrow$4, setArrow] = import_react.useState(null);
-	const arrowSize = useSize(arrow$4);
-	const arrowWidth = arrowSize?.width ?? 0;
-	const arrowHeight = arrowSize?.height ?? 0;
-	const desiredPlacement = side + (align !== "center" ? "-" + align : "");
-	const collisionPadding = typeof collisionPaddingProp === "number" ? collisionPaddingProp : {
-		top: 0,
-		right: 0,
-		bottom: 0,
-		left: 0,
-		...collisionPaddingProp
-	};
-	const boundary = Array.isArray(collisionBoundary) ? collisionBoundary : [collisionBoundary];
-	const hasExplicitBoundaries = boundary.length > 0;
-	const detectOverflowOptions = {
-		padding: collisionPadding,
-		boundary: boundary.filter(isNotNull),
-		altBoundary: hasExplicitBoundaries
-	};
-	const { refs, floatingStyles, placement, isPositioned, middlewareData } = useFloating({
-		strategy: "fixed",
-		placement: desiredPlacement,
-		whileElementsMounted: (...args) => {
-			return autoUpdate(...args, { animationFrame: updatePositionStrategy === "always" });
-		},
-		elements: { reference: context.anchor },
-		middleware: [
-			offset({
-				mainAxis: sideOffset + arrowHeight,
-				alignmentAxis: alignOffset
-			}),
-			avoidCollisions && shift({
-				mainAxis: true,
-				crossAxis: false,
-				limiter: sticky === "partial" ? limitShift() : void 0,
-				...detectOverflowOptions
-			}),
-			avoidCollisions && flip({ ...detectOverflowOptions }),
-			size({
-				...detectOverflowOptions,
-				apply: ({ elements, rects, availableWidth, availableHeight }) => {
-					const { width: anchorWidth, height: anchorHeight } = rects.reference;
-					const contentStyle = elements.floating.style;
-					contentStyle.setProperty("--radix-popper-available-width", `${availableWidth}px`);
-					contentStyle.setProperty("--radix-popper-available-height", `${availableHeight}px`);
-					contentStyle.setProperty("--radix-popper-anchor-width", `${anchorWidth}px`);
-					contentStyle.setProperty("--radix-popper-anchor-height", `${anchorHeight}px`);
-				}
-			}),
-			arrow$4 && arrow({
-				element: arrow$4,
-				padding: arrowPadding
-			}),
-			transformOrigin({
-				arrowWidth,
-				arrowHeight
-			}),
-			hideWhenDetached && hide({
-				strategy: "referenceHidden",
-				...detectOverflowOptions
-			})
-		]
-	});
-	const [placedSide, placedAlign] = getSideAndAlignFromPlacement(placement);
-	const handlePlaced = useCallbackRef$1(onPlaced);
-	useLayoutEffect2(() => {
-		if (isPositioned) handlePlaced?.();
-	}, [isPositioned, handlePlaced]);
-	const arrowX = middlewareData.arrow?.x;
-	const arrowY = middlewareData.arrow?.y;
-	const cannotCenterArrow = middlewareData.arrow?.centerOffset !== 0;
-	const [contentZIndex, setContentZIndex] = import_react.useState();
-	useLayoutEffect2(() => {
-		if (content) setContentZIndex(window.getComputedStyle(content).zIndex);
-	}, [content]);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		ref: refs.setFloating,
-		"data-radix-popper-content-wrapper": "",
-		style: {
-			...floatingStyles,
-			transform: isPositioned ? floatingStyles.transform : "translate(0, -200%)",
-			minWidth: "max-content",
-			zIndex: contentZIndex,
-			["--radix-popper-transform-origin"]: [middlewareData.transformOrigin?.x, middlewareData.transformOrigin?.y].join(" "),
-			...middlewareData.hide?.referenceHidden && {
-				visibility: "hidden",
-				pointerEvents: "none"
-			}
-		},
-		dir: props.dir,
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopperContentProvider, {
-			scope: __scopePopper,
-			placedSide,
-			onArrowChange: setArrow,
-			arrowX,
-			arrowY,
-			shouldHideArrow: cannotCenterArrow,
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.div, {
-				"data-side": placedSide,
-				"data-align": placedAlign,
-				...contentProps,
-				ref: composedRefs,
-				style: {
-					...contentProps.style,
-					animation: !isPositioned ? "none" : void 0
-				}
-			})
-		})
-	});
-});
-PopperContent.displayName = CONTENT_NAME$2;
-var ARROW_NAME$2 = "PopperArrow";
-var OPPOSITE_SIDE = {
-	top: "bottom",
-	right: "left",
-	bottom: "top",
-	left: "right"
-};
-var PopperArrow = import_react.forwardRef(function PopperArrow2(props, forwardedRef) {
-	const { __scopePopper, ...arrowProps } = props;
-	const contentContext = useContentContext(ARROW_NAME$2, __scopePopper);
-	const baseSide = OPPOSITE_SIDE[contentContext.placedSide];
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-		ref: contentContext.onArrowChange,
-		style: {
-			position: "absolute",
-			left: contentContext.arrowX,
-			top: contentContext.arrowY,
-			[baseSide]: 0,
-			transformOrigin: {
-				top: "",
-				right: "0 0",
-				bottom: "center 0",
-				left: "100% 0"
-			}[contentContext.placedSide],
-			transform: {
-				top: "translateY(100%)",
-				right: "translateY(50%) rotate(90deg) translateX(-50%)",
-				bottom: `rotate(180deg)`,
-				left: "translateY(50%) rotate(-90deg) translateX(50%)"
-			}[contentContext.placedSide],
-			visibility: contentContext.shouldHideArrow ? "hidden" : void 0
-		},
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$1, {
-			...arrowProps,
-			ref: forwardedRef,
-			style: {
-				...arrowProps.style,
-				display: "block"
-			}
-		})
-	});
-});
-PopperArrow.displayName = ARROW_NAME$2;
-function isNotNull(value) {
-	return value !== null;
-}
-var transformOrigin = (options) => ({
-	name: "transformOrigin",
-	options,
-	fn(data) {
-		const { placement, rects, middlewareData } = data;
-		const isArrowHidden = middlewareData.arrow?.centerOffset !== 0;
-		const arrowWidth = isArrowHidden ? 0 : options.arrowWidth;
-		const arrowHeight = isArrowHidden ? 0 : options.arrowHeight;
-		const [placedSide, placedAlign] = getSideAndAlignFromPlacement(placement);
-		const noArrowAlign = {
-			start: "0%",
-			center: "50%",
-			end: "100%"
-		}[placedAlign];
-		const arrowXCenter = (middlewareData.arrow?.x ?? 0) + arrowWidth / 2;
-		const arrowYCenter = (middlewareData.arrow?.y ?? 0) + arrowHeight / 2;
-		let x = "";
-		let y = "";
-		if (placedSide === "bottom") {
-			x = isArrowHidden ? noArrowAlign : `${arrowXCenter}px`;
-			y = `${-arrowHeight}px`;
-		} else if (placedSide === "top") {
-			x = isArrowHidden ? noArrowAlign : `${arrowXCenter}px`;
-			y = `${rects.floating.height + arrowHeight}px`;
-		} else if (placedSide === "right") {
-			x = `${-arrowHeight}px`;
-			y = isArrowHidden ? noArrowAlign : `${arrowYCenter}px`;
-		} else if (placedSide === "left") {
-			x = `${rects.floating.width + arrowHeight}px`;
-			y = isArrowHidden ? noArrowAlign : `${arrowYCenter}px`;
-		}
-		return { data: {
-			x,
-			y
-		} };
-	}
-});
-function getSideAndAlignFromPlacement(placement) {
-	const [side, align = "center"] = placement.split("-");
-	return [side, align];
-}
-var Root2$2 = Popper;
-var Anchor = PopperAnchor;
-var Content = PopperContent;
-var Arrow = PopperArrow;
 //#endregion
 //#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/@radix-ui+react-visually-hidden@1.2.3_@types+react-dom@19.2.3_@types+react@19.2.14__@ty_fa89646d7248b32d1762bf88948f6339/node_modules/@radix-ui/react-visually-hidden/dist/index.mjs
 var VISUALLY_HIDDEN_STYLES = Object.freeze({
@@ -33803,7 +35489,7 @@ var Select$1 = (props) => {
 	const isFormControl = trigger ? form || !!trigger.closest("form") : true;
 	const [nativeOptionsSet, setNativeOptionsSet] = import_react.useState(/* @__PURE__ */ new Set());
 	const nativeSelectKey = Array.from(nativeOptionsSet).map((option) => option.props.value).join(";");
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$2, {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$4, {
 		...popperScope,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectProvider, {
 			required,
@@ -33952,7 +35638,7 @@ var SelectIcon = import_react.forwardRef((props, forwardedRef) => {
 SelectIcon.displayName = ICON_NAME;
 var PORTAL_NAME$1 = "SelectPortal";
 var SelectPortal = (props) => {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Portal$2, {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Portal$3, {
 		asChild: true,
 		...props
 	});
@@ -34199,7 +35885,7 @@ var SelectItemAlignedPosition = import_react.forwardRef((props, forwardedRef) =>
 				const minContentWidth = triggerRect.width + leftDelta;
 				const contentWidth = Math.max(minContentWidth, contentRect.width);
 				const rightEdge = window.innerWidth - CONTENT_MARGIN;
-				const clampedLeft = clamp$1(left, [CONTENT_MARGIN, Math.max(CONTENT_MARGIN, rightEdge - contentWidth)]);
+				const clampedLeft = clamp(left, [CONTENT_MARGIN, Math.max(CONTENT_MARGIN, rightEdge - contentWidth)]);
 				contentWrapper.style.minWidth = minContentWidth + "px";
 				contentWrapper.style.left = clampedLeft + "px";
 			} else {
@@ -34209,7 +35895,7 @@ var SelectItemAlignedPosition = import_react.forwardRef((props, forwardedRef) =>
 				const minContentWidth = triggerRect.width + rightDelta;
 				const contentWidth = Math.max(minContentWidth, contentRect.width);
 				const leftEdge = window.innerWidth - CONTENT_MARGIN;
-				const clampedRight = clamp$1(right, [CONTENT_MARGIN, Math.max(CONTENT_MARGIN, leftEdge - contentWidth)]);
+				const clampedRight = clamp(right, [CONTENT_MARGIN, Math.max(CONTENT_MARGIN, leftEdge - contentWidth)]);
 				contentWrapper.style.minWidth = minContentWidth + "px";
 				contentWrapper.style.right = clampedRight + "px";
 			}
@@ -36018,7 +37704,7 @@ var ToastAnnounce = (props) => {
 		const timer = window.setTimeout(() => setIsAnnounced(true), 1e3);
 		return () => window.clearTimeout(timer);
 	}, []);
-	return isAnnounced ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Portal$2, {
+	return isAnnounced ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Portal$3, {
 		asChild: true,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(VisuallyHidden, {
 			...announceProps,
@@ -36424,7 +38110,7 @@ var Tooltip$1 = (props) => {
 			}
 		};
 	}, []);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$2, {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$4, {
 		...popperScope,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TooltipContextProvider, {
 			scope: __scopeTooltip,
@@ -36512,7 +38198,7 @@ var TooltipPortal = (props) => {
 		forceMount,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
 			present: forceMount || context.open,
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Portal$2, {
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Portal$3, {
 				asChild: true,
 				container,
 				children
@@ -36952,4 +38638,4 @@ function App() {
 }));
 //#endregion
 
-//# sourceMappingURL=index-B5Lpy7wn.js.map
+//# sourceMappingURL=index-B7Jc6FQ4.js.map

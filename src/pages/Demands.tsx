@@ -7,7 +7,7 @@ import { useApp } from '@/store/AppContext'
 import { SERVICES } from '@/lib/services'
 
 const Demands = () => {
-  const { role, demands, isSubscribed, companyProfile } = useApp()
+  const { role, demands, isSubscribed, companyProfile, proposals } = useApp()
 
   const activeSector = SERVICES.find((s) => s.id === companyProfile?.sector)
 
@@ -18,6 +18,31 @@ const Demands = () => {
       (d) => d.requirements[companyProfile.sector as keyof typeof d.requirements],
     )
   }, [demands, role, companyProfile?.sector])
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return (
+          <Badge className="bg-orange-500/10 text-orange-500 hover:bg-orange-500/20 border-orange-500/20 text-[10px] uppercase tracking-wider font-bold shrink-0">
+            Pendente
+          </Badge>
+        )
+      case 'negotiating':
+        return (
+          <Badge className="bg-blue-500/10 text-blue-500 hover:bg-blue-500/20 border-blue-500/20 text-[10px] uppercase tracking-wider font-bold shrink-0">
+            Em negociação
+          </Badge>
+        )
+      case 'completed':
+        return (
+          <Badge className="bg-green-500/10 text-green-500 hover:bg-green-500/20 border-green-500/20 text-[10px] uppercase tracking-wider font-bold shrink-0">
+            Concluído
+          </Badge>
+        )
+      default:
+        return null
+    }
+  }
 
   if (role === 'company' && !isSubscribed) {
     return (
@@ -37,7 +62,7 @@ const Demands = () => {
   }
 
   return (
-    <div className="space-y-6 animate-slide-up pb-12">
+    <div className="space-y-6 animate-slide-up pb-12 p-4 sm:p-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-3xl font-bold text-foreground tracking-tight">
           {role === 'customer'
@@ -58,81 +83,82 @@ const Demands = () => {
                 : 'Nenhuma demanda encontrada no momento.'}
           </div>
         ) : (
-          filteredDemands.map((demand) => (
-            <Link key={demand.id} to={`/demands/${demand.id}`} className="block">
-              <Card className="hover:shadow-md transition-all duration-300 border-border group bg-card">
-                <CardContent className="p-0">
-                  <div className="p-5 md:p-6 space-y-4">
-                    <div className="flex justify-between items-start gap-4">
-                      <h2 className="font-semibold text-foreground text-lg md:text-xl leading-tight group-hover:text-primary transition-colors">
-                        {demand.title}
-                      </h2>
-                      {demand.status === 'open' && (
-                        <Badge
-                          variant="secondary"
-                          className="text-[10px] uppercase tracking-wider font-bold bg-primary/10 text-primary hover:bg-primary/20 shrink-0"
-                        >
-                          Aberto
-                        </Badge>
-                      )}
-                    </div>
+          filteredDemands.map((demand) => {
+            const demandProposalsCount = proposals.filter((p) => p.demandId === demand.id).length
+            return (
+              <Link key={demand.id} to={`/demands/${demand.id}`} className="block">
+                <Card className="hover:shadow-md transition-all duration-300 border-border group bg-card">
+                  <CardContent className="p-0">
+                    <div className="p-5 md:p-6 space-y-4">
+                      <div className="flex justify-between items-start gap-4">
+                        <h2 className="font-semibold text-foreground text-lg md:text-xl leading-tight group-hover:text-primary transition-colors">
+                          {demand.title}
+                        </h2>
+                        {getStatusBadge(demand.status)}
+                      </div>
 
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4" />
-                        <span className="font-medium">
-                          {new Date(demand.date).toLocaleDateString('pt-BR')}
-                        </span>
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4" />
+                          <span className="font-medium">
+                            {new Date(demand.date).toLocaleDateString('pt-BR')}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <MapPin className="w-4 h-4" />
+                          <span className="font-medium">{demand.location}</span>
+                        </div>
+                        {role === 'customer' && (
+                          <div className="flex items-center gap-2 text-primary">
+                            <span className="font-semibold">{demandProposalsCount} propostas</span>
+                          </div>
+                        )}
                       </div>
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4" />
-                        <span className="font-medium">{demand.location}</span>
-                      </div>
-                    </div>
 
-                    <div className="flex items-center justify-between pt-5 border-t border-border">
-                      <div className="flex gap-2 items-center flex-wrap">
-                        {(() => {
-                          const activeReqs = SERVICES.filter(
-                            (s) => demand.requirements[s.id as keyof typeof demand.requirements],
-                          )
-                          return (
-                            <>
-                              {activeReqs.slice(0, 4).map((req) => (
-                                <div
-                                  key={req.id}
-                                  className={`p-2 ${req.bg} rounded-lg`}
-                                  title={req.label}
-                                >
-                                  <req.icon className={`w-4 h-4 ${req.color}`} />
-                                </div>
-                              ))}
-                              {activeReqs.length > 4 && (
-                                <div className="p-2 bg-secondary rounded-lg flex items-center justify-center text-xs font-bold text-muted-foreground min-w-[32px]">
-                                  +{activeReqs.length - 4}
-                                </div>
-                              )}
-                            </>
-                          )
-                        })()}
-                      </div>
-                      <div className="text-right">
-                        <p className="text-[10px] text-muted-foreground mb-1 uppercase tracking-wider font-semibold">
-                          {role === 'customer' ? 'Orçamento' : 'Valor Líquido'}
-                        </p>
-                        <p className="text-foreground font-bold text-lg md:text-xl">
-                          {new Intl.NumberFormat('pt-BR', {
-                            style: 'currency',
-                            currency: 'BRL',
-                          }).format(role === 'customer' ? demand.budget : demand.budget * 0.9)}
-                        </p>
+                      <div className="flex items-center justify-between pt-5 border-t border-border">
+                        <div className="flex gap-2 items-center flex-wrap">
+                          {(() => {
+                            const activeReqs = SERVICES.filter(
+                              (s) => demand.requirements[s.id as keyof typeof demand.requirements],
+                            )
+                            return (
+                              <>
+                                {activeReqs.slice(0, 4).map((req) => (
+                                  <div
+                                    key={req.id}
+                                    className={`p-2 ${req.bg} rounded-lg`}
+                                    title={req.label}
+                                  >
+                                    <req.icon className={`w-4 h-4 ${req.color}`} />
+                                  </div>
+                                ))}
+                                {activeReqs.length > 4 && (
+                                  <div className="p-2 bg-secondary rounded-lg flex items-center justify-center text-xs font-bold text-muted-foreground min-w-[32px]">
+                                    +{activeReqs.length - 4}
+                                  </div>
+                                )}
+                              </>
+                            )
+                          })()}
+                        </div>
+                        <div className="text-right">
+                          <p className="text-[10px] text-muted-foreground mb-1 uppercase tracking-wider font-semibold">
+                            {role === 'customer' ? 'Orçamento' : 'Valor Líquido'}
+                          </p>
+                          <p className="text-foreground font-bold text-lg md:text-xl">
+                            {new Intl.NumberFormat('pt-BR', {
+                              style: 'currency',
+                              currency: 'BRL',
+                            }).format(role === 'customer' ? demand.budget : demand.budget * 0.9)}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-          ))
+                  </CardContent>
+                </Card>
+              </Link>
+            )
+          })
         )}
       </div>
     </div>

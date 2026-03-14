@@ -22,6 +22,8 @@ export type TechRequirement = {
   details: string
 }
 
+export type DemandStatus = 'pending' | 'negotiating' | 'completed'
+
 export type Demand = {
   id: string
   title: string
@@ -30,8 +32,28 @@ export type Demand = {
   date: string
   location: string
   requirements: TechRequirement
-  status: 'open' | 'closed'
-  proposals: number
+  status: DemandStatus
+  createdAt: string
+}
+
+export type Proposal = {
+  id: string
+  demandId: string
+  supplierId: string
+  supplierName: string
+  value: number
+  message: string
+  status: 'pending' | 'accepted' | 'rejected'
+  createdAt: string
+}
+
+export type Notification = {
+  id: string
+  title: string
+  message: string
+  demandId: string
+  sector: string
+  read: boolean
   createdAt: string
 }
 
@@ -58,7 +80,7 @@ interface AppContextType {
   isSubscribed: boolean
   setIsSubscribed: (val: boolean) => void
   demands: Demand[]
-  addDemand: (demand: Omit<Demand, 'id' | 'status' | 'proposals' | 'createdAt'>) => void
+  addDemand: (demand: Omit<Demand, 'id' | 'status' | 'createdAt'>) => void
   companyProfile: CompanyProfile
   updateCompanyProfile: (profile: Partial<CompanyProfile>) => void
   users: User[]
@@ -66,6 +88,11 @@ interface AppContextType {
   registerUser: (user: Omit<User, 'id'>) => Promise<void>
   login: (email: string, password?: string) => Promise<void>
   logout: () => void
+  proposals: Proposal[]
+  addProposal: (proposal: Omit<Proposal, 'id' | 'status' | 'createdAt'>) => void
+  acceptProposal: (proposalId: string) => void
+  notifications: Notification[]
+  markNotificationsAsRead: () => void
 }
 
 const MOCK_USERS: User[] = [
@@ -106,8 +133,7 @@ const MOCK_DEMANDS: Demand[] = [
       details:
         'Preciso de PA para 300 pessoas, iluminação cênica na pista, grid Q30 e banda para festa.',
     },
-    status: 'open',
-    proposals: 2,
+    status: 'pending',
     createdAt: new Date().toISOString(),
   },
   {
@@ -136,8 +162,21 @@ const MOCK_DEMANDS: Demand[] = [
       security: true,
       details: 'Painel de LED 4x3 indoor, som para DJ, luz de palco completa e buffet completo.',
     },
-    status: 'open',
-    proposals: 5,
+    status: 'negotiating',
+    createdAt: new Date().toISOString(),
+  },
+]
+
+const MOCK_PROPOSALS: Proposal[] = [
+  {
+    id: 'p1',
+    demandId: 'd2',
+    supplierId: 'u2',
+    supplierName: 'Empresa XPTO',
+    value: 8500,
+    message:
+      'Podemos fornecer o painel de LED com a melhor qualidade e equipe técnica de apoio. Nossa montagem é rápida e o suporte está incluso no valor total da locação.',
+    status: 'pending',
     createdAt: new Date().toISOString(),
   },
 ]
@@ -150,6 +189,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [role, setRole] = useState<Role>('customer')
   const [isSubscribed, setIsSubscribed] = useState<boolean>(true)
   const [demands, setDemands] = useState<Demand[]>(MOCK_DEMANDS)
+  const [proposals, setProposals] = useState<Proposal[]>(MOCK_PROPOSALS)
+  const [notifications, setNotifications] = useState<Notification[]>([])
   const [companyProfile, setCompanyProfile] = useState<CompanyProfile>({
     name: 'JD Decorações',
     specialties: 'Casamentos, Cenografia, Flores',
@@ -159,15 +200,63 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     observations: '',
   })
 
-  const addDemand = (demandData: Omit<Demand, 'id' | 'status' | 'proposals' | 'createdAt'>) => {
+  const addDemand = (demandData: Omit<Demand, 'id' | 'status' | 'createdAt'>) => {
     const newDemand: Demand = {
       ...demandData,
       id: Math.random().toString(36).substring(7),
-      status: 'open',
-      proposals: 0,
+      status: 'pending',
       createdAt: new Date().toISOString(),
     }
     setDemands([newDemand, ...demands])
+
+    const newNotifs = Object.entries(demandData.requirements)
+      .filter(([_, val]) => val)
+      .map(([sector]) => ({
+        id: Math.random().toString(36).substring(7),
+        title: 'Nova demanda disponível!',
+        message: newDemand.title,
+        demandId: newDemand.id,
+        sector,
+        read: false,
+        createdAt: new Date().toISOString(),
+      }))
+    setNotifications((prev) => [...newNotifs, ...prev])
+  }
+
+  const addProposal = (propData: Omit<Proposal, 'id' | 'status' | 'createdAt'>) => {
+    const newProp: Proposal = {
+      ...propData,
+      id: Math.random().toString(36).substring(7),
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    }
+    setProposals((prev) => [newProp, ...prev])
+    setDemands((prev) =>
+      prev.map((d) =>
+        d.id === propData.demandId && d.status === 'pending' ? { ...d, status: 'negotiating' } : d,
+      ),
+    )
+  }
+
+  const acceptProposal = (proposalId: string) => {
+    const prop = proposals.find((p) => p.id === proposalId)
+    if (!prop) return
+
+    setProposals((prev) =>
+      prev.map((p) => {
+        if (p.demandId === prop.demandId) {
+          return p.id === proposalId ? { ...p, status: 'accepted' } : { ...p, status: 'rejected' }
+        }
+        return p
+      }),
+    )
+    setDemands((prev) =>
+      prev.map((d) => (d.id === prop.demandId ? { ...d, status: 'completed' } : d)),
+    )
+  }
+
+  const markNotificationsAsRead = () => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
   }
 
   const updateCompanyProfile = (profile: Partial<CompanyProfile>) => {
@@ -224,6 +313,11 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         registerUser,
         login,
         logout,
+        proposals,
+        addProposal,
+        acceptProposal,
+        notifications,
+        markNotificationsAsRead,
       }}
     >
       {children}
