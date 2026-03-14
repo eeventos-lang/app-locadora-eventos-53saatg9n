@@ -26,7 +26,7 @@ export type TechRequirement = {
   details: string
 }
 
-export type DemandStatus = 'pending' | 'negotiating' | 'completed'
+export type DemandStatus = 'pending' | 'negotiating' | 'completed' | 'canceled'
 
 export type PaymentStatus =
   | 'gathering'
@@ -34,6 +34,8 @@ export type PaymentStatus =
   | 'pending_payment'
   | 'escrow'
   | 'completed'
+  | 'refunded'
+  | 'processing_refund'
 
 export type SectorStatus = 'pending' | 'contracted' | 'concluded' | 'not_delivered' | 'disputed'
 
@@ -101,6 +103,7 @@ export type CompanyProfile = {
     outlook?: IntegrationStatus
   }
   safetyIndex?: number
+  loyaltyPoints?: number
 }
 
 export type User = {
@@ -113,7 +116,12 @@ export type User = {
   companyProfile?: CompanyProfile
 }
 
-export type TransactionStatus = 'pending' | 'completed' | 'refunded' | 'disputed'
+export type TransactionStatus =
+  | 'pending'
+  | 'completed'
+  | 'refunded'
+  | 'disputed'
+  | 'processing_refund'
 
 export type Transaction = {
   id: string
@@ -126,6 +134,8 @@ export type Transaction = {
   amount: number
   date: string
   status: TransactionStatus
+  hasInsurance?: boolean
+  sectors?: string[]
 }
 
 export type Review = {
@@ -185,6 +195,7 @@ interface AppContextType {
       | 'customerId'
     >,
   ) => void
+  cancelDemand: (demandId: string) => void
   companyProfile: CompanyProfile
   updateCompanyProfile: (profile: Partial<CompanyProfile>) => void
   users: User[]
@@ -217,6 +228,7 @@ interface AppContextType {
   createChat: (participantId: string) => string
   sendChatMessage: (chatId: string, text: string) => void
   getSafetyIndex: (supplierId: string) => number
+  redeemLoyaltyPoints: (points: number, reward: string) => void
 }
 
 const MOCK_USERS: User[] = [
@@ -246,6 +258,7 @@ const MOCK_USERS: User[] = [
       isVerified: true,
       unavailableDates: ['2026-05-15', '2026-05-25'],
       safetyIndex: 98,
+      loyaltyPoints: 350,
       integrations: {
         google: {
           connected: true,
@@ -271,6 +284,7 @@ const MOCK_USERS: User[] = [
       observations: '',
       isVerified: false,
       safetyIndex: 85,
+      loyaltyPoints: 50,
     },
   },
 ]
@@ -302,10 +316,6 @@ const MOCK_DEMANDS: Demand[] = [
       decoracao: true,
       ceremonial: true,
       security: false,
-      doces: false,
-      bolos: false,
-      brinquedos: false,
-      buffet_alternativo: false,
       details: 'Preciso de PA para 300 pessoas.',
     },
     status: 'negotiating',
@@ -325,10 +335,87 @@ const MOCK_DEMANDS: Demand[] = [
     createdAt: new Date().toISOString(),
     hasInsurance: true,
   },
+  {
+    id: 'd2',
+    customerId: 'c1',
+    title: 'Festa Corporativa de Fim de Ano',
+    budget: 15000,
+    guests: 100,
+    date: '2026-12-10',
+    location: 'Campinas, SP',
+    requirements: {
+      sound: true,
+      light: true,
+      led: false,
+      grid: false,
+      buffet: false,
+      drinks: false,
+      cocktails: false,
+      photo: false,
+      video: false,
+      singer: false,
+      band: false,
+      dj: true,
+      space: false,
+      decoracao: false,
+      ceremonial: false,
+      security: false,
+      details: 'Som e iluminação básica.',
+    },
+    status: 'pending',
+    paymentStatus: 'escrow',
+    sectorStatus: {
+      sound: 'contracted',
+      light: 'contracted',
+      dj: 'contracted',
+    },
+    contractedProviders: { sound: 'p3', light: 'p3', dj: 'p3' },
+    createdAt: new Date().toISOString(),
+    hasInsurance: true,
+  },
 ]
 
-const MOCK_PROPOSALS: Proposal[] = []
-const MOCK_TRANSACTIONS: Transaction[] = []
+const MOCK_PROPOSALS: Proposal[] = [
+  {
+    id: 'p2',
+    demandId: 'd1',
+    supplierId: 'u1',
+    supplierName: 'JD Decorações e Espaços',
+    value: 3500,
+    message: 'Proposta para decoração completa.',
+    status: 'accepted',
+    offeredSectors: ['decoracao'],
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'p3',
+    demandId: 'd2',
+    supplierId: 'u2',
+    supplierName: 'MS Áudio e Luz',
+    value: 2000,
+    message: 'Pacote som, luz e DJ.',
+    status: 'accepted',
+    offeredSectors: ['sound', 'light', 'dj'],
+    createdAt: new Date().toISOString(),
+  },
+]
+
+const MOCK_TRANSACTIONS: Transaction[] = [
+  {
+    id: 't1',
+    demandId: 'd2',
+    demandTitle: 'Festa Corporativa de Fim de Ano',
+    customerId: 'c1',
+    clientName: 'Cliente Teste',
+    supplierId: 'u2',
+    supplierName: 'MS Áudio e Luz',
+    amount: 2000,
+    date: new Date().toISOString(),
+    status: 'completed',
+    hasInsurance: true,
+    sectors: ['sound', 'light', 'dj'],
+  },
+]
 
 const MOCK_REVIEWS: Review[] = []
 for (let i = 0; i < 15; i++) {
@@ -422,7 +509,60 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setDemands([newDemand, ...demands])
   }
 
-  const addProposal = (propData: any) => {}
+  const cancelDemand = (demandId: string) => {
+    let cancelledDemandTitle = ''
+    let refundIssued = false
+
+    setDemands((prev) =>
+      prev.map((d) => {
+        if (d.id === demandId) {
+          cancelledDemandTitle = d.title
+          const isRefunded =
+            d.hasInsurance && (d.paymentStatus === 'escrow' || d.paymentStatus === 'completed')
+          refundIssued = isRefunded
+          return {
+            ...d,
+            status: 'canceled',
+            paymentStatus: isRefunded ? 'processing_refund' : d.paymentStatus,
+          }
+        }
+        return d
+      }),
+    )
+
+    setTransactions((prev) =>
+      prev.map((t) => {
+        if (t.demandId === demandId && t.hasInsurance) {
+          return { ...t, status: 'processing_refund' }
+        }
+        return t
+      }),
+    )
+
+    if (refundIssued) {
+      setNotifications((prev) => [
+        {
+          id: Math.random().toString(36).substring(7),
+          title: 'Reembolso em Processamento',
+          message: `O evento "${cancelledDemandTitle}" foi cancelado. Como possuía seguro ativo, o reembolso integral foi iniciado automaticamente.`,
+          read: false,
+          createdAt: new Date().toISOString(),
+          customerId: currentUser?.id,
+        },
+        ...prev,
+      ])
+    }
+  }
+
+  const addProposal = (propData: any) => {
+    const newProp: Proposal = {
+      ...propData,
+      id: Math.random().toString(36).substring(7),
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    }
+    setProposals([newProp, ...proposals])
+  }
 
   const acceptProposal = (proposalId: string) => {
     setProposals((prev) =>
@@ -430,19 +570,124 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     )
   }
 
-  const signContracts = (demandId: string) => {}
+  const signContracts = (demandId: string) => {
+    setDemands((prev) =>
+      prev.map((d) => (d.id === demandId ? { ...d, paymentStatus: 'pending_payment' } : d)),
+    )
+  }
 
   const payEvent = (demandId: string, hasInsurance: boolean = false) => {
     setDemands((prev) =>
       prev.map((d) => (d.id === demandId ? { ...d, paymentStatus: 'escrow', hasInsurance } : d)),
     )
+
+    // Create transactions for accepted proposals
+    const dProposals = proposals.filter((p) => p.demandId === demandId && p.status === 'accepted')
+    const demand = demands.find((d) => d.id === demandId)
+    if (!demand) return
+
+    const newTransactions: Transaction[] = dProposals.map((p) => ({
+      id: Math.random().toString(36).substring(7),
+      demandId: demand.id,
+      demandTitle: demand.title,
+      customerId: demand.customerId,
+      clientName: currentUser?.name || 'Cliente',
+      supplierId: p.supplierId,
+      supplierName: p.supplierName,
+      amount: p.value,
+      date: new Date().toISOString(),
+      status: 'pending',
+      hasInsurance,
+      sectors: p.offeredSectors,
+    }))
+    setTransactions((prev) => [...newTransactions, ...prev])
   }
 
-  const updateSectorStatus = (demandId: string, sector: string, status: SectorStatus) => {}
+  const updateSectorStatus = (demandId: string, sector: string, status: SectorStatus) => {
+    setDemands((prev) => {
+      const newDemands = [...prev]
+      const dIndex = newDemands.findIndex((d) => d.id === demandId)
+      if (dIndex === -1) return prev
 
-  const disputeService = (demandId: string, sector: string, reason: string) => {}
+      const d = { ...newDemands[dIndex] }
+      d.sectorStatus = { ...d.sectorStatus, [sector]: status }
 
-  const inviteSupplier = (supplierId: string, demandId: string) => {}
+      const contractedSectors = Object.keys(d.contractedProviders)
+      const allConcluded =
+        contractedSectors.length > 0 &&
+        contractedSectors.every((s) => d.sectorStatus[s] === 'concluded')
+
+      if (allConcluded && status === 'concluded' && d.status !== 'completed') {
+        d.status = 'completed'
+        d.paymentStatus = 'completed'
+
+        // Update transactions to completed
+        setTransactions((txs) =>
+          txs.map((t) => (t.demandId === demandId ? { ...t, status: 'completed' } : t)),
+        )
+
+        // Award points to providers
+        setTimeout(() => {
+          const providersToReward = new Set(Object.values(d.contractedProviders))
+          providersToReward.forEach((pid) => {
+            setUsers((uList) =>
+              uList.map((u) => {
+                if (u.id === pid && u.companyProfile) {
+                  return {
+                    ...u,
+                    companyProfile: {
+                      ...u.companyProfile,
+                      loyaltyPoints: (u.companyProfile.loyaltyPoints || 0) + 100,
+                    },
+                  }
+                }
+                return u
+              }),
+            )
+
+            if (currentUser?.id === pid) {
+              setCompanyProfile((cp) => ({ ...cp, loyaltyPoints: (cp.loyaltyPoints || 0) + 100 }))
+            }
+
+            setNotifications((n) => [
+              {
+                id: Math.random().toString(),
+                title: 'Evento Concluído! +100 Pontos',
+                message: `O evento ${d.title} foi finalizado. Seu pagamento foi liberado e você ganhou 100 Pontos de Fidelidade!`,
+                read: false,
+                createdAt: new Date().toISOString(),
+                targetSupplierId: pid,
+              },
+              ...n,
+            ])
+          })
+        }, 100)
+      }
+
+      newDemands[dIndex] = d
+      return newDemands
+    })
+  }
+
+  const disputeService = (demandId: string, sector: string, reason: string) => {
+    updateSectorStatus(demandId, sector, 'disputed')
+  }
+
+  const inviteSupplier = (supplierId: string, demandId: string) => {
+    setNotifications((prev) => [
+      {
+        id: Math.random().toString(36).substring(7),
+        title: 'Novo Convite Direto!',
+        message:
+          'Você recebeu um convite exclusivo para um evento. Confira os detalhes e envie sua proposta.',
+        read: false,
+        createdAt: new Date().toISOString(),
+        targetSupplierId: supplierId,
+        demandId,
+      },
+      ...prev,
+    ])
+  }
 
   const markNotificationsAsRead = () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
@@ -465,7 +710,25 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     })
   }
 
-  const registerUser = async (userData: any) => {}
+  const registerUser = async (userData: any) => {
+    const newUser: User = {
+      ...userData,
+      id: Math.random().toString(36).substring(7),
+      companyProfile:
+        userData.role === 'company'
+          ? {
+              name: userData.name,
+              specialties: '',
+              sectors: userData.sectors || [],
+              address: '',
+              logo: '',
+              observations: '',
+              loyaltyPoints: 0,
+            }
+          : undefined,
+    }
+    setUsers([...users, newUser])
+  }
 
   const login = async (email: string, password?: string) => {
     return new Promise<void>((resolve, reject) => {
@@ -566,48 +829,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setChats((prev) =>
       prev.map((c) => (c.id === chatId ? { ...c, updatedAt: new Date().toISOString() } : c)),
     )
-
-    // Simulate receiving a reply to demonstrate PWA Push Notification
-    setTimeout(() => {
-      const chat = chats.find((c) => c.id === chatId)
-      const otherUserId = chat?.participants.find((p) => p !== currentUser.id)
-      const otherUser = users.find((u) => u.id === otherUserId)
-      const senderName = otherUser?.companyProfile?.name || otherUser?.name || 'Usuário'
-
-      const replyMsg: ChatMessage = {
-        id: Math.random().toString(36).substring(7),
-        chatId,
-        senderId: otherUserId || 'system',
-        text: `Simulação de resposta automática de ${senderName}.`,
-        createdAt: new Date().toISOString(),
-      }
-      setMessages((prev) => [...prev, replyMsg])
-      setChats((prev) =>
-        prev.map((c) => (c.id === chatId ? { ...c, updatedAt: new Date().toISOString() } : c)),
-      )
-
-      if ('Notification' in window && Notification.permission === 'granted') {
-        const chatUrl = `${window.location.origin}/messages?chat=${chatId}`
-        const iconUrl = 'https://img.usecurling.com/i?q=chat&color=blue&shape=fill'
-        navigator.serviceWorker.ready
-          .then((registration) => {
-            registration.showNotification(`Nova mensagem de ${senderName}`, {
-              body: replyMsg.text,
-              icon: iconUrl,
-              data: { url: chatUrl },
-            })
-          })
-          .catch(() => {
-            const notification = new Notification(`Nova mensagem de ${senderName}`, {
-              body: replyMsg.text,
-              icon: iconUrl,
-            })
-            notification.onclick = () => {
-              window.open(chatUrl, '_blank')
-            }
-          })
-      }
-    }, 2000)
   }
 
   const getSafetyIndex = (supplierId: string) => {
@@ -638,6 +859,26 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     return Math.round((successCount / relevantDemands.length) * 100)
   }
 
+  const redeemLoyaltyPoints = (points: number, reward: string) => {
+    if (!currentUser || !companyProfile) return
+    if ((companyProfile.loyaltyPoints || 0) < points) throw new Error('Pontos insuficientes')
+
+    const newPoints = (companyProfile.loyaltyPoints || 0) - points
+    updateCompanyProfile({ loyaltyPoints: newPoints })
+
+    setNotifications((n) => [
+      {
+        id: Math.random().toString(),
+        title: 'Recompensa Resgatada!',
+        message: `Você resgatou com sucesso: ${reward}. Seus benefícios já estão ativos.`,
+        read: false,
+        createdAt: new Date().toISOString(),
+        targetSupplierId: currentUser.id,
+      },
+      ...n,
+    ])
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -647,6 +888,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         setIsSubscribed,
         demands,
         addDemand,
+        cancelDemand,
         companyProfile,
         updateCompanyProfile,
         users,
@@ -677,6 +919,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         createChat,
         sendChatMessage,
         getSafetyIndex,
+        redeemLoyaltyPoints,
       }}
     >
       {children}

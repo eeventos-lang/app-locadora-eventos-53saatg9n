@@ -7,12 +7,31 @@ import {
   Award,
   Download,
   Loader2,
+  Gift,
+  Zap,
+  Percent,
 } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+} from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts'
+import { Progress } from '@/components/ui/progress'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog'
 import { useApp } from '@/store/AppContext'
 import { useToast } from '@/hooks/use-toast'
 
@@ -30,9 +49,14 @@ const POSITIVE_KEYWORDS = [
 ]
 
 export default function Insights() {
-  const { currentUser, role, reviews, companyProfile } = useApp()
+  const { currentUser, role, reviews, companyProfile, redeemLoyaltyPoints } = useApp()
   const { toast } = useToast()
   const [isExporting, setIsExporting] = useState(false)
+
+  const [redeemModalOpen, setRedeemModalOpen] = useState(false)
+  const [selectedReward, setSelectedReward] = useState<{ name: string; points: number } | null>(
+    null,
+  )
 
   const myReviews = useMemo(() => {
     return reviews.filter((r) => r.supplierId === currentUser?.id)
@@ -103,6 +127,17 @@ export default function Insights() {
     }, 800)
   }
 
+  const handleRedeem = () => {
+    if (selectedReward) {
+      try {
+        redeemLoyaltyPoints(selectedReward.points, selectedReward.name)
+        setRedeemModalOpen(false)
+      } catch (err: any) {
+        toast({ title: 'Erro', description: err.message, variant: 'destructive' })
+      }
+    }
+  }
+
   if (role !== 'company') {
     return (
       <div className="p-8 text-center text-muted-foreground animate-fade-in">
@@ -114,9 +149,11 @@ export default function Insights() {
   const isExpert = fiveStarCount >= 10
   const isHighPerformance = fiveStarCount >= 25
 
+  const points = companyProfile?.loyaltyPoints || 0
+  const progressToNextReward = Math.min((points / 100) * 100, 100)
+
   return (
     <>
-      {/* Normal Dashboard View */}
       <div className="space-y-6 p-4 sm:p-6 max-w-7xl mx-auto animate-slide-up pb-12 print:hidden">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
           <div className="flex flex-col gap-2">
@@ -138,6 +175,107 @@ export default function Insights() {
             Baixar Relatório (PDF)
           </Button>
         </div>
+
+        {/* Loyalty Program Section */}
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20 shadow-sm relative overflow-hidden">
+          <div className="absolute -right-10 -top-10 text-primary/10 w-48 h-48 rotate-12">
+            <Trophy className="w-full h-full" />
+          </div>
+          <CardHeader className="relative z-10 pb-4">
+            <CardTitle className="text-xl flex items-center gap-2 text-foreground">
+              <Gift className="w-5 h-5 text-primary" /> Programa de Fidelidade
+            </CardTitle>
+            <CardDescription>
+              Acumule pontos ao concluir eventos com excelência e troque por benefícios exclusivos
+              na plataforma.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="relative z-10">
+            <div className="flex flex-col md:flex-row gap-8 items-center">
+              <div className="flex flex-col items-center justify-center p-6 bg-background rounded-2xl border border-primary/20 shadow-sm min-w-[200px]">
+                <span className="text-xs uppercase font-bold tracking-wider text-muted-foreground mb-1">
+                  Seu Saldo
+                </span>
+                <span className="text-5xl font-black text-primary drop-shadow-sm">{points}</span>
+                <span className="text-sm font-semibold text-primary mt-1">Pontos</span>
+              </div>
+
+              <div className="flex-1 w-full space-y-6">
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm font-semibold">
+                    <span className="text-muted-foreground">Progresso para resgate</span>
+                    <span className="text-primary">{points} / 100 pts</span>
+                  </div>
+                  <Progress value={progressToNextReward} className="h-3 bg-primary/10" />
+                  <p className="text-xs text-muted-foreground mt-1 text-right">
+                    Faltam {Math.max(0, 100 - points)} pontos para a primeira recompensa.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <Card className="bg-background border-border shadow-none hover:border-primary/50 transition-colors">
+                    <CardContent className="p-4 flex flex-col items-start gap-3">
+                      <div className="p-2 bg-amber-500/10 rounded-lg">
+                        <Zap className="w-5 h-5 text-amber-500" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-sm">Destaque nas Buscas (1 Semana)</h4>
+                        <p className="text-xs text-muted-foreground mt-0.5 mb-3 leading-relaxed">
+                          Aumente sua visibilidade em 300% aparecendo no topo dos resultados para os
+                          clientes.
+                        </p>
+                        <Button
+                          size="sm"
+                          variant={points >= 100 ? 'default' : 'secondary'}
+                          className="w-full font-bold shadow-sm"
+                          disabled={points < 100}
+                          onClick={() => {
+                            setSelectedReward({
+                              name: 'Destaque nas Buscas (1 Semana)',
+                              points: 100,
+                            })
+                            setRedeemModalOpen(true)
+                          }}
+                        >
+                          Resgatar (100 pts)
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-background border-border shadow-none hover:border-primary/50 transition-colors">
+                    <CardContent className="p-4 flex flex-col items-start gap-3">
+                      <div className="p-2 bg-emerald-500/10 rounded-lg">
+                        <Percent className="w-5 h-5 text-emerald-500" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-sm">Desconto em Taxas (1 Transação)</h4>
+                        <p className="text-xs text-muted-foreground mt-0.5 mb-3 leading-relaxed">
+                          Reduza a taxa da plataforma pela metade (de 30% para 15%) no seu próximo
+                          contrato.
+                        </p>
+                        <Button
+                          size="sm"
+                          variant={points >= 200 ? 'default' : 'secondary'}
+                          className="w-full font-bold shadow-sm"
+                          disabled={points < 200}
+                          onClick={() => {
+                            setSelectedReward({
+                              name: 'Desconto em Taxas (1 Transação)',
+                              points: 200,
+                            })
+                            setRedeemModalOpen(true)
+                          }}
+                        >
+                          Resgatar (200 pts)
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <Card className="bg-card border-border shadow-sm">
@@ -171,7 +309,7 @@ export default function Insights() {
           <Card className="bg-card border-border shadow-sm flex flex-col justify-center">
             <CardContent className="p-6">
               <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-                Conquistas (Gamificação)
+                Conquistas
               </p>
               <div className="flex flex-col gap-2">
                 {isHighPerformance ? (
@@ -275,6 +413,36 @@ export default function Insights() {
           </Card>
         </div>
       </div>
+
+      <Dialog open={redeemModalOpen} onOpenChange={setRedeemModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Confirmar Resgate</DialogTitle>
+            <DialogDescription>
+              Você está prestes a utilizar seus pontos de fidelidade.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4 space-y-4">
+            <div className="bg-secondary p-4 rounded-xl border border-border flex justify-between items-center">
+              <span className="font-semibold text-foreground">{selectedReward?.name}</span>
+              <span className="text-xl font-bold text-primary">-{selectedReward?.points} pts</span>
+            </div>
+            <p className="text-sm text-muted-foreground text-center">
+              Seu saldo final será de{' '}
+              <strong className="text-foreground">
+                {points - (selectedReward?.points || 0)} pontos
+              </strong>
+              .
+            </p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setRedeemModalOpen(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={handleRedeem}>Confirmar Resgate</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Hidden Printable PDF Layout */}
       <div className="hidden print:block print:bg-white print:text-black print:absolute print:inset-0 print:z-[99999] print:p-12 print:min-h-screen font-sans">
