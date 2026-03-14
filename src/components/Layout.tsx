@@ -50,10 +50,11 @@ export function Layout() {
       ? notifications
           .filter(
             (n) =>
-              n.targetSupplierId === currentUser?.id || companyProfile?.sectors?.includes(n.sector),
+              n.targetSupplierId === currentUser?.id ||
+              companyProfile?.sectors?.includes(n.sector || ''),
           )
           .slice(0, 5)
-      : []
+      : notifications.filter((n) => n.customerId === currentUser?.id).slice(0, 5)
 
   const unreadCount = myNotifications.filter((n) => !n.read).length
 
@@ -170,7 +171,7 @@ export function Layout() {
           </nav>
 
           <div className="flex items-center gap-3">
-            {role === 'company' && (
+            {currentUser && (
               <DropdownMenu
                 onOpenChange={(open) => {
                   if (!open) markNotificationsAsRead()
@@ -206,7 +207,7 @@ export function Layout() {
                             {notif.title}
                           </span>
                         </div>
-                        <span className="text-xs text-muted-foreground line-clamp-2">
+                        <span className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
                           {notif.message}
                         </span>
                       </DropdownMenuItem>

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Calendar, MapPin, Target } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts'
 import { useApp, Demand } from '@/store/AppContext'
@@ -12,12 +13,12 @@ const Demands = () => {
   const { role, demands, isSubscribed, companyProfile, proposals, currentUser } = useApp()
 
   const filteredDemands = useMemo(() => {
-    if (role === 'customer') return demands
+    if (role === 'customer') return demands.filter((d) => d.customerId === currentUser?.id)
     if (!companyProfile?.sectors || companyProfile.sectors.length === 0) return []
     return demands.filter((d) =>
       companyProfile.sectors.some((s) => d.requirements[s as keyof typeof d.requirements]),
     )
-  }, [demands, role, companyProfile?.sectors])
+  }, [demands, role, companyProfile?.sectors, currentUser?.id])
 
   const getDisplayBudget = (demand: Demand) => {
     if (role === 'customer') return demand.budget
@@ -37,32 +38,45 @@ const Demands = () => {
     return sum * 0.9
   }
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'pending':
-        return (
-          <Badge className="bg-orange-500/10 text-orange-500 border-orange-500/20 uppercase tracking-wider font-bold shrink-0 text-[10px]">
-            Pendente
-          </Badge>
-        )
-      case 'negotiating':
-        return (
-          <Badge className="bg-blue-500/10 text-blue-500 border-blue-500/20 uppercase tracking-wider font-bold shrink-0 text-[10px]">
-            Em negociação
-          </Badge>
-        )
-      case 'completed':
-        return (
-          <Badge className="bg-green-500/10 text-green-500 border-green-500/20 uppercase tracking-wider font-bold shrink-0 text-[10px]">
-            Concluído
-          </Badge>
-        )
-      default:
-        return null
+  const getStatusBadge = (status: string, paymentStatus: string) => {
+    if (paymentStatus === 'completed') {
+      return (
+        <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 uppercase tracking-wider font-bold shrink-0 text-[10px]">
+          Concluído
+        </Badge>
+      )
     }
+    if (paymentStatus === 'escrow') {
+      return (
+        <Badge className="bg-blue-500/10 text-blue-500 border-blue-500/20 uppercase tracking-wider font-bold shrink-0 text-[10px]">
+          Serviço Pago
+        </Badge>
+      )
+    }
+    if (paymentStatus === 'pending_payment' || paymentStatus === 'pending_signature') {
+      return (
+        <Badge className="bg-amber-500/10 text-amber-600 border-amber-500/20 uppercase tracking-wider font-bold shrink-0 text-[10px]">
+          Aguardando Ação
+        </Badge>
+      )
+    }
+    if (status === 'pending') {
+      return (
+        <Badge className="bg-orange-500/10 text-orange-500 border-orange-500/20 uppercase tracking-wider font-bold shrink-0 text-[10px]">
+          Pendente
+        </Badge>
+      )
+    }
+    if (status === 'negotiating') {
+      return (
+        <Badge className="bg-blue-500/10 text-blue-500 border-blue-500/20 uppercase tracking-wider font-bold shrink-0 text-[10px]">
+          Em negociação
+        </Badge>
+      )
+    }
+    return null
   }
 
-  // Performance Dashboard Data
   const myProposals = useMemo(
     () => proposals.filter((p) => p.supplierId === currentUser?.id),
     [proposals, currentUser],
@@ -90,6 +104,85 @@ const Demands = () => {
           Assinar Agora
         </Link>
       </div>
+    )
+  }
+
+  const renderDemandCard = (demand: Demand) => {
+    const demandProposalsCount = proposals.filter((p) => p.demandId === demand.id).length
+    return (
+      <Link key={demand.id} to={`/demands/${demand.id}`} className="block">
+        <Card className="hover:shadow-md transition-all duration-300 border-border group bg-card">
+          <CardContent className="p-0">
+            <div className="p-5 md:p-6 space-y-4">
+              <div className="flex justify-between items-start gap-4">
+                <h2 className="font-semibold text-foreground text-lg md:text-xl leading-tight group-hover:text-primary transition-colors">
+                  {demand.title}
+                </h2>
+                {getStatusBadge(demand.status, demand.paymentStatus)}
+              </div>
+
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4" />
+                  <span className="font-medium">
+                    {new Date(demand.date).toLocaleDateString('pt-BR')}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4" />
+                  <span className="font-medium">{demand.location}</span>
+                </div>
+                {role === 'customer' && (
+                  <div className="flex items-center gap-2 text-primary">
+                    <span className="font-semibold">{demandProposalsCount} propostas</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex items-center justify-between pt-5 border-t border-border">
+                <div className="flex gap-2 items-center flex-wrap">
+                  {(() => {
+                    const activeReqs = SERVICES.filter(
+                      (s) =>
+                        demand.requirements[s.id as keyof typeof demand.requirements] &&
+                        (role === 'customer' || companyProfile?.sectors?.includes(s.id)),
+                    )
+                    return (
+                      <>
+                        {activeReqs.slice(0, 4).map((req) => (
+                          <div
+                            key={req.id}
+                            className={`p-2 ${req.bg} rounded-lg`}
+                            title={req.label}
+                          >
+                            <req.icon className={`w-4 h-4 ${req.color}`} />
+                          </div>
+                        ))}
+                        {activeReqs.length > 4 && (
+                          <div className="p-2 bg-secondary rounded-lg flex items-center justify-center text-xs font-bold text-muted-foreground min-w-[32px]">
+                            +{activeReqs.length - 4}
+                          </div>
+                        )}
+                      </>
+                    )
+                  })()}
+                </div>
+                <div className="text-right">
+                  <p className="text-[10px] text-muted-foreground mb-1 uppercase tracking-wider font-semibold">
+                    {role === 'customer' ? 'Orçamento Total' : 'Seu Orçamento Líquido'}
+                  </p>
+                  <p className="text-foreground font-bold text-lg md:text-xl">
+                    {new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    }).format(getDisplayBudget(demand))}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </Link>
     )
   }
 
@@ -157,96 +250,101 @@ const Demands = () => {
         </h1>
       </div>
 
-      <div className="space-y-4">
-        {filteredDemands.length === 0 ? (
-          <div className="text-center text-muted-foreground py-16 border-2 border-dashed border-border rounded-xl bg-secondary/30">
-            {role === 'company'
-              ? companyProfile?.sectors && companyProfile.sectors.length > 0
-                ? 'Não há demandas para as suas áreas de atuação no momento.'
-                : 'Configure suas áreas de atuação no perfil para ver oportunidades.'
-              : 'Nenhuma demanda encontrada no momento.'}
-          </div>
-        ) : (
-          filteredDemands.map((demand) => {
-            const demandProposalsCount = proposals.filter((p) => p.demandId === demand.id).length
-            return (
-              <Link key={demand.id} to={`/demands/${demand.id}`} className="block">
-                <Card className="hover:shadow-md transition-all duration-300 border-border group bg-card">
-                  <CardContent className="p-0">
-                    <div className="p-5 md:p-6 space-y-4">
-                      <div className="flex justify-between items-start gap-4">
-                        <h2 className="font-semibold text-foreground text-lg md:text-xl leading-tight group-hover:text-primary transition-colors">
-                          {demand.title}
-                        </h2>
-                        {getStatusBadge(demand.status)}
-                      </div>
+      {role === 'customer' ? (
+        <Tabs defaultValue="events" className="space-y-6">
+          <TabsList className="bg-secondary p-1 h-auto flex flex-wrap w-full sm:max-w-md">
+            <TabsTrigger value="events" className="flex-1 py-2 text-sm font-semibold">
+              Eventos Ativos
+            </TabsTrigger>
+            <TabsTrigger value="schedule" className="flex-1 py-2 text-sm font-semibold">
+              Cronograma de Pagamentos
+            </TabsTrigger>
+          </TabsList>
 
-                      <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4" />
-                          <span className="font-medium">
-                            {new Date(demand.date).toLocaleDateString('pt-BR')}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <MapPin className="w-4 h-4" />
-                          <span className="font-medium">{demand.location}</span>
-                        </div>
-                        {role === 'customer' && (
-                          <div className="flex items-center gap-2 text-primary">
-                            <span className="font-semibold">{demandProposalsCount} propostas</span>
-                          </div>
-                        )}
-                      </div>
+          <TabsContent value="events" className="space-y-4 mt-4">
+            {filteredDemands.length === 0 ? (
+              <div className="text-center text-muted-foreground py-16 border-2 border-dashed border-border rounded-xl bg-secondary/30">
+                Nenhum evento encontrado no momento.
+              </div>
+            ) : (
+              filteredDemands.map(renderDemandCard)
+            )}
+          </TabsContent>
 
-                      <div className="flex items-center justify-between pt-5 border-t border-border">
-                        <div className="flex gap-2 items-center flex-wrap">
-                          {(() => {
-                            const activeReqs = SERVICES.filter(
-                              (s) =>
-                                demand.requirements[s.id as keyof typeof demand.requirements] &&
-                                (role === 'customer' || companyProfile?.sectors?.includes(s.id)),
-                            )
-                            return (
-                              <>
-                                {activeReqs.slice(0, 4).map((req) => (
-                                  <div
-                                    key={req.id}
-                                    className={`p-2 ${req.bg} rounded-lg`}
-                                    title={req.label}
-                                  >
-                                    <req.icon className={`w-4 h-4 ${req.color}`} />
-                                  </div>
-                                ))}
-                                {activeReqs.length > 4 && (
-                                  <div className="p-2 bg-secondary rounded-lg flex items-center justify-center text-xs font-bold text-muted-foreground min-w-[32px]">
-                                    +{activeReqs.length - 4}
-                                  </div>
-                                )}
-                              </>
-                            )
-                          })()}
-                        </div>
-                        <div className="text-right">
-                          <p className="text-[10px] text-muted-foreground mb-1 uppercase tracking-wider font-semibold">
-                            {role === 'customer' ? 'Orçamento Total' : 'Seu Orçamento Líquido'}
+          <TabsContent value="schedule" className="space-y-4 mt-4">
+            {filteredDemands.filter((d) =>
+              ['pending_payment', 'escrow', 'completed'].includes(d.paymentStatus),
+            ).length === 0 ? (
+              <div className="text-center text-muted-foreground py-16 border-2 border-dashed border-border rounded-xl bg-secondary/30">
+                Nenhum pagamento pendente ou agendado.
+              </div>
+            ) : (
+              filteredDemands
+                .filter((d) => ['pending_payment', 'escrow', 'completed'].includes(d.paymentStatus))
+                .map((demand) => {
+                  const isPaid =
+                    demand.paymentStatus === 'escrow' || demand.paymentStatus === 'completed'
+                  const deadline = new Date(demand.date)
+                  deadline.setDate(deadline.getDate() - 15)
+
+                  const totalContracted = proposals
+                    .filter((p) => p.demandId === demand.id && p.status === 'accepted')
+                    .reduce((acc, p) => acc + p.value, 0)
+
+                  return (
+                    <Card
+                      key={demand.id}
+                      className="bg-card shadow-sm border-border hover:shadow-md transition-shadow"
+                    >
+                      <CardContent className="p-5 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div className="w-full md:w-auto">
+                          <h3 className="font-bold text-lg mb-1">{demand.title}</h3>
+                          <p className="text-sm text-muted-foreground">
+                            Vencimento (15 dias antes):{' '}
+                            <span className="font-medium text-foreground">
+                              {deadline.toLocaleDateString('pt-BR')}
+                            </span>
                           </p>
-                          <p className="text-foreground font-bold text-lg md:text-xl">
+                        </div>
+                        <div className="text-left md:text-right w-full md:w-auto pt-4 md:pt-0 border-t md:border-t-0 border-border">
+                          <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-1">
+                            Valor Contratado
+                          </p>
+                          <p className="font-bold text-2xl text-foreground mb-2">
                             {new Intl.NumberFormat('pt-BR', {
                               style: 'currency',
                               currency: 'BRL',
-                            }).format(getDisplayBudget(demand))}
+                            }).format(totalContracted)}
                           </p>
+                          <Badge
+                            variant={isPaid ? 'default' : 'secondary'}
+                            className={
+                              isPaid
+                                ? 'bg-emerald-500 text-white'
+                                : 'bg-amber-500 text-white border-transparent'
+                            }
+                          >
+                            {isPaid ? 'Pago via Plataforma' : 'Pagamento Pendente'}
+                          </Badge>
                         </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            )
-          })
-        )}
-      </div>
+                      </CardContent>
+                    </Card>
+                  )
+                })
+            )}
+          </TabsContent>
+        </Tabs>
+      ) : (
+        <div className="space-y-4">
+          {filteredDemands.length === 0 ? (
+            <div className="text-center text-muted-foreground py-16 border-2 border-dashed border-border rounded-xl bg-secondary/30">
+              Configure suas áreas de atuação no perfil para ver oportunidades compatíveis.
+            </div>
+          ) : (
+            filteredDemands.map(renderDemandCard)
+          )}
+        </div>
+      )}
     </div>
   )
 }

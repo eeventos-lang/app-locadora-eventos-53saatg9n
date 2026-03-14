@@ -24,8 +24,18 @@ export type TechRequirement = {
 
 export type DemandStatus = 'pending' | 'negotiating' | 'completed'
 
+export type PaymentStatus =
+  | 'gathering'
+  | 'pending_signature'
+  | 'pending_payment'
+  | 'escrow'
+  | 'completed'
+
+export type SectorStatus = 'pending' | 'contracted' | 'concluded' | 'not_delivered'
+
 export type Demand = {
   id: string
+  customerId: string
   title: string
   budget: number
   budgetBreakdown?: Record<string, number>
@@ -34,6 +44,9 @@ export type Demand = {
   location: string
   requirements: TechRequirement
   status: DemandStatus
+  paymentStatus: PaymentStatus
+  sectorStatus: Record<string, SectorStatus>
+  contractedProviders: Record<string, string> // sector -> proposal id
   createdAt: string
 }
 
@@ -45,6 +58,7 @@ export type Proposal = {
   value: number
   message: string
   status: 'pending' | 'accepted' | 'rejected'
+  offeredSectors: string[]
   createdAt: string
 }
 
@@ -53,10 +67,11 @@ export type Notification = {
   title: string
   message: string
   demandId: string
-  sector: string
+  sector?: string
   read: boolean
   createdAt: string
   targetSupplierId?: string
+  customerId?: string
 }
 
 export type CompanyProfile = {
@@ -87,7 +102,18 @@ interface AppContextType {
   isSubscribed: boolean
   setIsSubscribed: (val: boolean) => void
   demands: Demand[]
-  addDemand: (demand: Omit<Demand, 'id' | 'status' | 'createdAt'>) => void
+  addDemand: (
+    demand: Omit<
+      Demand,
+      | 'id'
+      | 'status'
+      | 'createdAt'
+      | 'paymentStatus'
+      | 'sectorStatus'
+      | 'contractedProviders'
+      | 'customerId'
+    >,
+  ) => void
   companyProfile: CompanyProfile
   updateCompanyProfile: (profile: Partial<CompanyProfile>) => void
   users: User[]
@@ -98,12 +124,22 @@ interface AppContextType {
   proposals: Proposal[]
   addProposal: (proposal: Omit<Proposal, 'id' | 'status' | 'createdAt'>) => void
   acceptProposal: (proposalId: string) => void
+  signContracts: (demandId: string) => void
+  payEvent: (demandId: string) => void
+  updateSectorStatus: (demandId: string, sector: string, status: SectorStatus) => void
   notifications: Notification[]
   markNotificationsAsRead: () => void
   inviteSupplier: (supplierId: string, demandId: string) => void
 }
 
 const MOCK_USERS: User[] = [
+  {
+    id: 'c1',
+    name: 'Cliente Teste',
+    email: 'cliente@exemplo.com',
+    role: 'customer',
+    password: '123',
+  },
   {
     id: 'u1',
     name: 'JD Decorações',
@@ -145,6 +181,7 @@ const MOCK_USERS: User[] = [
 const MOCK_DEMANDS: Demand[] = [
   {
     id: 'd1',
+    customerId: 'c1',
     title: 'Casamento Sítio das Palmeiras',
     budget: 65000,
     budgetBreakdown: { sound: 1500, light: 1000, decoracao: 3000 },
@@ -171,10 +208,26 @@ const MOCK_DEMANDS: Demand[] = [
       details: 'Preciso de PA para 300 pessoas.',
     },
     status: 'negotiating',
+    paymentStatus: 'gathering',
+    sectorStatus: {
+      sound: 'pending',
+      light: 'pending',
+      grid: 'pending',
+      buffet: 'pending',
+      cocktails: 'pending',
+      band: 'pending',
+      dj: 'pending',
+      decoracao: 'contracted',
+      ceremonial: 'pending',
+    },
+    contractedProviders: {
+      decoracao: 'p2',
+    },
     createdAt: new Date().toISOString(),
   },
   {
     id: 'd2',
+    customerId: 'c1',
     title: 'Festa Corporativa Tech',
     budget: 95000,
     guests: 150,
@@ -200,6 +253,21 @@ const MOCK_DEMANDS: Demand[] = [
       details: 'Painel de LED 4x3 indoor.',
     },
     status: 'negotiating',
+    paymentStatus: 'gathering',
+    sectorStatus: {
+      sound: 'pending',
+      light: 'pending',
+      led: 'pending',
+      grid: 'pending',
+      buffet: 'pending',
+      drinks: 'pending',
+      photo: 'pending',
+      video: 'pending',
+      dj: 'pending',
+      space: 'pending',
+      security: 'pending',
+    },
+    contractedProviders: {},
     createdAt: new Date().toISOString(),
   },
 ]
@@ -213,6 +281,7 @@ const MOCK_PROPOSALS: Proposal[] = [
     value: 8500,
     message: 'Fornecemos o painel de LED com a melhor qualidade.',
     status: 'pending',
+    offeredSectors: ['led'],
     createdAt: new Date().toISOString(),
   },
   {
@@ -223,6 +292,7 @@ const MOCK_PROPOSALS: Proposal[] = [
     value: 3200,
     message: 'Decoração rústica completa com flores do campo.',
     status: 'accepted',
+    offeredSectors: ['decoracao'],
     createdAt: new Date().toISOString(),
   },
   {
@@ -233,6 +303,7 @@ const MOCK_PROPOSALS: Proposal[] = [
     value: 5000,
     message: 'Cenografia e lounges para o evento corporativo.',
     status: 'pending',
+    offeredSectors: ['space'],
     createdAt: new Date().toISOString(),
   },
 ]
@@ -248,16 +319,41 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [proposals, setProposals] = useState<Proposal[]>(MOCK_PROPOSALS)
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [companyProfile, setCompanyProfile] = useState<CompanyProfile>(
-    MOCK_USERS[0].companyProfile!,
+    MOCK_USERS[1].companyProfile!,
   )
 
-  const addDemand = (demandData: Omit<Demand, 'id' | 'status' | 'createdAt'>) => {
+  const addDemand = (
+    demandData: Omit<
+      Demand,
+      | 'id'
+      | 'status'
+      | 'createdAt'
+      | 'paymentStatus'
+      | 'sectorStatus'
+      | 'contractedProviders'
+      | 'customerId'
+    >,
+  ) => {
     const newDemand: Demand = {
       ...demandData,
       id: Math.random().toString(36).substring(7),
+      customerId: currentUser?.id || 'c1',
       status: 'pending',
+      paymentStatus: 'gathering',
+      sectorStatus: {},
+      contractedProviders: {},
       createdAt: new Date().toISOString(),
     }
+
+    Object.keys(demandData.requirements).forEach((key) => {
+      if (
+        demandData.requirements[key as keyof TechRequirement] &&
+        typeof demandData.requirements[key as keyof TechRequirement] === 'boolean'
+      ) {
+        newDemand.sectorStatus[key] = 'pending'
+      }
+    })
+
     setDemands([newDemand, ...demands])
 
     const newNotifs = Object.entries(demandData.requirements)
@@ -287,6 +383,20 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         d.id === propData.demandId && d.status === 'pending' ? { ...d, status: 'negotiating' } : d,
       ),
     )
+
+    const demand = demands.find((d) => d.id === propData.demandId)
+    if (demand) {
+      const newNotif: Notification = {
+        id: Math.random().toString(36).substring(7),
+        title: 'Novo fornecedor interessado!',
+        message: `${newProp.supplierName} enviou uma proposta para o seu evento. A plataforma assegura que o seu dinheiro será preservado e repassado apenas após o fornecimento dos serviços.`,
+        demandId: demand.id,
+        read: false,
+        createdAt: new Date().toISOString(),
+        customerId: demand.customerId,
+      }
+      setNotifications((prev) => [newNotif, ...prev])
+    }
   }
 
   const acceptProposal = (proposalId: string) => {
@@ -295,14 +405,110 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
     setProposals((prev) =>
       prev.map((p) => {
-        if (p.demandId === prop.demandId) {
-          return p.id === proposalId ? { ...p, status: 'accepted' } : { ...p, status: 'rejected' }
-        }
+        if (p.id === proposalId) return { ...p, status: 'accepted' }
         return p
       }),
     )
+
     setDemands((prev) =>
-      prev.map((d) => (d.id === prop.demandId ? { ...d, status: 'completed' } : d)),
+      prev.map((d) => {
+        if (d.id === prop.demandId) {
+          const newSectorStatus = { ...d.sectorStatus }
+          const newContractedProviders = { ...d.contractedProviders }
+
+          prop.offeredSectors?.forEach((sector) => {
+            newSectorStatus[sector] = 'contracted'
+            newContractedProviders[sector] = prop.id
+          })
+
+          const requestedSectors = Object.keys(newSectorStatus)
+          const allCovered =
+            requestedSectors.length > 0 &&
+            requestedSectors.every((s) => newSectorStatus[s] !== 'pending')
+
+          let newPaymentStatus = d.paymentStatus
+          if (allCovered && d.paymentStatus === 'gathering') {
+            newPaymentStatus = 'pending_signature'
+          }
+
+          return {
+            ...d,
+            status: allCovered ? 'negotiating' : d.status,
+            sectorStatus: newSectorStatus,
+            contractedProviders: newContractedProviders,
+            paymentStatus: newPaymentStatus,
+          }
+        }
+        return d
+      }),
+    )
+
+    const newNotif: Notification = {
+      id: Math.random().toString(36).substring(7),
+      title: 'Proposta Aceita!',
+      message: `Sua proposta para o evento foi aceita pelo cliente.`,
+      demandId: prop.demandId,
+      read: false,
+      createdAt: new Date().toISOString(),
+      targetSupplierId: prop.supplierId,
+    }
+
+    setNotifications((prev) => [newNotif, ...prev])
+  }
+
+  const signContracts = (demandId: string) => {
+    setDemands((prev) =>
+      prev.map((d) => (d.id === demandId ? { ...d, paymentStatus: 'pending_payment' } : d)),
+    )
+  }
+
+  const payEvent = (demandId: string) => {
+    setDemands((prev) =>
+      prev.map((d) => (d.id === demandId ? { ...d, paymentStatus: 'escrow' } : d)),
+    )
+
+    const demand = demands.find((d) => d.id === demandId)
+    if (demand) {
+      const contractedIds = Object.values(demand.contractedProviders)
+      const uniqueProviders = Array.from(
+        new Set(
+          contractedIds
+            .map((pId) => proposals.find((p) => p.id === pId)?.supplierId)
+            .filter(Boolean),
+        ),
+      )
+
+      const newNotifs = uniqueProviders.map((supId) => ({
+        id: Math.random().toString(36).substring(7),
+        title: 'Evento Pago e Confirmado!',
+        message: `O cliente realizou o pagamento seguro para o evento ${demand.title}. 30% do valor está liberado para seus custos operacionais.`,
+        demandId: demand.id,
+        read: false,
+        createdAt: new Date().toISOString(),
+        targetSupplierId: supId as string,
+      }))
+
+      setNotifications((prev) => [...newNotifs, ...prev])
+    }
+  }
+
+  const updateSectorStatus = (demandId: string, sector: string, status: SectorStatus) => {
+    setDemands((prev) =>
+      prev.map((d) => {
+        if (d.id === demandId) {
+          const newSectorStatus = { ...d.sectorStatus, [sector]: status }
+          const allDone = Object.values(newSectorStatus).every(
+            (s) => s === 'concluded' || s === 'not_delivered',
+          )
+          return {
+            ...d,
+            sectorStatus: newSectorStatus,
+            paymentStatus: allDone ? 'completed' : d.paymentStatus,
+            status: allDone ? 'completed' : d.status,
+          }
+        }
+        return d
+      }),
     )
   }
 
@@ -410,6 +616,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         proposals,
         addProposal,
         acceptProposal,
+        signContracts,
+        payEvent,
+        updateSectorStatus,
         notifications,
         markNotificationsAsRead,
         inviteSupplier,

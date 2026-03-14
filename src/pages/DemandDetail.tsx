@@ -1,9 +1,18 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Calendar, MapPin, DollarSign, Users, MessageSquare } from 'lucide-react'
+import {
+  Calendar,
+  MapPin,
+  DollarSign,
+  Users,
+  MessageSquare,
+  ShieldCheck,
+  CheckCircle2,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
 import {
   Dialog,
   DialogContent,
@@ -17,22 +26,45 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/hooks/use-toast'
-import { useApp } from '@/store/AppContext'
+import { useApp, TechRequirement } from '@/store/AppContext'
 import { SERVICES } from '@/lib/services'
 import { BackButton } from '@/components/BackButton'
+import { cn } from '@/lib/utils'
 
 const DemandDetail = () => {
   const { id } = useParams()
-  const navigate = useNavigate()
   const { toast } = useToast()
-  const { role, demands, proposals, addProposal, acceptProposal, currentUser, companyProfile } =
-    useApp()
+  const {
+    role,
+    demands,
+    proposals,
+    addProposal,
+    acceptProposal,
+    signContracts,
+    payEvent,
+    updateSectorStatus,
+    currentUser,
+    companyProfile,
+  } = useApp()
 
   const [isProposalOpen, setIsProposalOpen] = useState(false)
   const [proposalValue, setProposalValue] = useState('')
   const [proposalMessage, setProposalMessage] = useState('')
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false)
 
   const demand = demands.find((d) => d.id === id)
+
+  const applicableSectors = demand
+    ? SERVICES.filter(
+        (s) =>
+          demand.requirements[s.id as keyof TechRequirement] &&
+          companyProfile?.sectors?.includes(s.id),
+      )
+    : []
+
+  const [selectedSectors, setSelectedSectors] = useState<string[]>(
+    applicableSectors.map((s) => s.id),
+  )
 
   if (!demand) {
     return <div className="p-6 text-center text-muted-foreground">Demanda não encontrada.</div>
@@ -62,10 +94,10 @@ const DemandDetail = () => {
   }
 
   const handleSubmitProposal = () => {
-    if (!proposalValue || !proposalMessage) {
+    if (!proposalValue || !proposalMessage || selectedSectors.length === 0) {
       toast({
         title: 'Atenção',
-        description: 'Preencha o valor e a mensagem.',
+        description: 'Preencha o valor, a mensagem e selecione pelo menos um serviço.',
         variant: 'destructive',
       })
       return
@@ -77,11 +109,12 @@ const DemandDetail = () => {
       supplierName: companyProfile?.name || currentUser?.name || 'Fornecedor',
       value: Number(proposalValue),
       message: proposalMessage,
+      offeredSectors: selectedSectors,
     })
 
     toast({
       title: 'Proposta Enviada!',
-      description: 'O cliente receberá sua notificação em breve.',
+      description: 'O cliente receberá sua notificação com a garantia da plataforma em breve.',
     })
     setIsProposalOpen(false)
   }
@@ -89,35 +122,61 @@ const DemandDetail = () => {
   const handleAccept = (proposalId: string) => {
     acceptProposal(proposalId)
     toast({
-      title: 'Proposta Aceita',
-      description: 'O fornecedor será notificado. Evento concluído com sucesso!',
+      title: 'Fornecedor Selecionado',
+      description: 'O serviço foi marcado como atendido para esta etapa do evento.',
     })
   }
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'pending':
-        return (
-          <Badge className="bg-orange-500/10 text-orange-500 hover:bg-orange-500/20 border-orange-500/20 uppercase tracking-wider font-bold shrink-0">
-            Pendente
-          </Badge>
-        )
-      case 'negotiating':
-        return (
-          <Badge className="bg-blue-500/10 text-blue-500 hover:bg-blue-500/20 border-blue-500/20 uppercase tracking-wider font-bold shrink-0">
-            Em negociação
-          </Badge>
-        )
-      case 'completed':
-        return (
-          <Badge className="bg-green-500/10 text-green-500 hover:bg-green-500/20 border-green-500/20 uppercase tracking-wider font-bold shrink-0">
-            Concluído
-          </Badge>
-        )
-      default:
-        return null
+  const getStatusBadge = () => {
+    if (demand.paymentStatus === 'completed') {
+      return (
+        <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 uppercase tracking-wider font-bold shrink-0">
+          Concluído
+        </Badge>
+      )
     }
+    if (demand.paymentStatus === 'escrow') {
+      return (
+        <Badge className="bg-blue-500/10 text-blue-500 border-blue-500/20 uppercase tracking-wider font-bold shrink-0">
+          Serviço Pago
+        </Badge>
+      )
+    }
+    if (
+      demand.paymentStatus === 'pending_payment' ||
+      demand.paymentStatus === 'pending_signature'
+    ) {
+      return (
+        <Badge className="bg-amber-500/10 text-amber-600 border-amber-500/20 uppercase tracking-wider font-bold shrink-0">
+          Aguardando Ação
+        </Badge>
+      )
+    }
+    if (demand.status === 'pending') {
+      return (
+        <Badge className="bg-orange-500/10 text-orange-500 border-orange-500/20 uppercase tracking-wider font-bold shrink-0">
+          Pendente
+        </Badge>
+      )
+    }
+    if (demand.status === 'negotiating') {
+      return (
+        <Badge className="bg-blue-500/10 text-blue-500 border-blue-500/20 uppercase tracking-wider font-bold shrink-0">
+          Em negociação
+        </Badge>
+      )
+    }
+    return null
   }
+
+  const isProviderContracted =
+    role === 'company' &&
+    demand.paymentStatus === 'escrow' &&
+    supplierProposal?.status === 'accepted'
+
+  const totalContractedValue = demandProposals
+    .filter((p) => p.status === 'accepted')
+    .reduce((sum, p) => sum + p.value, 0)
 
   return (
     <div className="flex flex-col animate-slide-up relative min-h-full space-y-6 pb-24 p-4 sm:p-6 max-w-5xl mx-auto w-full">
@@ -128,7 +187,7 @@ const DemandDetail = () => {
             {demand.title}
           </h1>
         </div>
-        {getStatusBadge(demand.status)}
+        {getStatusBadge()}
       </div>
 
       <div className="space-y-8 flex-1">
@@ -146,6 +205,51 @@ const DemandDetail = () => {
             <span className="font-medium">{demand.guests} convidados</span>
           </div>
         </div>
+
+        {isProviderContracted && supplierProposal && (
+          <Card className="border-emerald-500/30 bg-emerald-500/5 shadow-sm mt-8 animate-fade-in">
+            <CardHeader className="pb-4 border-b border-emerald-500/10 mb-4">
+              <CardTitle className="text-lg text-emerald-700 flex items-center gap-2">
+                <DollarSign className="w-5 h-5" /> Gestão Financeira e Repasse
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex justify-between items-center text-sm border-b border-emerald-500/10 pb-3">
+                <span className="text-muted-foreground font-medium">Valor Total Acordado</span>
+                <span className="font-bold text-base">
+                  R$ {supplierProposal.value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                </span>
+              </div>
+              <div className="flex justify-between items-center text-sm border-b border-emerald-500/10 pb-3">
+                <span className="text-muted-foreground font-medium">
+                  Adiantamento Liberado (30% Custos)
+                </span>
+                <span className="font-bold text-emerald-600">
+                  R${' '}
+                  {(supplierProposal.value * 0.3).toLocaleString('pt-BR', {
+                    minimumFractionDigits: 2,
+                  })}
+                </span>
+              </div>
+              <div className="flex justify-between items-center text-sm pb-1">
+                <span className="text-muted-foreground font-medium">
+                  Retido pela Plataforma (70%)
+                </span>
+                <span className="font-bold text-amber-600">
+                  R${' '}
+                  {(supplierProposal.value * 0.7).toLocaleString('pt-BR', {
+                    minimumFractionDigits: 2,
+                  })}
+                </span>
+              </div>
+              <div className="bg-emerald-500/10 p-3 rounded-lg mt-2 text-xs text-emerald-800 leading-relaxed font-medium">
+                O cliente realizou o pagamento total. Os 70% restantes estão em custódia segura na
+                plataforma e serão depositados na sua conta assim que o cliente confirmar a
+                conclusão do serviço no sistema.
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         <Card className="border-border border-l-4 border-l-primary overflow-hidden shadow-sm">
           <CardContent className="p-6 md:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -172,6 +276,232 @@ const DemandDetail = () => {
             )}
           </CardContent>
         </Card>
+
+        {role === 'customer' && demand.paymentStatus === 'escrow' && (
+          <section className="space-y-4 mt-8 animate-fade-in-up">
+            <div className="flex items-center gap-2 border-b border-border pb-2">
+              <ShieldCheck className="w-6 h-6 text-primary" />
+              <h3 className="font-semibold text-foreground text-xl">
+                Garantia de Serviço e Pagamento
+              </h3>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">
+              Confirme a entrega dos serviços para liberar o repasse final aos fornecedores. Caso
+              algum serviço não tenha sido entregue, solicite o reembolso proporcional.
+            </p>
+            <div className="grid grid-cols-1 gap-4">
+              {SERVICES.filter((s) => demand.requirements[s.id as keyof TechRequirement]).map(
+                (s) => {
+                  const status = demand.sectorStatus[s.id]
+                  if (status === 'pending') return null
+
+                  const pId = demand.contractedProviders[s.id]
+                  const providerName =
+                    proposals.find((p) => p.id === pId)?.supplierName || 'Desconhecido'
+
+                  return (
+                    <Card
+                      key={s.id}
+                      className="p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-card border-border shadow-sm"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className={`p-3 rounded-xl ${s.bg}`}>
+                          <s.icon className={`w-6 h-6 ${s.color}`} />
+                        </div>
+                        <div>
+                          <p className="font-bold text-foreground text-base">{s.label}</p>
+                          <p className="text-sm text-muted-foreground">
+                            Fornecedor:{' '}
+                            <span className="font-medium text-foreground">{providerName}</span>
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto">
+                        {status === 'contracted' && (
+                          <>
+                            <Button
+                              variant="outline"
+                              className="w-full sm:w-auto text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground"
+                              onClick={() => updateSectorStatus(demand.id, s.id, 'not_delivered')}
+                            >
+                              Não Entregue
+                            </Button>
+                            <Button
+                              className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white shadow-md"
+                              onClick={() => updateSectorStatus(demand.id, s.id, 'concluded')}
+                            >
+                              Marcar como Concluído
+                            </Button>
+                          </>
+                        )}
+                        {status === 'concluded' && (
+                          <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 px-4 py-2 text-sm">
+                            Serviço Concluído (Pagamento Liberado)
+                          </Badge>
+                        )}
+                        {status === 'not_delivered' && (
+                          <Badge className="bg-destructive/10 text-destructive border-destructive/20 px-4 py-2 text-sm">
+                            Reembolso Solicitado
+                          </Badge>
+                        )}
+                      </div>
+                    </Card>
+                  )
+                },
+              )}
+            </div>
+          </section>
+        )}
+
+        {role === 'customer' &&
+          demand.paymentStatus !== 'escrow' &&
+          demand.paymentStatus !== 'completed' && (
+            <section className="space-y-4 mt-8">
+              <h3 className="font-semibold text-foreground text-xl border-b border-border pb-2">
+                Status da Contratação (Multi-Fornecedores)
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {SERVICES.filter((s) => demand.requirements[s.id as keyof TechRequirement]).map(
+                  (s) => {
+                    const status = demand.sectorStatus[s.id] || 'pending'
+                    const pId = demand.contractedProviders[s.id]
+                    const providerName = pId
+                      ? proposals.find((p) => p.id === pId)?.supplierName
+                      : null
+
+                    return (
+                      <div
+                        key={s.id}
+                        className="flex items-center justify-between p-4 bg-card border border-border rounded-xl shadow-sm"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`p-2 rounded-lg ${s.bg}`}>
+                            <s.icon className={`w-5 h-5 ${s.color}`} />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-sm">{s.label}</p>
+                            {providerName && (
+                              <p className="text-xs text-muted-foreground">{providerName}</p>
+                            )}
+                          </div>
+                        </div>
+                        {status === 'pending' ? (
+                          <Badge variant="secondary" className="text-[10px]">
+                            Pendente
+                          </Badge>
+                        ) : (
+                          <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 text-[10px] shrink-0 gap-1 pl-1.5">
+                            <CheckCircle2 className="w-3 h-3" /> Definido
+                          </Badge>
+                        )}
+                      </div>
+                    )
+                  },
+                )}
+              </div>
+            </section>
+          )}
+
+        {role === 'customer' && demand.paymentStatus === 'pending_signature' && (
+          <Card className="bg-primary/5 border-primary/20 shadow-sm mt-8 animate-fade-in-up">
+            <CardContent className="p-6 text-center space-y-4">
+              <h3 className="text-2xl font-bold text-foreground tracking-tight">
+                Todos os fornecedores selecionados!
+              </h3>
+              <p className="text-muted-foreground text-lg">
+                Assine os contratos digitais para avançar à etapa de pagamento seguro.
+              </p>
+              <Button
+                size="lg"
+                onClick={() => signContracts(demand.id)}
+                className="w-full sm:w-auto h-14 text-base px-8 shadow-md"
+              >
+                Assinar Todos os Contratos Digitais
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {role === 'customer' && demand.paymentStatus === 'pending_payment' && (
+          <Card className="bg-primary/5 border-primary/20 shadow-sm mt-8 animate-fade-in-up">
+            <CardContent className="p-6 text-center space-y-4">
+              <h3 className="text-2xl font-bold text-foreground tracking-tight">
+                Contratos Assinados
+              </h3>
+              <p className="text-muted-foreground text-lg">
+                Realize o pagamento para garantir a reserva. O valor fica retido com segurança pela
+                plataforma até a entrega do evento.
+              </p>
+              <Dialog open={isPaymentOpen} onOpenChange={setIsPaymentOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    size="lg"
+                    className="w-full sm:w-auto h-14 text-base px-8 shadow-md bg-emerald-600 hover:bg-emerald-700 text-white"
+                  >
+                    Realizar Pagamento Seguro (
+                    {new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    }).format(totalContractedValue)}
+                    )
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Pagamento Seguro Integrado</DialogTitle>
+                    <DialogDescription>
+                      O pagamento será mantido em custódia pela plataforma e-eventos.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="py-6 space-y-4">
+                    <div className="bg-secondary p-4 rounded-xl flex justify-between items-center">
+                      <span className="font-semibold text-muted-foreground">Valor Total</span>
+                      <span className="text-2xl font-bold text-foreground">
+                        {new Intl.NumberFormat('pt-BR', {
+                          style: 'currency',
+                          currency: 'BRL',
+                        }).format(totalContractedValue)}
+                      </span>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Número do Cartão</Label>
+                      <Input placeholder="0000 0000 0000 0000" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Validade</Label>
+                        <Input placeholder="MM/AA" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>CVV</Label>
+                        <Input placeholder="123" type="password" />
+                      </div>
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setIsPaymentOpen(false)}>
+                      Cancelar
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        payEvent(demand.id)
+                        setIsPaymentOpen(false)
+                        toast({
+                          title: 'Pagamento Aprovado!',
+                          description:
+                            'O evento está totalmente garantido e os fornecedores foram notificados.',
+                        })
+                      }}
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                    >
+                      Confirmar Pagamento
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </CardContent>
+          </Card>
+        )}
 
         <section className="space-y-4">
           <h3 className="font-semibold text-foreground text-xl border-b border-border pb-2">
@@ -211,63 +541,100 @@ const DemandDetail = () => {
             <h3 className="font-semibold text-foreground text-xl border-b border-border pb-2">
               Propostas Recebidas ({demandProposals.length})
             </h3>
+
+            {demandProposals.length > 0 && demand.paymentStatus === 'gathering' && (
+              <Alert className="bg-primary/5 border-primary/20 shadow-sm mt-4">
+                <ShieldCheck className="h-5 w-5 text-primary" />
+                <AlertTitle className="text-primary font-bold">
+                  Segurança Financeira Garantida
+                </AlertTitle>
+                <AlertDescription className="text-muted-foreground mt-1">
+                  A plataforma assegura que o seu dinheiro será preservado e repassado aos
+                  fornecedores apenas após o fornecimento dos serviços.
+                </AlertDescription>
+              </Alert>
+            )}
+
             {demandProposals.length === 0 ? (
               <div className="bg-secondary/30 border-2 border-dashed border-border rounded-xl p-8 text-sm text-muted-foreground text-center">
                 Nenhuma proposta recebida até o momento.
               </div>
             ) : (
               <div className="space-y-4">
-                {demandProposals.map((proposal) => (
-                  <Card
-                    key={proposal.id}
-                    className="border-border shadow-sm hover:border-primary/50 transition-colors bg-card"
-                  >
-                    <CardContent className="p-6">
-                      <div className="flex flex-col md:flex-row justify-between gap-6">
-                        <div className="flex-1">
-                          <h4 className="font-bold text-lg text-foreground flex items-center gap-2 flex-wrap">
-                            {proposal.supplierName}
-                            {proposal.status === 'accepted' && (
-                              <Badge className="bg-green-500/10 text-green-500 hover:bg-green-500/20 border-green-500/20">
-                                Aceita
-                              </Badge>
-                            )}
-                            {proposal.status === 'rejected' && (
-                              <Badge variant="secondary">Recusada</Badge>
-                            )}
-                          </h4>
-                          <div className="mt-4 flex items-start gap-3 bg-secondary/50 p-4 rounded-lg">
-                            <MessageSquare className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" />
-                            <p className="text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">
-                              {proposal.message}
-                            </p>
+                {demandProposals.map((proposal) => {
+                  const canAccept =
+                    proposal.offeredSectors?.every((s) => demand.sectorStatus[s] === 'pending') ??
+                    true
+
+                  return (
+                    <Card
+                      key={proposal.id}
+                      className="border-border shadow-sm hover:border-primary/50 transition-colors bg-card"
+                    >
+                      <CardContent className="p-6">
+                        <div className="flex flex-col md:flex-row justify-between gap-6">
+                          <div className="flex-1">
+                            <h4 className="font-bold text-lg text-foreground flex items-center gap-2 flex-wrap">
+                              {proposal.supplierName}
+                              {proposal.status === 'accepted' && (
+                                <Badge className="bg-green-500/10 text-green-500 hover:bg-green-500/20 border-green-500/20">
+                                  Aceita
+                                </Badge>
+                              )}
+                              {proposal.status === 'rejected' && (
+                                <Badge variant="secondary">Recusada</Badge>
+                              )}
+                            </h4>
+                            <div className="flex flex-wrap gap-2 mt-3">
+                              {proposal.offeredSectors?.map((sec) => {
+                                const s = SERVICES.find((x) => x.id === sec)
+                                if (!s) return null
+                                return (
+                                  <Badge
+                                    key={sec}
+                                    variant="outline"
+                                    className="bg-secondary/50 text-xs text-muted-foreground border-border"
+                                  >
+                                    {s.label}
+                                  </Badge>
+                                )
+                              })}
+                            </div>
+                            <div className="mt-4 flex items-start gap-3 bg-secondary/50 p-4 rounded-lg">
+                              <MessageSquare className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" />
+                              <p className="text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">
+                                {proposal.message}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex flex-col items-start md:items-end justify-between min-w-[150px] border-t md:border-t-0 md:border-l border-border pt-4 md:pt-0 md:pl-6">
+                            <div className="text-left md:text-right w-full mb-4">
+                              <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-1">
+                                Valor Proposto
+                              </p>
+                              <span className="text-2xl font-bold text-primary">
+                                {new Intl.NumberFormat('pt-BR', {
+                                  style: 'currency',
+                                  currency: 'BRL',
+                                }).format(proposal.value)}
+                              </span>
+                            </div>
+                            {proposal.status === 'pending' &&
+                              demand.paymentStatus === 'gathering' && (
+                                <Button
+                                  onClick={() => handleAccept(proposal.id)}
+                                  className="w-full shadow-sm"
+                                  disabled={!canAccept}
+                                >
+                                  {canAccept ? 'Aceitar Proposta' : 'Serviço Já Contratado'}
+                                </Button>
+                              )}
                           </div>
                         </div>
-                        <div className="flex flex-col items-start md:items-end justify-between min-w-[140px] border-t md:border-t-0 md:border-l border-border pt-4 md:pt-0 md:pl-6">
-                          <div className="text-left md:text-right w-full mb-4">
-                            <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-1">
-                              Valor Proposto
-                            </p>
-                            <span className="text-2xl font-bold text-primary">
-                              {new Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL',
-                              }).format(proposal.value)}
-                            </span>
-                          </div>
-                          {proposal.status === 'pending' && demand.status !== 'completed' && (
-                            <Button
-                              onClick={() => handleAccept(proposal.id)}
-                              className="w-full shadow-sm"
-                            >
-                              Aceitar Proposta
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                      </CardContent>
+                    </Card>
+                  )
+                })}
               </div>
             )}
           </section>
@@ -298,9 +665,9 @@ const DemandDetail = () => {
                 foi registrada.
               </p>
             </div>
-          ) : demand.status === 'completed' ? (
+          ) : demand.status === 'completed' || demand.paymentStatus === 'escrow' ? (
             <div className="p-5 bg-secondary rounded-xl text-center border border-border shadow-sm text-muted-foreground">
-              Esta demanda já foi concluída.
+              Esta demanda já foi preenchida ou concluída.
             </div>
           ) : (
             <Dialog open={isProposalOpen} onOpenChange={setIsProposalOpen}>
@@ -313,14 +680,44 @@ const DemandDetail = () => {
                 <DialogHeader>
                   <DialogTitle>Enviar Proposta Comercial</DialogTitle>
                   <DialogDescription>
-                    Descreva os detalhes da sua oferta e o valor final. O cliente será notificado
-                    instantaneamente.
+                    Descreva os detalhes da sua oferta e selecione os serviços inclusos.
                   </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-4 py-4">
+                <div className="grid gap-5 py-4">
+                  <div className="space-y-3">
+                    <Label className="font-semibold text-foreground">
+                      Serviços Inclusos na Proposta
+                    </Label>
+                    <div className="flex flex-wrap gap-2">
+                      {applicableSectors.map((s) => {
+                        const isSelected = selectedSectors.includes(s.id)
+                        return (
+                          <Badge
+                            key={s.id}
+                            variant={isSelected ? 'default' : 'outline'}
+                            className={cn(
+                              'cursor-pointer text-xs py-1.5 px-3 transition-all',
+                              isSelected
+                                ? `border-transparent shadow-sm ${s.bg} ${s.color}`
+                                : 'bg-transparent text-muted-foreground hover:bg-secondary',
+                            )}
+                            onClick={() => {
+                              setSelectedSectors((prev) =>
+                                prev.includes(s.id)
+                                  ? prev.filter((x) => x !== s.id)
+                                  : [...prev, s.id],
+                              )
+                            }}
+                          >
+                            {s.label}
+                          </Badge>
+                        )
+                      })}
+                    </div>
+                  </div>
                   <div className="space-y-2">
                     <Label htmlFor="value" className="font-semibold">
-                      Valor da Proposta (R$)
+                      Valor Final da Proposta (R$)
                     </Label>
                     <Input
                       id="value"
@@ -337,8 +734,8 @@ const DemandDetail = () => {
                     </Label>
                     <Textarea
                       id="message"
-                      placeholder="Descreva o que está incluso no seu serviço, prazos, etc..."
-                      className="min-h-[120px] resize-none"
+                      placeholder="Descreva o que está incluso, equipamentos, prazos..."
+                      className="min-h-[100px] resize-none"
                       value={proposalMessage}
                       onChange={(e) => setProposalMessage(e.target.value)}
                     />
