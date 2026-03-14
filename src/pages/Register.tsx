@@ -21,7 +21,7 @@ export default function Register() {
             <img
               src={logoImg}
               alt="e-eventos"
-              className="h-24 w-24 rounded-[1.5rem] object-contain shadow-md"
+              className="h-24 w-24 rounded-[1.5rem] object-contain shadow-md bg-white/5 p-2 border border-white/10"
             />
           </Link>
           <div className="space-y-2">

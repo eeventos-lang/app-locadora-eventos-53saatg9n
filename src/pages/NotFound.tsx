@@ -8,7 +8,7 @@ export default function NotFound() {
       <img
         src={logoImg}
         alt="e-eventos"
-        className="h-24 w-24 rounded-[1.5rem] object-contain mb-8 opacity-50 grayscale"
+        className="h-24 w-24 rounded-[1.5rem] object-contain mb-8 opacity-50 grayscale bg-white/5 p-2 border border-white/10"
       />
       <h1 className="text-6xl font-bold text-primary mb-4">404</h1>
       <h2 className="text-2xl font-semibold mb-4">Página não encontrada</h2>

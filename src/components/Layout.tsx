@@ -25,7 +25,7 @@ export function Layout() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Sheet>
@@ -41,7 +41,7 @@ export function Layout() {
                     <img
                       src={logoImg}
                       alt="e-eventos"
-                      className="h-8 w-8 rounded-lg object-contain shadow-sm"
+                      className="h-8 w-8 rounded-lg object-contain shadow-sm bg-white/5 p-1 border border-white/10"
                     />
                     <span className="font-bold tracking-tight text-lg">e-eventos</span>
                   </SheetTitle>
@@ -66,7 +66,7 @@ export function Layout() {
                     )
                   })}
                 </nav>
-                <div className="flex flex-col gap-2 mt-auto pt-6 border-t">
+                <div className="flex flex-col gap-2 mt-auto pt-6 border-t border-border">
                   <Link
                     to="/login"
                     className="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium hover:bg-muted transition-colors"
@@ -87,7 +87,7 @@ export function Layout() {
               <img
                 src={logoImg}
                 alt="e-eventos"
-                className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl object-contain drop-shadow-sm"
+                className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl object-contain drop-shadow-sm bg-white/5 p-1 border border-white/10"
               />
               <span className="hidden sm:inline-block font-extrabold text-xl tracking-tight text-foreground">
                 e-eventos
@@ -125,7 +125,7 @@ export function Layout() {
         <Outlet />
       </main>
 
-      <footer className="border-t bg-muted/30 pt-12 pb-8 mt-auto">
+      <footer className="border-t border-border bg-card/50 pt-12 pb-8 mt-auto">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div className="col-span-1 md:col-span-2">
@@ -136,7 +136,7 @@ export function Layout() {
                 <img
                   src={logoImg}
                   alt="e-eventos"
-                  className="h-10 w-10 rounded-xl object-contain drop-shadow-sm"
+                  className="h-10 w-10 rounded-xl object-contain drop-shadow-sm bg-white/5 p-1 border border-white/10"
                 />
                 <span className="font-extrabold text-xl tracking-tight text-foreground">
                   e-eventos
@@ -148,7 +148,7 @@ export function Layout() {
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Plataforma</h3>
+              <h3 className="font-semibold mb-4 text-foreground">Plataforma</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
                   <Link to="/demands" className="hover:text-primary transition-colors">
@@ -168,7 +168,7 @@ export function Layout() {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Suporte</h3>
+              <h3 className="font-semibold mb-4 text-foreground">Suporte</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
                   <Link to="#" className="hover:text-primary transition-colors">
@@ -188,7 +188,7 @@ export function Layout() {
               </ul>
             </div>
           </div>
-          <div className="pt-8 border-t flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground text-center md:text-left">
               © {new Date().getFullYear()} e-eventos. Todos os direitos reservados.
             </p>

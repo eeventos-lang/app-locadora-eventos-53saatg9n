@@ -36,11 +36,13 @@ export const Step3Review = ({ formData, totals }: Props) => {
         <div className="flex justify-between items-start">
           <div>
             <h3 className="text-sm text-muted-foreground">Evento</h3>
-            <p className="font-medium text-lg text-white">{formData.title || 'Não informado'}</p>
+            <p className="font-medium text-lg text-foreground">
+              {formData.title || 'Não informado'}
+            </p>
           </div>
           <div className="text-right">
             <h3 className="text-sm text-muted-foreground">Convidados</h3>
-            <p className="text-white font-medium">{formData.guests}</p>
+            <p className="text-foreground font-medium">{formData.guests}</p>
           </div>
         </div>
         <div>
@@ -58,13 +60,15 @@ export const Step3Review = ({ formData, totals }: Props) => {
                 {totals.lines.map((l, i) => (
                   <TableRow key={i}>
                     <TableCell className="py-2">
-                      <p className="font-medium text-sm leading-none">{l.name}</p>
+                      <p className="font-medium text-sm leading-none text-foreground">{l.name}</p>
                       <p className="text-[10px] text-muted-foreground mt-0.5">
                         {l.detail} • {fmt(l.unit)}
                       </p>
                     </TableCell>
-                    <TableCell className="py-2 text-right text-sm">{l.qty}</TableCell>
-                    <TableCell className="py-2 text-right font-medium text-sm">
+                    <TableCell className="py-2 text-right text-sm text-foreground">
+                      {l.qty}
+                    </TableCell>
+                    <TableCell className="py-2 text-right font-medium text-sm text-foreground">
                       {fmt(l.subtotal)}
                     </TableCell>
                   </TableRow>
@@ -77,12 +81,12 @@ export const Step3Review = ({ formData, totals }: Props) => {
                   </TableRow>
                 )}
               </TableBody>
-              <TableFooter className="bg-primary/20">
+              <TableFooter className="bg-primary/10">
                 <TableRow>
-                  <TableCell colSpan={2} className="font-bold py-3 text-white">
+                  <TableCell colSpan={2} className="font-bold py-3 text-foreground">
                     Resultado Final
                   </TableCell>
-                  <TableCell className="text-right font-bold text-accent py-3">
+                  <TableCell className="text-right font-bold text-primary py-3">
                     {fmt(totals.total)}
                   </TableCell>
                 </TableRow>

@@ -21942,7 +21942,7 @@ function Layout() {
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", {
 				"data-uid": "src/components/Layout.tsx:28:7",
 				"data-prohibitions": "[editContent]",
-				className: "sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60",
+				className: "sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					"data-uid": "src/components/Layout.tsx:29:9",
 					"data-prohibitions": "[editContent]",
@@ -21994,7 +21994,7 @@ function Layout() {
 													"data-prohibitions": "[editContent]",
 													src: e_eventos_novo_62817_default,
 													alt: "e-eventos",
-													className: "h-8 w-8 rounded-lg object-contain shadow-sm"
+													className: "h-8 w-8 rounded-lg object-contain shadow-sm bg-white/5 p-1 border border-white/10"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													"data-uid": "src/components/Layout.tsx:46:21",
 													"data-prohibitions": "[]",
@@ -22025,7 +22025,7 @@ function Layout() {
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											"data-uid": "src/components/Layout.tsx:69:17",
 											"data-prohibitions": "[]",
-											className: "flex flex-col gap-2 mt-auto pt-6 border-t",
+											className: "flex flex-col gap-2 mt-auto pt-6 border-t border-border",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 												"data-uid": "src/components/Layout.tsx:70:19",
 												"data-prohibitions": "[]",
@@ -22060,7 +22060,7 @@ function Layout() {
 									"data-prohibitions": "[editContent]",
 									src: e_eventos_novo_62817_default,
 									alt: "e-eventos",
-									className: "h-10 w-10 sm:h-12 sm:w-12 rounded-xl object-contain drop-shadow-sm"
+									className: "h-10 w-10 sm:h-12 sm:w-12 rounded-xl object-contain drop-shadow-sm bg-white/5 p-1 border border-white/10"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									"data-uid": "src/components/Layout.tsx:92:15",
 									"data-prohibitions": "[]",
@@ -22125,7 +22125,7 @@ function Layout() {
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("footer", {
 				"data-uid": "src/components/Layout.tsx:128:7",
 				"data-prohibitions": "[editContent]",
-				className: "border-t bg-muted/30 pt-12 pb-8 mt-auto",
+				className: "border-t border-border bg-card/50 pt-12 pb-8 mt-auto",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					"data-uid": "src/components/Layout.tsx:129:9",
 					"data-prohibitions": "[editContent]",
@@ -22149,7 +22149,7 @@ function Layout() {
 										"data-prohibitions": "[editContent]",
 										src: e_eventos_novo_62817_default,
 										alt: "e-eventos",
-										className: "h-10 w-10 rounded-xl object-contain drop-shadow-sm"
+										className: "h-10 w-10 rounded-xl object-contain drop-shadow-sm bg-white/5 p-1 border border-white/10"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 										"data-uid": "src/components/Layout.tsx:141:17",
 										"data-prohibitions": "[]",
@@ -22169,7 +22169,7 @@ function Layout() {
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 									"data-uid": "src/components/Layout.tsx:151:15",
 									"data-prohibitions": "[]",
-									className: "font-semibold mb-4",
+									className: "font-semibold mb-4 text-foreground",
 									children: "Plataforma"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ul", {
 									"data-uid": "src/components/Layout.tsx:152:15",
@@ -22218,7 +22218,7 @@ function Layout() {
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 									"data-uid": "src/components/Layout.tsx:171:15",
 									"data-prohibitions": "[]",
-									className: "font-semibold mb-4",
+									className: "font-semibold mb-4 text-foreground",
 									children: "Suporte"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ul", {
 									"data-uid": "src/components/Layout.tsx:172:15",
@@ -22265,7 +22265,7 @@ function Layout() {
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 						"data-uid": "src/components/Layout.tsx:191:11",
 						"data-prohibitions": "[editContent]",
-						className: "pt-8 border-t flex flex-col md:flex-row items-center justify-between gap-4",
+						className: "pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 							"data-uid": "src/components/Layout.tsx:192:13",
 							"data-prohibitions": "[editContent]",
@@ -22303,7 +22303,7 @@ function Index() {
 						"data-prohibitions": "[editContent]",
 						src: e_eventos_novo_62817_default,
 						alt: "e-eventos",
-						className: "h-28 w-28 sm:h-36 sm:w-36 rounded-[2rem] object-contain shadow-xl border border-white/20 animate-fade-in-down"
+						className: "h-28 w-28 sm:h-36 sm:w-36 rounded-[2rem] object-contain shadow-xl border border-white/10 bg-white/5 p-2 animate-fade-in-down"
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
 						"data-uid": "src/pages/Index.tsx:16:11",
@@ -22420,7 +22420,7 @@ function Index() {
 				].map((feature, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					"data-uid": "src/pages/Index.tsx:80:13",
 					"data-prohibitions": "[editContent]",
-					className: "flex flex-col items-center text-center p-6 rounded-2xl bg-card border shadow-sm hover:shadow-md transition-shadow",
+					className: "flex flex-col items-center text-center p-6 rounded-2xl bg-card border border-border shadow-sm hover:border-primary/50 transition-colors",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							"data-uid": "src/pages/Index.tsx:84:15",
@@ -22435,7 +22435,7 @@ function Index() {
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 							"data-uid": "src/pages/Index.tsx:87:15",
 							"data-prohibitions": "[editContent]",
-							className: "font-semibold text-xl mb-2",
+							className: "font-semibold text-xl mb-2 text-foreground",
 							children: feature.title
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
@@ -22603,7 +22603,7 @@ function Login() {
 							"data-prohibitions": "[editContent]",
 							src: e_eventos_novo_62817_default,
 							alt: "e-eventos",
-							className: "h-24 w-24 rounded-[1.5rem] object-contain shadow-md"
+							className: "h-24 w-24 rounded-[1.5rem] object-contain shadow-md bg-white/5 p-2 border border-white/10"
 						})
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						"data-uid": "src/pages/Login.tsx:27:11",
@@ -22730,7 +22730,7 @@ function Register() {
 							"data-prohibitions": "[editContent]",
 							src: e_eventos_novo_62817_default,
 							alt: "e-eventos",
-							className: "h-24 w-24 rounded-[1.5rem] object-contain shadow-md"
+							className: "h-24 w-24 rounded-[1.5rem] object-contain shadow-md bg-white/5 p-2 border border-white/10"
 						})
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						"data-uid": "src/pages/Register.tsx:27:11",
@@ -23677,7 +23677,7 @@ var Step1Basic = ({ formData, updateForm, setConfigs }) => {
 					type: "date",
 					value: formData.date,
 					onChange: (e) => updateForm("date", e.target.value),
-					className: "bg-card border-border block w-full text-white"
+					className: "bg-card border-border block w-full text-foreground"
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -24300,7 +24300,7 @@ var Step2Services = ({ formData, setFormData, configs, setConfigs }) => {
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 				"data-uid": "src/components/create-event/Step2Services.tsx:35:7",
 				"data-prohibitions": "[]",
-				className: "text-lg font-semibold",
+				className: "text-lg font-semibold text-foreground",
 				children: "O que você precisa?"
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -24310,7 +24310,7 @@ var Step2Services = ({ formData, setFormData, configs, setConfigs }) => {
 				children: SERVICES.map(({ id, label, icon: Icon }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					"data-uid": "src/components/create-event/Step2Services.tsx:38:11",
 					"data-prohibitions": "[editContent]",
-					className: `flex flex-col items-center justify-center p-3 rounded-xl border transition-all cursor-pointer ${formData.requirements[id] ? "bg-primary/20 border-primary shadow-[0_0_15px_rgba(0,82,255,0.2)] text-white" : "bg-card border-border text-muted-foreground hover:bg-card/80"}`,
+					className: `flex flex-col items-center justify-center p-3 rounded-xl border transition-all cursor-pointer ${formData.requirements[id] ? "bg-primary/10 border-primary shadow-[0_0_15px_rgba(255,255,255,0.1)] text-foreground" : "bg-card border-border text-muted-foreground hover:bg-card/80"}`,
 					onClick: () => updateReq(id, !formData.requirements[id]),
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
 						"data-uid": "src/components/create-event/Step2Services.tsx:47:13",
@@ -24332,18 +24332,18 @@ var Step2Services = ({ formData, setFormData, configs, setConfigs }) => {
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 						"data-uid": "src/components/create-event/Step2Services.tsx:58:11",
 						"data-prohibitions": "[]",
-						className: "text-sm font-semibold text-white",
+						className: "text-sm font-semibold text-foreground",
 						children: "Configurações de Serviços"
 					}),
 					formData.requirements.buffet && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						"data-uid": "src/components/create-event/Step2Services.tsx:61:13",
 						"data-prohibitions": "[]",
-						className: "space-y-4 p-4 border rounded-xl bg-card",
+						className: "space-y-4 p-4 border border-border rounded-xl bg-card",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
 								"data-uid": "src/components/create-event/Step2Services.tsx:62:15",
 								"data-prohibitions": "[]",
-								className: "font-medium text-white",
+								className: "font-medium text-foreground",
 								children: "Opções de Buffet"
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(RadioGroup, {
@@ -24359,7 +24359,7 @@ var Step2Services = ({ formData, setFormData, configs, setConfigs }) => {
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										"data-uid": "src/components/create-event/Step2Services.tsx:68:17",
 										"data-prohibitions": "[]",
-										className: "flex items-start space-x-3 border p-3 rounded-lg hover:bg-muted/50 cursor-pointer",
+										className: "flex items-start space-x-3 border border-border p-3 rounded-lg hover:bg-muted/50 cursor-pointer",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupItem, {
 											"data-uid": "src/components/create-event/Step2Services.tsx:69:19",
 											"data-prohibitions": "[editContent]",
@@ -24374,7 +24374,7 @@ var Step2Services = ({ formData, setFormData, configs, setConfigs }) => {
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												"data-uid": "src/components/create-event/Step2Services.tsx:71:21",
 												"data-prohibitions": "[]",
-												className: "font-medium text-white",
+												className: "font-medium text-foreground",
 												children: "Prime"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												"data-uid": "src/components/create-event/Step2Services.tsx:72:21",
@@ -24387,7 +24387,7 @@ var Step2Services = ({ formData, setFormData, configs, setConfigs }) => {
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										"data-uid": "src/components/create-event/Step2Services.tsx:75:17",
 										"data-prohibitions": "[]",
-										className: "flex items-start space-x-3 border p-3 rounded-lg hover:bg-muted/50 cursor-pointer",
+										className: "flex items-start space-x-3 border border-border p-3 rounded-lg hover:bg-muted/50 cursor-pointer",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupItem, {
 											"data-uid": "src/components/create-event/Step2Services.tsx:76:19",
 											"data-prohibitions": "[editContent]",
@@ -24402,7 +24402,7 @@ var Step2Services = ({ formData, setFormData, configs, setConfigs }) => {
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												"data-uid": "src/components/create-event/Step2Services.tsx:78:21",
 												"data-prohibitions": "[]",
-												className: "font-medium text-white",
+												className: "font-medium text-foreground",
 												children: "Premium"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												"data-uid": "src/components/create-event/Step2Services.tsx:79:21",
@@ -24415,7 +24415,7 @@ var Step2Services = ({ formData, setFormData, configs, setConfigs }) => {
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										"data-uid": "src/components/create-event/Step2Services.tsx:82:17",
 										"data-prohibitions": "[]",
-										className: "flex items-start space-x-3 border p-3 rounded-lg hover:bg-muted/50 cursor-pointer",
+										className: "flex items-start space-x-3 border border-border p-3 rounded-lg hover:bg-muted/50 cursor-pointer",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupItem, {
 											"data-uid": "src/components/create-event/Step2Services.tsx:83:19",
 											"data-prohibitions": "[editContent]",
@@ -24430,7 +24430,7 @@ var Step2Services = ({ formData, setFormData, configs, setConfigs }) => {
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												"data-uid": "src/components/create-event/Step2Services.tsx:85:21",
 												"data-prohibitions": "[]",
-												className: "font-medium text-white",
+												className: "font-medium text-foreground",
 												children: "Top"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												"data-uid": "src/components/create-event/Step2Services.tsx:86:21",
@@ -24645,63 +24645,63 @@ var Step3Review = ({ formData, totals }) => {
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						"data-uid": "src/components/create-event/Step3Review.tsx:39:13",
 						"data-prohibitions": "[editContent]",
-						className: "font-medium text-lg text-white",
+						className: "font-medium text-lg text-foreground",
 						children: formData.title || "Não informado"
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/components/create-event/Step3Review.tsx:41:11",
+					"data-uid": "src/components/create-event/Step3Review.tsx:43:11",
 					"data-prohibitions": "[editContent]",
 					className: "text-right",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-						"data-uid": "src/components/create-event/Step3Review.tsx:42:13",
+						"data-uid": "src/components/create-event/Step3Review.tsx:44:13",
 						"data-prohibitions": "[]",
 						className: "text-sm text-muted-foreground",
 						children: "Convidados"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						"data-uid": "src/components/create-event/Step3Review.tsx:43:13",
+						"data-uid": "src/components/create-event/Step3Review.tsx:45:13",
 						"data-prohibitions": "[editContent]",
-						className: "text-white font-medium",
+						className: "text-foreground font-medium",
 						children: formData.guests
 					})]
 				})]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/components/create-event/Step3Review.tsx:46:9",
+				"data-uid": "src/components/create-event/Step3Review.tsx:48:9",
 				"data-prohibitions": "[editContent]",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-					"data-uid": "src/components/create-event/Step3Review.tsx:47:11",
+					"data-uid": "src/components/create-event/Step3Review.tsx:49:11",
 					"data-prohibitions": "[]",
 					className: "text-sm text-muted-foreground mb-3",
 					children: "Resumo e Orçamento"
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					"data-uid": "src/components/create-event/Step3Review.tsx:48:11",
+					"data-uid": "src/components/create-event/Step3Review.tsx:50:11",
 					"data-prohibitions": "[editContent]",
 					className: "rounded-md border border-border overflow-hidden",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table, {
-						"data-uid": "src/components/create-event/Step3Review.tsx:49:13",
+						"data-uid": "src/components/create-event/Step3Review.tsx:51:13",
 						"data-prohibitions": "[editContent]",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHeader, {
-								"data-uid": "src/components/create-event/Step3Review.tsx:50:15",
+								"data-uid": "src/components/create-event/Step3Review.tsx:52:15",
 								"data-prohibitions": "[]",
 								className: "bg-muted/50",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
-									"data-uid": "src/components/create-event/Step3Review.tsx:51:17",
+									"data-uid": "src/components/create-event/Step3Review.tsx:53:17",
 									"data-prohibitions": "[]",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-											"data-uid": "src/components/create-event/Step3Review.tsx:52:19",
+											"data-uid": "src/components/create-event/Step3Review.tsx:54:19",
 											"data-prohibitions": "[]",
 											className: "py-2 h-9 text-xs",
 											children: "Serviço"
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-											"data-uid": "src/components/create-event/Step3Review.tsx:53:19",
+											"data-uid": "src/components/create-event/Step3Review.tsx:55:19",
 											"data-prohibitions": "[]",
 											className: "py-2 h-9 text-xs text-right",
 											children: "Qtd"
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-											"data-uid": "src/components/create-event/Step3Review.tsx:54:19",
+											"data-uid": "src/components/create-event/Step3Review.tsx:56:19",
 											"data-prohibitions": "[]",
 											className: "py-2 h-9 text-xs text-right",
 											children: "Subtotal"
@@ -24710,23 +24710,23 @@ var Step3Review = ({ formData, totals }) => {
 								})
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableBody, {
-								"data-uid": "src/components/create-event/Step3Review.tsx:57:15",
+								"data-uid": "src/components/create-event/Step3Review.tsx:59:15",
 								"data-prohibitions": "[editContent]",
 								children: [totals.lines.map((l, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
-									"data-uid": "src/components/create-event/Step3Review.tsx:59:19",
+									"data-uid": "src/components/create-event/Step3Review.tsx:61:19",
 									"data-prohibitions": "[editContent]",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableCell, {
-											"data-uid": "src/components/create-event/Step3Review.tsx:60:21",
+											"data-uid": "src/components/create-event/Step3Review.tsx:62:21",
 											"data-prohibitions": "[editContent]",
 											className: "py-2",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												"data-uid": "src/components/create-event/Step3Review.tsx:61:23",
+												"data-uid": "src/components/create-event/Step3Review.tsx:63:23",
 												"data-prohibitions": "[editContent]",
-												className: "font-medium text-sm leading-none",
+												className: "font-medium text-sm leading-none text-foreground",
 												children: l.name
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-												"data-uid": "src/components/create-event/Step3Review.tsx:62:23",
+												"data-uid": "src/components/create-event/Step3Review.tsx:64:23",
 												"data-prohibitions": "[editContent]",
 												className: "text-[10px] text-muted-foreground mt-0.5",
 												children: [
@@ -24737,23 +24737,23 @@ var Step3Review = ({ formData, totals }) => {
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-											"data-uid": "src/components/create-event/Step3Review.tsx:66:21",
+											"data-uid": "src/components/create-event/Step3Review.tsx:68:21",
 											"data-prohibitions": "[editContent]",
-											className: "py-2 text-right text-sm",
+											className: "py-2 text-right text-sm text-foreground",
 											children: l.qty
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-											"data-uid": "src/components/create-event/Step3Review.tsx:67:21",
+											"data-uid": "src/components/create-event/Step3Review.tsx:71:21",
 											"data-prohibitions": "[editContent]",
-											className: "py-2 text-right font-medium text-sm",
+											className: "py-2 text-right font-medium text-sm text-foreground",
 											children: fmt(l.subtotal)
 										})
 									]
 								}, i)), totals.lines.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableRow, {
-									"data-uid": "src/components/create-event/Step3Review.tsx:73:19",
+									"data-uid": "src/components/create-event/Step3Review.tsx:77:19",
 									"data-prohibitions": "[]",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/components/create-event/Step3Review.tsx:74:21",
+										"data-uid": "src/components/create-event/Step3Review.tsx:78:21",
 										"data-prohibitions": "[]",
 										colSpan: 3,
 										className: "text-center py-4 text-xs",
@@ -24762,22 +24762,22 @@ var Step3Review = ({ formData, totals }) => {
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableFooter, {
-								"data-uid": "src/components/create-event/Step3Review.tsx:80:15",
+								"data-uid": "src/components/create-event/Step3Review.tsx:84:15",
 								"data-prohibitions": "[editContent]",
-								className: "bg-primary/20",
+								className: "bg-primary/10",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
-									"data-uid": "src/components/create-event/Step3Review.tsx:81:17",
+									"data-uid": "src/components/create-event/Step3Review.tsx:85:17",
 									"data-prohibitions": "[editContent]",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/components/create-event/Step3Review.tsx:82:19",
+										"data-uid": "src/components/create-event/Step3Review.tsx:86:19",
 										"data-prohibitions": "[]",
 										colSpan: 2,
-										className: "font-bold py-3 text-white",
+										className: "font-bold py-3 text-foreground",
 										children: "Resultado Final"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/components/create-event/Step3Review.tsx:85:19",
+										"data-uid": "src/components/create-event/Step3Review.tsx:89:19",
 										"data-prohibitions": "[editContent]",
-										className: "text-right font-bold text-accent py-3",
+										className: "text-right font-bold text-primary py-3",
 										children: fmt(totals.total)
 									})]
 								})
@@ -25626,7 +25626,7 @@ var Subscription = () => {
 								"data-uid": "src/pages/Subscription.tsx:77:15",
 								"data-prohibitions": "[editContent]",
 								variant: "outline",
-								className: isSubscribed ? "text-emerald-600 border-emerald-500/30 bg-emerald-50 px-3 py-1 text-xs" : "text-amber-600 border-amber-500/30 bg-amber-50 px-3 py-1 text-xs",
+								className: isSubscribed ? "text-emerald-400 border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs" : "text-amber-400 border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs",
 								children: isSubscribed ? "Regular" : "Atrasado"
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -25655,14 +25655,14 @@ var Subscription = () => {
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 									"data-uid": "src/pages/Subscription.tsx:99:19",
 									"data-prohibitions": "[]",
-									className: "text-sm text-amber-700 bg-amber-50 p-4 rounded-lg border border-amber-200 leading-relaxed",
+									className: "text-sm text-amber-400 bg-amber-500/10 p-4 rounded-lg border border-amber-500/20 leading-relaxed",
 									children: "Sua fatura deste mês está aguardando pagamento. Regularize para visualizar novas demandas na plataforma."
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 									"data-uid": "src/pages/Subscription.tsx:103:19",
 									"data-prohibitions": "[]",
 									size: "lg",
 									onClick: handlePayment,
-									className: "w-full bg-amber-500 hover:bg-amber-600 text-white gap-2 h-14 text-base shadow-md",
+									className: "w-full bg-amber-600 hover:bg-amber-700 text-zinc-50 gap-2 h-14 text-base shadow-md",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreditCard, {
 										"data-uid": "src/pages/Subscription.tsx:108:21",
 										"data-prohibitions": "[editContent]",
@@ -25768,7 +25768,7 @@ var Subscription = () => {
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								"data-uid": "src/pages/Subscription.tsx:155:17",
 								"data-prohibitions": "[]",
-								className: "text-sm text-amber-600 mt-1",
+								className: "text-sm text-amber-400 mt-1",
 								children: "Vencido em 10/05/2026"
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -25784,42 +25784,42 @@ var Subscription = () => {
 								"data-uid": "src/pages/Subscription.tsx:161:17",
 								"data-prohibitions": "[]",
 								variant: "outline",
-								className: "bg-amber-50 text-amber-600 border-amber-200",
+								className: "bg-amber-500/10 text-amber-400 border-amber-500/20",
 								children: "Pendente"
 							})]
 						})]
 					}), history.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/Subscription.tsx:168:13",
+						"data-uid": "src/pages/Subscription.tsx:171:13",
 						"data-prohibitions": "[editContent]",
-						className: "flex items-center justify-between p-5 bg-card border border-border shadow-sm rounded-xl hover:shadow-md transition-shadow",
+						className: "flex items-center justify-between p-5 bg-card border border-border shadow-sm rounded-xl hover:border-primary/50 transition-colors",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/Subscription.tsx:172:15",
+							"data-uid": "src/pages/Subscription.tsx:175:15",
 							"data-prohibitions": "[editContent]",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								"data-uid": "src/pages/Subscription.tsx:173:17",
+								"data-uid": "src/pages/Subscription.tsx:176:17",
 								"data-prohibitions": "[editContent]",
 								className: "font-semibold text-foreground text-lg",
 								children: item.month
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-								"data-uid": "src/pages/Subscription.tsx:174:17",
+								"data-uid": "src/pages/Subscription.tsx:177:17",
 								"data-prohibitions": "[editContent]",
 								className: "text-sm text-muted-foreground mt-1",
 								children: ["Pago em ", item.date]
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/Subscription.tsx:176:15",
+							"data-uid": "src/pages/Subscription.tsx:179:15",
 							"data-prohibitions": "[editContent]",
 							className: "text-right flex flex-col items-end gap-2",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-								"data-uid": "src/pages/Subscription.tsx:177:17",
+								"data-uid": "src/pages/Subscription.tsx:180:17",
 								"data-prohibitions": "[editContent]",
 								className: "text-xl font-bold text-foreground",
 								children: ["R$ ", item.amount.toFixed(2).replace(".", ",")]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
-								"data-uid": "src/pages/Subscription.tsx:180:17",
+								"data-uid": "src/pages/Subscription.tsx:183:17",
 								"data-prohibitions": "[]",
 								variant: "outline",
-								className: "bg-emerald-50 text-emerald-600 border-emerald-200",
+								className: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
 								children: "Pago"
 							})]
 						})]
@@ -25842,7 +25842,7 @@ function NotFound() {
 				"data-prohibitions": "[editContent]",
 				src: e_eventos_novo_62817_default,
 				alt: "e-eventos",
-				className: "h-24 w-24 rounded-[1.5rem] object-contain mb-8 opacity-50 grayscale"
+				className: "h-24 w-24 rounded-[1.5rem] object-contain mb-8 opacity-50 grayscale bg-white/5 p-2 border border-white/10"
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 				"data-uid": "src/pages/NotFound.tsx:13:7",
@@ -30044,4 +30044,4 @@ function App() {
 }));
 //#endregion
 
-//# sourceMappingURL=index-BxUpA1ui.js.map
+//# sourceMappingURL=index-CQNeoo5H.js.map

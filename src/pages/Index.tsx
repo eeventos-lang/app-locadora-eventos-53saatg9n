@@ -11,7 +11,7 @@ export default function Index() {
           <img
             src={logoImg}
             alt="e-eventos"
-            className="h-28 w-28 sm:h-36 sm:w-36 rounded-[2rem] object-contain shadow-xl border border-white/20 animate-fade-in-down"
+            className="h-28 w-28 sm:h-36 sm:w-36 rounded-[2rem] object-contain shadow-xl border border-white/10 bg-white/5 p-2 animate-fade-in-down"
           />
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl text-foreground animate-fade-in-up">
             O seu parceiro ideal em{' '}
@@ -79,12 +79,12 @@ export default function Index() {
           ].map((feature, i) => (
             <div
               key={i}
-              className="flex flex-col items-center text-center p-6 rounded-2xl bg-card border shadow-sm hover:shadow-md transition-shadow"
+              className="flex flex-col items-center text-center p-6 rounded-2xl bg-card border border-border shadow-sm hover:border-primary/50 transition-colors"
             >
               <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                 <feature.icon className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="font-semibold text-xl mb-2">{feature.title}</h3>
+              <h3 className="font-semibold text-xl mb-2 text-foreground">{feature.title}</h3>
               <p className="text-muted-foreground">{feature.description}</p>
             </div>
           ))}

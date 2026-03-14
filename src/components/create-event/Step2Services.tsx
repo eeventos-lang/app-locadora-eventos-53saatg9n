@@ -32,14 +32,14 @@ export const Step2Services = ({ formData, setFormData, configs, setConfigs }: Pr
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <h2 className="text-lg font-semibold">O que você precisa?</h2>
+      <h2 className="text-lg font-semibold text-foreground">O que você precisa?</h2>
       <div className="grid grid-cols-3 gap-3">
         {SERVICES.map(({ id, label, icon: Icon }) => (
           <div
             key={id}
             className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all cursor-pointer ${
               formData.requirements[id as keyof TechRequirement]
-                ? 'bg-primary/20 border-primary shadow-[0_0_15px_rgba(0,82,255,0.2)] text-white'
+                ? 'bg-primary/10 border-primary shadow-[0_0_15px_rgba(255,255,255,0.1)] text-foreground'
                 : 'bg-card border-border text-muted-foreground hover:bg-card/80'
             }`}
             onClick={() => updateReq(id, !formData.requirements[id as keyof TechRequirement])}
@@ -55,34 +55,34 @@ export const Step2Services = ({ formData, setFormData, configs, setConfigs }: Pr
         formData.requirements.drinks ||
         formData.requirements.security) && (
         <div className="space-y-4 pt-4 border-t border-border/50 animate-fade-in">
-          <h3 className="text-sm font-semibold text-white">Configurações de Serviços</h3>
+          <h3 className="text-sm font-semibold text-foreground">Configurações de Serviços</h3>
 
           {formData.requirements.buffet && (
-            <div className="space-y-4 p-4 border rounded-xl bg-card">
-              <h4 className="font-medium text-white">Opções de Buffet</h4>
+            <div className="space-y-4 p-4 border border-border rounded-xl bg-card">
+              <h4 className="font-medium text-foreground">Opções de Buffet</h4>
               <RadioGroup
                 value={configs.buffetTier}
                 onValueChange={(val: any) => setConfigs((p) => ({ ...p, buffetTier: val }))}
                 className="grid grid-cols-1 md:grid-cols-3 gap-3"
               >
-                <div className="flex items-start space-x-3 border p-3 rounded-lg hover:bg-muted/50 cursor-pointer">
+                <div className="flex items-start space-x-3 border border-border p-3 rounded-lg hover:bg-muted/50 cursor-pointer">
                   <RadioGroupItem value="prime" id="prime" className="mt-1" />
                   <Label htmlFor="prime" className="cursor-pointer grid gap-1.5">
-                    <span className="font-medium text-white">Prime</span>
+                    <span className="font-medium text-foreground">Prime</span>
                     <span className="text-xs text-muted-foreground">R$ 150,00 por pessoa</span>
                   </Label>
                 </div>
-                <div className="flex items-start space-x-3 border p-3 rounded-lg hover:bg-muted/50 cursor-pointer">
+                <div className="flex items-start space-x-3 border border-border p-3 rounded-lg hover:bg-muted/50 cursor-pointer">
                   <RadioGroupItem value="premium" id="premium" className="mt-1" />
                   <Label htmlFor="premium" className="cursor-pointer grid gap-1.5">
-                    <span className="font-medium text-white">Premium</span>
+                    <span className="font-medium text-foreground">Premium</span>
                     <span className="text-xs text-muted-foreground">R$ 200,00 por pessoa</span>
                   </Label>
                 </div>
-                <div className="flex items-start space-x-3 border p-3 rounded-lg hover:bg-muted/50 cursor-pointer">
+                <div className="flex items-start space-x-3 border border-border p-3 rounded-lg hover:bg-muted/50 cursor-pointer">
                   <RadioGroupItem value="top" id="top" className="mt-1" />
                   <Label htmlFor="top" className="cursor-pointer grid gap-1.5">
-                    <span className="font-medium text-white">Top</span>
+                    <span className="font-medium text-foreground">Top</span>
                     <span className="text-xs text-muted-foreground">R$ 300,00 por pessoa</span>
                   </Label>
                 </div>

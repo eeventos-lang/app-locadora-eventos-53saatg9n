@@ -52,7 +52,7 @@ export const Step1Basic = ({ formData, updateForm, setConfigs }: Props) => {
           type="date"
           value={formData.date}
           onChange={(e) => updateForm('date', e.target.value)}
-          className="bg-card border-border block w-full text-white"
+          className="bg-card border-border block w-full text-foreground"
         />
       </div>
       <div className="space-y-2">

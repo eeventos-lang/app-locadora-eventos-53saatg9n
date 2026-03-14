@@ -78,8 +78,8 @@ const Subscription = () => {
                 variant="outline"
                 className={
                   isSubscribed
-                    ? 'text-emerald-600 border-emerald-500/30 bg-emerald-50 px-3 py-1 text-xs'
-                    : 'text-amber-600 border-amber-500/30 bg-amber-50 px-3 py-1 text-xs'
+                    ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs'
+                    : 'text-amber-400 border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs'
                 }
               >
                 {isSubscribed ? 'Regular' : 'Atrasado'}
@@ -96,14 +96,14 @@ const Subscription = () => {
 
               {!isSubscribed && (
                 <div className="space-y-4 animate-fade-in">
-                  <p className="text-sm text-amber-700 bg-amber-50 p-4 rounded-lg border border-amber-200 leading-relaxed">
+                  <p className="text-sm text-amber-400 bg-amber-500/10 p-4 rounded-lg border border-amber-500/20 leading-relaxed">
                     Sua fatura deste mês está aguardando pagamento. Regularize para visualizar novas
                     demandas na plataforma.
                   </p>
                   <Button
                     size="lg"
                     onClick={handlePayment}
-                    className="w-full bg-amber-500 hover:bg-amber-600 text-white gap-2 h-14 text-base shadow-md"
+                    className="w-full bg-amber-600 hover:bg-amber-700 text-zinc-50 gap-2 h-14 text-base shadow-md"
                   >
                     <CreditCard className="w-5 h-5" />
                     Pagar Agora
@@ -152,13 +152,16 @@ const Subscription = () => {
             <div className="flex items-center justify-between p-5 bg-card border border-amber-500/30 shadow-sm rounded-xl">
               <div>
                 <p className="font-semibold text-foreground text-lg">Maio / 2026</p>
-                <p className="text-sm text-amber-600 mt-1">Vencido em 10/05/2026</p>
+                <p className="text-sm text-amber-400 mt-1">Vencido em 10/05/2026</p>
               </div>
               <div className="text-right flex flex-col items-end gap-2">
                 <p className="text-xl font-bold text-foreground">
                   R$ {monthlyFee.toFixed(2).replace('.', ',')}
                 </p>
-                <Badge variant="outline" className="bg-amber-50 text-amber-600 border-amber-200">
+                <Badge
+                  variant="outline"
+                  className="bg-amber-500/10 text-amber-400 border-amber-500/20"
+                >
                   Pendente
                 </Badge>
               </div>
@@ -167,7 +170,7 @@ const Subscription = () => {
           {history.map((item) => (
             <div
               key={item.id}
-              className="flex items-center justify-between p-5 bg-card border border-border shadow-sm rounded-xl hover:shadow-md transition-shadow"
+              className="flex items-center justify-between p-5 bg-card border border-border shadow-sm rounded-xl hover:border-primary/50 transition-colors"
             >
               <div>
                 <p className="font-semibold text-foreground text-lg">{item.month}</p>
@@ -179,7 +182,7 @@ const Subscription = () => {
                 </p>
                 <Badge
                   variant="outline"
-                  className="bg-emerald-50 text-emerald-600 border-emerald-200"
+                  className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                 >
                   Pago
                 </Badge>

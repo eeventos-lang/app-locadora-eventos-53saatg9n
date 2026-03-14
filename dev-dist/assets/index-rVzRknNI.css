@@ -514,57 +514,57 @@ video {
 }
 
 :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --background: 240 5% 4%;
+    --foreground: 240 5% 96%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card: 240 5% 10%;
+    --card-foreground: 240 5% 96%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
+    --popover: 240 5% 10%;
+    --popover-foreground: 240 5% 96%;
 
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 240 5% 96%;
+    --primary-foreground: 240 5% 4%;
 
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
+    --secondary: 240 5% 16%;
+    --secondary-foreground: 240 5% 96%;
 
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
+    --muted: 240 5% 16%;
+    --muted-foreground: 240 5% 65%;
 
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    --accent: 240 5% 16%;
+    --accent-foreground: 240 5% 96%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 240 5% 96%;
 
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
+    --border: 240 5% 16%;
+    --input: 240 5% 16%;
+    --ring: 240 5% 65%;
 
     --radius: 0.75rem;
   }
 
 .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --background: 240 5% 4%;
+    --foreground: 240 5% 96%;
+    --card: 240 5% 10%;
+    --card-foreground: 240 5% 96%;
+    --popover: 240 5% 10%;
+    --popover-foreground: 240 5% 96%;
+    --primary: 240 5% 96%;
+    --primary-foreground: 240 5% 4%;
+    --secondary: 240 5% 16%;
+    --secondary-foreground: 240 5% 96%;
+    --muted: 240 5% 16%;
+    --muted-foreground: 240 5% 65%;
+    --accent: 240 5% 16%;
+    --accent-foreground: 240 5% 96%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 240 5% 96%;
+    --border: 240 5% 16%;
+    --input: 240 5% 16%;
+    --ring: 240 5% 65%;
   }
 
 body{
@@ -1778,9 +1778,8 @@ section[aria-label='Notifications alt+T'] {
   border-color: var(--color-border);
 }
 
-.border-amber-200{
-  --tw-border-opacity: 1;
-  border-color: rgb(253 230 138 / var(--tw-border-opacity, 1));
+.border-amber-500\/20{
+  border-color: rgb(245 158 11 / 0.2);
 }
 
 .border-amber-500\/30{
@@ -1811,9 +1810,8 @@ section[aria-label='Notifications alt+T'] {
   border-color: hsl(var(--destructive) / 0.5);
 }
 
-.border-emerald-200{
-  --tw-border-opacity: 1;
-  border-color: rgb(167 243 208 / var(--tw-border-opacity, 1));
+.border-emerald-500\/20{
+  border-color: rgb(16 185 129 / 0.2);
 }
 
 .border-emerald-500\/30{
@@ -1844,8 +1842,8 @@ section[aria-label='Notifications alt+T'] {
   border-color: transparent;
 }
 
-.border-white\/20{
-  border-color: rgb(255 255 255 / 0.2);
+.border-white\/10{
+  border-color: rgb(255 255 255 / 0.1);
 }
 
 .border-l-primary{
@@ -1868,18 +1866,13 @@ section[aria-label='Notifications alt+T'] {
   background-color: hsl(var(--accent));
 }
 
-.bg-amber-50{
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 251 235 / var(--tw-bg-opacity, 1));
-}
-
-.bg-amber-500{
-  --tw-bg-opacity: 1;
-  background-color: rgb(245 158 11 / var(--tw-bg-opacity, 1));
-}
-
 .bg-amber-500\/10{
   background-color: rgb(245 158 11 / 0.1);
+}
+
+.bg-amber-600{
+  --tw-bg-opacity: 1;
+  background-color: rgb(217 119 6 / var(--tw-bg-opacity, 1));
 }
 
 .bg-background{
@@ -1892,10 +1885,6 @@ section[aria-label='Notifications alt+T'] {
 
 .bg-background\/90{
   background-color: hsl(var(--background) / 0.9);
-}
-
-.bg-background\/95{
-  background-color: hsl(var(--background) / 0.95);
 }
 
 .bg-black\/80{
@@ -1914,17 +1903,16 @@ section[aria-label='Notifications alt+T'] {
   background-color: hsl(var(--card));
 }
 
+.bg-card\/50{
+  background-color: hsl(var(--card) / 0.5);
+}
+
 .bg-cyan-500\/10{
   background-color: rgb(6 182 212 / 0.1);
 }
 
 .bg-destructive{
   background-color: hsl(var(--destructive));
-}
-
-.bg-emerald-50{
-  --tw-bg-opacity: 1;
-  background-color: rgb(236 253 245 / var(--tw-bg-opacity, 1));
 }
 
 .bg-emerald-500\/10{
@@ -1945,10 +1933,6 @@ section[aria-label='Notifications alt+T'] {
 
 .bg-muted{
   background-color: hsl(var(--muted));
-}
-
-.bg-muted\/30{
-  background-color: hsl(var(--muted) / 0.3);
 }
 
 .bg-muted\/50{
@@ -1973,10 +1957,6 @@ section[aria-label='Notifications alt+T'] {
 
 .bg-primary\/10{
   background-color: hsl(var(--primary) / 0.1);
-}
-
-.bg-primary\/20{
-  background-color: hsl(var(--primary) / 0.2);
 }
 
 .bg-primary\/5{
@@ -2025,6 +2005,10 @@ section[aria-label='Notifications alt+T'] {
 
 .bg-violet-500\/10{
   background-color: rgb(139 92 246 / 0.1);
+}
+
+.bg-white\/5{
+  background-color: rgb(255 255 255 / 0.05);
 }
 
 .bg-yellow-500\/10{
@@ -2395,10 +2379,6 @@ section[aria-label='Notifications alt+T'] {
   letter-spacing: 0.1em;
 }
 
-.text-accent{
-  color: hsl(var(--accent));
-}
-
 .text-accent-foreground{
   color: hsl(var(--accent-foreground));
 }
@@ -2411,16 +2391,6 @@ section[aria-label='Notifications alt+T'] {
 .text-amber-500{
   --tw-text-opacity: 1;
   color: rgb(245 158 11 / var(--tw-text-opacity, 1));
-}
-
-.text-amber-600{
-  --tw-text-opacity: 1;
-  color: rgb(217 119 6 / var(--tw-text-opacity, 1));
-}
-
-.text-amber-700{
-  --tw-text-opacity: 1;
-  color: rgb(180 83 9 / var(--tw-text-opacity, 1));
 }
 
 .text-blue-400{
@@ -2457,11 +2427,6 @@ section[aria-label='Notifications alt+T'] {
 .text-emerald-500{
   --tw-text-opacity: 1;
   color: rgb(16 185 129 / var(--tw-text-opacity, 1));
-}
-
-.text-emerald-600{
-  --tw-text-opacity: 1;
-  color: rgb(5 150 105 / var(--tw-text-opacity, 1));
 }
 
 .text-foreground{
@@ -2555,14 +2520,14 @@ section[aria-label='Notifications alt+T'] {
   color: rgb(167 139 250 / var(--tw-text-opacity, 1));
 }
 
-.text-white{
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-}
-
 .text-yellow-400{
   --tw-text-opacity: 1;
   color: rgb(250 204 21 / var(--tw-text-opacity, 1));
+}
+
+.text-zinc-50{
+  --tw-text-opacity: 1;
+  color: rgb(250 250 250 / var(--tw-text-opacity, 1));
 }
 
 .underline-offset-4{
@@ -2595,8 +2560,8 @@ section[aria-label='Notifications alt+T'] {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
-.shadow-\[0_0_15px_rgba\(0\2c 82\2c 255\2c 0\.2\)\]{
-  --tw-shadow: 0 0 15px rgba(0,82,255,0.2);
+.shadow-\[0_0_15px_rgba\(255\2c 255\2c 255\2c 0\.1\)\]{
+  --tw-shadow: 0 0 15px rgba(255,255,255,0.1);
   --tw-shadow-colored: 0 0 15px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
@@ -2678,11 +2643,6 @@ section[aria-label='Notifications alt+T'] {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
-.backdrop-blur{
-  --tw-backdrop-blur: blur(8px);
-  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
-}
-
 .backdrop-blur-md{
   --tw-backdrop-blur: blur(12px);
   backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
@@ -2736,12 +2696,6 @@ section[aria-label='Notifications alt+T'] {
 
 .transition-opacity{
   transition-property: opacity;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
-.transition-shadow{
-  transition-property: box-shadow;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
@@ -2956,9 +2910,9 @@ section[aria-label='Notifications alt+T'] {
   background-color: hsl(var(--accent));
 }
 
-.hover\:bg-amber-600:hover{
+.hover\:bg-amber-700:hover{
   --tw-bg-opacity: 1;
-  background-color: rgb(217 119 6 / var(--tw-bg-opacity, 1));
+  background-color: rgb(180 83 9 / var(--tw-bg-opacity, 1));
 }
 
 .hover\:bg-card\/80:hover{
