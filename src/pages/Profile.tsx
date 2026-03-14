@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '@/store/AppContext'
 import { Card, CardContent } from '@/components/ui/card'
@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { useToast } from '@/hooks/use-toast'
-import { Upload, BadgeCheck, AlertCircle, ShieldCheck } from 'lucide-react'
+import { Upload, BadgeCheck, AlertCircle, ShieldCheck, Trophy, Award } from 'lucide-react'
 import { SERVICES } from '@/lib/services'
 import { cn } from '@/lib/utils'
 
@@ -23,6 +23,7 @@ const Profile = () => {
     updateCompanyProfile,
     currentUser,
     logout,
+    reviews,
   } = useApp()
   const { toast } = useToast()
   const navigate = useNavigate()
@@ -36,6 +37,14 @@ const Profile = () => {
 
   const isCompany = role === 'company'
   const isVerified = localProfile.isVerified
+
+  const fiveStarCount = useMemo(() => {
+    if (!currentUser) return 0
+    return reviews.filter((r) => r.supplierId === currentUser.id && r.rating === 5).length
+  }, [reviews, currentUser])
+
+  const isExpert = fiveStarCount >= 10
+  const isHighPerformance = fiveStarCount >= 25
 
   const handleSave = () => {
     updateCompanyProfile(localProfile)
@@ -67,30 +76,52 @@ const Profile = () => {
 
   return (
     <div className="space-y-8 animate-slide-up pb-12 p-6 md:p-8 max-w-5xl mx-auto">
-      <div className="flex items-center gap-5">
-        <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center border border-border shadow-sm overflow-hidden">
-          {isCompany && companyProfile.logo ? (
-            <img src={companyProfile.logo} alt="Logo" className="w-full h-full object-cover" />
-          ) : (
-            <span className="text-3xl font-bold text-muted-foreground uppercase">
-              {currentUser?.name?.charAt(0) || 'U'}
-            </span>
-          )}
-        </div>
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-2 flex-wrap">
-            {currentUser?.name || 'Usuário'}
-            {isCompany && isVerified && (
-              <BadgeCheck
-                className="w-7 h-7 text-blue-500 shrink-0"
-                title="Fornecedor Verificado"
-              />
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 justify-between">
+        <div className="flex items-center gap-5">
+          <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center border border-border shadow-sm overflow-hidden shrink-0">
+            {isCompany && companyProfile.logo ? (
+              <img src={companyProfile.logo} alt="Logo" className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-3xl font-bold text-muted-foreground uppercase">
+                {currentUser?.name?.charAt(0) || 'U'}
+              </span>
             )}
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            {currentUser?.email || 'usuario@exemplo.com'}
-          </p>
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-2 flex-wrap">
+              {currentUser?.name || 'Usuário'}
+              {isCompany && isVerified && (
+                <BadgeCheck
+                  className="w-7 h-7 text-blue-500 shrink-0"
+                  title="Fornecedor Verificado"
+                />
+              )}
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              {currentUser?.email || 'usuario@exemplo.com'}
+            </p>
+          </div>
         </div>
+
+        {isCompany && (isHighPerformance || isExpert) && (
+          <div className="flex flex-col gap-2 mt-4 sm:mt-0">
+            <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-[-4px]">
+              Badges Recebidos
+            </span>
+            <div className="flex gap-2">
+              {isHighPerformance && (
+                <Badge className="bg-amber-500/20 text-amber-500 border-amber-500/30 px-3 py-1.5 shadow-sm">
+                  <Trophy className="w-4 h-4 mr-1.5" /> Alta Performance
+                </Badge>
+              )}
+              {isExpert && !isHighPerformance && (
+                <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 px-3 py-1.5 shadow-sm">
+                  <Award className="w-4 h-4 mr-1.5" /> Fornecedor Expert
+                </Badge>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">

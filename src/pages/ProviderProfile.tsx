@@ -1,8 +1,9 @@
 import { useParams } from 'react-router-dom'
 import { useApp } from '@/store/AppContext'
-import { MapPin, Star, Heart, BadgeCheck } from 'lucide-react'
+import { MapPin, Star, Heart, BadgeCheck, Trophy, Award } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 import { BackButton } from '@/components/BackButton'
 import { SERVICES } from '@/lib/services'
 import { cn } from '@/lib/utils'
@@ -26,9 +27,13 @@ export default function ProviderProfile() {
   const avgRating = supplierReviews.length
     ? supplierReviews.reduce((sum, r) => sum + r.rating, 0) / supplierReviews.length
     : 0
+  const fiveStarCount = supplierReviews.filter((r) => r.rating === 5).length
   const isFav = favorites.some(
     (f) => f.customerId === currentUser?.id && f.supplierId === supplier.id,
   )
+
+  const isExpert = fiveStarCount >= 10
+  const isHighPerformance = fiveStarCount >= 25
 
   return (
     <div className="animate-slide-up pb-12 p-4 sm:p-6 max-w-5xl mx-auto space-y-6">
@@ -55,7 +60,21 @@ export default function ProviderProfile() {
                 <BadgeCheck className="w-5 h-5 text-blue-500 shrink-0" title="Verificado" />
               )}
             </h2>
-            <div className="flex items-center gap-2 mt-2 text-sm text-muted-foreground">
+
+            <div className="flex flex-col gap-2 mt-3 w-full">
+              {isHighPerformance && (
+                <Badge className="bg-amber-500/20 text-amber-500 border-amber-500/30 justify-center py-1">
+                  <Trophy className="w-3.5 h-3.5 mr-1.5" /> Alta Performance
+                </Badge>
+              )}
+              {isExpert && !isHighPerformance && (
+                <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 justify-center py-1">
+                  <Award className="w-3.5 h-3.5 mr-1.5" /> Fornecedor Expert
+                </Badge>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2 mt-4 text-sm text-muted-foreground">
               <MapPin className="w-4 h-4 text-primary" />
               <span>{profile.address || 'Endereço não informado'}</span>
             </div>

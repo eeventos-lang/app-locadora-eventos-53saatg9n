@@ -14,6 +14,8 @@ import {
   Users,
   Receipt,
   Heart,
+  LineChart,
+  CalendarClock,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet'
@@ -74,8 +76,9 @@ export function Layout() {
       ? [
           { name: 'Fornecedores', path: '/suppliers', icon: Users },
           { name: 'Favoritos', path: '/favorites', icon: Heart },
+          { name: 'Agendamentos', path: '/schedules', icon: CalendarClock },
         ]
-      : []),
+      : [{ name: 'Insights', path: '/insights', icon: LineChart }]),
     { name: 'Financeiro', path: '/finance', icon: Receipt },
     { name: 'Criar Evento', path: '/create-event', icon: PlusCircle },
     { name: 'Planos', path: '/subscription', icon: CreditCard },
@@ -233,7 +236,9 @@ export function Layout() {
                       <DropdownMenuItem
                         key={notif.id}
                         className="flex flex-col items-start gap-1 p-3 cursor-pointer"
-                        onClick={() => navigate(`/demands/${notif.demandId}`)}
+                        onClick={() =>
+                          navigate(notif.demandId ? `/demands/${notif.demandId}` : '#')
+                        }
                       >
                         <div className="flex items-center gap-2">
                           {!notif.read && (
@@ -316,20 +321,29 @@ export function Layout() {
                   </Link>
                 </li>
                 {role === 'customer' && (
+                  <>
+                    <li>
+                      <Link to="/suppliers" className="hover:text-primary transition-colors">
+                        Buscar Fornecedores
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/schedules" className="hover:text-primary transition-colors">
+                        Agendamentos
+                      </Link>
+                    </li>
+                  </>
+                )}
+                {role === 'company' && (
                   <li>
-                    <Link to="/suppliers" className="hover:text-primary transition-colors">
-                      Buscar Fornecedores
+                    <Link to="/insights" className="hover:text-primary transition-colors">
+                      Insights & Desempenho
                     </Link>
                   </li>
                 )}
                 <li>
                   <Link to="/create-event" className="hover:text-primary transition-colors">
                     Criar Evento
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/subscription" className="hover:text-primary transition-colors">
-                    Planos
                   </Link>
                 </li>
               </ul>

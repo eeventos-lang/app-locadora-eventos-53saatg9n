@@ -1,14 +1,36 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Heart, MapPin, Star, BadgeCheck } from 'lucide-react'
+import { Heart, MapPin, Star, BadgeCheck, Calendar as CalendarIcon, Clock } from 'lucide-react'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Calendar } from '@/components/ui/calendar'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { useApp } from '@/store/AppContext'
 import { SERVICES } from '@/lib/services'
 import { cn } from '@/lib/utils'
+import { useToast } from '@/hooks/use-toast'
 
 export default function Favorites() {
-  const { users, favorites, toggleFavorite, currentUser, role, reviews } = useApp()
+  const { users, favorites, toggleFavorite, currentUser, role, reviews, addScheduledInvitation } =
+    useApp()
+  const { toast } = useToast()
+
+  const [isScheduleOpen, setIsScheduleOpen] = useState(false)
+  const [selectedSupplierId, setSelectedSupplierId] = useState<string | null>(null)
+  const [scheduleDate, setScheduleDate] = useState<Date | undefined>(undefined)
+  const [scheduleTitle, setScheduleTitle] = useState('')
 
   const myFavorites = useMemo(() => {
     if (!currentUser) return []
@@ -26,6 +48,37 @@ export default function Favorites() {
     )
   }
 
+  const handleOpenSchedule = (supplierId: string, e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setSelectedSupplierId(supplierId)
+    setScheduleDate(undefined)
+    setScheduleTitle('')
+    setIsScheduleOpen(true)
+  }
+
+  const handleConfirmSchedule = () => {
+    if (!scheduleDate || !scheduleTitle || !selectedSupplierId || !currentUser) {
+      toast({
+        title: 'Atenção',
+        description: 'Preencha a data e o título do evento.',
+        variant: 'destructive',
+      })
+      return
+    }
+    addScheduledInvitation({
+      customerId: currentUser.id,
+      supplierId: selectedSupplierId,
+      title: scheduleTitle,
+      date: scheduleDate.toISOString(),
+    })
+    setIsScheduleOpen(false)
+    toast({
+      title: 'Agendamento Salvo!',
+      description: 'O convite será enviado automaticamente quando a data se aproximar.',
+    })
+  }
+
   return (
     <div className="space-y-6 p-4 sm:p-6 max-w-7xl mx-auto animate-slide-up pb-12">
       <div className="flex flex-col gap-2 mb-6">
@@ -34,7 +87,8 @@ export default function Favorites() {
           Meus Favoritos
         </h1>
         <p className="text-muted-foreground">
-          Sua rede de confiança. Salve os melhores profissionais para os seus próximos eventos.
+          Sua rede de confiança. Salve os melhores profissionais para os seus próximos eventos ou
+          agende convites antecipados.
         </p>
       </div>
 
@@ -140,9 +194,17 @@ export default function Favorites() {
                         )}
                       </div>
 
-                      <Button className="w-full shadow-sm font-semibold" variant="outline">
-                        Ver Perfil Completo
-                      </Button>
+                      <div className="flex gap-2 z-20">
+                        <Button className="flex-1 shadow-sm font-semibold" variant="outline">
+                          Ver Perfil
+                        </Button>
+                        <Button
+                          className="flex-1 shadow-sm font-semibold bg-primary text-primary-foreground gap-2"
+                          onClick={(e) => handleOpenSchedule(supplier.id, e)}
+                        >
+                          <Clock className="w-4 h-4" /> Agendar
+                        </Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Link>
@@ -151,6 +213,66 @@ export default function Favorites() {
           })
         )}
       </div>
+
+      <Dialog open={isScheduleOpen} onOpenChange={setIsScheduleOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Agendar Convite Recorrente</DialogTitle>
+            <DialogDescription>
+              Planeje com antecedência! O fornecedor receberá um convite na plataforma 30 dias antes
+              da data selecionada.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-5 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="title">Título do Evento</Label>
+              <Input
+                id="title"
+                placeholder="Ex: Jantar Corporativo Anual"
+                value={scheduleTitle}
+                onChange={(e) => setScheduleTitle(e.target.value)}
+                className="h-11"
+              />
+            </div>
+            <div className="space-y-2 flex flex-col">
+              <Label>Data do Evento</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      'justify-start text-left font-normal h-11 w-full',
+                      !scheduleDate && 'text-muted-foreground',
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {scheduleDate ? (
+                      format(scheduleDate, 'PPP', { locale: ptBR })
+                    ) : (
+                      <span>Selecione a data</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={scheduleDate}
+                    onSelect={setScheduleDate}
+                    initialFocus
+                    disabled={(date) => date < new Date()}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsScheduleOpen(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={handleConfirmSchedule}>Salvar Agendamento</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

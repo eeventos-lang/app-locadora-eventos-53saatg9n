@@ -12,6 +12,8 @@ import SupplierSearch from '@/pages/SupplierSearch'
 import ProviderProfile from '@/pages/ProviderProfile'
 import Favorites from '@/pages/Favorites'
 import Transactions from '@/pages/Transactions'
+import Insights from '@/pages/Insights'
+import Schedules from '@/pages/Schedules'
 import NotFound from '@/pages/NotFound'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
@@ -38,7 +40,9 @@ function App() {
               <Route path="suppliers" element={<SupplierSearch />} />
               <Route path="suppliers/:id" element={<ProviderProfile />} />
               <Route path="favorites" element={<Favorites />} />
+              <Route path="schedules" element={<Schedules />} />
               <Route path="finance" element={<Transactions />} />
+              <Route path="insights" element={<Insights />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
