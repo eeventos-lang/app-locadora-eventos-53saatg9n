@@ -38,6 +38,7 @@ import {
 import { useApp } from '@/store/AppContext'
 import { useToast } from '@/hooks/use-toast'
 import { getLoyaltyTier, cn } from '@/lib/utils'
+import { useExportQueue } from '@/hooks/use-export-queue'
 
 const POSITIVE_KEYWORDS = [
   'excelente',
@@ -55,7 +56,7 @@ const POSITIVE_KEYWORDS = [
 export default function Insights() {
   const { currentUser, role, reviews, companyProfile, redeemLoyaltyPoints } = useApp()
   const { toast } = useToast()
-  const [isExporting, setIsExporting] = useState(false)
+  const { addToQueue, isProcessing } = useExportQueue()
 
   const [redeemModalOpen, setRedeemModalOpen] = useState(false)
   const [selectedReward, setSelectedReward] = useState<{ name: string; points: number } | null>(
@@ -120,15 +121,9 @@ export default function Insights() {
   const chartConfig = { rating: { label: 'Avaliação Média', color: 'hsl(var(--primary))' } }
 
   const handleExportPDF = () => {
-    setIsExporting(true)
-    setTimeout(() => {
+    addToQueue('Relatório de Desempenho (PDF)', () => {
       window.print()
-      setIsExporting(false)
-      toast({
-        title: 'Relatório Gerado',
-        description: 'Seu PDF profissional está pronto para ser salvo.',
-      })
-    }, 800)
+    })
   }
 
   const handleRedeem = () => {
@@ -187,8 +182,8 @@ export default function Insights() {
               serviço.
             </p>
           </div>
-          <Button onClick={handleExportPDF} disabled={isExporting} className="shrink-0 shadow-md">
-            {isExporting ? (
+          <Button onClick={handleExportPDF} disabled={isProcessing} className="shrink-0 shadow-md">
+            {isProcessing ? (
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
             ) : (
               <Download className="w-4 h-4 mr-2" />
@@ -212,10 +207,10 @@ export default function Insights() {
               </CardDescription>
             </CardHeader>
             <CardContent className="relative z-10 pt-6 flex-1 flex flex-col justify-center">
-              <div className="flex flex-col md:flex-row gap-8 items-center">
+              <div className="flex flex-col sm:flex-row gap-6 md:gap-8 items-center w-full">
                 <div
                   className={cn(
-                    'flex flex-col items-center justify-center p-6 rounded-2xl border shadow-sm min-w-[200px] transition-all',
+                    'flex flex-col items-center justify-center p-6 rounded-2xl border shadow-sm w-full sm:w-auto min-w-[200px] transition-all',
                     tier.bgClass,
                     tier.borderClass,
                   )}
@@ -233,23 +228,28 @@ export default function Insights() {
                 <div className="flex-1 w-full space-y-6">
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm font-semibold">
-                      <span className="text-muted-foreground">
+                      <span className="text-muted-foreground text-center sm:text-left w-full sm:w-auto block">
                         Progresso para {tier.nextThreshold ? 'próximo nível' : 'nível máximo'}
                       </span>
-                      <span className={cn(tier.colorClass)}>
+                      <span
+                        className={cn(
+                          'text-center sm:text-right w-full sm:w-auto block',
+                          tier.colorClass,
+                        )}
+                      >
                         {points} {tier.nextThreshold ? `/ ${tier.nextThreshold} pts` : 'pts'}
                       </span>
                     </div>
-                    <Progress value={progressToNextReward} className="h-3 bg-primary/10" />
+                    <Progress value={progressToNextReward} className="h-3 bg-primary/10 w-full" />
                     {tier.nextThreshold && (
-                      <p className="text-xs text-muted-foreground mt-1 text-right">
+                      <p className="text-xs text-muted-foreground mt-1 text-center sm:text-right">
                         Faltam {Math.max(0, tier.nextThreshold - points)} pontos para o próximo
                         nível.
                       </p>
                     )}
                   </div>
 
-                  <div className="grid grid-cols-1 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
                     <Button
                       variant={points >= 100 ? 'default' : 'secondary'}
                       className="w-full font-bold shadow-sm h-11"
@@ -259,7 +259,7 @@ export default function Insights() {
                         setRedeemModalOpen(true)
                       }}
                     >
-                      <Zap className="w-4 h-4 mr-2" /> Resgatar Destaque (100 pts)
+                      <Zap className="w-4 h-4 mr-2" /> Destaque (100 pts)
                     </Button>
                     <Button
                       variant={points >= 200 ? 'default' : 'secondary'}
@@ -270,7 +270,7 @@ export default function Insights() {
                         setRedeemModalOpen(true)
                       }}
                     >
-                      <Percent className="w-4 h-4 mr-2" /> Resgatar Desconto (200 pts)
+                      <Percent className="w-4 h-4 mr-2" /> Desconto (200 pts)
                     </Button>
                   </div>
                 </div>
@@ -292,7 +292,7 @@ export default function Insights() {
               </CardDescription>
             </CardHeader>
             <CardContent className="relative z-10 pt-6 flex-1 flex flex-col justify-center gap-8">
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-2 bg-secondary/30 p-5 rounded-2xl border border-border/50">
                   <p className="text-xs uppercase font-bold tracking-wider text-muted-foreground flex items-center gap-1.5">
                     <Trophy className="w-3.5 h-3.5" /> Pontos Ganhos
@@ -383,17 +383,19 @@ export default function Insights() {
               <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
                 Conquistas
               </p>
-              <div className="flex flex-col gap-2">
-                {isHighPerformance ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-2">
+                {isHighPerformance && (
                   <Badge className="bg-amber-500/20 text-amber-500 border-amber-500/30 py-1.5 px-3 text-sm justify-center w-full">
-                    <Trophy className="w-4 h-4 mr-2" /> Alta Performance
+                    <Trophy className="w-4 h-4 mr-2 shrink-0" /> Alta Performance
                   </Badge>
-                ) : isExpert ? (
+                )}
+                {isExpert && (
                   <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 py-1.5 px-3 text-sm justify-center w-full">
-                    <Award className="w-4 h-4 mr-2" /> Fornecedor Expert
+                    <Award className="w-4 h-4 mr-2 shrink-0" /> Fornecedor Expert
                   </Badge>
-                ) : (
-                  <span className="text-sm text-muted-foreground italic text-center w-full block py-1.5">
+                )}
+                {!isHighPerformance && !isExpert && (
+                  <span className="text-sm text-muted-foreground italic text-center w-full block py-1.5 sm:col-span-2">
                     Faltam {10 - fiveStarCount} avaliações 5 estrelas para a primeira conquista!
                   </span>
                 )}

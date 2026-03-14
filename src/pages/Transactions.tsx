@@ -20,12 +20,14 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { useApp, Proposal, Demand, User, Transaction } from '@/store/AppContext'
-import { Receipt, ShieldCheck, FileText, Ban } from 'lucide-react'
+import { Receipt, ShieldCheck, FileText, Ban, Loader2 } from 'lucide-react'
 import { SERVICES } from '@/lib/services'
 import logoImg from '@/assets/e-eventos-novo-62817.png'
+import { useExportQueue } from '@/hooks/use-export-queue'
 
 const Transactions = () => {
   const { role, transactions, currentUser, proposals, demands, users } = useApp()
+  const { addToQueue, isProcessing } = useExportQueue()
   const [insuranceFilter, setInsuranceFilter] = useState('all')
   const [paymentFilter, setPaymentFilter] = useState('all')
 
@@ -459,8 +461,17 @@ const Transactions = () => {
                   <Button variant="outline" onClick={() => setSelectedReceipt(null)}>
                     Fechar
                   </Button>
-                  <Button onClick={() => window.print()} className="gap-2">
-                    <FileText className="w-4 h-4" /> Imprimir Recibo
+                  <Button
+                    onClick={() => addToQueue(`Recibo_${selectedReceipt.id}`, () => window.print())}
+                    disabled={isProcessing}
+                    className="gap-2"
+                  >
+                    {isProcessing ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <FileText className="w-4 h-4" />
+                    )}
+                    Imprimir Recibo
                   </Button>
                 </div>
               </>

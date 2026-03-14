@@ -1,10 +1,59 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    src:
+      url('/fonts/Inter-Regular.woff2') format('woff2'),
+      local('Inter Regular'),
+      local('Inter-Regular');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    src:
+      url('/fonts/Inter-Medium.woff2') format('woff2'),
+      local('Inter Medium'),
+      local('Inter-Medium');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    src:
+      url('/fonts/Inter-SemiBold.woff2') format('woff2'),
+      local('Inter SemiBold'),
+      local('Inter-SemiBold');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    src:
+      url('/fonts/Inter-Bold.woff2') format('woff2'),
+      local('Inter Bold'),
+      local('Inter-Bold');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    src:
+      url('/fonts/Inter-ExtraBold.woff2') format('woff2'),
+      local('Inter ExtraBold'),
+      local('Inter-ExtraBold');
+    font-display: swap;
+  }
+
   :root {
     --background: 240 5% 4%;
     --foreground: 240 5% 96%;

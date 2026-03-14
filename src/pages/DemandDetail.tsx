@@ -11,6 +11,7 @@ import {
   Star,
   Ban,
   FileText,
+  Loader2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -36,11 +37,13 @@ import { SERVICES } from '@/lib/services'
 import { BackButton } from '@/components/BackButton'
 import { cn } from '@/lib/utils'
 import logoImg from '@/assets/e-eventos-novo-62817.png'
+import { useExportQueue } from '@/hooks/use-export-queue'
 
 const DemandDetail = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const { toast } = useToast()
+  const { addToQueue, isProcessing } = useExportQueue()
   const {
     role,
     demands,
@@ -1311,8 +1314,17 @@ const DemandDetail = () => {
             <Button variant="outline" onClick={() => setIsReceiptOpen(false)}>
               Fechar
             </Button>
-            <Button onClick={() => window.print()} className="gap-2">
-              <FileText className="w-4 h-4" /> Imprimir Recibo
+            <Button
+              onClick={() => addToQueue(`Recibo_${demand.id}`, () => window.print())}
+              disabled={isProcessing}
+              className="gap-2"
+            >
+              {isProcessing ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <FileText className="w-4 h-4" />
+              )}
+              Imprimir Recibo
             </Button>
           </div>
         </DialogContent>
