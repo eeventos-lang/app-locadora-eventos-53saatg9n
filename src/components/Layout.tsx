@@ -1,236 +1,198 @@
-import { Outlet, Link, useLocation } from 'react-router-dom'
-import { cn } from '@/lib/utils'
-import { Calendar, Home, Settings, User, Menu, Bell, Instagram, Mail, Phone } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetTitle,
-  SheetDescription,
-} from '@/components/ui/sheet'
-import logoUrl from '../assets/logo-marca-e-eventos-66b1b.png'
+  Menu,
+  Calendar,
+  PlusCircle,
+  CreditCard,
+  LayoutDashboard,
+  LogIn,
+  UserPlus,
+} from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet'
+import { cn } from '@/lib/utils'
+import logoImg from '@/assets/e-eventos-novo-62817.png'
 
-const navigation = [
-  { name: 'Início', href: '/', icon: Home },
-  { name: 'Demandas', href: '/demandas', icon: Calendar },
-  { name: 'Assinatura', href: '/assinatura', icon: Settings },
-  { name: 'Perfil', href: '/perfil', icon: User },
-]
-
-export default function Layout() {
+export function Layout() {
   const location = useLocation()
 
+  const navItems = [
+    { name: 'Início', path: '/', icon: LayoutDashboard },
+    { name: 'Demandas', path: '/demands', icon: Calendar },
+    { name: 'Criar Evento', path: '/create-event', icon: PlusCircle },
+    { name: 'Planos', path: '/subscription', icon: CreditCard },
+  ]
+
   return (
-    <div className="min-h-screen bg-background flex flex-col font-sans">
-      <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-border bg-background/80 backdrop-blur-md px-4 md:px-6 transition-all duration-200 shadow-sm">
-        <div className="flex items-center gap-4">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-72 sm:w-80 overflow-y-auto flex flex-col">
-              <SheetTitle className="sr-only">Menu de Navegação</SheetTitle>
-              <SheetDescription className="sr-only">
-                Navegue pelas páginas do e-eventos
-              </SheetDescription>
-              <div className="flex items-center gap-3 mb-8 mt-4 px-2">
-                <img
-                  src={logoUrl}
-                  alt="e-eventos logo"
-                  className="h-9 w-auto rounded object-contain"
-                />
-                <span className="text-xl font-bold tracking-tight text-foreground">e-eventos</span>
-              </div>
-              <nav className="flex flex-col gap-2 flex-1">
-                {navigation.map((item) => {
-                  const isActive =
-                    location.pathname === item.href ||
-                    (item.href !== '/' && location.pathname.startsWith(item.href))
-                  return (
-                    <Link
-                      key={item.name}
-                      to={item.href}
-                      className={cn(
-                        'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all',
-                        isActive
-                          ? 'bg-secondary text-foreground'
-                          : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground',
-                      )}
-                    >
-                      <item.icon
+    <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="md:hidden">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Menu principal</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-64 sm:max-w-xs flex flex-col">
+                <SheetHeader>
+                  <SheetTitle className="text-left flex items-center gap-3">
+                    <img
+                      src={logoImg}
+                      alt="e-eventos"
+                      className="h-8 w-8 rounded-lg object-contain shadow-sm"
+                    />
+                    <span className="font-bold tracking-tight text-lg">e-eventos</span>
+                  </SheetTitle>
+                </SheetHeader>
+                <nav className="flex flex-col gap-2 mt-6 flex-1">
+                  {navItems.map((item) => {
+                    const Icon = item.icon
+                    return (
+                      <Link
+                        key={item.path}
+                        to={item.path}
                         className={cn(
-                          'h-5 w-5',
-                          isActive ? 'text-foreground' : 'text-muted-foreground',
+                          'flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors',
+                          location.pathname === item.path
+                            ? 'bg-primary text-primary-foreground'
+                            : 'hover:bg-muted',
                         )}
-                      />
-                      {item.name}
-                    </Link>
-                  )
-                })}
-
-                <div className="mt-6 pt-6 border-t border-border">
-                  <span className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 block">
-                    Redes Sociais
-                  </span>
-                  <a
-                    href="https://www.instagram.com/lhshoweventos?igsh=MWp6amc0bDUyZjU4cA=="
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-secondary/50 hover:text-pink-600 transition-all"
+                      >
+                        <Icon className="h-4 w-4" />
+                        {item.name}
+                      </Link>
+                    )
+                  })}
+                </nav>
+                <div className="flex flex-col gap-2 mt-auto pt-6 border-t">
+                  <Link
+                    to="/login"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium hover:bg-muted transition-colors"
                   >
-                    <Instagram className="h-5 w-5 group-hover:text-pink-600 transition-colors" />
-                    @lhshoweventos
-                  </a>
+                    <LogIn className="h-4 w-4" /> Entrar
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium hover:bg-muted transition-colors text-primary"
+                  >
+                    <UserPlus className="h-4 w-4" /> Cadastrar
+                  </Link>
                 </div>
-              </nav>
-            </SheetContent>
-          </Sheet>
+              </SheetContent>
+            </Sheet>
 
-          <Link
-            to="/"
-            className="hidden md:flex items-center gap-3 transition-opacity hover:opacity-90"
-          >
-            <img
-              src={logoUrl}
-              alt="e-eventos logo"
-              className="h-9 w-auto rounded-sm object-contain"
-            />
-            <span className="text-xl font-extrabold tracking-tight text-foreground">e-eventos</span>
-          </Link>
-        </div>
+            <Link to="/" className="flex items-center gap-3 transition-opacity hover:opacity-90">
+              <img
+                src={logoImg}
+                alt="e-eventos"
+                className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl object-contain drop-shadow-sm"
+              />
+              <span className="hidden sm:inline-block font-extrabold text-xl tracking-tight text-foreground">
+                e-eventos
+              </span>
+            </Link>
+          </div>
 
-        <nav className="hidden md:flex items-center gap-2 mx-6 flex-1 justify-center">
-          {navigation.map((item) => {
-            const isActive =
-              location.pathname === item.href ||
-              (item.href !== '/' && location.pathname.startsWith(item.href))
-            return (
+          <nav className="hidden md:flex items-center gap-6">
+            {navItems.map((item) => (
               <Link
-                key={item.name}
-                to={item.href}
+                key={item.path}
+                to={item.path}
                 className={cn(
-                  'px-4 py-2 text-sm font-medium rounded-md transition-colors',
-                  isActive
-                    ? 'bg-secondary text-foreground'
-                    : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground',
+                  'text-sm font-medium transition-colors hover:text-primary',
+                  location.pathname === item.path ? 'text-primary' : 'text-muted-foreground',
                 )}
               >
                 {item.name}
               </Link>
-            )
-          })}
-        </nav>
+            ))}
+          </nav>
 
-        <div className="flex items-center gap-1 sm:gap-2">
-          <a
-            href="https://www.instagram.com/lhshoweventos?igsh=MWp6amc0bDUyZjU4cA=="
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted-foreground hover:text-pink-600 transition-colors p-2 rounded-full hover:bg-secondary flex items-center justify-center"
-            aria-label="Instagram @lhshoweventos"
-            title="Siga-nos no Instagram"
-          >
-            <Instagram className="h-5 w-5" />
-          </a>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="relative text-muted-foreground hover:text-foreground rounded-full"
-          >
-            <Bell className="h-5 w-5" />
-          </Button>
-          <Link to="/perfil">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full bg-secondary text-foreground hover:ring-2 hover:ring-border hover:ring-offset-1 transition-all ml-1 sm:ml-2"
-            >
-              <User className="h-4 w-4" />
+          <div className="hidden md:flex items-center gap-3">
+            <Button variant="ghost" size="sm" asChild>
+              <Link to="/login">Entrar</Link>
             </Button>
-          </Link>
+            <Button size="sm" asChild>
+              <Link to="/register">Cadastrar</Link>
+            </Button>
+          </div>
         </div>
       </header>
 
-      <main className="flex-1 w-full max-w-7xl mx-auto p-4 md:p-6 lg:p-8 relative">
+      <main className="flex-1 w-full">
         <Outlet />
       </main>
 
-      <footer className="w-full border-t border-border bg-card py-12 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="space-y-4">
-            <div className="flex items-center gap-2 opacity-90">
-              <img src={logoUrl} alt="e-eventos logo" className="h-8 w-auto grayscale" />
-              <span className="text-xl font-extrabold text-foreground">e-eventos</span>
+      <footer className="border-t bg-muted/30 pt-12 pb-8 mt-auto">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div className="col-span-1 md:col-span-2">
+              <Link
+                to="/"
+                className="flex items-center gap-3 transition-opacity hover:opacity-90 mb-4 inline-flex"
+              >
+                <img
+                  src={logoImg}
+                  alt="e-eventos"
+                  className="h-10 w-10 rounded-xl object-contain drop-shadow-sm"
+                />
+                <span className="font-extrabold text-xl tracking-tight text-foreground">
+                  e-eventos
+                </span>
+              </Link>
+              <p className="text-muted-foreground text-sm max-w-sm">
+                A plataforma líder em locação de equipamentos e serviços para eventos. Conectando
+                você aos melhores fornecedores do mercado.
+              </p>
             </div>
-            <p className="text-sm text-muted-foreground max-w-xs">
-              Plataforma premium para gestão e locação de estruturas para eventos, com a qualidade
-              de assinatura LH Show Eventos.
+            <div>
+              <h3 className="font-semibold mb-4">Plataforma</h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>
+                  <Link to="/demands" className="hover:text-primary transition-colors">
+                    Demandas
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/create-event" className="hover:text-primary transition-colors">
+                    Criar Evento
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/subscription" className="hover:text-primary transition-colors">
+                    Planos
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-4">Suporte</h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>
+                  <Link to="#" className="hover:text-primary transition-colors">
+                    Central de Ajuda
+                  </Link>
+                </li>
+                <li>
+                  <Link to="#" className="hover:text-primary transition-colors">
+                    Termos de Uso
+                  </Link>
+                </li>
+                <li>
+                  <Link to="#" className="hover:text-primary transition-colors">
+                    Privacidade
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="pt-8 border-t flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-sm text-muted-foreground text-center md:text-left">
+              © {new Date().getFullYear()} e-eventos. Todos os direitos reservados.
             </p>
           </div>
-
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Navegação</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  to="/"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Início
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/demandas"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Demandas
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/perfil"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Perfil
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Contato & Redes</h3>
-            <ul className="space-y-3">
-              <li>
-                <a
-                  href="https://www.instagram.com/lhshoweventos?igsh=MWp6amc0bDUyZjU4cA=="
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-pink-600 transition-colors group"
-                >
-                  <Instagram className="h-4 w-4 group-hover:text-pink-600" />
-                  @lhshoweventos
-                </a>
-              </li>
-              <li className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Mail className="h-4 w-4" />
-                contato@lhshoweventos.com.br
-              </li>
-              <li className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Phone className="h-4 w-4" />
-                (11) 99999-9999
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto px-4 md:px-6 mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
-          <span className="text-sm font-medium text-muted-foreground">
-            © {new Date().getFullYear()} e-eventos. Todos os direitos reservados.
-          </span>
         </div>
       </footer>
     </div>

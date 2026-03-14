@@ -1,39 +1,40 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { Layout } from '@/components/Layout'
+import Index from '@/pages/Index'
+import Login from '@/pages/Login'
+import Register from '@/pages/Register'
+import Demands from '@/pages/Demands'
+import DemandDetail from '@/pages/DemandDetail'
+import CreateEvent from '@/pages/CreateEvent'
+import Profile from '@/pages/Profile'
+import Subscription from '@/pages/Subscription'
+import NotFound from '@/pages/NotFound'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import { AppProvider } from '@/store/AppContext'
 
-import Layout from './components/Layout'
-import Index from './pages/Index'
-import Demands from './pages/Demands'
-import DemandDetail from './pages/DemandDetail'
-import CreateEvent from './pages/CreateEvent'
-import Profile from './pages/Profile'
-import Subscription from './pages/Subscription'
-import NotFound from './pages/NotFound'
-
-const App = () => (
-  <AppProvider>
-    <BrowserRouter future={{ v7_startTransition: false, v7_relativeSplatPath: false }}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
+function App() {
+  return (
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <Router>
         <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<Index />} />
-            <Route path="/demandas" element={<Demands />} />
-            <Route path="/demanda/:id" element={<DemandDetail />} />
-            <Route path="/assinatura" element={<Subscription />} />
-            <Route path="/perfil" element={<Profile />} />
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Index />} />
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+            <Route path="demands" element={<Demands />} />
+            <Route path="demands/:id" element={<DemandDetail />} />
+            <Route path="create-event" element={<CreateEvent />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="subscription" element={<Subscription />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
-          {/* Create Event is outside main Layout to hide bottom nav for focus */}
-          <Route path="/novo-evento" element={<CreateEvent />} />
-          <Route path="*" element={<NotFound />} />
         </Routes>
-      </TooltipProvider>
-    </BrowserRouter>
-  </AppProvider>
-)
+      </Router>
+    </TooltipProvider>
+  )
+}
 
 export default App
