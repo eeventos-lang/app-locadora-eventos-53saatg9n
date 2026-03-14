@@ -11,6 +11,13 @@ import { Badge } from '@/components/ui/badge'
 import { Calendar } from '@/components/ui/calendar'
 import { useToast } from '@/hooks/use-toast'
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import {
   Upload,
   BadgeCheck,
   AlertCircle,
@@ -23,9 +30,10 @@ import {
   Mail,
   Chrome,
   CheckCircle2,
+  CreditCard,
 } from 'lucide-react'
 import { SERVICES } from '@/lib/services'
-import { cn } from '@/lib/utils'
+import { getLoyaltyTier, cn } from '@/lib/utils'
 import { format } from 'date-fns'
 
 const Profile = () => {
@@ -63,6 +71,10 @@ const Profile = () => {
   const isExpert = fiveStarCount >= 10
   const isHighPerformance = fiveStarCount >= 25
   const safetyIndex = currentUser ? getSafetyIndex(currentUser.id) : 100
+
+  const points = companyProfile?.loyaltyPoints || 0
+  const tier = getLoyaltyTier(points)
+  const TierIcon = tier.icon
 
   const handleSave = () => {
     updateCompanyProfile(localProfile)
@@ -158,6 +170,16 @@ const Profile = () => {
             <div className="flex flex-wrap gap-2">
               <Badge
                 className={cn(
+                  'px-3 py-1.5 shadow-sm border',
+                  tier.bgClass,
+                  tier.colorClass,
+                  tier.borderClass,
+                )}
+              >
+                <TierIcon className="w-4 h-4 mr-1.5" /> Nível {tier.name}
+              </Badge>
+              <Badge
+                className={cn(
                   'px-3 py-1.5 shadow-sm',
                   safetyIndex >= 90
                     ? 'bg-emerald-500/20 text-emerald-600 border-emerald-500/30'
@@ -216,6 +238,67 @@ const Profile = () => {
 
       {isCompany && (
         <>
+          <section className="space-y-6 animate-fade-in mt-8 bg-card border border-border rounded-xl p-6 shadow-sm">
+            <div className="flex items-center gap-2 border-b border-border pb-4 mb-4">
+              <CreditCard className="w-6 h-6 text-primary" />
+              <h3 className="text-xl font-bold text-foreground">Gateway de Pagamento</h3>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+              Conecte sua conta do Stripe ou Mercado Pago para processar pagamentos e reembolsos
+              automatizados em eventos com seguro, sem a necessidade de intervenção manual.
+            </p>
+
+            <div className="grid gap-6 md:grid-cols-2 pt-2">
+              <div className="space-y-2">
+                <Label className="font-semibold">Provedor de Pagamento</Label>
+                <Select
+                  value={localProfile.paymentGateway?.provider || ''}
+                  onValueChange={(val: any) =>
+                    setLocalProfile({
+                      ...localProfile,
+                      paymentGateway: { ...localProfile.paymentGateway, provider: val } as any,
+                    })
+                  }
+                >
+                  <SelectTrigger className="h-11">
+                    <SelectValue placeholder="Selecione o gateway" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="stripe">Stripe</SelectItem>
+                    <SelectItem value="mercadopago">Mercado Pago</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label className="font-semibold">Chave de API (Public Key)</Label>
+                <Input
+                  placeholder="pk_test_..."
+                  className="h-11"
+                  value={localProfile.paymentGateway?.publicKey || ''}
+                  onChange={(e) =>
+                    setLocalProfile({
+                      ...localProfile,
+                      paymentGateway: {
+                        ...localProfile.paymentGateway,
+                        publicKey: e.target.value,
+                      } as any,
+                    })
+                  }
+                />
+              </div>
+            </div>
+            <div className="pt-4 flex items-center gap-4 flex-wrap">
+              <Button onClick={handleSave} className="h-11 shadow-sm px-8">
+                Salvar Configurações
+              </Button>
+              {localProfile.paymentGateway?.provider && localProfile.paymentGateway?.publicKey && (
+                <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/30 flex items-center gap-1.5 px-3 py-1.5">
+                  <CheckCircle2 className="w-4 h-4" /> Conectado via Gateway
+                </Badge>
+              )}
+            </div>
+          </section>
+
           <section className="space-y-6 animate-fade-in mt-8 bg-card border border-border rounded-xl p-6 shadow-sm">
             <div className="flex items-center gap-2 border-b border-border pb-4 mb-4">
               <CalendarSync className="w-6 h-6 text-primary" />

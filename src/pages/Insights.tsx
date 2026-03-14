@@ -10,6 +10,9 @@ import {
   Gift,
   Zap,
   Percent,
+  Activity,
+  ArrowUpRight,
+  ArrowDownRight,
 } from 'lucide-react'
 import {
   Card,
@@ -34,6 +37,7 @@ import {
 } from '@/components/ui/dialog'
 import { useApp } from '@/store/AppContext'
 import { useToast } from '@/hooks/use-toast'
+import { getLoyaltyTier, cn } from '@/lib/utils'
 
 const POSITIVE_KEYWORDS = [
   'excelente',
@@ -150,7 +154,24 @@ export default function Insights() {
   const isHighPerformance = fiveStarCount >= 25
 
   const points = companyProfile?.loyaltyPoints || 0
-  const progressToNextReward = Math.min((points / 100) * 100, 100)
+  const tier = getLoyaltyTier(points)
+  const TierIcon = tier.icon
+  const progressToNextReward = tier.nextThreshold
+    ? Math.min((points / tier.nextThreshold) * 100, 100)
+    : 100
+
+  const stats = companyProfile?.monthlyStats || {
+    pointsEarned: 0,
+    pointsEarnedPrev: 0,
+    feeSavings: 0,
+    feeSavingsPrev: 0,
+  }
+  const pointsTrend = stats.pointsEarnedPrev
+    ? ((stats.pointsEarned - stats.pointsEarnedPrev) / stats.pointsEarnedPrev) * 100
+    : 0
+  const savingsTrend = stats.feeSavingsPrev
+    ? ((stats.feeSavings - stats.feeSavingsPrev) / stats.feeSavingsPrev) * 100
+    : 0
 
   return (
     <>
@@ -176,106 +197,157 @@ export default function Insights() {
           </Button>
         </div>
 
-        {/* Loyalty Program Section */}
-        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20 shadow-sm relative overflow-hidden">
-          <div className="absolute -right-10 -top-10 text-primary/10 w-48 h-48 rotate-12">
-            <Trophy className="w-full h-full" />
-          </div>
-          <CardHeader className="relative z-10 pb-4">
-            <CardTitle className="text-xl flex items-center gap-2 text-foreground">
-              <Gift className="w-5 h-5 text-primary" /> Programa de Fidelidade
-            </CardTitle>
-            <CardDescription>
-              Acumule pontos ao concluir eventos com excelência e troque por benefícios exclusivos
-              na plataforma.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="relative z-10">
-            <div className="flex flex-col md:flex-row gap-8 items-center">
-              <div className="flex flex-col items-center justify-center p-6 bg-background rounded-2xl border border-primary/20 shadow-sm min-w-[200px]">
-                <span className="text-xs uppercase font-bold tracking-wider text-muted-foreground mb-1">
-                  Seu Saldo
-                </span>
-                <span className="text-5xl font-black text-primary drop-shadow-sm">{points}</span>
-                <span className="text-sm font-semibold text-primary mt-1">Pontos</span>
-              </div>
-
-              <div className="flex-1 w-full space-y-6">
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm font-semibold">
-                    <span className="text-muted-foreground">Progresso para resgate</span>
-                    <span className="text-primary">{points} / 100 pts</span>
-                  </div>
-                  <Progress value={progressToNextReward} className="h-3 bg-primary/10" />
-                  <p className="text-xs text-muted-foreground mt-1 text-right">
-                    Faltam {Math.max(0, 100 - points)} pontos para a primeira recompensa.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Card className="bg-background border-border shadow-none hover:border-primary/50 transition-colors">
-                    <CardContent className="p-4 flex flex-col items-start gap-3">
-                      <div className="p-2 bg-amber-500/10 rounded-lg">
-                        <Zap className="w-5 h-5 text-amber-500" />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-sm">Destaque nas Buscas (1 Semana)</h4>
-                        <p className="text-xs text-muted-foreground mt-0.5 mb-3 leading-relaxed">
-                          Aumente sua visibilidade em 300% aparecendo no topo dos resultados para os
-                          clientes.
-                        </p>
-                        <Button
-                          size="sm"
-                          variant={points >= 100 ? 'default' : 'secondary'}
-                          className="w-full font-bold shadow-sm"
-                          disabled={points < 100}
-                          onClick={() => {
-                            setSelectedReward({
-                              name: 'Destaque nas Buscas (1 Semana)',
-                              points: 100,
-                            })
-                            setRedeemModalOpen(true)
-                          }}
-                        >
-                          Resgatar (100 pts)
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  <Card className="bg-background border-border shadow-none hover:border-primary/50 transition-colors">
-                    <CardContent className="p-4 flex flex-col items-start gap-3">
-                      <div className="p-2 bg-emerald-500/10 rounded-lg">
-                        <Percent className="w-5 h-5 text-emerald-500" />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-sm">Desconto em Taxas (1 Transação)</h4>
-                        <p className="text-xs text-muted-foreground mt-0.5 mb-3 leading-relaxed">
-                          Reduza a taxa da plataforma pela metade (de 30% para 15%) no seu próximo
-                          contrato.
-                        </p>
-                        <Button
-                          size="sm"
-                          variant={points >= 200 ? 'default' : 'secondary'}
-                          className="w-full font-bold shadow-sm"
-                          disabled={points < 200}
-                          onClick={() => {
-                            setSelectedReward({
-                              name: 'Desconto em Taxas (1 Transação)',
-                              points: 200,
-                            })
-                            setRedeemModalOpen(true)
-                          }}
-                        >
-                          Resgatar (200 pts)
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          {/* Loyalty Program Section */}
+          <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20 shadow-sm relative overflow-hidden flex flex-col">
+            <div className="absolute -right-10 -top-10 text-primary/10 w-48 h-48 rotate-12">
+              <Trophy className="w-full h-full" />
             </div>
-          </CardContent>
-        </Card>
+            <CardHeader className="relative z-10 pb-4 border-b border-border/50">
+              <CardTitle className="text-xl flex items-center gap-2 text-foreground">
+                <Gift className="w-5 h-5 text-primary" /> Programa de Fidelidade
+              </CardTitle>
+              <CardDescription>
+                Acumule pontos ao concluir eventos e suba de nível para obter mais visibilidade.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="relative z-10 pt-6 flex-1 flex flex-col justify-center">
+              <div className="flex flex-col md:flex-row gap-8 items-center">
+                <div
+                  className={cn(
+                    'flex flex-col items-center justify-center p-6 rounded-2xl border shadow-sm min-w-[200px] transition-all',
+                    tier.bgClass,
+                    tier.borderClass,
+                  )}
+                >
+                  <TierIcon className={cn('w-10 h-10 mb-2', tier.colorClass)} />
+                  <span className="text-xs uppercase font-bold tracking-wider text-muted-foreground mb-1">
+                    Nível {tier.name}
+                  </span>
+                  <span className={cn('text-5xl font-black drop-shadow-sm', tier.colorClass)}>
+                    {points}
+                  </span>
+                  <span className={cn('text-sm font-semibold mt-1', tier.colorClass)}>Pontos</span>
+                </div>
+
+                <div className="flex-1 w-full space-y-6">
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm font-semibold">
+                      <span className="text-muted-foreground">
+                        Progresso para {tier.nextThreshold ? 'próximo nível' : 'nível máximo'}
+                      </span>
+                      <span className={cn(tier.colorClass)}>
+                        {points} {tier.nextThreshold ? `/ ${tier.nextThreshold} pts` : 'pts'}
+                      </span>
+                    </div>
+                    <Progress value={progressToNextReward} className="h-3 bg-primary/10" />
+                    {tier.nextThreshold && (
+                      <p className="text-xs text-muted-foreground mt-1 text-right">
+                        Faltam {Math.max(0, tier.nextThreshold - points)} pontos para o próximo
+                        nível.
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-3">
+                    <Button
+                      variant={points >= 100 ? 'default' : 'secondary'}
+                      className="w-full font-bold shadow-sm h-11"
+                      disabled={points < 100}
+                      onClick={() => {
+                        setSelectedReward({ name: 'Destaque nas Buscas (1 Semana)', points: 100 })
+                        setRedeemModalOpen(true)
+                      }}
+                    >
+                      <Zap className="w-4 h-4 mr-2" /> Resgatar Destaque (100 pts)
+                    </Button>
+                    <Button
+                      variant={points >= 200 ? 'default' : 'secondary'}
+                      className="w-full font-bold shadow-sm h-11"
+                      disabled={points < 200}
+                      onClick={() => {
+                        setSelectedReward({ name: 'Desconto em Taxas (1 Transação)', points: 200 })
+                        setRedeemModalOpen(true)
+                      }}
+                    >
+                      <Percent className="w-4 h-4 mr-2" /> Resgatar Desconto (200 pts)
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Monthly Performance Report */}
+          <Card className="bg-card border-border shadow-sm flex flex-col relative overflow-hidden">
+            <div className="absolute -right-10 -top-10 text-muted/5 w-48 h-48 rotate-12 pointer-events-none">
+              <Activity className="w-full h-full" />
+            </div>
+            <CardHeader className="relative z-10 pb-4 border-b border-border/50">
+              <CardTitle className="text-xl flex items-center gap-2 text-foreground">
+                <Activity className="w-5 h-5 text-primary" /> Relatório Mensal
+              </CardTitle>
+              <CardDescription>
+                Resumo do seu desempenho e economia nos últimos 30 dias.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="relative z-10 pt-6 flex-1 flex flex-col justify-center gap-8">
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-2 bg-secondary/30 p-5 rounded-2xl border border-border/50">
+                  <p className="text-xs uppercase font-bold tracking-wider text-muted-foreground flex items-center gap-1.5">
+                    <Trophy className="w-3.5 h-3.5" /> Pontos Ganhos
+                  </p>
+                  <p className="text-4xl font-black text-foreground">{stats.pointsEarned}</p>
+                  <div className="flex items-center gap-1 pt-1 border-t border-border/50">
+                    {pointsTrend >= 0 ? (
+                      <ArrowUpRight className="w-4 h-4 text-emerald-500" />
+                    ) : (
+                      <ArrowDownRight className="w-4 h-4 text-destructive" />
+                    )}
+                    <span
+                      className={cn(
+                        'text-xs font-bold',
+                        pointsTrend >= 0 ? 'text-emerald-500' : 'text-destructive',
+                      )}
+                    >
+                      {Math.abs(pointsTrend).toFixed(1)}% {pointsTrend >= 0 ? 'a mais' : 'a menos'}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground ml-1 font-medium">
+                      vs mês ant.
+                    </span>
+                  </div>
+                </div>
+                <div className="space-y-2 bg-secondary/30 p-5 rounded-2xl border border-border/50">
+                  <p className="text-xs uppercase font-bold tracking-wider text-muted-foreground flex items-center gap-1.5">
+                    <Percent className="w-3.5 h-3.5" /> Economia (Taxas)
+                  </p>
+                  <p className="text-3xl sm:text-4xl font-black text-primary">
+                    R$ {stats.feeSavings.toFixed(0)}
+                  </p>
+                  <div className="flex items-center gap-1 pt-1 border-t border-border/50">
+                    {savingsTrend >= 0 ? (
+                      <ArrowUpRight className="w-4 h-4 text-emerald-500" />
+                    ) : (
+                      <ArrowDownRight className="w-4 h-4 text-destructive" />
+                    )}
+                    <span
+                      className={cn(
+                        'text-xs font-bold',
+                        savingsTrend >= 0 ? 'text-emerald-500' : 'text-destructive',
+                      )}
+                    >
+                      {Math.abs(savingsTrend).toFixed(1)}%{' '}
+                      {savingsTrend >= 0 ? 'a mais' : 'a menos'}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground ml-1 font-medium">
+                      vs mês ant.
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <Card className="bg-card border-border shadow-sm">

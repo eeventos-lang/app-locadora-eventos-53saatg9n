@@ -87,6 +87,19 @@ export type IntegrationStatus = {
   account?: string
 }
 
+export type PaymentGateway = {
+  provider: 'stripe' | 'mercadopago' | ''
+  publicKey: string
+  connected: boolean
+}
+
+export type MonthlyStats = {
+  pointsEarned: number
+  pointsEarnedPrev: number
+  feeSavings: number
+  feeSavingsPrev: number
+}
+
 export type CompanyProfile = {
   name: string
   specialties: string
@@ -104,6 +117,8 @@ export type CompanyProfile = {
   }
   safetyIndex?: number
   loyaltyPoints?: number
+  paymentGateway?: PaymentGateway
+  monthlyStats?: MonthlyStats
 }
 
 export type User = {
@@ -258,7 +273,18 @@ const MOCK_USERS: User[] = [
       isVerified: true,
       unavailableDates: ['2026-05-15', '2026-05-25'],
       safetyIndex: 98,
-      loyaltyPoints: 350,
+      loyaltyPoints: 650, // Silver tier
+      monthlyStats: {
+        pointsEarned: 150,
+        pointsEarnedPrev: 100,
+        feeSavings: 350,
+        feeSavingsPrev: 150,
+      },
+      paymentGateway: {
+        provider: 'stripe',
+        publicKey: 'pk_test_51...123',
+        connected: true,
+      },
       integrations: {
         google: {
           connected: true,
@@ -512,11 +538,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const cancelDemand = (demandId: string) => {
     let cancelledDemandTitle = ''
     let refundIssued = false
+    let cId = ''
 
     setDemands((prev) =>
       prev.map((d) => {
         if (d.id === demandId) {
           cancelledDemandTitle = d.title
+          cId = d.customerId
           const isRefunded =
             d.hasInsurance && (d.paymentStatus === 'escrow' || d.paymentStatus === 'completed')
           refundIssued = isRefunded
@@ -543,14 +571,37 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       setNotifications((prev) => [
         {
           id: Math.random().toString(36).substring(7),
-          title: 'Reembolso em Processamento',
-          message: `O evento "${cancelledDemandTitle}" foi cancelado. Como possuía seguro ativo, o reembolso integral foi iniciado automaticamente.`,
+          title: 'Cancelamento Confirmado',
+          message: `O evento "${cancelledDemandTitle}" foi cancelado. Como possuía seguro, o reembolso está em processamento via gateway.`,
           read: false,
           createdAt: new Date().toISOString(),
-          customerId: currentUser?.id,
+          customerId: cId || currentUser?.id,
         },
         ...prev,
       ])
+
+      // Simulate API Call to External Gateway (Stripe/Mercado Pago)
+      setTimeout(() => {
+        setDemands((curr) =>
+          curr.map((d) => (d.id === demandId ? { ...d, paymentStatus: 'refunded' } : d)),
+        )
+        setTransactions((curr) =>
+          curr.map((t) =>
+            t.demandId === demandId && t.hasInsurance ? { ...t, status: 'refunded' } : t,
+          ),
+        )
+        setNotifications((prev) => [
+          {
+            id: Math.random().toString(36).substring(7),
+            title: 'Reembolso Concluído',
+            message: `O estorno via gateway de pagamento para o evento "${cancelledDemandTitle}" foi processado com sucesso.`,
+            read: false,
+            createdAt: new Date().toISOString(),
+            customerId: cId || currentUser?.id,
+          },
+          ...prev,
+        ])
+      }, 3000)
     }
   }
 

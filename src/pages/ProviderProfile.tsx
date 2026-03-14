@@ -15,7 +15,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { BackButton } from '@/components/BackButton'
 import { SERVICES } from '@/lib/services'
-import { cn } from '@/lib/utils'
+import { getLoyaltyTier, cn } from '@/lib/utils'
 
 export default function ProviderProfile() {
   const { id } = useParams()
@@ -46,6 +46,9 @@ export default function ProviderProfile() {
   const isExpert = fiveStarCount >= 10
   const isHighPerformance = fiveStarCount >= 25
   const safetyIndex = getSafetyIndex(supplier.id)
+
+  const tier = getLoyaltyTier(profile.loyaltyPoints || 0)
+  const TierIcon = tier.icon
 
   const handleMessage = () => {
     if (!currentUser) return
@@ -80,6 +83,16 @@ export default function ProviderProfile() {
             </h2>
 
             <div className="flex flex-col gap-2 mt-3 w-full">
+              <Badge
+                className={cn(
+                  'justify-center py-1.5 shadow-sm border',
+                  tier.bgClass,
+                  tier.colorClass,
+                  tier.borderClass,
+                )}
+              >
+                <TierIcon className="w-4 h-4 mr-1.5" /> Nível {tier.name}
+              </Badge>
               <Badge
                 className={cn(
                   'justify-center py-1.5 shadow-sm',

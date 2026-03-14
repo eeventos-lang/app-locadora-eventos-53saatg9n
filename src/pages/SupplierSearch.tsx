@@ -22,7 +22,7 @@ import {
 import { useApp } from '@/store/AppContext'
 import { SERVICES } from '@/lib/services'
 import { useToast } from '@/hooks/use-toast'
-import { cn } from '@/lib/utils'
+import { getLoyaltyTier, cn } from '@/lib/utils'
 
 export default function SupplierSearch() {
   const {
@@ -141,6 +141,9 @@ export default function SupplierSearch() {
               : 0
             const safetyIndex = getSafetyIndex(supplier.id)
 
+            const tier = getLoyaltyTier(profile.loyaltyPoints || 0)
+            const TierIcon = tier.icon
+
             return (
               <Card
                 key={supplier.id}
@@ -199,10 +202,20 @@ export default function SupplierSearch() {
                                 ({supplierReviews.length})
                               </span>
                             </div>
-                            <div className="flex items-center gap-1 mt-0.5 text-xs font-semibold">
+                            <div className="flex items-center gap-1 mt-1 text-xs font-semibold flex-wrap">
+                              <Badge
+                                className={cn(
+                                  'px-2 py-0.5 shadow-none border text-[10px] gap-1',
+                                  tier.bgClass,
+                                  tier.colorClass,
+                                  tier.borderClass,
+                                )}
+                              >
+                                <TierIcon className="w-3 h-3" /> {tier.name}
+                              </Badge>
                               <ShieldCheck
                                 className={cn(
-                                  'w-3.5 h-3.5',
+                                  'w-3.5 h-3.5 ml-1',
                                   safetyIndex >= 90 ? 'text-emerald-500' : 'text-amber-500',
                                 )}
                               />
@@ -211,7 +224,7 @@ export default function SupplierSearch() {
                                   safetyIndex >= 90 ? 'text-emerald-500' : 'text-amber-500'
                                 }
                               >
-                                Índice de Segurança: {safetyIndex}%
+                                Índice Seguro: {safetyIndex}%
                               </span>
                             </div>
                           </div>
