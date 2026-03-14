@@ -8,6 +8,7 @@ import {
   MessageSquare,
   ShieldCheck,
   CheckCircle2,
+  Star,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -47,6 +48,8 @@ const DemandDetail = () => {
     disputeService,
     currentUser,
     companyProfile,
+    reviews,
+    addReview,
   } = useApp()
 
   const [isProposalOpen, setIsProposalOpen] = useState(false)
@@ -57,6 +60,13 @@ const DemandDetail = () => {
   const [isDisputeOpen, setIsDisputeOpen] = useState(false)
   const [disputeReason, setDisputeReason] = useState('')
   const [disputeSector, setDisputeSector] = useState('')
+
+  const [isReviewOpen, setIsReviewOpen] = useState(false)
+  const [reviewSupplierId, setReviewSupplierId] = useState('')
+  const [reviewSupplierName, setReviewSupplierName] = useState('')
+  const [reviewRating, setReviewRating] = useState(0)
+  const [reviewComment, setReviewComment] = useState('')
+  const [hoverRating, setHoverRating] = useState(0)
 
   const demand = demands.find((d) => d.id === id)
 
@@ -131,6 +141,34 @@ const DemandDetail = () => {
       title: 'Fornecedor Selecionado',
       description: 'O serviço foi marcado como atendido para esta etapa do evento.',
     })
+  }
+
+  const handleReviewSubmit = () => {
+    if (reviewRating === 0 || !reviewComment.trim()) {
+      toast({
+        title: 'Atenção',
+        description: 'Por favor, selecione uma nota e escreva um comentário.',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    addReview({
+      demandId: demand.id,
+      customerId: currentUser?.id || 'unknown',
+      supplierId: reviewSupplierId,
+      rating: reviewRating,
+      comment: reviewComment,
+    })
+
+    toast({
+      title: 'Avaliação Enviada',
+      description: 'Sua opinião é muito importante e ajuda outros clientes!',
+    })
+
+    setIsReviewOpen(false)
+    setReviewRating(0)
+    setReviewComment('')
   }
 
   const getStatusBadge = () => {
@@ -414,17 +452,144 @@ const DemandDetail = () => {
                     onClick={() => {
                       if (!disputeReason) return
                       disputeService(demand.id, disputeSector, disputeReason)
-                      toast({
-                        title: 'Disputa Aberta',
-                        description: 'Os fundos foram retidos. Um administrador analisará o caso.',
-                        variant: 'destructive',
-                      })
                       setIsDisputeOpen(false)
                       setDisputeReason('')
                     }}
                   >
                     Confirmar Disputa
                   </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </section>
+        )}
+
+        {role === 'customer' && demand.paymentStatus === 'completed' && (
+          <section className="space-y-4 mt-8 animate-fade-in-up">
+            <div className="flex items-center gap-2 border-b border-border pb-2">
+              <Star className="w-6 h-6 text-amber-500 fill-amber-500" />
+              <h3 className="font-semibold text-foreground text-xl">Avaliar Fornecedores</h3>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">
+              O evento foi concluído! Por favor, avalie os fornecedores para ajudar a manter a
+              qualidade na plataforma.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {demandProposals
+                .filter((p) => p.status === 'accepted')
+                .map((provider) => {
+                  const existingReview = reviews.find(
+                    (r) => r.demandId === demand.id && r.supplierId === provider.supplierId,
+                  )
+
+                  return (
+                    <Card key={provider.id} className="bg-card shadow-sm border-border">
+                      <CardContent className="p-5 flex flex-col gap-3">
+                        <div>
+                          <p className="font-bold text-base text-foreground">
+                            {provider.supplierName}
+                          </p>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {provider.offeredSectors?.map((sec) => {
+                              const s = SERVICES.find((x) => x.id === sec)
+                              return s ? (
+                                <Badge key={sec} variant="secondary" className="text-[10px]">
+                                  {s.label}
+                                </Badge>
+                              ) : null
+                            })}
+                          </div>
+                        </div>
+
+                        {existingReview ? (
+                          <div className="bg-secondary/50 p-3 rounded-lg border border-border/50">
+                            <div className="flex items-center gap-1 mb-1">
+                              {[1, 2, 3, 4, 5].map((s) => (
+                                <Star
+                                  key={s}
+                                  className={cn(
+                                    'w-4 h-4',
+                                    s <= existingReview.rating
+                                      ? 'fill-amber-500 text-amber-500'
+                                      : 'text-muted-foreground/30',
+                                  )}
+                                />
+                              ))}
+                            </div>
+                            <p className="text-xs text-muted-foreground italic line-clamp-2">
+                              "{existingReview.comment}"
+                            </p>
+                          </div>
+                        ) : (
+                          <Button
+                            variant="outline"
+                            className="w-full gap-2 hover:bg-secondary"
+                            onClick={() => {
+                              setReviewSupplierId(provider.supplierId)
+                              setReviewSupplierName(provider.supplierName)
+                              setIsReviewOpen(true)
+                            }}
+                          >
+                            <Star className="w-4 h-4" /> Avaliar Serviço
+                          </Button>
+                        )}
+                      </CardContent>
+                    </Card>
+                  )
+                })}
+            </div>
+
+            <Dialog
+              open={isReviewOpen}
+              onOpenChange={(open) => {
+                setIsReviewOpen(open)
+                if (!open) {
+                  setReviewRating(0)
+                  setReviewComment('')
+                }
+              }}
+            >
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Avaliar {reviewSupplierName}</DialogTitle>
+                  <DialogDescription>
+                    Compartilhe sua experiência. Sua avaliação ficará visível no perfil do
+                    fornecedor.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="py-6 flex flex-col items-center gap-6">
+                  <div className="flex gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        className={cn(
+                          'w-10 h-10 cursor-pointer transition-colors',
+                          (hoverRating || reviewRating) >= star
+                            ? 'fill-amber-500 text-amber-500'
+                            : 'text-muted-foreground/30 hover:text-amber-500/50',
+                        )}
+                        onMouseEnter={() => setHoverRating(star)}
+                        onMouseLeave={() => setHoverRating(0)}
+                        onClick={() => setReviewRating(star)}
+                      />
+                    ))}
+                  </div>
+                  <div className="w-full space-y-2">
+                    <Label htmlFor="reviewComment">Comentário</Label>
+                    <Textarea
+                      id="reviewComment"
+                      placeholder="Descreva o que você achou do serviço prestado..."
+                      value={reviewComment}
+                      onChange={(e) => setReviewComment(e.target.value)}
+                      className="min-h-[100px]"
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setIsReviewOpen(false)}>
+                    Cancelar
+                  </Button>
+                  <Button onClick={handleReviewSubmit}>Enviar Avaliação</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>

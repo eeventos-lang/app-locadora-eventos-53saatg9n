@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
-import { Search, BadgeCheck, MapPin, Send, FilterX } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Search, BadgeCheck, MapPin, Send, FilterX, Heart, Star } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import {
@@ -21,9 +22,11 @@ import {
 import { useApp } from '@/store/AppContext'
 import { SERVICES } from '@/lib/services'
 import { useToast } from '@/hooks/use-toast'
+import { cn } from '@/lib/utils'
 
 export default function SupplierSearch() {
-  const { users, demands, inviteSupplier, role } = useApp()
+  const { users, demands, inviteSupplier, role, currentUser, favorites, toggleFavorite, reviews } =
+    useApp()
   const { toast } = useToast()
 
   const [searchTerm, setSearchTerm] = useState('')
@@ -120,78 +123,114 @@ export default function SupplierSearch() {
         ) : (
           suppliers.map((supplier) => {
             const profile = supplier.companyProfile!
+            const isFav = favorites.some(
+              (f) => f.customerId === currentUser?.id && f.supplierId === supplier.id,
+            )
+            const supplierReviews = reviews.filter((r) => r.supplierId === supplier.id)
+            const avgRating = supplierReviews.length
+              ? supplierReviews.reduce((sum, r) => sum + r.rating, 0) / supplierReviews.length
+              : 0
+
             return (
               <Card
                 key={supplier.id}
-                className="overflow-hidden hover:border-primary/50 transition-colors shadow-sm bg-card group flex flex-col"
+                className="overflow-hidden hover:border-primary/50 transition-colors shadow-sm bg-card group flex flex-col relative"
               >
-                <CardContent className="p-0 flex flex-col h-full">
-                  <div className="p-6 flex-1 flex flex-col">
-                    <div className="flex items-start gap-4 mb-5">
-                      <div className="w-16 h-16 rounded-2xl bg-secondary flex items-center justify-center border border-border shadow-sm shrink-0 overflow-hidden">
-                        {profile.logo ? (
-                          <img
-                            src={profile.logo}
-                            alt="Logo"
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <span className="text-2xl font-bold text-muted-foreground uppercase">
-                            {profile.name.charAt(0)}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute top-4 right-4 z-20 bg-background/50 hover:bg-background/80 backdrop-blur-sm"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    toggleFavorite(supplier.id)
+                  }}
+                >
+                  <Heart
+                    className={cn(
+                      'w-5 h-5',
+                      isFav ? 'fill-pink-600 text-pink-600' : 'text-muted-foreground',
+                    )}
+                  />
+                </Button>
+
+                <Link to={`/suppliers/${supplier.id}`} className="flex-1 flex flex-col h-full">
+                  <CardContent className="p-0 flex flex-col h-full">
+                    <div className="p-6 flex-1 flex flex-col">
+                      <div className="flex items-start gap-4 mb-5 pr-10">
+                        <div className="w-16 h-16 rounded-2xl bg-secondary flex items-center justify-center border border-border shadow-sm shrink-0 overflow-hidden">
+                          {profile.logo ? (
+                            <img
+                              src={profile.logo}
+                              alt="Logo"
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <span className="text-2xl font-bold text-muted-foreground uppercase">
+                              {profile.name.charAt(0)}
+                            </span>
+                          )}
+                        </div>
+                        <div className="pt-1">
+                          <h3 className="font-bold text-lg text-foreground flex items-center gap-1.5 leading-tight group-hover:text-primary transition-colors">
+                            {profile.name}
+                            {profile.isVerified && (
+                              <BadgeCheck
+                                className="w-5 h-5 text-blue-500 shrink-0"
+                                title="Fornecedor Verificado"
+                              />
+                            )}
+                          </h3>
+                          <div className="flex items-center gap-1 mt-1 text-sm font-medium text-amber-500">
+                            <Star className="w-4 h-4 fill-amber-500" />
+                            {avgRating > 0 ? avgRating.toFixed(1) : 'Novo'}
+                            <span className="text-muted-foreground ml-1">
+                              ({supplierReviews.length})
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6 bg-secondary/50 p-2.5 rounded-lg border border-border/50">
+                        <MapPin className="w-4 h-4 shrink-0 text-primary" />
+                        <span className="truncate font-medium">
+                          {profile.address || 'Endereço não informado'}
+                        </span>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2 mb-6 mt-auto">
+                        {profile.sectors.slice(0, 4).map((sec) => {
+                          const service = SERVICES.find((s) => s.id === sec)
+                          return service ? (
+                            <span
+                              key={sec}
+                              className={`text-[10px] font-bold px-2.5 py-1.5 rounded-md flex items-center gap-1.5 ${service.bg} ${service.color}`}
+                            >
+                              <service.icon className="w-3 h-3" />
+                              {service.label}
+                            </span>
+                          ) : null
+                        })}
+                        {profile.sectors.length > 4 && (
+                          <span className="text-[10px] font-bold px-2.5 py-1.5 rounded-md bg-secondary text-muted-foreground">
+                            +{profile.sectors.length - 4}
                           </span>
                         )}
                       </div>
-                      <div className="pt-1">
-                        <h3 className="font-bold text-lg text-foreground flex items-center gap-1.5 leading-tight">
-                          {profile.name}
-                          {profile.isVerified && (
-                            <BadgeCheck
-                              className="w-5 h-5 text-blue-500 shrink-0"
-                              title="Fornecedor Verificado"
-                            />
-                          )}
-                        </h3>
-                        <p className="text-sm text-muted-foreground mt-1.5 line-clamp-2 leading-relaxed">
-                          {profile.specialties || 'Especialidades não informadas'}
-                        </p>
-                      </div>
-                    </div>
 
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6 bg-secondary/50 p-2.5 rounded-lg border border-border/50">
-                      <MapPin className="w-4 h-4 shrink-0 text-primary" />
-                      <span className="truncate font-medium">
-                        {profile.address || 'Endereço não informado'}
-                      </span>
+                      <Button
+                        className="w-full h-12 shadow-sm font-semibold z-20 relative"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          setSelectedSupplier(supplier.id)
+                        }}
+                      >
+                        <Send className="w-4 h-4 mr-2" /> Convidar para Evento
+                      </Button>
                     </div>
-
-                    <div className="flex flex-wrap gap-2 mb-6 mt-auto">
-                      {profile.sectors.slice(0, 5).map((sec) => {
-                        const service = SERVICES.find((s) => s.id === sec)
-                        return service ? (
-                          <span
-                            key={sec}
-                            className={`text-[10px] font-bold px-2.5 py-1.5 rounded-md flex items-center gap-1.5 ${service.bg} ${service.color}`}
-                          >
-                            <service.icon className="w-3 h-3" />
-                            {service.label}
-                          </span>
-                        ) : null
-                      })}
-                      {profile.sectors.length > 5 && (
-                        <span className="text-[10px] font-bold px-2.5 py-1.5 rounded-md bg-secondary text-muted-foreground">
-                          +{profile.sectors.length - 5}
-                        </span>
-                      )}
-                    </div>
-
-                    <Button
-                      className="w-full h-12 shadow-sm font-semibold group-hover:bg-primary/90 transition-all"
-                      onClick={() => setSelectedSupplier(supplier.id)}
-                    >
-                      <Send className="w-4 h-4 mr-2" /> Convidar para Evento
-                    </Button>
-                  </div>
-                </CardContent>
+                  </CardContent>
+                </Link>
               </Card>
             )
           })
@@ -211,12 +250,12 @@ export default function SupplierSearch() {
             {activeDemands.length === 0 ? (
               <div className="p-6 bg-secondary border border-border text-sm text-muted-foreground rounded-xl text-center shadow-inner">
                 Você não possui eventos ativos no momento. <br />
-                <a
-                  href="/create-event"
+                <Link
+                  to="/create-event"
                   className="text-primary font-bold hover:underline mt-3 inline-block"
                 >
                   Criar meu primeiro evento
-                </a>
+                </Link>
               </div>
             ) : (
               <div className="space-y-3">

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
   Menu,
@@ -12,6 +13,7 @@ import {
   Bell,
   Users,
   Receipt,
+  Heart,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet'
@@ -26,12 +28,39 @@ import {
 import { cn } from '@/lib/utils'
 import logoImg from '@/assets/e-eventos-novo-62817.png'
 import { useApp } from '@/store/AppContext'
+import { useToast } from '@/hooks/use-toast'
 
 export function Layout() {
   const location = useLocation()
   const navigate = useNavigate()
+  const { toast } = useToast()
   const { currentUser, logout, role, companyProfile, notifications, markNotificationsAsRead } =
     useApp()
+
+  const prevNotifsRef = useRef(notifications.length)
+
+  useEffect(() => {
+    if (notifications.length > prevNotifsRef.current) {
+      const newCount = notifications.length - prevNotifsRef.current
+      const newNotifs = notifications.slice(0, newCount)
+
+      newNotifs.forEach((n) => {
+        const isForMe =
+          role === 'company'
+            ? n.targetSupplierId === currentUser?.id ||
+              companyProfile?.sectors?.includes(n.sector || '')
+            : n.customerId === currentUser?.id
+
+        if (isForMe && !n.read) {
+          toast({
+            title: n.title,
+            description: n.message,
+          })
+        }
+      })
+      prevNotifsRef.current = notifications.length
+    }
+  }, [notifications, role, currentUser, companyProfile, toast])
 
   const handleLogout = () => {
     logout()
@@ -41,7 +70,12 @@ export function Layout() {
   const navItems = [
     { name: 'Início', path: '/', icon: LayoutDashboard },
     { name: 'Demandas', path: '/demands', icon: Calendar },
-    ...(role === 'customer' ? [{ name: 'Fornecedores', path: '/suppliers', icon: Users }] : []),
+    ...(role === 'customer'
+      ? [
+          { name: 'Fornecedores', path: '/suppliers', icon: Users },
+          { name: 'Favoritos', path: '/favorites', icon: Heart },
+        ]
+      : []),
     { name: 'Financeiro', path: '/finance', icon: Receipt },
     { name: 'Criar Evento', path: '/create-event', icon: PlusCircle },
     { name: 'Planos', path: '/subscription', icon: CreditCard },

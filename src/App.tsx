@@ -9,6 +9,8 @@ import CreateEvent from '@/pages/CreateEvent'
 import Profile from '@/pages/Profile'
 import Subscription from '@/pages/Subscription'
 import SupplierSearch from '@/pages/SupplierSearch'
+import ProviderProfile from '@/pages/ProviderProfile'
+import Favorites from '@/pages/Favorites'
 import Transactions from '@/pages/Transactions'
 import NotFound from '@/pages/NotFound'
 import { Toaster } from '@/components/ui/toaster'
@@ -34,6 +36,8 @@ function App() {
               <Route path="profile" element={<Profile />} />
               <Route path="subscription" element={<Subscription />} />
               <Route path="suppliers" element={<SupplierSearch />} />
+              <Route path="suppliers/:id" element={<ProviderProfile />} />
+              <Route path="favorites" element={<Favorites />} />
               <Route path="finance" element={<Transactions />} />
               <Route path="*" element={<NotFound />} />
             </Route>

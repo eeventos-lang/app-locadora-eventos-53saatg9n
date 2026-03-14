@@ -111,6 +111,21 @@ export type Transaction = {
   status: TransactionStatus
 }
 
+export type Review = {
+  id: string
+  demandId: string
+  customerId: string
+  supplierId: string
+  rating: number
+  comment: string
+  createdAt: string
+}
+
+export type Favorite = {
+  customerId: string
+  supplierId: string
+}
+
 interface AppContextType {
   role: Role
   setRole: (role: Role) => void
@@ -147,6 +162,10 @@ interface AppContextType {
   notifications: Notification[]
   markNotificationsAsRead: () => void
   inviteSupplier: (supplierId: string, demandId: string) => void
+  reviews: Review[]
+  addReview: (review: Omit<Review, 'id' | 'createdAt'>) => void
+  favorites: Favorite[]
+  toggleFavorite: (supplierId: string) => void
 }
 
 const MOCK_USERS: User[] = [
@@ -163,11 +182,11 @@ const MOCK_USERS: User[] = [
     email: 'joao.doe@exemplo.com',
     role: 'company',
     password: '123',
-    sectors: ['decoracao', 'space'],
+    sectors: ['decoracao', 'space', 'buffet'],
     companyProfile: {
       name: 'JD Decorações e Espaços',
-      specialties: 'Casamentos, Cenografia, Arranjos Florais',
-      sectors: ['decoracao', 'space'],
+      specialties: 'Casamentos, Cenografia, Arranjos Florais, Buffet Completo',
+      sectors: ['decoracao', 'space', 'buffet'],
       address: 'Av. das Flores, 123, São Paulo - SP',
       logo: '',
       observations: 'Transformando seu evento em um momento inesquecível.',
@@ -287,6 +306,45 @@ const MOCK_DEMANDS: Demand[] = [
     contractedProviders: {},
     createdAt: new Date().toISOString(),
   },
+  {
+    id: 'd3',
+    customerId: 'c1',
+    title: 'Festa de Aniversário (Concluída)',
+    budget: 5000,
+    guests: 50,
+    date: '2026-01-10',
+    location: 'São Paulo, SP',
+    requirements: {
+      sound: true,
+      light: false,
+      led: false,
+      grid: false,
+      buffet: true,
+      drinks: false,
+      cocktails: false,
+      photo: false,
+      video: false,
+      singer: false,
+      band: false,
+      dj: false,
+      space: false,
+      decoracao: false,
+      ceremonial: false,
+      security: false,
+      details: '',
+    },
+    status: 'completed',
+    paymentStatus: 'completed',
+    sectorStatus: {
+      sound: 'concluded',
+      buffet: 'concluded',
+    },
+    contractedProviders: {
+      sound: 'p4',
+      buffet: 'p5',
+    },
+    createdAt: new Date().toISOString(),
+  },
 ]
 
 const MOCK_PROPOSALS: Proposal[] = [
@@ -323,6 +381,28 @@ const MOCK_PROPOSALS: Proposal[] = [
     offeredSectors: ['space'],
     createdAt: new Date().toISOString(),
   },
+  {
+    id: 'p4',
+    demandId: 'd3',
+    supplierId: 'u2',
+    supplierName: 'MS Áudio e Luz',
+    value: 1500,
+    message: 'Kit som básico entregue.',
+    status: 'accepted',
+    offeredSectors: ['sound'],
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'p5',
+    demandId: 'd3',
+    supplierId: 'u1',
+    supplierName: 'JD Decorações',
+    value: 3500,
+    message: 'Serviço de buffet completo.',
+    status: 'accepted',
+    offeredSectors: ['buffet'],
+    createdAt: new Date().toISOString(),
+  },
 ]
 
 const MOCK_TRANSACTIONS: Transaction[] = [
@@ -340,11 +420,30 @@ const MOCK_TRANSACTIONS: Transaction[] = [
   },
 ]
 
+const MOCK_REVIEWS: Review[] = [
+  {
+    id: 'r1',
+    demandId: 'd3',
+    customerId: 'c1',
+    supplierId: 'u1',
+    rating: 5,
+    comment: 'Serviço excelente! Comida maravilhosa e equipe muito educada.',
+    createdAt: new Date().toISOString(),
+  },
+]
+
+const MOCK_FAVORITES: Favorite[] = [
+  {
+    customerId: 'c1',
+    supplierId: 'u1',
+  },
+]
+
 const AppContext = createContext<AppContextType | undefined>(undefined)
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [users, setUsers] = useState<User[]>(MOCK_USERS)
-  const [currentUser, setCurrentUser] = useState<User | null>(null)
+  const [currentUser, setCurrentUser] = useState<User | null>(MOCK_USERS[0]) // Auto-login as customer for ease
   const [role, setRole] = useState<Role>('customer')
   const [isSubscribed, setIsSubscribed] = useState<boolean>(true)
   const [demands, setDemands] = useState<Demand[]>(MOCK_DEMANDS)
@@ -354,6 +453,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [companyProfile, setCompanyProfile] = useState<CompanyProfile>(
     MOCK_USERS[1].companyProfile!,
   )
+  const [reviews, setReviews] = useState<Review[]>(MOCK_REVIEWS)
+  const [favorites, setFavorites] = useState<Favorite[]>(MOCK_FAVORITES)
 
   const addDemand = (
     demandData: Omit<
@@ -541,7 +642,17 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         targetSupplierId: supId as string,
       }))
 
-      setNotifications((prev) => [...newNotifs, ...prev])
+      const newNotifCustomer: Notification = {
+        id: Math.random().toString(36).substring(7),
+        title: 'Pagamento Seguro Confirmado!',
+        message: `Seu pagamento para o evento "${demand.title}" foi aprovado e os fundos estão em custódia na plataforma.`,
+        demandId: demand.id,
+        read: false,
+        createdAt: new Date().toISOString(),
+        customerId: demand.customerId,
+      }
+
+      setNotifications((prev) => [...newNotifs, newNotifCustomer, ...prev])
     }
   }
 
@@ -597,7 +708,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       const providerId = demand.contractedProviders[sector]
       const proposal = proposals.find((p) => p.id === providerId)
 
-      const newNotif: Notification = {
+      const newNotifProvider: Notification = {
         id: Math.random().toString(36).substring(7),
         title: 'Serviço em Disputa!',
         message: `O cliente abriu uma disputa para o serviço contratado. Motivo: ${reason}`,
@@ -607,7 +718,30 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         createdAt: new Date().toISOString(),
         targetSupplierId: proposal?.supplierId,
       }
-      setNotifications((prev) => [newNotif, ...prev])
+
+      const newNotifCustomer: Notification = {
+        id: Math.random().toString(36).substring(7),
+        title: 'Disputa Iniciada',
+        message: `Sua disputa para o serviço foi registrada e enviada para mediação da plataforma. Os fundos continuam retidos.`,
+        demandId: demand.id,
+        sector,
+        read: false,
+        createdAt: new Date().toISOString(),
+        customerId: demand.customerId,
+      }
+
+      const newNotifAdmin: Notification = {
+        id: Math.random().toString(36).substring(7),
+        title: 'Nova Disputa Requer Mediação',
+        message: `O cliente abriu uma disputa no evento ${demand.title}. Motivo: ${reason}`,
+        demandId: demand.id,
+        sector,
+        read: false,
+        createdAt: new Date().toISOString(),
+        targetSupplierId: 'admin',
+      }
+
+      setNotifications((prev) => [newNotifProvider, newNotifCustomer, newNotifAdmin, ...prev])
 
       if (proposal) {
         setTransactions((prev) =>
@@ -707,6 +841,28 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setRole('customer')
   }
 
+  const addReview = (reviewData: Omit<Review, 'id' | 'createdAt'>) => {
+    const newReview: Review = {
+      ...reviewData,
+      id: Math.random().toString(36).substring(7),
+      createdAt: new Date().toISOString(),
+    }
+    setReviews((prev) => [newReview, ...prev])
+  }
+
+  const toggleFavorite = (supplierId: string) => {
+    if (!currentUser) return
+    setFavorites((prev) => {
+      const exists = prev.find(
+        (f) => f.customerId === currentUser.id && f.supplierId === supplierId,
+      )
+      if (exists) {
+        return prev.filter((f) => !(f.customerId === currentUser.id && f.supplierId === supplierId))
+      }
+      return [...prev, { customerId: currentUser.id, supplierId }]
+    })
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -734,6 +890,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         notifications,
         markNotificationsAsRead,
         inviteSupplier,
+        reviews,
+        addReview,
+        favorites,
+        toggleFavorite,
       }}
     >
       {children}
