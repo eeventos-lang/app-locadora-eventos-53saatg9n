@@ -1,6 +1,33 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script>
+      // Global fix for CSS Security Exception (CORS) when accessing cross-origin stylesheets.
+      // This specifically addresses the failure point in html-to-image.min.js
+      try {
+        if (typeof window !== 'undefined' && typeof CSSStyleSheet !== 'undefined') {
+          function patchSheet(prop) {
+            var desc = Object.getOwnPropertyDescriptor(CSSStyleSheet.prototype, prop);
+            if (desc && desc.get) {
+              var originalGet = desc.get;
+              Object.defineProperty(CSSStyleSheet.prototype, prop, {
+                get: function() {
+                  try {
+                    return originalGet.call(this) || [];
+                  } catch (e) {
+                    return [];
+                  }
+                },
+                enumerable: true,
+                configurable: true
+              });
+            }
+          }
+          patchSheet('cssRules');
+          patchSheet('rules');
+        }
+      } catch (e) {}
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>e-eventos</title>

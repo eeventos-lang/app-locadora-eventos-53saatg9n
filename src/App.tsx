@@ -24,19 +24,26 @@ import { AppProvider } from '@/store/AppContext'
 // Global fix for CSS Security Exception (CORS) when accessing cross-origin stylesheets.
 // This prevents crashes in external image capture/PDF generation libraries that iterate over document.styleSheets.
 if (typeof window !== 'undefined' && typeof CSSStyleSheet !== 'undefined') {
-  const originalCssRules = Object.getOwnPropertyDescriptor(CSSStyleSheet.prototype, 'cssRules')
-  if (originalCssRules) {
-    Object.defineProperty(CSSStyleSheet.prototype, 'cssRules', {
-      get() {
-        try {
-          return originalCssRules.get ? originalCssRules.get.call(this) : []
-        } catch (e) {
-          console.warn('Blocked access to stylesheet cssRules safely bypassed.', e)
-          return []
-        }
-      },
-    })
+  const patchSheetProperty = (property: string) => {
+    const originalDescriptor = Object.getOwnPropertyDescriptor(CSSStyleSheet.prototype, property)
+    if (originalDescriptor && originalDescriptor.get) {
+      Object.defineProperty(CSSStyleSheet.prototype, property, {
+        get() {
+          try {
+            return originalDescriptor.get!.call(this) || []
+          } catch (e) {
+            console.warn(`Blocked access to stylesheet ${property} safely bypassed.`)
+            return []
+          }
+        },
+        configurable: true,
+        enumerable: true,
+      })
+    }
   }
+
+  patchSheetProperty('cssRules')
+  patchSheetProperty('rules')
 }
 
 // Global fetch interceptor to prevent html-to-image / document generation from crashing
