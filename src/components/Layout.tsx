@@ -45,7 +45,7 @@ export function Layout() {
 
   const myNotifications =
     role === 'company'
-      ? notifications.filter((n) => n.sector === companyProfile?.sector).slice(0, 5)
+      ? notifications.filter((n) => companyProfile?.sectors?.includes(n.sector)).slice(0, 5)
       : []
 
   const unreadCount = myNotifications.filter((n) => !n.read).length

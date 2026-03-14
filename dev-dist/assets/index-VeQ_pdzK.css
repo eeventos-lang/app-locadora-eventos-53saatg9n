@@ -1113,6 +1113,10 @@ section[aria-label='Notifications alt+T'] {
   max-height: var(--radix-context-menu-content-available-height);
 }
 
+.max-h-\[220px\]{
+  max-height: 220px;
+}
+
 .max-h-\[300px\]{
   max-height: 300px;
 }
@@ -4051,6 +4055,10 @@ section[aria-label='Notifications alt+T'] {
     max-width: 20rem;
   }
 
+  .sm\:grid-cols-4{
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
   .sm\:flex-row{
     flex-direction: row;
   }
@@ -4115,6 +4123,11 @@ section[aria-label='Notifications alt+T'] {
   .sm\:text-xl{
     font-size: 1.25rem;
     line-height: 1.75rem;
+  }
+
+  .sm\:text-xs{
+    font-size: 0.75rem;
+    line-height: 1rem;
   }
 
   .data-\[state\=open\]\:sm\:slide-in-from-bottom-full[data-state="open"]{

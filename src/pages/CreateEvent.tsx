@@ -60,7 +60,12 @@ const CreateEvent = () => {
   const handleBack = () => (currentStep > 1 ? setCurrentStep((p) => p - 1) : navigate(-1))
 
   const handleSubmit = () => {
-    addDemand({ ...formData, title: formData.title || 'Novo Evento', budget: totals.total })
+    addDemand({
+      ...formData,
+      title: formData.title || 'Novo Evento',
+      budget: totals.total,
+      budgetBreakdown: totals.breakdown,
+    })
     toast({ title: 'Sucesso!', description: 'Sua demanda foi publicada para os fornecedores.' })
     navigate('/demands')
   }

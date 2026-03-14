@@ -27,18 +27,30 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { toast } from 'sonner'
 import { useApp } from '@/store/AppContext'
+import { SERVICES } from '@/lib/services'
 
 import logoImg from '@/assets/e-eventos-novo-62817.png'
 import { cn } from '@/lib/utils'
 
-const formSchema = z.object({
-  name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
-  email: z.string().email('Email inválido. Verifique o formato.'),
-  password: z.string().min(6, 'A senha deve ter pelo menos 6 caracteres.'),
-  role: z.enum(['customer', 'company'], {
-    required_error: 'Por favor, selecione o tipo de perfil.',
-  }),
-})
+const formSchema = z
+  .object({
+    name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
+    email: z.string().email('Email inválido. Verifique o formato.'),
+    password: z.string().min(6, 'A senha deve ter pelo menos 6 caracteres.'),
+    role: z.enum(['customer', 'company'], {
+      required_error: 'Por favor, selecione o tipo de perfil.',
+    }),
+    sectors: z.array(z.string()).default([]),
+  })
+  .superRefine((data, ctx) => {
+    if (data.role === 'company' && data.sectors.length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Selecione pelo menos uma área de atuação.',
+        path: ['sectors'],
+      })
+    }
+  })
 
 type FormValues = z.infer<typeof formSchema>
 
@@ -54,6 +66,7 @@ export default function Register() {
       email: '',
       password: '',
       role: undefined,
+      sectors: [],
     },
   })
 
@@ -65,6 +78,7 @@ export default function Register() {
         email: data.email,
         password: data.password,
         role: data.role,
+        sectors: data.sectors,
       })
       toast.success('Conta criada com sucesso! Faça seu login.')
       navigate('/login')
@@ -77,7 +91,7 @@ export default function Register() {
 
   return (
     <div className="flex min-h-[80vh] items-center justify-center py-12 px-4">
-      <Card className="w-full max-w-md mx-auto shadow-lg border-primary/10">
+      <Card className="w-full max-w-lg mx-auto shadow-lg border-primary/10">
         <CardHeader className="space-y-4 flex flex-col items-center text-center pt-8">
           <Link to="/" className="transition-transform hover:scale-105">
             <img
@@ -232,6 +246,46 @@ export default function Register() {
                   </FormItem>
                 )}
               />
+
+              {form.watch('role') === 'company' && (
+                <FormField
+                  control={form.control}
+                  name="sectors"
+                  render={({ field }) => (
+                    <FormItem className="space-y-3 animate-fade-in pt-2">
+                      <FormLabel>Áreas de Atuação</FormLabel>
+                      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-[220px] overflow-y-auto p-1">
+                        {SERVICES.map((s) => {
+                          const isSelected = field.value.includes(s.id)
+                          return (
+                            <div
+                              key={s.id}
+                              className={cn(
+                                'border rounded-xl p-3 cursor-pointer flex flex-col items-center gap-2 transition-all',
+                                isSelected
+                                  ? 'bg-primary/10 border-primary text-foreground shadow-sm'
+                                  : 'bg-card border-border text-muted-foreground hover:bg-card/80',
+                              )}
+                              onClick={() => {
+                                const val = field.value || []
+                                if (val.includes(s.id))
+                                  field.onChange(val.filter((v: string) => v !== s.id))
+                                else field.onChange([...val, s.id])
+                              }}
+                            >
+                              <s.icon className={cn('w-6 h-6', isSelected ? s.color : '')} />
+                              <span className="text-[10px] sm:text-xs font-semibold text-center leading-tight">
+                                {s.label}
+                              </span>
+                            </div>
+                          )
+                        })}
+                      </div>
+                      <FormMessage className="text-destructive font-medium" />
+                    </FormItem>
+                  )}
+                />
+              )}
             </CardContent>
 
             <CardFooter className="flex flex-col space-y-4 pb-8">

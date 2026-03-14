@@ -5,17 +5,20 @@ import { TechRequirement } from '@/store/AppContext'
 export const useEventTotals = (formData: EventFormData, configs: EventConfigs) => {
   let total = 0
   const lines: Array<{
+    id: string
     name: string
     detail: string
     qty: number
     unit: number
     subtotal: number
   }> = []
+  const breakdown: Record<string, number> = {}
 
-  const addLine = (name: string, detail: string, qty: number, unit: number) => {
+  const addLine = (id: string, name: string, detail: string, qty: number, unit: number) => {
     const subtotal = qty * unit
     total += subtotal
-    lines.push({ name, detail, qty, unit, subtotal })
+    breakdown[id] = subtotal
+    lines.push({ id, name, detail, qty, unit, subtotal })
   }
 
   const fixed = {
@@ -35,17 +38,22 @@ export const useEventTotals = (formData: EventFormData, configs: EventConfigs) =
 
   SERVICES.forEach((s) => {
     if (formData.requirements[s.id as keyof TechRequirement] && s.id in fixed) {
-      addLine(s.label, 'Taxa Fixa', 1, fixed[s.id as keyof typeof fixed])
+      addLine(s.id, s.label, 'Taxa Fixa', 1, fixed[s.id as keyof typeof fixed])
     }
   })
 
   if (formData.requirements.buffet) {
-    addLine('Buffet', 'Por pessoa', configs.buffetGuests, 150)
+    addLine('buffet', 'Buffet', 'Por pessoa', configs.buffetGuests, 150)
   }
-  if (formData.requirements.drinks) addLine('Bebidas', 'Por pessoa', configs.drinksGuests, 50)
-  if (formData.requirements.cocktails)
-    addLine('Bar Drinks', 'Por pessoa', configs.cocktailsGuests, 70)
-  if (formData.requirements.security) addLine('Seguranças', 'Qtd', configs.securityCount, 150)
+  if (formData.requirements.drinks) {
+    addLine('drinks', 'Bebidas', 'Por pessoa', configs.drinksGuests, 50)
+  }
+  if (formData.requirements.cocktails) {
+    addLine('cocktails', 'Bar Drinks', 'Por pessoa', configs.cocktailsGuests, 70)
+  }
+  if (formData.requirements.security) {
+    addLine('security', 'Seguranças', 'Qtd', configs.securityCount, 150)
+  }
 
-  return { total, lines }
+  return { total, lines, breakdown }
 }

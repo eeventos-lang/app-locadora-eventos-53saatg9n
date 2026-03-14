@@ -3,21 +3,37 @@ import { Link } from 'react-router-dom'
 import { Calendar, MapPin } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { useApp } from '@/store/AppContext'
+import { useApp, Demand } from '@/store/AppContext'
 import { SERVICES } from '@/lib/services'
 
 const Demands = () => {
   const { role, demands, isSubscribed, companyProfile, proposals } = useApp()
 
-  const activeSector = SERVICES.find((s) => s.id === companyProfile?.sector)
-
   const filteredDemands = useMemo(() => {
     if (role === 'customer') return demands
-    if (!companyProfile?.sector) return []
-    return demands.filter(
-      (d) => d.requirements[companyProfile.sector as keyof typeof d.requirements],
+    if (!companyProfile?.sectors || companyProfile.sectors.length === 0) return []
+    return demands.filter((d) =>
+      companyProfile.sectors.some((s) => d.requirements[s as keyof typeof d.requirements]),
     )
-  }, [demands, role, companyProfile?.sector])
+  }, [demands, role, companyProfile?.sectors])
+
+  const getDisplayBudget = (demand: Demand) => {
+    if (role === 'customer') return demand.budget
+    let sum = 0
+    if (demand.budgetBreakdown) {
+      companyProfile?.sectors?.forEach((s) => {
+        if (
+          demand.requirements[s as keyof typeof demand.requirements] &&
+          demand.budgetBreakdown?.[s]
+        ) {
+          sum += demand.budgetBreakdown[s]
+        }
+      })
+    } else {
+      return demand.budget * 0.9
+    }
+    return sum * 0.9
+  }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -65,22 +81,18 @@ const Demands = () => {
     <div className="space-y-6 animate-slide-up pb-12 p-4 sm:p-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-3xl font-bold text-foreground tracking-tight">
-          {role === 'customer'
-            ? 'Meus Eventos'
-            : activeSector
-              ? `Oportunidades: ${activeSector.label}`
-              : 'Demandas Disponíveis'}
+          {role === 'customer' ? 'Meus Eventos' : 'Oportunidades Compatíveis'}
         </h1>
       </div>
 
       <div className="space-y-4">
         {filteredDemands.length === 0 ? (
           <div className="text-center text-muted-foreground py-16 border-2 border-dashed border-border rounded-xl bg-secondary/30">
-            {role === 'company' && companyProfile?.sector
-              ? `Não há demandas de ${activeSector?.label.toLowerCase()} no momento.`
-              : role === 'company'
-                ? 'Configure seu setor no perfil para ver oportunidades.'
-                : 'Nenhuma demanda encontrada no momento.'}
+            {role === 'company'
+              ? companyProfile?.sectors && companyProfile.sectors.length > 0
+                ? 'Não há demandas para as suas áreas de atuação no momento.'
+                : 'Configure suas áreas de atuação no perfil para ver oportunidades.'
+              : 'Nenhuma demanda encontrada no momento.'}
           </div>
         ) : (
           filteredDemands.map((demand) => {
@@ -119,7 +131,9 @@ const Demands = () => {
                         <div className="flex gap-2 items-center flex-wrap">
                           {(() => {
                             const activeReqs = SERVICES.filter(
-                              (s) => demand.requirements[s.id as keyof typeof demand.requirements],
+                              (s) =>
+                                demand.requirements[s.id as keyof typeof demand.requirements] &&
+                                (role === 'customer' || companyProfile?.sectors?.includes(s.id)),
                             )
                             return (
                               <>
@@ -143,13 +157,13 @@ const Demands = () => {
                         </div>
                         <div className="text-right">
                           <p className="text-[10px] text-muted-foreground mb-1 uppercase tracking-wider font-semibold">
-                            {role === 'customer' ? 'Orçamento' : 'Valor Líquido'}
+                            {role === 'customer' ? 'Orçamento Total' : 'Seu Orçamento Líquido'}
                           </p>
                           <p className="text-foreground font-bold text-lg md:text-xl">
                             {new Intl.NumberFormat('pt-BR', {
                               style: 'currency',
                               currency: 'BRL',
-                            }).format(role === 'customer' ? demand.budget : demand.budget * 0.9)}
+                            }).format(getDisplayBudget(demand))}
                           </p>
                         </div>
                       </div>

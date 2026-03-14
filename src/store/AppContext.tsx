@@ -28,6 +28,7 @@ export type Demand = {
   id: string
   title: string
   budget: number
+  budgetBreakdown?: Record<string, number>
   guests: number
   date: string
   location: string
@@ -60,7 +61,7 @@ export type Notification = {
 export type CompanyProfile = {
   name: string
   specialties: string
-  sector: string
+  sectors: string[]
   address: string
   logo: string
   observations: string
@@ -72,6 +73,7 @@ export type User = {
   email: string
   role: Role
   password?: string
+  sectors?: string[]
 }
 
 interface AppContextType {
@@ -102,6 +104,7 @@ const MOCK_USERS: User[] = [
     email: 'joao.doe@exemplo.com',
     role: 'company',
     password: 'password123',
+    sectors: ['decoracao', 'space'],
   },
 ]
 
@@ -110,6 +113,17 @@ const MOCK_DEMANDS: Demand[] = [
     id: 'd1',
     title: 'Casamento Sítio das Palmeiras',
     budget: 65000,
+    budgetBreakdown: {
+      sound: 1500,
+      light: 1000,
+      grid: 800,
+      buffet: 45000,
+      cocktails: 7000,
+      band: 4000,
+      dj: 1000,
+      decoracao: 3000,
+      ceremonial: 1500,
+    },
     guests: 300,
     date: '2026-05-20',
     location: 'São Paulo, SP',
@@ -140,6 +154,19 @@ const MOCK_DEMANDS: Demand[] = [
     id: 'd2',
     title: 'Festa Corporativa Tech',
     budget: 95000,
+    budgetBreakdown: {
+      sound: 1500,
+      light: 1000,
+      led: 2500,
+      grid: 800,
+      buffet: 22500,
+      drinks: 7500,
+      photo: 2000,
+      video: 2500,
+      dj: 1000,
+      space: 5000,
+      security: 300,
+    },
     guests: 150,
     date: '2026-06-15',
     location: 'Campinas, SP',
@@ -194,7 +221,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [companyProfile, setCompanyProfile] = useState<CompanyProfile>({
     name: 'JD Decorações',
     specialties: 'Casamentos, Cenografia, Flores',
-    sector: 'decoracao',
+    sectors: ['decoracao', 'space'],
     address: 'Av. das Flores, 123',
     logo: '',
     observations: '',
@@ -272,6 +299,15 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         }
         const newUser: User = { ...userData, id: Math.random().toString(36).substring(7) }
         setUsers((prev) => [...prev, newUser])
+
+        if (userData.role === 'company') {
+          setCompanyProfile((prev) => ({
+            ...prev,
+            name: userData.name,
+            sectors: userData.sectors || [],
+          }))
+        }
+
         resolve()
       }, 800)
     })

@@ -43,6 +43,24 @@ const DemandDetail = () => {
   const supplierProposal =
     role === 'company' ? demandProposals.find((p) => p.supplierId === currentUser?.id) : null
 
+  const getDisplayBudget = () => {
+    if (role === 'customer') return demand.budget
+    let sum = 0
+    if (demand.budgetBreakdown) {
+      companyProfile?.sectors?.forEach((s) => {
+        if (
+          demand.requirements[s as keyof typeof demand.requirements] &&
+          demand.budgetBreakdown?.[s]
+        ) {
+          sum += demand.budgetBreakdown[s]
+        }
+      })
+    } else {
+      return demand.budget * 0.9
+    }
+    return sum * 0.9
+  }
+
   const handleSubmitProposal = () => {
     if (!proposalValue || !proposalMessage) {
       toast({
@@ -133,12 +151,14 @@ const DemandDetail = () => {
           <CardContent className="p-6 md:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
             <div>
               <p className="text-xs text-muted-foreground uppercase tracking-wider font-bold mb-2">
-                {role === 'customer' ? 'Orçamento Estimado' : 'Valor Líquido (-10% Taxa)'}
+                {role === 'customer'
+                  ? 'Orçamento Total Estimado'
+                  : 'Valor Líquido da sua Parte (-10% Taxa)'}
               </p>
               <p className="text-4xl font-extrabold text-foreground flex items-center gap-2">
                 <DollarSign className="w-8 h-8 text-primary" />
                 {new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2 }).format(
-                  role === 'customer' ? demand.budget : demand.budget * 0.9,
+                  getDisplayBudget(),
                 )}
               </p>
             </div>
@@ -155,11 +175,13 @@ const DemandDetail = () => {
 
         <section className="space-y-4">
           <h3 className="font-semibold text-foreground text-xl border-b border-border pb-2">
-            Serviços Solicitados
+            Serviços Solicitados {role === 'company' && '(Sua Área)'}
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 pt-2">
             {SERVICES.map(({ id, icon: Icon, label, color, bg }) => {
               if (!demand.requirements[id as keyof typeof demand.requirements]) return null
+              if (role === 'company' && !companyProfile?.sectors?.includes(id)) return null
+
               return (
                 <div
                   key={id}

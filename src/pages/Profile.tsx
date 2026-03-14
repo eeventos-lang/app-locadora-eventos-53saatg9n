@@ -7,16 +7,10 @@ import { Switch } from '@/components/ui/switch'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
 import { Upload } from 'lucide-react'
 import { SERVICES } from '@/lib/services'
+import { cn } from '@/lib/utils'
 
 const Profile = () => {
   const {
@@ -186,27 +180,39 @@ const Profile = () => {
               </div>
 
               <div className="space-y-2">
-                <Label>Setor Principal de Atuação</Label>
-                <Select
-                  value={localProfile.sector || ''}
-                  onValueChange={(val) => setLocalProfile({ ...localProfile, sector: val })}
-                >
-                  <SelectTrigger className="bg-background">
-                    <SelectValue placeholder="Selecione seu setor" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {SERVICES.map((s) => (
-                      <SelectItem key={s.id} value={s.id}>
-                        <div className="flex items-center gap-2">
-                          <s.icon className={`w-4 h-4 ${s.color}`} />
-                          <span>{s.label}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Label>Áreas de Atuação</Label>
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-[300px] overflow-y-auto p-1">
+                  {SERVICES.map((s) => {
+                    const isSelected = localProfile.sectors?.includes(s.id)
+                    return (
+                      <div
+                        key={s.id}
+                        className={cn(
+                          'border rounded-xl p-3 cursor-pointer flex flex-col items-center justify-center gap-2 transition-all',
+                          isSelected
+                            ? 'bg-primary/10 border-primary text-foreground shadow-sm'
+                            : 'bg-card border-border text-muted-foreground hover:bg-card/80',
+                        )}
+                        onClick={() => {
+                          const val = localProfile.sectors || []
+                          if (val.includes(s.id))
+                            setLocalProfile({
+                              ...localProfile,
+                              sectors: val.filter((v) => v !== s.id),
+                            })
+                          else setLocalProfile({ ...localProfile, sectors: [...val, s.id] })
+                        }}
+                      >
+                        <s.icon className={cn('w-6 h-6', isSelected ? s.color : '')} />
+                        <span className="text-[10px] sm:text-xs font-semibold text-center leading-tight">
+                          {s.label}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
                 <p className="text-[10px] text-muted-foreground mt-1">
-                  Você receberá apenas demandas relacionadas a este setor.
+                  Você receberá apenas demandas relacionadas aos setores selecionados.
                 </p>
               </div>
 
