@@ -19199,6 +19199,20 @@ var Speaker = createLucideIcon("speaker", [
 		key: "1etili"
 	}]
 ]);
+var Upload = createLucideIcon("upload", [
+	["path", {
+		d: "M12 3v12",
+		key: "1x0j5s"
+	}],
+	["path", {
+		d: "m17 8-5-5-5 5",
+		key: "7q97r8"
+	}],
+	["path", {
+		d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4",
+		key: "ih7n3h"
+	}]
+]);
 var User = createLucideIcon("user", [["path", {
 	d: "M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2",
 	key: "975kel"
@@ -24205,6 +24219,13 @@ var AppProvider = ({ children }) => {
 	const [role, setRole] = (0, import_react.useState)("customer");
 	const [isSubscribed, setIsSubscribed] = (0, import_react.useState)(true);
 	const [demands, setDemands] = (0, import_react.useState)(MOCK_DEMANDS);
+	const [companyProfile, setCompanyProfile] = (0, import_react.useState)({
+		name: "JD Eventos Tech",
+		specialties: "Som, Iluminação, Painel de LED",
+		address: "",
+		logo: "",
+		observations: ""
+	});
 	const addDemand = (demandData) => {
 		setDemands([{
 			...demandData,
@@ -24214,8 +24235,14 @@ var AppProvider = ({ children }) => {
 			createdAt: (/* @__PURE__ */ new Date()).toISOString()
 		}, ...demands]);
 	};
+	const updateCompanyProfile = (profile) => {
+		setCompanyProfile((prev) => ({
+			...prev,
+			...profile
+		}));
+	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppContext.Provider, {
-		"data-uid": "src/store/AppContext.tsx:93:5",
+		"data-uid": "src/store/AppContext.tsx:114:5",
 		"data-prohibitions": "[editContent]",
 		value: {
 			role,
@@ -24223,7 +24250,9 @@ var AppProvider = ({ children }) => {
 			isSubscribed,
 			setIsSubscribed,
 			demands,
-			addDemand
+			addDemand,
+			companyProfile,
+			updateCompanyProfile
 		},
 		children
 	});
@@ -26094,37 +26123,66 @@ Switch.displayName = Root.displayName;
 //#endregion
 //#region src/pages/Profile.tsx
 var Profile = () => {
-	const { role, setRole, isSubscribed, setIsSubscribed } = useApp();
+	const { role, setRole, isSubscribed, setIsSubscribed, companyProfile, updateCompanyProfile } = useApp();
+	const { toast } = useToast();
+	const fileInputRef = (0, import_react.useRef)(null);
+	const [localProfile, setLocalProfile] = (0, import_react.useState)(companyProfile);
+	(0, import_react.useEffect)(() => {
+		setLocalProfile(companyProfile);
+	}, [companyProfile]);
 	const isCompany = role === "company";
+	const handleSave = () => {
+		updateCompanyProfile(localProfile);
+		toast({
+			title: "Cadastro Salvo",
+			description: "Os dados da sua locadora foram atualizados com sucesso."
+		});
+	};
+	const handleImageUpload = (e) => {
+		const file = e.target.files?.[0];
+		if (file) {
+			const url = URL.createObjectURL(file);
+			setLocalProfile({
+				...localProfile,
+				logo: url
+			});
+		}
+	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/Profile.tsx:14:5",
+		"data-uid": "src/pages/Profile.tsx:43:5",
 		"data-prohibitions": "[editContent]",
-		className: "p-6 space-y-8 animate-slide-up",
+		className: "p-6 space-y-8 animate-slide-up pb-24",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/Profile.tsx:15:7",
-				"data-prohibitions": "[]",
+				"data-uid": "src/pages/Profile.tsx:44:7",
+				"data-prohibitions": "[editContent]",
 				className: "flex items-center gap-4",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					"data-uid": "src/pages/Profile.tsx:16:9",
-					"data-prohibitions": "[]",
-					className: "w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center border-2 border-primary",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						"data-uid": "src/pages/Profile.tsx:17:11",
+					"data-uid": "src/pages/Profile.tsx:45:9",
+					"data-prohibitions": "[editContent]",
+					className: "w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center border-2 border-primary overflow-hidden",
+					children: isCompany && companyProfile.logo ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+						"data-uid": "src/pages/Profile.tsx:47:13",
+						"data-prohibitions": "[editContent]",
+						src: companyProfile.logo,
+						alt: "Logo",
+						className: "w-full h-full object-cover"
+					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						"data-uid": "src/pages/Profile.tsx:49:13",
 						"data-prohibitions": "[]",
 						className: "text-2xl font-bold text-primary",
 						children: "JD"
 					})
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/pages/Profile.tsx:19:9",
+					"data-uid": "src/pages/Profile.tsx:52:9",
 					"data-prohibitions": "[]",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-						"data-uid": "src/pages/Profile.tsx:20:11",
+						"data-uid": "src/pages/Profile.tsx:53:11",
 						"data-prohibitions": "[]",
 						className: "text-xl font-bold text-white",
 						children: "João Doe"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						"data-uid": "src/pages/Profile.tsx:21:11",
+						"data-uid": "src/pages/Profile.tsx:54:11",
 						"data-prohibitions": "[]",
 						className: "text-muted-foreground text-sm",
 						children: "joao.doe@exemplo.com"
@@ -26132,62 +26190,62 @@ var Profile = () => {
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/Profile.tsx:25:7",
+				"data-uid": "src/pages/Profile.tsx:58:7",
 				"data-prohibitions": "[editContent]",
 				className: "space-y-4",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
-					"data-uid": "src/pages/Profile.tsx:26:9",
+					"data-uid": "src/pages/Profile.tsx:59:9",
 					"data-prohibitions": "[]",
 					className: "bg-card border-border",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-						"data-uid": "src/pages/Profile.tsx:27:11",
+						"data-uid": "src/pages/Profile.tsx:60:11",
 						"data-prohibitions": "[]",
 						className: "p-5 flex items-center justify-between",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/Profile.tsx:28:13",
+							"data-uid": "src/pages/Profile.tsx:61:13",
 							"data-prohibitions": "[]",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-								"data-uid": "src/pages/Profile.tsx:29:15",
+								"data-uid": "src/pages/Profile.tsx:62:15",
 								"data-prohibitions": "[]",
 								className: "text-base text-white font-semibold",
 								children: "Modo Locadora"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								"data-uid": "src/pages/Profile.tsx:30:15",
+								"data-uid": "src/pages/Profile.tsx:63:15",
 								"data-prohibitions": "[]",
 								className: "text-xs text-muted-foreground mt-1",
 								children: "Ative para ver oportunidades de eventos"
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Switch, {
-							"data-uid": "src/pages/Profile.tsx:34:13",
+							"data-uid": "src/pages/Profile.tsx:67:13",
 							"data-prohibitions": "[editContent]",
 							checked: isCompany,
 							onCheckedChange: (checked) => setRole(checked ? "company" : "customer")
 						})]
 					})
 				}), isCompany && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
-					"data-uid": "src/pages/Profile.tsx:42:11",
+					"data-uid": "src/pages/Profile.tsx:75:11",
 					"data-prohibitions": "[]",
 					className: "bg-card border-border animate-fade-in border-primary/50",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-						"data-uid": "src/pages/Profile.tsx:43:13",
+						"data-uid": "src/pages/Profile.tsx:76:13",
 						"data-prohibitions": "[]",
 						className: "p-5 flex items-center justify-between",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/Profile.tsx:44:15",
+							"data-uid": "src/pages/Profile.tsx:77:15",
 							"data-prohibitions": "[]",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-								"data-uid": "src/pages/Profile.tsx:45:17",
+								"data-uid": "src/pages/Profile.tsx:78:17",
 								"data-prohibitions": "[]",
 								className: "text-base text-white font-semibold",
 								children: "Assinatura Premium"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								"data-uid": "src/pages/Profile.tsx:46:17",
+								"data-uid": "src/pages/Profile.tsx:79:17",
 								"data-prohibitions": "[]",
 								className: "text-xs text-muted-foreground mt-1",
 								children: "Taxa mensal para receber demandas"
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Switch, {
-							"data-uid": "src/pages/Profile.tsx:50:15",
+							"data-uid": "src/pages/Profile.tsx:83:15",
 							"data-prohibitions": "[editContent]",
 							checked: isSubscribed,
 							onCheckedChange: setIsSubscribed
@@ -26196,59 +26254,59 @@ var Profile = () => {
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-				"data-uid": "src/pages/Profile.tsx:56:7",
+				"data-uid": "src/pages/Profile.tsx:89:7",
 				"data-prohibitions": "[]",
 				className: "space-y-4",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-					"data-uid": "src/pages/Profile.tsx:57:9",
+					"data-uid": "src/pages/Profile.tsx:90:9",
 					"data-prohibitions": "[]",
 					className: "font-semibold text-white",
 					children: "Dados Pessoais"
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/pages/Profile.tsx:58:9",
+					"data-uid": "src/pages/Profile.tsx:91:9",
 					"data-prohibitions": "[]",
 					className: "space-y-4",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/Profile.tsx:59:11",
+							"data-uid": "src/pages/Profile.tsx:92:11",
 							"data-prohibitions": "[]",
 							className: "space-y-2",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-								"data-uid": "src/pages/Profile.tsx:60:13",
+								"data-uid": "src/pages/Profile.tsx:93:13",
 								"data-prohibitions": "[]",
 								children: "Nome Completo"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-								"data-uid": "src/pages/Profile.tsx:61:13",
+								"data-uid": "src/pages/Profile.tsx:94:13",
 								"data-prohibitions": "[editContent]",
 								defaultValue: "João Doe",
 								className: "bg-card border-border"
 							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/Profile.tsx:63:11",
+							"data-uid": "src/pages/Profile.tsx:96:11",
 							"data-prohibitions": "[]",
 							className: "space-y-2",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-								"data-uid": "src/pages/Profile.tsx:64:13",
+								"data-uid": "src/pages/Profile.tsx:97:13",
 								"data-prohibitions": "[]",
 								children: "Telefone"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-								"data-uid": "src/pages/Profile.tsx:65:13",
+								"data-uid": "src/pages/Profile.tsx:98:13",
 								"data-prohibitions": "[editContent]",
 								defaultValue: "(11) 98765-4321",
 								className: "bg-card border-border"
 							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/Profile.tsx:67:11",
+							"data-uid": "src/pages/Profile.tsx:100:11",
 							"data-prohibitions": "[]",
 							className: "space-y-2",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-								"data-uid": "src/pages/Profile.tsx:68:13",
+								"data-uid": "src/pages/Profile.tsx:101:13",
 								"data-prohibitions": "[]",
 								children: "CPF / CNPJ"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-								"data-uid": "src/pages/Profile.tsx:69:13",
+								"data-uid": "src/pages/Profile.tsx:102:13",
 								"data-prohibitions": "[editContent]",
 								defaultValue: "123.456.789-00",
 								className: "bg-card border-border"
@@ -26258,51 +26316,153 @@ var Profile = () => {
 				})]
 			}),
 			isCompany && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-				"data-uid": "src/pages/Profile.tsx:75:9",
-				"data-prohibitions": "[]",
+				"data-uid": "src/pages/Profile.tsx:108:9",
+				"data-prohibitions": "[editContent]",
 				className: "space-y-4 animate-fade-in",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-					"data-uid": "src/pages/Profile.tsx:76:11",
+					"data-uid": "src/pages/Profile.tsx:109:11",
 					"data-prohibitions": "[]",
 					className: "font-semibold text-white",
 					children: "Perfil da Locadora"
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/pages/Profile.tsx:77:11",
-					"data-prohibitions": "[]",
+					"data-uid": "src/pages/Profile.tsx:110:11",
+					"data-prohibitions": "[editContent]",
 					className: "space-y-4",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/Profile.tsx:78:13",
-						"data-prohibitions": "[]",
-						className: "space-y-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-							"data-uid": "src/pages/Profile.tsx:79:15",
-							"data-prohibitions": "[]",
-							children: "Nome da Empresa"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-							"data-uid": "src/pages/Profile.tsx:80:15",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/pages/Profile.tsx:111:13",
 							"data-prohibitions": "[editContent]",
-							defaultValue: "JD Eventos Tech",
-							className: "bg-card border-border"
-						})]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/Profile.tsx:82:13",
-						"data-prohibitions": "[]",
-						className: "space-y-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-							"data-uid": "src/pages/Profile.tsx:83:15",
+							className: "space-y-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+								"data-uid": "src/pages/Profile.tsx:112:15",
+								"data-prohibitions": "[]",
+								children: "Logo Marca da Empresa"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/pages/Profile.tsx:113:15",
+								"data-prohibitions": "[editContent]",
+								className: "flex flex-col items-center justify-center border-2 border-dashed border-border rounded-lg p-6 cursor-pointer hover:border-primary/50 transition-colors bg-card/50",
+								onClick: () => fileInputRef.current?.click(),
+								children: [localProfile.logo ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+									"data-uid": "src/pages/Profile.tsx:118:19",
+									"data-prohibitions": "[editContent]",
+									src: localProfile.logo,
+									alt: "Logo Preview",
+									className: "h-24 w-auto object-contain rounded"
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									"data-uid": "src/pages/Profile.tsx:124:19",
+									"data-prohibitions": "[]",
+									className: "flex flex-col items-center text-muted-foreground",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Upload, {
+										"data-uid": "src/pages/Profile.tsx:125:21",
+										"data-prohibitions": "[editContent]",
+										className: "h-8 w-8 mb-2 opacity-50"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										"data-uid": "src/pages/Profile.tsx:126:21",
+										"data-prohibitions": "[]",
+										className: "text-sm",
+										children: "Clique para fazer upload"
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									"data-uid": "src/pages/Profile.tsx:129:17",
+									"data-prohibitions": "[editContent]",
+									type: "file",
+									ref: fileInputRef,
+									className: "hidden",
+									accept: "image/*",
+									onChange: handleImageUpload
+								})]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/pages/Profile.tsx:139:13",
 							"data-prohibitions": "[]",
-							children: "Especialidades"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-							"data-uid": "src/pages/Profile.tsx:84:15",
-							"data-prohibitions": "[editContent]",
-							defaultValue: "Som, Iluminação, Painel de LED",
-							className: "bg-card border-border"
-						})]
-					})]
+							className: "space-y-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+								"data-uid": "src/pages/Profile.tsx:140:15",
+								"data-prohibitions": "[]",
+								children: "Nome da Empresa"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+								"data-uid": "src/pages/Profile.tsx:141:15",
+								"data-prohibitions": "[editContent]",
+								value: localProfile.name,
+								onChange: (e) => setLocalProfile({
+									...localProfile,
+									name: e.target.value
+								}),
+								className: "bg-card border-border"
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/pages/Profile.tsx:148:13",
+							"data-prohibitions": "[]",
+							className: "space-y-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+								"data-uid": "src/pages/Profile.tsx:149:15",
+								"data-prohibitions": "[]",
+								children: "Endereço da Empresa"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+								"data-uid": "src/pages/Profile.tsx:150:15",
+								"data-prohibitions": "[editContent]",
+								value: localProfile.address,
+								onChange: (e) => setLocalProfile({
+									...localProfile,
+									address: e.target.value
+								}),
+								placeholder: "Rua, Número, Bairro, Cidade - UF",
+								className: "bg-card border-border"
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/pages/Profile.tsx:158:13",
+							"data-prohibitions": "[]",
+							className: "space-y-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+								"data-uid": "src/pages/Profile.tsx:159:15",
+								"data-prohibitions": "[]",
+								children: "Especialidades"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+								"data-uid": "src/pages/Profile.tsx:160:15",
+								"data-prohibitions": "[editContent]",
+								value: localProfile.specialties,
+								onChange: (e) => setLocalProfile({
+									...localProfile,
+									specialties: e.target.value
+								}),
+								className: "bg-card border-border"
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/pages/Profile.tsx:167:13",
+							"data-prohibitions": "[]",
+							className: "space-y-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+								"data-uid": "src/pages/Profile.tsx:168:15",
+								"data-prohibitions": "[]",
+								children: "Obs:"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
+								"data-uid": "src/pages/Profile.tsx:169:15",
+								"data-prohibitions": "[editContent]",
+								value: localProfile.observations,
+								onChange: (e) => setLocalProfile({
+									...localProfile,
+									observations: e.target.value
+								}),
+								placeholder: "Detalhes, história ou informações adicionais da sua empresa...",
+								className: "bg-card border-border min-h-[100px] resize-none"
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+							"data-uid": "src/pages/Profile.tsx:177:13",
+							"data-prohibitions": "[]",
+							onClick: handleSave,
+							className: "w-full mt-4 h-12 text-md",
+							children: "Salvar Cadastro"
+						})
+					]
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-				"data-uid": "src/pages/Profile.tsx:93:7",
+				"data-uid": "src/pages/Profile.tsx:184:7",
 				"data-prohibitions": "[]",
 				variant: "outline",
 				className: "w-full mt-8 border-destructive/50 text-destructive hover:bg-destructive hover:text-white",
@@ -26456,4 +26616,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppProvider, {
 }));
 //#endregion
 
-//# sourceMappingURL=index-SHBMACIJ.js.map
+//# sourceMappingURL=index-BbmDh41s.js.map

@@ -23,6 +23,14 @@ export type Demand = {
   createdAt: string
 }
 
+export type CompanyProfile = {
+  name: string
+  specialties: string
+  address: string
+  logo: string
+  observations: string
+}
+
 interface AppContextType {
   role: Role
   setRole: (role: Role) => void
@@ -30,6 +38,8 @@ interface AppContextType {
   setIsSubscribed: (val: boolean) => void
   demands: Demand[]
   addDemand: (demand: Omit<Demand, 'id' | 'status' | 'proposals' | 'createdAt'>) => void
+  companyProfile: CompanyProfile
+  updateCompanyProfile: (profile: Partial<CompanyProfile>) => void
 }
 
 const MOCK_DEMANDS: Demand[] = [
@@ -77,6 +87,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [role, setRole] = useState<Role>('customer')
   const [isSubscribed, setIsSubscribed] = useState<boolean>(true)
   const [demands, setDemands] = useState<Demand[]>(MOCK_DEMANDS)
+  const [companyProfile, setCompanyProfile] = useState<CompanyProfile>({
+    name: 'JD Eventos Tech',
+    specialties: 'Som, Iluminação, Painel de LED',
+    address: '',
+    logo: '',
+    observations: '',
+  })
 
   const addDemand = (demandData: Omit<Demand, 'id' | 'status' | 'proposals' | 'createdAt'>) => {
     const newDemand: Demand = {
@@ -89,9 +106,22 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setDemands([newDemand, ...demands])
   }
 
+  const updateCompanyProfile = (profile: Partial<CompanyProfile>) => {
+    setCompanyProfile((prev) => ({ ...prev, ...profile }))
+  }
+
   return (
     <AppContext.Provider
-      value={{ role, setRole, isSubscribed, setIsSubscribed, demands, addDemand }}
+      value={{
+        role,
+        setRole,
+        isSubscribed,
+        setIsSubscribed,
+        demands,
+        addDemand,
+        companyProfile,
+        updateCompanyProfile,
+      }}
     >
       {children}
     </AppContext.Provider>
