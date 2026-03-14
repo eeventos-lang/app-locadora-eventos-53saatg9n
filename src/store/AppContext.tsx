@@ -19,6 +19,10 @@ export type TechRequirement = {
   decoracao: boolean
   ceremonial: boolean
   security: boolean
+  doces?: boolean
+  bolos?: boolean
+  brinquedos?: boolean
+  buffet_alternativo?: boolean
   details: string
 }
 
@@ -298,6 +302,10 @@ const MOCK_DEMANDS: Demand[] = [
       decoracao: true,
       ceremonial: true,
       security: false,
+      doces: false,
+      bolos: false,
+      brinquedos: false,
+      buffet_alternativo: false,
       details: 'Preciso de PA para 300 pessoas.',
     },
     status: 'negotiating',

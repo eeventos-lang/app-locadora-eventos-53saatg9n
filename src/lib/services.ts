@@ -15,6 +15,10 @@ import {
   ClipboardList,
   Shield,
   Palette,
+  Candy,
+  CakeSlice,
+  PartyPopper,
+  ChefHat,
 } from 'lucide-react'
 
 export const SERVICES = [
@@ -81,5 +85,33 @@ export const SERVICES = [
     icon: Shield,
     color: 'text-slate-400',
     bg: 'bg-slate-500/10',
+  },
+  {
+    id: 'doces',
+    label: 'doces em geral',
+    icon: Candy,
+    color: 'text-pink-300',
+    bg: 'bg-pink-400/10',
+  },
+  {
+    id: 'bolos',
+    label: 'Bolos',
+    icon: CakeSlice,
+    color: 'text-orange-300',
+    bg: 'bg-orange-400/10',
+  },
+  {
+    id: 'brinquedos',
+    label: 'Briquedos Para festa',
+    icon: PartyPopper,
+    color: 'text-indigo-300',
+    bg: 'bg-indigo-400/10',
+  },
+  {
+    id: 'buffet_alternativo',
+    label: 'Bufft Auternativo',
+    icon: ChefHat,
+    color: 'text-teal-300',
+    bg: 'bg-teal-400/10',
   },
 ] as const
