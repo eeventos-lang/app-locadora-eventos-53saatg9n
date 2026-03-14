@@ -2,7 +2,6 @@ import React from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { SERVICES } from '@/lib/services'
 import { EventFormData, EventConfigs } from '@/types/event'
 import { TechRequirement } from '@/store/AppContext'
@@ -60,35 +59,8 @@ export const Step2Services = ({ formData, setFormData, configs, setConfigs }: Pr
           {formData.requirements.buffet && (
             <div className="space-y-4 p-4 border border-border rounded-xl bg-card">
               <h4 className="font-medium text-foreground">Opções de Buffet</h4>
-              <RadioGroup
-                value={configs.buffetTier}
-                onValueChange={(val: any) => setConfigs((p) => ({ ...p, buffetTier: val }))}
-                className="grid grid-cols-1 md:grid-cols-3 gap-3"
-              >
-                <div className="flex items-start space-x-3 border border-border p-3 rounded-lg hover:bg-muted/50 cursor-pointer">
-                  <RadioGroupItem value="prime" id="prime" className="mt-1" />
-                  <Label htmlFor="prime" className="cursor-pointer grid gap-1.5">
-                    <span className="font-medium text-foreground">Prime</span>
-                    <span className="text-xs text-muted-foreground">R$ 150,00 por pessoa</span>
-                  </Label>
-                </div>
-                <div className="flex items-start space-x-3 border border-border p-3 rounded-lg hover:bg-muted/50 cursor-pointer">
-                  <RadioGroupItem value="premium" id="premium" className="mt-1" />
-                  <Label htmlFor="premium" className="cursor-pointer grid gap-1.5">
-                    <span className="font-medium text-foreground">Premium</span>
-                    <span className="text-xs text-muted-foreground">R$ 200,00 por pessoa</span>
-                  </Label>
-                </div>
-                <div className="flex items-start space-x-3 border border-border p-3 rounded-lg hover:bg-muted/50 cursor-pointer">
-                  <RadioGroupItem value="top" id="top" className="mt-1" />
-                  <Label htmlFor="top" className="cursor-pointer grid gap-1.5">
-                    <span className="font-medium text-foreground">Top</span>
-                    <span className="text-xs text-muted-foreground">R$ 300,00 por pessoa</span>
-                  </Label>
-                </div>
-              </RadioGroup>
               <div className="space-y-2 pt-2">
-                <Label>Quantidade de Pessoas</Label>
+                <Label>Quantidade de Pessoas (R$ 150/pessoa)</Label>
                 <Input
                   type="number"
                   min="1"

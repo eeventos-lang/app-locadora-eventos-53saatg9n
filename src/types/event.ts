@@ -9,7 +9,6 @@ export type EventFormData = {
 }
 
 export type EventConfigs = {
-  buffetTier: 'prime' | 'premium' | 'top'
   buffetGuests: number
   cocktailsGuests: number
   drinksGuests: number

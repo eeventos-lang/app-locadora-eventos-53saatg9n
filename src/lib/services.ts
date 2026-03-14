@@ -14,6 +14,7 @@ import {
   Building,
   ClipboardList,
   Shield,
+  Palette,
 } from 'lucide-react'
 
 export const SERVICES = [
@@ -59,6 +60,13 @@ export const SERVICES = [
     icon: Building,
     color: 'text-emerald-400',
     bg: 'bg-emerald-500/10',
+  },
+  {
+    id: 'decoracao',
+    label: 'Decoração',
+    icon: Palette,
+    color: 'text-fuchsia-400',
+    bg: 'bg-fuchsia-500/10',
   },
   {
     id: 'ceremonial',

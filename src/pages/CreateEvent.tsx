@@ -38,6 +38,7 @@ const CreateEvent = () => {
       band: false,
       dj: false,
       space: false,
+      decoracao: false,
       ceremonial: false,
       security: false,
       details: '',
@@ -45,7 +46,6 @@ const CreateEvent = () => {
   })
 
   const [configs, setConfigs] = useState<EventConfigs>({
-    buffetTier: 'prime',
     buffetGuests: 100,
     cocktailsGuests: 100,
     drinksGuests: 100,

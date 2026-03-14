@@ -17913,6 +17913,40 @@ var Music = createLucideIcon("music", [
 		key: "1hluhg"
 	}]
 ]);
+var Palette = createLucideIcon("palette", [
+	["path", {
+		d: "M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z",
+		key: "e79jfc"
+	}],
+	["circle", {
+		cx: "13.5",
+		cy: "6.5",
+		r: ".5",
+		fill: "currentColor",
+		key: "1okk4w"
+	}],
+	["circle", {
+		cx: "17.5",
+		cy: "10.5",
+		r: ".5",
+		fill: "currentColor",
+		key: "f64h9f"
+	}],
+	["circle", {
+		cx: "6.5",
+		cy: "12.5",
+		r: ".5",
+		fill: "currentColor",
+		key: "qy21gx"
+	}],
+	["circle", {
+		cx: "8.5",
+		cy: "7.5",
+		r: ".5",
+		fill: "currentColor",
+		key: "fotxhn"
+	}]
+]);
 var Receipt = createLucideIcon("receipt", [
 	["path", {
 		d: "M12 17V7",
@@ -21976,6 +22010,7 @@ var MOCK_DEMANDS = [{
 		band: true,
 		dj: true,
 		space: false,
+		decoracao: true,
 		ceremonial: true,
 		security: false,
 		details: "Preciso de PA para 300 pessoas, iluminação cênica na pista, grid Q30 e banda para festa."
@@ -22004,6 +22039,7 @@ var MOCK_DEMANDS = [{
 		band: false,
 		dj: true,
 		space: true,
+		decoracao: false,
 		ceremonial: false,
 		security: true,
 		details: "Painel de LED 4x3 indoor, som para DJ, luz de palco completa e buffet completo."
@@ -22074,7 +22110,7 @@ var AppProvider = ({ children }) => {
 		setRole("customer");
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppContext.Provider, {
-		"data-uid": "src/store/AppContext.tsx:207:5",
+		"data-uid": "src/store/AppContext.tsx:210:5",
 		"data-prohibitions": "[editContent]",
 		value: {
 			role,
@@ -30329,6 +30365,13 @@ var SERVICES = [
 		bg: "bg-emerald-500/10"
 	},
 	{
+		id: "decoracao",
+		label: "Decoração",
+		icon: Palette,
+		color: "text-fuchsia-400",
+		bg: "bg-fuchsia-500/10"
+	},
+	{
 		id: "ceremonial",
 		label: "Cerimonial",
 		icon: ClipboardList,
@@ -31003,31 +31046,31 @@ var Step2Services = ({ formData, setFormData, configs, setConfigs }) => {
 		}));
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/components/create-event/Step2Services.tsx:34:5",
+		"data-uid": "src/components/create-event/Step2Services.tsx:33:5",
 		"data-prohibitions": "[editContent]",
 		className: "space-y-6 animate-fade-in",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-				"data-uid": "src/components/create-event/Step2Services.tsx:35:7",
+				"data-uid": "src/components/create-event/Step2Services.tsx:34:7",
 				"data-prohibitions": "[]",
 				className: "text-lg font-semibold text-foreground",
 				children: "O que você precisa?"
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/components/create-event/Step2Services.tsx:36:7",
+				"data-uid": "src/components/create-event/Step2Services.tsx:35:7",
 				"data-prohibitions": "[editContent]",
 				className: "grid grid-cols-3 gap-3",
 				children: SERVICES.map(({ id, label, icon: Icon }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/components/create-event/Step2Services.tsx:38:11",
+					"data-uid": "src/components/create-event/Step2Services.tsx:37:11",
 					"data-prohibitions": "[editContent]",
 					className: `flex flex-col items-center justify-center p-3 rounded-xl border transition-all cursor-pointer ${formData.requirements[id] ? "bg-primary/10 border-primary shadow-[0_0_15px_rgba(255,255,255,0.1)] text-foreground" : "bg-card border-border text-muted-foreground hover:bg-card/80"}`,
 					onClick: () => updateReq(id, !formData.requirements[id]),
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
-						"data-uid": "src/components/create-event/Step2Services.tsx:47:13",
+						"data-uid": "src/components/create-event/Step2Services.tsx:46:13",
 						"data-prohibitions": "[editContent]",
 						className: "w-6 h-6 mb-2"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						"data-uid": "src/components/create-event/Step2Services.tsx:48:13",
+						"data-uid": "src/components/create-event/Step2Services.tsx:47:13",
 						"data-prohibitions": "[editContent]",
 						className: "text-[10px] font-medium text-center leading-tight",
 						children: label
@@ -31035,153 +31078,54 @@ var Step2Services = ({ formData, setFormData, configs, setConfigs }) => {
 				}, id))
 			}),
 			(formData.requirements.buffet || formData.requirements.cocktails || formData.requirements.drinks || formData.requirements.security) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/components/create-event/Step2Services.tsx:57:9",
+				"data-uid": "src/components/create-event/Step2Services.tsx:56:9",
 				"data-prohibitions": "[editContent]",
 				className: "space-y-4 pt-4 border-t border-border/50 animate-fade-in",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-						"data-uid": "src/components/create-event/Step2Services.tsx:58:11",
+						"data-uid": "src/components/create-event/Step2Services.tsx:57:11",
 						"data-prohibitions": "[]",
 						className: "text-sm font-semibold text-foreground",
 						children: "Configurações de Serviços"
 					}),
 					formData.requirements.buffet && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/components/create-event/Step2Services.tsx:61:13",
+						"data-uid": "src/components/create-event/Step2Services.tsx:60:13",
 						"data-prohibitions": "[]",
 						className: "space-y-4 p-4 border border-border rounded-xl bg-card",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
-								"data-uid": "src/components/create-event/Step2Services.tsx:62:15",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+							"data-uid": "src/components/create-event/Step2Services.tsx:61:15",
+							"data-prohibitions": "[]",
+							className: "font-medium text-foreground",
+							children: "Opções de Buffet"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/components/create-event/Step2Services.tsx:62:15",
+							"data-prohibitions": "[]",
+							className: "space-y-2 pt-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+								"data-uid": "src/components/create-event/Step2Services.tsx:63:17",
 								"data-prohibitions": "[]",
-								className: "font-medium text-foreground",
-								children: "Opções de Buffet"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(RadioGroup, {
-								"data-uid": "src/components/create-event/Step2Services.tsx:63:15",
-								"data-prohibitions": "[]",
-								value: configs.buffetTier,
-								onValueChange: (val) => setConfigs((p) => ({
-									...p,
-									buffetTier: val
-								})),
-								className: "grid grid-cols-1 md:grid-cols-3 gap-3",
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/components/create-event/Step2Services.tsx:68:17",
-										"data-prohibitions": "[]",
-										className: "flex items-start space-x-3 border border-border p-3 rounded-lg hover:bg-muted/50 cursor-pointer",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupItem, {
-											"data-uid": "src/components/create-event/Step2Services.tsx:69:19",
-											"data-prohibitions": "[editContent]",
-											value: "prime",
-											id: "prime",
-											className: "mt-1"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
-											"data-uid": "src/components/create-event/Step2Services.tsx:70:19",
-											"data-prohibitions": "[]",
-											htmlFor: "prime",
-											className: "cursor-pointer grid gap-1.5",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												"data-uid": "src/components/create-event/Step2Services.tsx:71:21",
-												"data-prohibitions": "[]",
-												className: "font-medium text-foreground",
-												children: "Prime"
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												"data-uid": "src/components/create-event/Step2Services.tsx:72:21",
-												"data-prohibitions": "[]",
-												className: "text-xs text-muted-foreground",
-												children: "R$ 150,00 por pessoa"
-											})]
-										})]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/components/create-event/Step2Services.tsx:75:17",
-										"data-prohibitions": "[]",
-										className: "flex items-start space-x-3 border border-border p-3 rounded-lg hover:bg-muted/50 cursor-pointer",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupItem, {
-											"data-uid": "src/components/create-event/Step2Services.tsx:76:19",
-											"data-prohibitions": "[editContent]",
-											value: "premium",
-											id: "premium",
-											className: "mt-1"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
-											"data-uid": "src/components/create-event/Step2Services.tsx:77:19",
-											"data-prohibitions": "[]",
-											htmlFor: "premium",
-											className: "cursor-pointer grid gap-1.5",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												"data-uid": "src/components/create-event/Step2Services.tsx:78:21",
-												"data-prohibitions": "[]",
-												className: "font-medium text-foreground",
-												children: "Premium"
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												"data-uid": "src/components/create-event/Step2Services.tsx:79:21",
-												"data-prohibitions": "[]",
-												className: "text-xs text-muted-foreground",
-												children: "R$ 200,00 por pessoa"
-											})]
-										})]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/components/create-event/Step2Services.tsx:82:17",
-										"data-prohibitions": "[]",
-										className: "flex items-start space-x-3 border border-border p-3 rounded-lg hover:bg-muted/50 cursor-pointer",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupItem, {
-											"data-uid": "src/components/create-event/Step2Services.tsx:83:19",
-											"data-prohibitions": "[editContent]",
-											value: "top",
-											id: "top",
-											className: "mt-1"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
-											"data-uid": "src/components/create-event/Step2Services.tsx:84:19",
-											"data-prohibitions": "[]",
-											htmlFor: "top",
-											className: "cursor-pointer grid gap-1.5",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												"data-uid": "src/components/create-event/Step2Services.tsx:85:21",
-												"data-prohibitions": "[]",
-												className: "font-medium text-foreground",
-												children: "Top"
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												"data-uid": "src/components/create-event/Step2Services.tsx:86:21",
-												"data-prohibitions": "[]",
-												className: "text-xs text-muted-foreground",
-												children: "R$ 300,00 por pessoa"
-											})]
-										})]
-									})
-								]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/create-event/Step2Services.tsx:90:15",
-								"data-prohibitions": "[]",
-								className: "space-y-2 pt-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-									"data-uid": "src/components/create-event/Step2Services.tsx:91:17",
-									"data-prohibitions": "[]",
-									children: "Quantidade de Pessoas"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									"data-uid": "src/components/create-event/Step2Services.tsx:92:17",
-									"data-prohibitions": "[editContent]",
-									type: "number",
-									min: "1",
-									value: configs.buffetGuests || "",
-									onChange: handleNumChange("buffetGuests"),
-									className: "bg-background border-border"
-								})]
-							})
-						]
+								children: "Quantidade de Pessoas (R$ 150/pessoa)"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+								"data-uid": "src/components/create-event/Step2Services.tsx:64:17",
+								"data-prohibitions": "[editContent]",
+								type: "number",
+								min: "1",
+								value: configs.buffetGuests || "",
+								onChange: handleNumChange("buffetGuests"),
+								className: "bg-background border-border"
+							})]
+						})]
 					}),
 					formData.requirements.cocktails && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/components/create-event/Step2Services.tsx:104:13",
+						"data-uid": "src/components/create-event/Step2Services.tsx:76:13",
 						"data-prohibitions": "[]",
 						className: "space-y-2",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-							"data-uid": "src/components/create-event/Step2Services.tsx:105:15",
+							"data-uid": "src/components/create-event/Step2Services.tsx:77:15",
 							"data-prohibitions": "[]",
 							children: "Pessoas no Bar de Drinks (R$ 70/pessoa)"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-							"data-uid": "src/components/create-event/Step2Services.tsx:106:15",
+							"data-uid": "src/components/create-event/Step2Services.tsx:78:15",
 							"data-prohibitions": "[editContent]",
 							type: "number",
 							min: "1",
@@ -31191,15 +31135,15 @@ var Step2Services = ({ formData, setFormData, configs, setConfigs }) => {
 						})]
 					}),
 					formData.requirements.drinks && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/components/create-event/Step2Services.tsx:116:13",
+						"data-uid": "src/components/create-event/Step2Services.tsx:88:13",
 						"data-prohibitions": "[]",
 						className: "space-y-2",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-							"data-uid": "src/components/create-event/Step2Services.tsx:117:15",
+							"data-uid": "src/components/create-event/Step2Services.tsx:89:15",
 							"data-prohibitions": "[]",
 							children: "Pessoas para Bebidas (R$ 50/pessoa)"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-							"data-uid": "src/components/create-event/Step2Services.tsx:118:15",
+							"data-uid": "src/components/create-event/Step2Services.tsx:90:15",
 							"data-prohibitions": "[editContent]",
 							type: "number",
 							min: "1",
@@ -31209,15 +31153,15 @@ var Step2Services = ({ formData, setFormData, configs, setConfigs }) => {
 						})]
 					}),
 					formData.requirements.security && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/components/create-event/Step2Services.tsx:128:13",
+						"data-uid": "src/components/create-event/Step2Services.tsx:100:13",
 						"data-prohibitions": "[]",
 						className: "space-y-2",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-							"data-uid": "src/components/create-event/Step2Services.tsx:129:15",
+							"data-uid": "src/components/create-event/Step2Services.tsx:101:15",
 							"data-prohibitions": "[]",
 							children: "Quantidade de Seguranças (R$ 150/cada)"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-							"data-uid": "src/components/create-event/Step2Services.tsx:130:15",
+							"data-uid": "src/components/create-event/Step2Services.tsx:102:15",
 							"data-prohibitions": "[editContent]",
 							type: "number",
 							min: "1",
@@ -31229,15 +31173,15 @@ var Step2Services = ({ formData, setFormData, configs, setConfigs }) => {
 				]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/components/create-event/Step2Services.tsx:141:7",
+				"data-uid": "src/components/create-event/Step2Services.tsx:113:7",
 				"data-prohibitions": "[]",
 				className: "space-y-2",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-					"data-uid": "src/components/create-event/Step2Services.tsx:142:9",
+					"data-uid": "src/components/create-event/Step2Services.tsx:114:9",
 					"data-prohibitions": "[]",
 					children: "Detalhes Adicionais"
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
-					"data-uid": "src/components/create-event/Step2Services.tsx:143:9",
+					"data-uid": "src/components/create-event/Step2Services.tsx:115:9",
 					"data-prohibitions": "[editContent]",
 					placeholder: "Descreva tamanhos, quantidades, cronograma, etc...",
 					value: formData.requirements.details,
@@ -31526,19 +31470,13 @@ var useEventTotals = (formData, configs) => {
 		band: 4e3,
 		dj: 1e3,
 		space: 5e3,
+		decoracao: 3e3,
 		ceremonial: 1500
 	};
 	SERVICES.forEach((s) => {
 		if (formData.requirements[s.id] && s.id in fixed) addLine(s.label, "Taxa Fixa", 1, fixed[s.id]);
 	});
-	if (formData.requirements.buffet) {
-		const p = {
-			prime: 150,
-			premium: 200,
-			top: 300
-		}[configs.buffetTier];
-		addLine("Buffet", `Classe ${configs.buffetTier.toUpperCase()}`, configs.buffetGuests, p);
-	}
+	if (formData.requirements.buffet) addLine("Buffet", "Por pessoa", configs.buffetGuests, 150);
 	if (formData.requirements.drinks) addLine("Bebidas", "Por pessoa", configs.drinksGuests, 50);
 	if (formData.requirements.cocktails) addLine("Bar Drinks", "Por pessoa", configs.cocktailsGuests, 70);
 	if (formData.requirements.security) addLine("Seguranças", "Qtd", configs.securityCount, 150);
@@ -31578,13 +31516,13 @@ var CreateEvent = () => {
 			band: false,
 			dj: false,
 			space: false,
+			decoracao: false,
 			ceremonial: false,
 			security: false,
 			details: ""
 		}
 	});
 	const [configs, setConfigs] = (0, import_react.useState)({
-		buffetTier: "prime",
 		buffetGuests: 100,
 		cocktailsGuests: 100,
 		drinksGuests: 100,
@@ -35857,4 +35795,4 @@ function App() {
 }));
 //#endregion
 
-//# sourceMappingURL=index-CqI5gvxJ.js.map
+//# sourceMappingURL=index-DXAzYZac.js.map

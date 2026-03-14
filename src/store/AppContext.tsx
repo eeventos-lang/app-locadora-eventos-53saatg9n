@@ -16,6 +16,7 @@ export type TechRequirement = {
   band: boolean
   dj: boolean
   space: boolean
+  decoracao: boolean
   ceremonial: boolean
   security: boolean
   details: string
@@ -98,6 +99,7 @@ const MOCK_DEMANDS: Demand[] = [
       band: true,
       dj: true,
       space: false,
+      decoracao: true,
       ceremonial: true,
       security: false,
       details:
@@ -128,6 +130,7 @@ const MOCK_DEMANDS: Demand[] = [
       band: false,
       dj: true,
       space: true,
+      decoracao: false,
       ceremonial: false,
       security: true,
       details: 'Painel de LED 4x3 indoor, som para DJ, luz de palco completa e buffet completo.',

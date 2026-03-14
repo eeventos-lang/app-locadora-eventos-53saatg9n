@@ -29,6 +29,7 @@ export const useEventTotals = (formData: EventFormData, configs: EventConfigs) =
     band: 4000,
     dj: 1000,
     space: 5000,
+    decoracao: 3000,
     ceremonial: 1500,
   }
 
@@ -39,8 +40,7 @@ export const useEventTotals = (formData: EventFormData, configs: EventConfigs) =
   })
 
   if (formData.requirements.buffet) {
-    const p = { prime: 150, premium: 200, top: 300 }[configs.buffetTier]
-    addLine('Buffet', `Classe ${configs.buffetTier.toUpperCase()}`, configs.buffetGuests, p)
+    addLine('Buffet', 'Por pessoa', configs.buffetGuests, 150)
   }
   if (formData.requirements.drinks) addLine('Bebidas', 'Por pessoa', configs.drinksGuests, 50)
   if (formData.requirements.cocktails)

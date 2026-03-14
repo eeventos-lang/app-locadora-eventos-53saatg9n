@@ -1595,12 +1595,6 @@ section[aria-label='Notifications alt+T'] {
   margin-left: calc(0.25rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
-.space-x-3 > :not([hidden]) ~ :not([hidden]){
-  --tw-space-x-reverse: 0;
-  margin-right: calc(0.75rem * var(--tw-space-x-reverse));
-  margin-left: calc(0.75rem * calc(1 - var(--tw-space-x-reverse)));
-}
-
 .space-x-4 > :not([hidden]) ~ :not([hidden]){
   --tw-space-x-reverse: 0;
   margin-right: calc(1rem * var(--tw-space-x-reverse));
@@ -1948,6 +1942,10 @@ section[aria-label='Notifications alt+T'] {
 
 .bg-foreground{
   background-color: hsl(var(--foreground));
+}
+
+.bg-fuchsia-500\/10{
+  background-color: rgb(217 70 239 / 0.1);
 }
 
 .bg-gray-500\/10{
@@ -2466,6 +2464,11 @@ section[aria-label='Notifications alt+T'] {
 
 .text-foreground\/80{
   color: hsl(var(--foreground) / 0.8);
+}
+
+.text-fuchsia-400{
+  --tw-text-opacity: 1;
+  color: rgb(232 121 249 / var(--tw-text-opacity, 1));
 }
 
 .text-gray-400{
@@ -4089,10 +4092,6 @@ section[aria-label='Notifications alt+T'] {
 
   .md\:grid-cols-2{
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .md\:grid-cols-3{
-    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .md\:grid-cols-4{
