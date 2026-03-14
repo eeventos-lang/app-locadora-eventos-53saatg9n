@@ -4,11 +4,11 @@ import {
   Calendar,
   MapPin,
   DollarSign,
-  CheckCircle2,
   Speaker,
   Lightbulb,
   Monitor,
   Layers,
+  Zap,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -49,6 +49,13 @@ const DemandDetail = () => {
       label: 'Iluminação Cênica',
       color: 'text-yellow-400',
       bg: 'bg-yellow-500/10',
+    },
+    {
+      key: 'light',
+      icon: Zap,
+      label: 'Luz',
+      color: 'text-amber-400',
+      bg: 'bg-amber-500/10',
     },
     {
       key: 'led',
@@ -97,11 +104,13 @@ const DemandDetail = () => {
           <CardContent className="p-5 flex items-center justify-between">
             <div>
               <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
-                Orçamento Cliente
+                {role === 'customer' ? 'Orçamento Cliente' : 'Valor Líquido (-10% Taxa)'}
               </p>
               <p className="text-2xl font-bold text-accent mt-1 flex items-center gap-2">
                 <DollarSign className="w-6 h-6" />
-                {new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2 }).format(demand.budget)}
+                {new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2 }).format(
+                  role === 'customer' ? demand.budget : demand.budget * 0.9,
+                )}
               </p>
             </div>
             {role === 'customer' && (
@@ -149,7 +158,7 @@ const DemandDetail = () => {
             onClick={handleProposal}
             className="w-full h-14 text-lg font-semibold shadow-[0_4px_20px_0_rgba(0,82,255,0.4)] transition-transform active:scale-95"
           >
-            Enviar Proposta
+            Responder / Orçamento
           </Button>
         </div>
       )}

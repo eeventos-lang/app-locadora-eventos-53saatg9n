@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
 const Profile = () => {
-  const { role, setRole } = useApp()
+  const { role, setRole, isSubscribed, setIsSubscribed } = useApp()
 
   const isCompany = role === 'company'
 
@@ -22,20 +22,36 @@ const Profile = () => {
         </div>
       </div>
 
-      <Card className="bg-card border-border">
-        <CardContent className="p-5 flex items-center justify-between">
-          <div>
-            <Label className="text-base text-white font-semibold">Modo Locadora</Label>
-            <p className="text-xs text-muted-foreground mt-1">
-              Ative para ver oportunidades de eventos
-            </p>
-          </div>
-          <Switch
-            checked={isCompany}
-            onCheckedChange={(checked) => setRole(checked ? 'company' : 'customer')}
-          />
-        </CardContent>
-      </Card>
+      <div className="space-y-4">
+        <Card className="bg-card border-border">
+          <CardContent className="p-5 flex items-center justify-between">
+            <div>
+              <Label className="text-base text-white font-semibold">Modo Locadora</Label>
+              <p className="text-xs text-muted-foreground mt-1">
+                Ative para ver oportunidades de eventos
+              </p>
+            </div>
+            <Switch
+              checked={isCompany}
+              onCheckedChange={(checked) => setRole(checked ? 'company' : 'customer')}
+            />
+          </CardContent>
+        </Card>
+
+        {isCompany && (
+          <Card className="bg-card border-border animate-fade-in border-primary/50">
+            <CardContent className="p-5 flex items-center justify-between">
+              <div>
+                <Label className="text-base text-white font-semibold">Assinatura Premium</Label>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Taxa mensal para receber demandas
+                </p>
+              </div>
+              <Switch checked={isSubscribed} onCheckedChange={setIsSubscribed} />
+            </CardContent>
+          </Card>
+        )}
+      </div>
 
       <section className="space-y-4">
         <h3 className="font-semibold text-white">Dados Pessoais</h3>

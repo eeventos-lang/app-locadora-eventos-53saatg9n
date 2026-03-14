@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
 import { Plus, Speaker, Lightbulb, Monitor, Layers, ArrowRight } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useApp } from '@/store/AppContext'
 
 const Index = () => {
-  const { role, demands } = useApp()
+  const { role, demands, isSubscribed } = useApp()
 
   const categories = [
     { icon: Speaker, label: 'Som', color: 'text-blue-400' },
@@ -92,6 +92,24 @@ const Index = () => {
   }
 
   // Company View
+  if (!isSubscribed) {
+    return (
+      <div className="p-6 space-y-6 animate-slide-up flex flex-col items-center justify-center min-h-[60vh] text-center">
+        <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-4">
+          <Speaker className="w-8 h-8 text-primary" />
+        </div>
+        <h2 className="text-xl font-bold">Assinatura Necessária</h2>
+        <p className="text-muted-foreground text-sm max-w-[250px]">
+          Assine o plano Premium no seu perfil para visualizar as demandas de clientes e enviar
+          orçamentos.
+        </p>
+        <Button asChild className="mt-4">
+          <Link to="/perfil">Ir para Perfil</Link>
+        </Button>
+      </div>
+    )
+  }
+
   return (
     <div className="p-6 space-y-6 animate-slide-up">
       <div className="flex items-center justify-between">
@@ -144,12 +162,15 @@ const Index = () => {
                       )}
                       {demand.requirements.led && <Monitor className="w-4 h-4 text-purple-400" />}
                     </div>
-                    <span className="text-accent font-semibold text-sm">
-                      {new Intl.NumberFormat('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL',
-                      }).format(demand.budget)}
-                    </span>
+                    <div className="text-right">
+                      <p className="text-[10px] text-muted-foreground mb-0.5">Valor Líquido</p>
+                      <span className="text-accent font-semibold text-sm">
+                        {new Intl.NumberFormat('pt-BR', {
+                          style: 'currency',
+                          currency: 'BRL',
+                        }).format(demand.budget * 0.9)}
+                      </span>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

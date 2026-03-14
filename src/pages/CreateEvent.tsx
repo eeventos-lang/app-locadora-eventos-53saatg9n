@@ -1,13 +1,12 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, CheckCircle2, Speaker, Lightbulb, Monitor, Layers } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, Speaker, Lightbulb, Monitor, Layers, Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Checkbox } from '@/components/ui/checkbox'
 import { useToast } from '@/hooks/use-toast'
-import { useApp } from '@/store/AppContext'
+import { useApp, TechRequirement } from '@/store/AppContext'
 
 const steps = ['Básico', 'Técnico', 'Revisão']
 
@@ -25,6 +24,7 @@ const CreateEvent = () => {
     requirements: {
       sound: false,
       lighting: false,
+      light: false,
       led: false,
       grid: false,
       details: '',
@@ -158,7 +158,8 @@ const CreateEvent = () => {
             <div className="grid grid-cols-2 gap-4">
               {[
                 { id: 'sound', label: 'Estrutura de Som', icon: Speaker },
-                { id: 'lighting', label: 'Iluminação/Luz', icon: Lightbulb },
+                { id: 'lighting', label: 'Iluminação Cênica', icon: Lightbulb },
+                { id: 'light', label: 'Luz', icon: Zap },
                 { id: 'led', label: 'Painel de LED', icon: Monitor },
                 { id: 'grid', label: 'Estrutura Grid', icon: Layers },
               ].map(({ id, label, icon: Icon }) => (
@@ -226,6 +227,11 @@ const CreateEvent = () => {
                   )}
                   {formData.requirements.lighting && (
                     <span className="bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded">
+                      Cênica
+                    </span>
+                  )}
+                  {formData.requirements.light && (
+                    <span className="bg-amber-500/20 text-amber-400 text-xs px-2 py-1 rounded">
                       Luz
                     </span>
                   )}

@@ -5,7 +5,21 @@ import { Badge } from '@/components/ui/badge'
 import { useApp } from '@/store/AppContext'
 
 const Demands = () => {
-  const { role, demands } = useApp()
+  const { role, demands, isSubscribed } = useApp()
+
+  if (role === 'company' && !isSubscribed) {
+    return (
+      <div className="p-6 flex flex-col items-center justify-center min-h-[70vh] text-center animate-slide-up">
+        <h2 className="text-xl font-bold mb-2">Acesso Restrito</h2>
+        <p className="text-muted-foreground text-sm mb-6">
+          Ative sua assinatura premium para visualizar as demandas disponíveis.
+        </p>
+        <Link to="/perfil" className="px-6 py-2 bg-primary text-white rounded-md font-medium">
+          Assinar Agora
+        </Link>
+      </div>
+    )
+  }
 
   return (
     <div className="p-6 space-y-6 animate-slide-up">
@@ -73,12 +87,14 @@ const Demands = () => {
                         )}
                       </div>
                       <div className="text-right">
-                        <p className="text-[10px] text-muted-foreground mb-0.5">Orçamento</p>
+                        <p className="text-[10px] text-muted-foreground mb-0.5">
+                          {role === 'customer' ? 'Orçamento' : 'Valor Líquido'}
+                        </p>
                         <p className="text-accent font-bold text-base">
                           {new Intl.NumberFormat('pt-BR', {
                             style: 'currency',
                             currency: 'BRL',
-                          }).format(demand.budget)}
+                          }).format(role === 'customer' ? demand.budget : demand.budget * 0.9)}
                         </p>
                       </div>
                     </div>

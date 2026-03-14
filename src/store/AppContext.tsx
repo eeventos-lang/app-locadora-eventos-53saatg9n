@@ -5,6 +5,7 @@ export type Role = 'customer' | 'company'
 export type TechRequirement = {
   sound: boolean
   lighting: boolean
+  light: boolean
   led: boolean
   grid: boolean
   details: string
@@ -25,6 +26,8 @@ export type Demand = {
 interface AppContextType {
   role: Role
   setRole: (role: Role) => void
+  isSubscribed: boolean
+  setIsSubscribed: (val: boolean) => void
   demands: Demand[]
   addDemand: (demand: Omit<Demand, 'id' | 'status' | 'proposals' | 'createdAt'>) => void
 }
@@ -39,6 +42,7 @@ const MOCK_DEMANDS: Demand[] = [
     requirements: {
       sound: true,
       lighting: true,
+      light: false,
       led: false,
       grid: true,
       details: 'Preciso de PA para 300 pessoas, iluminação cênica na pista e grid Q30.',
@@ -56,6 +60,7 @@ const MOCK_DEMANDS: Demand[] = [
     requirements: {
       sound: true,
       lighting: true,
+      light: true,
       led: true,
       grid: true,
       details: 'Painel de LED 4x3 indoor, som para banda, luz de palco completa.',
@@ -70,6 +75,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined)
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [role, setRole] = useState<Role>('customer')
+  const [isSubscribed, setIsSubscribed] = useState<boolean>(true)
   const [demands, setDemands] = useState<Demand[]>(MOCK_DEMANDS)
 
   const addDemand = (demandData: Omit<Demand, 'id' | 'status' | 'proposals' | 'createdAt'>) => {
@@ -84,7 +90,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AppContext.Provider value={{ role, setRole, demands, addDemand }}>
+    <AppContext.Provider
+      value={{ role, setRole, isSubscribed, setIsSubscribed, demands, addDemand }}
+    >
       {children}
     </AppContext.Provider>
   )
