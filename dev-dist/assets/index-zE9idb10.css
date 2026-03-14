@@ -849,6 +849,10 @@ section[aria-label='Notifications alt+T'] {
   margin-right: 0.5rem;
 }
 
+.mt-0\.5{
+  margin-top: 0.125rem;
+}
+
 .mt-1{
   margin-top: 0.25rem;
 }
@@ -1656,6 +1660,14 @@ section[aria-label='Notifications alt+T'] {
   border-color: var(--color-border);
 }
 
+.border-amber-500\/30{
+  border-color: rgb(245 158 11 / 0.3);
+}
+
+.border-amber-500\/50{
+  border-color: rgb(245 158 11 / 0.5);
+}
+
 .border-border{
   border-color: hsl(var(--border));
 }
@@ -1670,6 +1682,14 @@ section[aria-label='Notifications alt+T'] {
 
 .border-destructive\/50{
   border-color: hsl(var(--destructive) / 0.5);
+}
+
+.border-emerald-500\/30{
+  border-color: rgb(16 185 129 / 0.3);
+}
+
+.border-emerald-500\/50{
+  border-color: rgb(16 185 129 / 0.5);
 }
 
 .border-input{
@@ -1716,8 +1736,21 @@ section[aria-label='Notifications alt+T'] {
   background-color: hsl(var(--accent));
 }
 
+.bg-amber-500{
+  --tw-bg-opacity: 1;
+  background-color: rgb(245 158 11 / var(--tw-bg-opacity, 1));
+}
+
 .bg-amber-500\/10{
   background-color: rgb(245 158 11 / 0.1);
+}
+
+.bg-amber-500\/20{
+  background-color: rgb(245 158 11 / 0.2);
+}
+
+.bg-amber-500\/5{
+  background-color: rgb(245 158 11 / 0.05);
 }
 
 .bg-background{
@@ -1773,6 +1806,14 @@ section[aria-label='Notifications alt+T'] {
   background-color: rgb(16 185 129 / 0.1);
 }
 
+.bg-emerald-500\/20{
+  background-color: rgb(16 185 129 / 0.2);
+}
+
+.bg-emerald-500\/5{
+  background-color: rgb(16 185 129 / 0.05);
+}
+
 .bg-foreground{
   background-color: hsl(var(--foreground));
 }
@@ -1792,6 +1833,10 @@ section[aria-label='Notifications alt+T'] {
 
 .bg-muted{
   background-color: hsl(var(--muted));
+}
+
+.bg-muted\/30{
+  background-color: hsl(var(--muted) / 0.3);
 }
 
 .bg-muted\/50{
@@ -2210,6 +2255,15 @@ section[aria-label='Notifications alt+T'] {
   color: rgb(251 191 36 / var(--tw-text-opacity, 1));
 }
 
+.text-amber-500{
+  --tw-text-opacity: 1;
+  color: rgb(245 158 11 / var(--tw-text-opacity, 1));
+}
+
+.text-amber-500\/80{
+  color: rgb(245 158 11 / 0.8);
+}
+
 .text-blue-400{
   --tw-text-opacity: 1;
   color: rgb(96 165 250 / var(--tw-text-opacity, 1));
@@ -2244,6 +2298,11 @@ section[aria-label='Notifications alt+T'] {
 .text-emerald-400{
   --tw-text-opacity: 1;
   color: rgb(52 211 153 / var(--tw-text-opacity, 1));
+}
+
+.text-emerald-500{
+  --tw-text-opacity: 1;
+  color: rgb(16 185 129 / var(--tw-text-opacity, 1));
 }
 
 .text-foreground{
@@ -2402,6 +2461,24 @@ section[aria-label='Notifications alt+T'] {
 .shadow-\[0_0_15px_rgba\(0\2c 82\2c 255\2c 0\.5\)\]{
   --tw-shadow: 0 0 15px rgba(0,82,255,0.5);
   --tw-shadow-colored: 0 0 15px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadow-\[0_0_15px_rgba\(245\2c 158\2c 11\2c 0\.3\)\]{
+  --tw-shadow: 0 0 15px rgba(245,158,11,0.3);
+  --tw-shadow-colored: 0 0 15px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadow-\[0_0_20px_rgba\(16\2c 185\2c 129\2c 0\.05\)\]{
+  --tw-shadow: 0 0 20px rgba(16,185,129,0.05);
+  --tw-shadow-colored: 0 0 20px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadow-\[0_0_20px_rgba\(245\2c 158\2c 11\2c 0\.05\)\]{
+  --tw-shadow: 0 0 20px rgba(245,158,11,0.05);
+  --tw-shadow-colored: 0 0 20px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
@@ -2769,6 +2846,11 @@ section[aria-label='Notifications alt+T'] {
 
 .hover\:bg-accent:hover{
   background-color: hsl(var(--accent));
+}
+
+.hover\:bg-amber-600:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(217 119 6 / var(--tw-bg-opacity, 1));
 }
 
 .hover\:bg-card\/80:hover{

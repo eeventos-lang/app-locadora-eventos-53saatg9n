@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router-dom'
-import { Home, ClipboardList, User, Bell } from 'lucide-react'
+import { Home, ClipboardList, User, Bell, CreditCard } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useApp } from '@/store/AppContext'
 
@@ -14,6 +14,7 @@ export default function Layout() {
       icon: ClipboardList,
       label: role === 'customer' ? 'Meus Eventos' : 'Demandas',
     },
+    ...(role === 'company' ? [{ path: '/assinatura', icon: CreditCard, label: 'Assinatura' }] : []),
     { path: '/perfil', icon: User, label: 'Perfil' },
   ]
 

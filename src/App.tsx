@@ -10,6 +10,7 @@ import Demands from './pages/Demands'
 import DemandDetail from './pages/DemandDetail'
 import CreateEvent from './pages/CreateEvent'
 import Profile from './pages/Profile'
+import Subscription from './pages/Subscription'
 import NotFound from './pages/NotFound'
 
 const App = () => (
@@ -23,6 +24,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/demandas" element={<Demands />} />
             <Route path="/demanda/:id" element={<DemandDetail />} />
+            <Route path="/assinatura" element={<Subscription />} />
             <Route path="/perfil" element={<Profile />} />
           </Route>
           {/* Create Event is outside main Layout to hide bottom nav for focus */}
