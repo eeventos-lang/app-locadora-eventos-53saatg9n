@@ -16,6 +16,7 @@ import Insights from '@/pages/Insights'
 import Schedules from '@/pages/Schedules'
 import Messages from '@/pages/Messages'
 import Registrations from '@/pages/Registrations'
+import Reports from '@/pages/Reports'
 import NotFound from '@/pages/NotFound'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
@@ -145,6 +146,7 @@ function App() {
               <Route path="insights" element={<Insights />} />
               <Route path="messages" element={<Messages />} />
               <Route path="registrations" element={<Registrations />} />
+              <Route path="reports" element={<Reports />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
