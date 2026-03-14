@@ -21,6 +21,29 @@ import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { AppProvider } from '@/store/AppContext'
 
+// Global fix for CSS Security Exception (CORS) when accessing cross-origin stylesheets.
+// This prevents crashes in external image capture/PDF generation libraries that iterate over document.styleSheets.
+if (typeof window !== 'undefined' && typeof CSSStyleSheet !== 'undefined') {
+  const originalCssRules = Object.getOwnPropertyDescriptor(CSSStyleSheet.prototype, 'cssRules')
+  if (originalCssRules) {
+    Object.defineProperty(CSSStyleSheet.prototype, 'cssRules', {
+      get() {
+        try {
+          return originalCssRules.get ? originalCssRules.get.call(this) : []
+        } catch (e) {
+          if (e instanceof DOMException && e.name === 'SecurityError') {
+            console.warn(
+              'CORS SecurityError: Blocked access to cross-origin stylesheet cssRules safely bypassed.',
+            )
+            return []
+          }
+          throw e
+        }
+      },
+    })
+  }
+}
+
 function App() {
   return (
     <AppProvider>
