@@ -30,9 +30,10 @@ if (typeof window !== 'undefined' && typeof CSSStyleSheet !== 'undefined') {
       Object.defineProperty(CSSStyleSheet.prototype, property, {
         get() {
           try {
+            // Attempt to read the property. Will natively throw SecurityError if cross-origin without CORS.
             return originalDescriptor.get!.call(this) || []
           } catch (e) {
-            console.warn(`Blocked access to stylesheet ${property} safely bypassed.`)
+            // Silently bypass blocked access to cross-origin stylesheets to prevent html-to-image crashes
             return []
           }
         },
@@ -47,7 +48,7 @@ if (typeof window !== 'undefined' && typeof CSSStyleSheet !== 'undefined') {
 }
 
 // Global fetch interceptor to prevent html-to-image / document generation from crashing
-// when a stylesheet or asset returns 404.
+// when a stylesheet or asset returns 404, preventing rendering sequence interruptions.
 if (typeof window !== 'undefined') {
   const originalFetch = window.fetch
   window.fetch = async function (...args) {
@@ -58,14 +59,33 @@ if (typeof window !== 'undefined') {
           typeof args[0] === 'string' ? args[0] : args[0] instanceof Request ? args[0].url : ''
         const isAsset =
           url.match(/\.(css|png|jpe?g|svg|woff2?|ttf)(\?.*)?$/i) || url.includes('/assets/')
+
         if (isAsset) {
           console.warn(`Gracefully intercepted failed fetch for asset: ${url}`)
-          return new Response('', {
+          let contentType = 'text/plain'
+          let body: BodyInit = ''
+
+          if (url.includes('.css')) {
+            contentType = 'text/css'
+          } else if (url.includes('.svg')) {
+            contentType = 'image/svg+xml'
+            body = '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"></svg>'
+          } else if (url.match(/\.(png|jpe?g)$/i)) {
+            contentType = url.includes('.png') ? 'image/png' : 'image/jpeg'
+            const imgData =
+              'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+            const binaryString = atob(imgData)
+            const bytes = new Uint8Array(binaryString.length)
+            for (let i = 0; i < binaryString.length; i++) {
+              bytes[i] = binaryString.charCodeAt(i)
+            }
+            body = bytes
+          }
+
+          return new Response(body, {
             status: 200,
             statusText: 'OK',
-            headers: new Headers({
-              'Content-Type': url.includes('.css') ? 'text/css' : 'text/plain',
-            }),
+            headers: new Headers({ 'Content-Type': contentType }),
           })
         }
       }
@@ -75,14 +95,23 @@ if (typeof window !== 'undefined') {
         typeof args[0] === 'string' ? args[0] : args[0] instanceof Request ? args[0].url : ''
       const isAsset =
         url.match(/\.(css|png|jpe?g|svg|woff2?|ttf)(\?.*)?$/i) || url.includes('/assets/')
+
       if (isAsset) {
-        console.warn(`Gracefully intercepted network error for asset: ${url}`, error)
-        return new Response('', {
+        console.warn(`Gracefully intercepted network error for asset: ${url}`)
+        let contentType = 'text/plain'
+        let body: BodyInit = ''
+
+        if (url.includes('.css')) {
+          contentType = 'text/css'
+        } else if (url.includes('.svg')) {
+          contentType = 'image/svg+xml'
+          body = '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"></svg>'
+        }
+
+        return new Response(body, {
           status: 200,
           statusText: 'OK',
-          headers: new Headers({
-            'Content-Type': url.includes('.css') ? 'text/css' : 'text/plain',
-          }),
+          headers: new Headers({ 'Content-Type': contentType }),
         })
       }
       throw error
