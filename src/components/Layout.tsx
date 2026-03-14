@@ -10,6 +10,7 @@ import {
   LogOut,
   User,
   Bell,
+  Users,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet'
@@ -39,13 +40,19 @@ export function Layout() {
   const navItems = [
     { name: 'Início', path: '/', icon: LayoutDashboard },
     { name: 'Demandas', path: '/demands', icon: Calendar },
+    ...(role === 'customer' ? [{ name: 'Fornecedores', path: '/suppliers', icon: Users }] : []),
     { name: 'Criar Evento', path: '/create-event', icon: PlusCircle },
     { name: 'Planos', path: '/subscription', icon: CreditCard },
   ]
 
   const myNotifications =
     role === 'company'
-      ? notifications.filter((n) => companyProfile?.sectors?.includes(n.sector)).slice(0, 5)
+      ? notifications
+          .filter(
+            (n) =>
+              n.targetSupplierId === currentUser?.id || companyProfile?.sectors?.includes(n.sector),
+          )
+          .slice(0, 5)
       : []
 
   const unreadCount = myNotifications.filter((n) => !n.read).length
@@ -195,7 +202,9 @@ export function Layout() {
                           {!notif.read && (
                             <div className="h-2 w-2 rounded-full bg-primary shrink-0" />
                           )}
-                          <span className="font-semibold text-sm">{notif.title}</span>
+                          <span className="font-semibold text-sm text-foreground">
+                            {notif.title}
+                          </span>
                         </div>
                         <span className="text-xs text-muted-foreground line-clamp-2">
                           {notif.message}
@@ -269,6 +278,13 @@ export function Layout() {
                     Demandas
                   </Link>
                 </li>
+                {role === 'customer' && (
+                  <li>
+                    <Link to="/suppliers" className="hover:text-primary transition-colors">
+                      Buscar Fornecedores
+                    </Link>
+                  </li>
+                )}
                 <li>
                   <Link to="/create-event" className="hover:text-primary transition-colors">
                     Criar Evento

@@ -8,6 +8,7 @@ import DemandDetail from '@/pages/DemandDetail'
 import CreateEvent from '@/pages/CreateEvent'
 import Profile from '@/pages/Profile'
 import Subscription from '@/pages/Subscription'
+import SupplierSearch from '@/pages/SupplierSearch'
 import NotFound from '@/pages/NotFound'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
@@ -31,6 +32,7 @@ function App() {
               <Route path="create-event" element={<CreateEvent />} />
               <Route path="profile" element={<Profile />} />
               <Route path="subscription" element={<Subscription />} />
+              <Route path="suppliers" element={<SupplierSearch />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

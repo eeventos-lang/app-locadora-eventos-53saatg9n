@@ -7,8 +7,9 @@ import { Switch } from '@/components/ui/switch'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { Badge } from '@/components/ui/badge'
 import { useToast } from '@/hooks/use-toast'
-import { Upload } from 'lucide-react'
+import { Upload, BadgeCheck, AlertCircle, ShieldCheck } from 'lucide-react'
 import { SERVICES } from '@/lib/services'
 import { cn } from '@/lib/utils'
 
@@ -34,6 +35,7 @@ const Profile = () => {
   }, [companyProfile])
 
   const isCompany = role === 'company'
+  const isVerified = localProfile.isVerified
 
   const handleSave = () => {
     updateCompanyProfile(localProfile)
@@ -48,6 +50,13 @@ const Profile = () => {
     if (file) {
       const url = URL.createObjectURL(file)
       setLocalProfile({ ...localProfile, logo: url })
+    }
+  }
+
+  const handlePortfolioUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setLocalProfile({ ...localProfile, portfolio: file.name })
     }
   }
 
@@ -69,8 +78,14 @@ const Profile = () => {
           )}
         </div>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-2 flex-wrap">
             {currentUser?.name || 'Usuário'}
+            {isCompany && isVerified && (
+              <BadgeCheck
+                className="w-7 h-7 text-blue-500 shrink-0"
+                title="Fornecedor Verificado"
+              />
+            )}
           </h1>
           <p className="text-muted-foreground mt-1">
             {currentUser?.email || 'usuario@exemplo.com'}
@@ -111,6 +126,60 @@ const Profile = () => {
         )}
       </div>
 
+      {isCompany && (
+        <section className="space-y-6 animate-fade-in mt-8 bg-card border border-border rounded-xl p-6 shadow-sm">
+          <div className="flex items-center justify-between border-b border-border pb-4 mb-4">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-6 h-6 text-primary" />
+              <h3 className="text-xl font-bold text-foreground">Verificação da Empresa</h3>
+            </div>
+            {isVerified ? (
+              <Badge className="bg-blue-500/10 text-blue-500 border-blue-500/20 hover:bg-blue-500/20">
+                Fornecedor Verificado
+              </Badge>
+            ) : (
+              <Badge variant="secondary" className="text-muted-foreground flex items-center gap-1">
+                <AlertCircle className="w-3 h-3" /> Pendente
+              </Badge>
+            )}
+          </div>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Envie sua documentação para ganhar o selo de fornecedor verificado. Perfis verificados
+            ganham mais destaque e confiança dos clientes na hora de fechar negócio.
+          </p>
+          <div className="grid gap-6 md:grid-cols-2 pt-2">
+            <div className="space-y-2">
+              <Label className="font-semibold">CNPJ</Label>
+              <Input
+                placeholder="00.000.000/0000-00"
+                className="h-11"
+                value={localProfile.cnpj || ''}
+                onChange={(e) => setLocalProfile({ ...localProfile, cnpj: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="font-semibold">Portfólio de Serviços (PDF)</Label>
+              <Input
+                type="file"
+                accept=".pdf"
+                className="h-11 cursor-pointer file:cursor-pointer"
+                onChange={handlePortfolioUpload}
+              />
+              {localProfile.portfolio && (
+                <p className="text-xs font-medium text-emerald-500 mt-2 flex items-center gap-1">
+                  <BadgeCheck className="w-3.5 h-3.5" /> Arquivo atual: {localProfile.portfolio}
+                </p>
+              )}
+            </div>
+          </div>
+          <div className="pt-2">
+            <Button onClick={handleSave} className="w-full sm:w-auto h-11 shadow-sm px-8">
+              Salvar Verificação
+            </Button>
+          </div>
+        </section>
+      )}
+
       <div className="grid gap-8 md:grid-cols-2">
         <section className="space-y-6">
           <h3 className="text-xl font-bold text-foreground border-b border-border pb-2">
@@ -119,15 +188,11 @@ const Profile = () => {
           <div className="space-y-4">
             <div className="space-y-2">
               <Label>Nome Completo</Label>
-              <Input defaultValue={currentUser?.name || ''} />
+              <Input defaultValue={currentUser?.name || ''} className="h-11" />
             </div>
             <div className="space-y-2">
               <Label>Telefone</Label>
-              <Input placeholder="(11) 90000-0000" />
-            </div>
-            <div className="space-y-2">
-              <Label>CPF / CNPJ</Label>
-              <Input placeholder="000.000.000-00" />
+              <Input placeholder="(11) 90000-0000" className="h-11" />
             </div>
             {!isCompany && (
               <Button onClick={handleSave} className="w-full mt-4 h-12 text-md shadow-sm">
@@ -174,6 +239,7 @@ const Profile = () => {
               <div className="space-y-2">
                 <Label>Nome da Empresa</Label>
                 <Input
+                  className="h-11"
                   value={localProfile.name}
                   onChange={(e) => setLocalProfile({ ...localProfile, name: e.target.value })}
                 />
@@ -211,14 +277,12 @@ const Profile = () => {
                     )
                   })}
                 </div>
-                <p className="text-[10px] text-muted-foreground mt-1">
-                  Você receberá apenas demandas relacionadas aos setores selecionados.
-                </p>
               </div>
 
               <div className="space-y-2">
                 <Label>Endereço da Empresa</Label>
                 <Input
+                  className="h-11"
                   value={localProfile.address}
                   onChange={(e) => setLocalProfile({ ...localProfile, address: e.target.value })}
                   placeholder="Rua, Número, Bairro, Cidade - UF"
@@ -228,6 +292,7 @@ const Profile = () => {
               <div className="space-y-2">
                 <Label>Especialidades Adicionais</Label>
                 <Input
+                  className="h-11"
                   value={localProfile.specialties}
                   onChange={(e) =>
                     setLocalProfile({ ...localProfile, specialties: e.target.value })
@@ -249,7 +314,7 @@ const Profile = () => {
               </div>
 
               <Button onClick={handleSave} className="w-full mt-4 h-12 text-md shadow-sm">
-                Salvar Cadastro
+                Salvar Perfil
               </Button>
             </div>
           </section>
@@ -260,7 +325,7 @@ const Profile = () => {
         <Button
           variant="outline"
           onClick={handleLogout}
-          className="w-full sm:w-auto text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground"
+          className="w-full sm:w-auto text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground h-11"
         >
           Sair da Conta
         </Button>

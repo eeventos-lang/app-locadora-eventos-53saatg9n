@@ -1,13 +1,15 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { Calendar, MapPin } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
+import { Calendar, MapPin, Target } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts'
 import { useApp, Demand } from '@/store/AppContext'
 import { SERVICES } from '@/lib/services'
 
 const Demands = () => {
-  const { role, demands, isSubscribed, companyProfile, proposals } = useApp()
+  const { role, demands, isSubscribed, companyProfile, proposals, currentUser } = useApp()
 
   const filteredDemands = useMemo(() => {
     if (role === 'customer') return demands
@@ -39,19 +41,19 @@ const Demands = () => {
     switch (status) {
       case 'pending':
         return (
-          <Badge className="bg-orange-500/10 text-orange-500 hover:bg-orange-500/20 border-orange-500/20 text-[10px] uppercase tracking-wider font-bold shrink-0">
+          <Badge className="bg-orange-500/10 text-orange-500 border-orange-500/20 uppercase tracking-wider font-bold shrink-0 text-[10px]">
             Pendente
           </Badge>
         )
       case 'negotiating':
         return (
-          <Badge className="bg-blue-500/10 text-blue-500 hover:bg-blue-500/20 border-blue-500/20 text-[10px] uppercase tracking-wider font-bold shrink-0">
+          <Badge className="bg-blue-500/10 text-blue-500 border-blue-500/20 uppercase tracking-wider font-bold shrink-0 text-[10px]">
             Em negociação
           </Badge>
         )
       case 'completed':
         return (
-          <Badge className="bg-green-500/10 text-green-500 hover:bg-green-500/20 border-green-500/20 text-[10px] uppercase tracking-wider font-bold shrink-0">
+          <Badge className="bg-green-500/10 text-green-500 border-green-500/20 uppercase tracking-wider font-bold shrink-0 text-[10px]">
             Concluído
           </Badge>
         )
@@ -59,6 +61,20 @@ const Demands = () => {
         return null
     }
   }
+
+  // Performance Dashboard Data
+  const myProposals = useMemo(
+    () => proposals.filter((p) => p.supplierId === currentUser?.id),
+    [proposals, currentUser],
+  )
+  const sentCount = myProposals.length
+  const acceptedCount = myProposals.filter((p) => p.status === 'accepted').length
+
+  const chartData = [
+    { status: 'Propostas Enviadas', count: sentCount, fill: 'hsl(var(--primary))' },
+    { status: 'Propostas Aceitas', count: acceptedCount, fill: 'hsl(var(--emerald-500))' },
+  ]
+  const chartConfig = { count: { label: 'Quantidade' } }
 
   if (role === 'company' && !isSubscribed) {
     return (
@@ -79,6 +95,62 @@ const Demands = () => {
 
   return (
     <div className="space-y-6 animate-slide-up pb-12 p-4 sm:p-6 max-w-7xl mx-auto">
+      {role === 'company' && (
+        <Card className="mb-8 border-border shadow-sm bg-card">
+          <CardHeader className="pb-4">
+            <div className="flex items-center gap-2">
+              <Target className="w-5 h-5 text-primary" />
+              <CardTitle className="text-xl text-foreground">Meu Desempenho</CardTitle>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Sua taxa de conversão de propostas na plataforma
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+              <div className="space-y-4 md:col-span-1">
+                <div className="bg-secondary/50 p-4 rounded-xl border border-border">
+                  <p className="text-xs uppercase tracking-wider font-semibold text-muted-foreground mb-1">
+                    Total Enviadas
+                  </p>
+                  <p className="text-3xl font-bold text-foreground">{sentCount}</p>
+                </div>
+                <div className="bg-emerald-500/10 p-4 rounded-xl border border-emerald-500/20">
+                  <p className="text-xs uppercase tracking-wider font-semibold text-emerald-600 mb-1">
+                    Total Aceitas
+                  </p>
+                  <p className="text-3xl font-bold text-emerald-500">{acceptedCount}</p>
+                </div>
+              </div>
+              <div className="md:col-span-2">
+                <ChartContainer config={chartConfig} className="h-[220px] w-full">
+                  <BarChart data={chartData} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      vertical={false}
+                      stroke="hsl(var(--border))"
+                    />
+                    <XAxis
+                      dataKey="status"
+                      tickLine={false}
+                      axisLine={false}
+                      tickMargin={10}
+                      className="text-xs font-medium"
+                    />
+                    <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
+                    <ChartTooltip
+                      content={<ChartTooltipContent />}
+                      cursor={{ fill: 'hsl(var(--secondary))' }}
+                    />
+                    <Bar dataKey="count" radius={[4, 4, 0, 0]} maxBarSize={60} />
+                  </BarChart>
+                </ChartContainer>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-3xl font-bold text-foreground tracking-tight">
           {role === 'customer' ? 'Meus Eventos' : 'Oportunidades Compatíveis'}

@@ -56,6 +56,7 @@ export type Notification = {
   sector: string
   read: boolean
   createdAt: string
+  targetSupplierId?: string
 }
 
 export type CompanyProfile = {
@@ -65,6 +66,9 @@ export type CompanyProfile = {
   address: string
   logo: string
   observations: string
+  cnpj?: string
+  portfolio?: string
+  isVerified?: boolean
 }
 
 export type User = {
@@ -74,6 +78,7 @@ export type User = {
   role: Role
   password?: string
   sectors?: string[]
+  companyProfile?: CompanyProfile
 }
 
 interface AppContextType {
@@ -95,16 +100,45 @@ interface AppContextType {
   acceptProposal: (proposalId: string) => void
   notifications: Notification[]
   markNotificationsAsRead: () => void
+  inviteSupplier: (supplierId: string, demandId: string) => void
 }
 
 const MOCK_USERS: User[] = [
   {
     id: 'u1',
-    name: 'João Doe',
+    name: 'JD Decorações',
     email: 'joao.doe@exemplo.com',
     role: 'company',
-    password: 'password123',
+    password: '123',
     sectors: ['decoracao', 'space'],
+    companyProfile: {
+      name: 'JD Decorações e Espaços',
+      specialties: 'Casamentos, Cenografia, Arranjos Florais',
+      sectors: ['decoracao', 'space'],
+      address: 'Av. das Flores, 123, São Paulo - SP',
+      logo: '',
+      observations: 'Transformando seu evento em um momento inesquecível.',
+      cnpj: '12.345.678/0001-90',
+      portfolio: 'portfolio_jd_2026.pdf',
+      isVerified: true,
+    },
+  },
+  {
+    id: 'u2',
+    name: 'MS Áudio e Luz',
+    email: 'maria@exemplo.com',
+    role: 'company',
+    password: '123',
+    sectors: ['sound', 'light', 'led'],
+    companyProfile: {
+      name: 'MS Áudio e Luz',
+      specialties: 'PA, Iluminação Cênica, Painéis de LED indoor/outdoor',
+      sectors: ['sound', 'light', 'led'],
+      address: 'Rua do Som, 45, Campinas - SP',
+      logo: '',
+      observations: '',
+      isVerified: false,
+    },
   },
 ]
 
@@ -113,17 +147,7 @@ const MOCK_DEMANDS: Demand[] = [
     id: 'd1',
     title: 'Casamento Sítio das Palmeiras',
     budget: 65000,
-    budgetBreakdown: {
-      sound: 1500,
-      light: 1000,
-      grid: 800,
-      buffet: 45000,
-      cocktails: 7000,
-      band: 4000,
-      dj: 1000,
-      decoracao: 3000,
-      ceremonial: 1500,
-    },
+    budgetBreakdown: { sound: 1500, light: 1000, decoracao: 3000 },
     guests: 300,
     date: '2026-05-20',
     location: 'São Paulo, SP',
@@ -144,29 +168,15 @@ const MOCK_DEMANDS: Demand[] = [
       decoracao: true,
       ceremonial: true,
       security: false,
-      details:
-        'Preciso de PA para 300 pessoas, iluminação cênica na pista, grid Q30 e banda para festa.',
+      details: 'Preciso de PA para 300 pessoas.',
     },
-    status: 'pending',
+    status: 'negotiating',
     createdAt: new Date().toISOString(),
   },
   {
     id: 'd2',
     title: 'Festa Corporativa Tech',
     budget: 95000,
-    budgetBreakdown: {
-      sound: 1500,
-      light: 1000,
-      led: 2500,
-      grid: 800,
-      buffet: 22500,
-      drinks: 7500,
-      photo: 2000,
-      video: 2500,
-      dj: 1000,
-      space: 5000,
-      security: 300,
-    },
     guests: 150,
     date: '2026-06-15',
     location: 'Campinas, SP',
@@ -187,7 +197,7 @@ const MOCK_DEMANDS: Demand[] = [
       decoracao: false,
       ceremonial: false,
       security: true,
-      details: 'Painel de LED 4x3 indoor, som para DJ, luz de palco completa e buffet completo.',
+      details: 'Painel de LED 4x3 indoor.',
     },
     status: 'negotiating',
     createdAt: new Date().toISOString(),
@@ -199,10 +209,29 @@ const MOCK_PROPOSALS: Proposal[] = [
     id: 'p1',
     demandId: 'd2',
     supplierId: 'u2',
-    supplierName: 'Empresa XPTO',
+    supplierName: 'MS Áudio e Luz',
     value: 8500,
-    message:
-      'Podemos fornecer o painel de LED com a melhor qualidade e equipe técnica de apoio. Nossa montagem é rápida e o suporte está incluso no valor total da locação.',
+    message: 'Fornecemos o painel de LED com a melhor qualidade.',
+    status: 'pending',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'p2',
+    demandId: 'd1',
+    supplierId: 'u1',
+    supplierName: 'JD Decorações',
+    value: 3200,
+    message: 'Decoração rústica completa com flores do campo.',
+    status: 'accepted',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'p3',
+    demandId: 'd2',
+    supplierId: 'u1',
+    supplierName: 'JD Decorações',
+    value: 5000,
+    message: 'Cenografia e lounges para o evento corporativo.',
     status: 'pending',
     createdAt: new Date().toISOString(),
   },
@@ -218,14 +247,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [demands, setDemands] = useState<Demand[]>(MOCK_DEMANDS)
   const [proposals, setProposals] = useState<Proposal[]>(MOCK_PROPOSALS)
   const [notifications, setNotifications] = useState<Notification[]>([])
-  const [companyProfile, setCompanyProfile] = useState<CompanyProfile>({
-    name: 'JD Decorações',
-    specialties: 'Casamentos, Cenografia, Flores',
-    sectors: ['decoracao', 'space'],
-    address: 'Av. das Flores, 123',
-    logo: '',
-    observations: '',
-  })
+  const [companyProfile, setCompanyProfile] = useState<CompanyProfile>(
+    MOCK_USERS[0].companyProfile!,
+  )
 
   const addDemand = (demandData: Omit<Demand, 'id' | 'status' | 'createdAt'>) => {
     const newDemand: Demand = {
@@ -282,12 +306,38 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     )
   }
 
+  const inviteSupplier = (supplierId: string, demandId: string) => {
+    const demand = demands.find((d) => d.id === demandId)
+    if (!demand) return
+    const newNotif: Notification = {
+      id: Math.random().toString(36).substring(7),
+      title: 'Convite Direto de Cliente!',
+      message: `Você foi convidado exclusivamente para enviar uma proposta para o evento: ${demand.title}`,
+      demandId: demand.id,
+      sector: 'invited',
+      read: false,
+      createdAt: new Date().toISOString(),
+      targetSupplierId: supplierId,
+    }
+    setNotifications((prev) => [newNotif, ...prev])
+  }
+
   const markNotificationsAsRead = () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
   }
 
   const updateCompanyProfile = (profile: Partial<CompanyProfile>) => {
-    setCompanyProfile((prev) => ({ ...prev, ...profile }))
+    setCompanyProfile((prev) => {
+      const updated = { ...prev, ...profile }
+      updated.isVerified = !!(updated.cnpj && updated.portfolio)
+
+      if (currentUser) {
+        const updatedUser = { ...currentUser, companyProfile: updated }
+        setCurrentUser(updatedUser)
+        setUsers((prevUsers) => prevUsers.map((u) => (u.id === currentUser.id ? updatedUser : u)))
+      }
+      return updated
+    })
   }
 
   const registerUser = async (userData: Omit<User, 'id'>) => {
@@ -298,16 +348,21 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
           return
         }
         const newUser: User = { ...userData, id: Math.random().toString(36).substring(7) }
-        setUsers((prev) => [...prev, newUser])
 
         if (userData.role === 'company') {
-          setCompanyProfile((prev) => ({
-            ...prev,
+          newUser.companyProfile = {
             name: userData.name,
             sectors: userData.sectors || [],
-          }))
+            specialties: '',
+            address: '',
+            logo: '',
+            observations: '',
+            isVerified: false,
+          }
+          setCompanyProfile(newUser.companyProfile)
         }
 
+        setUsers((prev) => [...prev, newUser])
         resolve()
       }, 800)
     })
@@ -320,6 +375,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         if (user) {
           setCurrentUser(user)
           setRole(user.role)
+          if (user.companyProfile) {
+            setCompanyProfile(user.companyProfile)
+          }
           resolve()
         } else {
           reject(new Error('Credenciais inválidas. Tente novamente.'))
@@ -354,6 +412,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         acceptProposal,
         notifications,
         markNotificationsAsRead,
+        inviteSupplier,
       }}
     >
       {children}
