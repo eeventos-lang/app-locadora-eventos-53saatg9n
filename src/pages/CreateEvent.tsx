@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CheckCircle2 } from 'lucide-react'
+import { CheckCircle2, Instagram } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
 import { useApp } from '@/store/AppContext'
@@ -67,9 +67,21 @@ const CreateEvent = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col animate-slide-up relative z-50">
-      <header className="flex items-center px-6 py-4 border-b border-border/50 bg-background/95 backdrop-blur sticky top-0 min-h-[72px] z-10">
-        <BackButton onClick={handleBack} className="-ml-3" />
-        <h1 className="font-semibold text-lg tracking-tight ml-2">Nova Demanda</h1>
+      <header className="flex items-center justify-between px-6 py-4 border-b border-border/50 bg-background/95 backdrop-blur sticky top-0 min-h-[72px] z-10">
+        <div className="flex items-center">
+          <BackButton onClick={handleBack} className="-ml-3" />
+          <h1 className="font-semibold text-lg tracking-tight ml-2">Nova Demanda</h1>
+        </div>
+        <a
+          href="https://www.instagram.com/lhshoweventos?igsh=MWp6amc0bDUyZjU4cA=="
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-muted-foreground hover:text-pink-600 transition-colors p-2 rounded-full hover:bg-pink-500/10 flex items-center justify-center"
+          aria-label="Instagram @lhshoweventos"
+          title="Siga-nos no Instagram"
+        >
+          <Instagram className="h-5 w-5" />
+        </a>
       </header>
 
       <div className="flex-1 p-6 overflow-y-auto pb-24">

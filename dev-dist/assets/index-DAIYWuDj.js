@@ -19309,6 +19309,28 @@ var House = createLucideIcon("house", [["path", {
 	d: "M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z",
 	key: "r6nss1"
 }]]);
+var Instagram = createLucideIcon("instagram", [
+	["rect", {
+		width: "20",
+		height: "20",
+		x: "2",
+		y: "2",
+		rx: "5",
+		ry: "5",
+		key: "2e1cvw"
+	}],
+	["path", {
+		d: "M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z",
+		key: "9exkf1"
+	}],
+	["line", {
+		x1: "17.5",
+		x2: "17.51",
+		y1: "6.5",
+		y2: "6.5",
+		key: "r4j83e"
+	}]
+]);
 var Layers = createLucideIcon("layers", [
 	["path", {
 		d: "M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z",
@@ -26206,164 +26228,265 @@ function Layout() {
 		"data-uid": "src/components/Layout.tsx:19:5",
 		"data-prohibitions": "[editContent]",
 		className: "min-h-screen bg-slate-50 flex flex-col",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
-			"data-uid": "src/components/Layout.tsx:20:7",
-			"data-prohibitions": "[editContent]",
-			className: "sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b bg-white px-4 md:px-6 shadow-sm",
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/components/Layout.tsx:21:9",
-					"data-prohibitions": "[editContent]",
-					className: "flex items-center gap-4",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Sheet, {
-						"data-uid": "src/components/Layout.tsx:22:11",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
+				"data-uid": "src/components/Layout.tsx:20:7",
+				"data-prohibitions": "[editContent]",
+				className: "sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b bg-white px-4 md:px-6 shadow-sm",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						"data-uid": "src/components/Layout.tsx:21:9",
 						"data-prohibitions": "[editContent]",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SheetTrigger, {
-							"data-uid": "src/components/Layout.tsx:23:13",
+						className: "flex items-center gap-4",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Sheet, {
+							"data-uid": "src/components/Layout.tsx:22:11",
+							"data-prohibitions": "[editContent]",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SheetTrigger, {
+								"data-uid": "src/components/Layout.tsx:23:13",
+								"data-prohibitions": "[]",
+								asChild: true,
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+									"data-uid": "src/components/Layout.tsx:24:15",
+									"data-prohibitions": "[]",
+									variant: "ghost",
+									size: "icon",
+									className: "md:hidden",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Menu, {
+										"data-uid": "src/components/Layout.tsx:25:17",
+										"data-prohibitions": "[editContent]",
+										className: "h-5 w-5"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										"data-uid": "src/components/Layout.tsx:26:17",
+										"data-prohibitions": "[]",
+										className: "sr-only",
+										children: "Menu"
+									})]
+								})
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SheetContent, {
+								"data-uid": "src/components/Layout.tsx:29:13",
+								"data-prohibitions": "[editContent]",
+								side: "left",
+								className: "w-72 sm:w-80 overflow-y-auto flex flex-col",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SheetTitle, {
+										"data-uid": "src/components/Layout.tsx:30:15",
+										"data-prohibitions": "[]",
+										className: "sr-only",
+										children: "Menu de Navegação"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										"data-uid": "src/components/Layout.tsx:31:15",
+										"data-prohibitions": "[]",
+										className: "flex items-center gap-3 mb-8 mt-4 px-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+											"data-uid": "src/components/Layout.tsx:32:17",
+											"data-prohibitions": "[editContent]",
+											src: logo_marca_e_eventos_66b1b_default,
+											alt: "e-eventos logo",
+											className: "h-9 w-auto rounded object-contain"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											"data-uid": "src/components/Layout.tsx:37:17",
+											"data-prohibitions": "[]",
+											className: "text-xl font-bold tracking-tight text-slate-900",
+											children: "e-eventos"
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
+										"data-uid": "src/components/Layout.tsx:39:15",
+										"data-prohibitions": "[editContent]",
+										className: "flex flex-col gap-2 flex-1",
+										children: [navigation$1.map((item) => {
+											const isActive = location.pathname === item.href || item.href !== "/" && location.pathname.startsWith(item.href);
+											return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+												"data-uid": "src/components/Layout.tsx:45:21",
+												"data-prohibitions": "[editContent]",
+												to: item.href,
+												className: cn$1("flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all", isActive ? "bg-blue-50 text-blue-700" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"),
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(item.icon, {
+													"data-uid": "src/components/Layout.tsx:55:23",
+													"data-prohibitions": "[editContent]",
+													className: cn$1("h-5 w-5", isActive ? "text-blue-700" : "text-slate-400")
+												}), item.name]
+											}, item.name);
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											"data-uid": "src/components/Layout.tsx:63:17",
+											"data-prohibitions": "[]",
+											className: "mt-6 pt-6 border-t border-slate-100",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												"data-uid": "src/components/Layout.tsx:64:19",
+												"data-prohibitions": "[]",
+												className: "px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 block",
+												children: "Redes Sociais"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+												"data-uid": "src/components/Layout.tsx:67:19",
+												"data-prohibitions": "[]",
+												href: "https://www.instagram.com/lhshoweventos?igsh=MWp6amc0bDUyZjU4cA==",
+												target: "_blank",
+												rel: "noopener noreferrer",
+												className: "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-pink-50 hover:text-pink-600 transition-all",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Instagram, {
+													"data-uid": "src/components/Layout.tsx:73:21",
+													"data-prohibitions": "[editContent]",
+													className: "h-5 w-5 text-slate-400 group-hover:text-pink-600 transition-colors"
+												}), "@lhshoweventos"]
+											})]
+										})]
+									})
+								]
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+							"data-uid": "src/components/Layout.tsx:81:11",
 							"data-prohibitions": "[]",
-							asChild: true,
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-								"data-uid": "src/components/Layout.tsx:24:15",
+							to: "/",
+							className: "hidden md:flex items-center gap-3 transition-opacity hover:opacity-90",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+								"data-uid": "src/components/Layout.tsx:85:13",
+								"data-prohibitions": "[editContent]",
+								src: logo_marca_e_eventos_66b1b_default,
+								alt: "e-eventos logo",
+								className: "h-9 w-auto rounded-sm object-contain drop-shadow-sm"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								"data-uid": "src/components/Layout.tsx:90:13",
+								"data-prohibitions": "[]",
+								className: "text-xl font-bold tracking-tight text-slate-900",
+								children: "e-eventos"
+							})]
+						})]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", {
+						"data-uid": "src/components/Layout.tsx:94:9",
+						"data-prohibitions": "[editContent]",
+						className: "hidden md:flex items-center gap-2 mx-6 flex-1 justify-center",
+						children: navigation$1.map((item) => {
+							const isActive = location.pathname === item.href || item.href !== "/" && location.pathname.startsWith(item.href);
+							return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+								"data-uid": "src/components/Layout.tsx:100:15",
+								"data-prohibitions": "[editContent]",
+								to: item.href,
+								className: cn$1("px-3 py-2 text-sm font-medium rounded-md transition-colors", isActive ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"),
+								children: item.name
+							}, item.name);
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						"data-uid": "src/components/Layout.tsx:116:9",
+						"data-prohibitions": "[]",
+						className: "flex items-center gap-1 sm:gap-2",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+								"data-uid": "src/components/Layout.tsx:117:11",
+								"data-prohibitions": "[]",
+								href: "https://www.instagram.com/lhshoweventos?igsh=MWp6amc0bDUyZjU4cA==",
+								target: "_blank",
+								rel: "noopener noreferrer",
+								className: "text-slate-500 hover:text-pink-600 transition-colors p-2 rounded-full hover:bg-pink-50 flex items-center justify-center",
+								"aria-label": "Instagram @lhshoweventos",
+								title: "Siga-nos no Instagram",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Instagram, {
+									"data-uid": "src/components/Layout.tsx:125:13",
+									"data-prohibitions": "[editContent]",
+									className: "h-5 w-5"
+								})
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+								"data-uid": "src/components/Layout.tsx:127:11",
 								"data-prohibitions": "[]",
 								variant: "ghost",
 								size: "icon",
-								className: "md:hidden",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Menu, {
-									"data-uid": "src/components/Layout.tsx:25:17",
+								className: "relative text-slate-500 hover:text-slate-900",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bell, {
+									"data-uid": "src/components/Layout.tsx:132:13",
 									"data-prohibitions": "[editContent]",
 									className: "h-5 w-5"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									"data-uid": "src/components/Layout.tsx:26:17",
+								})
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+								"data-uid": "src/components/Layout.tsx:134:11",
+								"data-prohibitions": "[]",
+								to: "/profile",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									"data-uid": "src/components/Layout.tsx:135:13",
 									"data-prohibitions": "[]",
-									className: "sr-only",
-									children: "Menu"
-								})]
-							})
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SheetContent, {
-							"data-uid": "src/components/Layout.tsx:29:13",
-							"data-prohibitions": "[editContent]",
-							side: "left",
-							className: "w-72 sm:w-80",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SheetTitle, {
-									"data-uid": "src/components/Layout.tsx:30:15",
-									"data-prohibitions": "[]",
-									className: "sr-only",
-									children: "Menu de Navegação"
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/components/Layout.tsx:31:15",
-									"data-prohibitions": "[]",
-									className: "flex items-center gap-3 mb-8 mt-4 px-2",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-										"data-uid": "src/components/Layout.tsx:32:17",
+									className: "h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center border border-blue-200 text-blue-700 overflow-hidden hover:ring-2 hover:ring-blue-100 hover:ring-offset-1 transition-all ml-1 sm:ml-2",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(User, {
+										"data-uid": "src/components/Layout.tsx:136:15",
 										"data-prohibitions": "[editContent]",
-										src: logo_marca_e_eventos_66b1b_default,
-										alt: "e-eventos logo",
-										className: "h-9 w-auto rounded object-contain"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										"data-uid": "src/components/Layout.tsx:37:17",
-										"data-prohibitions": "[]",
-										className: "text-xl font-bold tracking-tight text-slate-900",
-										children: "e-eventos"
-									})]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", {
-									"data-uid": "src/components/Layout.tsx:39:15",
-									"data-prohibitions": "[editContent]",
-									className: "flex flex-col gap-2",
-									children: navigation$1.map((item) => {
-										const isActive = location.pathname === item.href || item.href !== "/" && location.pathname.startsWith(item.href);
-										return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-											"data-uid": "src/components/Layout.tsx:45:21",
-											"data-prohibitions": "[editContent]",
-											to: item.href,
-											className: cn$1("flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all", isActive ? "bg-blue-50 text-blue-700" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"),
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(item.icon, {
-												"data-uid": "src/components/Layout.tsx:55:23",
-												"data-prohibitions": "[editContent]",
-												className: cn$1("h-5 w-5", isActive ? "text-blue-700" : "text-slate-400")
-											}), item.name]
-										}, item.name);
+										className: "h-4 w-4"
 									})
 								})
-							]
-						})]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-						"data-uid": "src/components/Layout.tsx:66:11",
-						"data-prohibitions": "[]",
-						to: "/",
-						className: "hidden md:flex items-center gap-3 transition-opacity hover:opacity-90",
+							})
+						]
+					})
+				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
+				"data-uid": "src/components/Layout.tsx:142:7",
+				"data-prohibitions": "[]",
+				className: "flex-1 w-full max-w-7xl mx-auto p-4 md:p-6 lg:p-8 relative",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {
+					"data-uid": "src/components/Layout.tsx:143:9",
+					"data-prohibitions": "[editContent]"
+				})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("footer", {
+				"data-uid": "src/components/Layout.tsx:146:7",
+				"data-prohibitions": "[editContent]",
+				className: "w-full border-t border-slate-200 bg-white py-6 mt-auto",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					"data-uid": "src/components/Layout.tsx:147:9",
+					"data-prohibitions": "[editContent]",
+					className: "max-w-7xl mx-auto px-4 md:px-6 flex flex-col sm:flex-row items-center justify-between gap-4",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						"data-uid": "src/components/Layout.tsx:148:11",
+						"data-prohibitions": "[editContent]",
+						className: "flex items-center gap-2 opacity-70 hover:opacity-100 transition-opacity",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-							"data-uid": "src/components/Layout.tsx:70:13",
+							"data-uid": "src/components/Layout.tsx:149:13",
 							"data-prohibitions": "[editContent]",
 							src: logo_marca_e_eventos_66b1b_default,
 							alt: "e-eventos logo",
-							className: "h-9 w-auto rounded-sm object-contain drop-shadow-sm"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							"data-uid": "src/components/Layout.tsx:75:13",
-							"data-prohibitions": "[]",
-							className: "text-xl font-bold tracking-tight text-slate-900",
-							children: "e-eventos"
+							className: "h-6 w-auto grayscale"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							"data-uid": "src/components/Layout.tsx:150:13",
+							"data-prohibitions": "[editContent]",
+							className: "text-sm font-medium text-slate-500",
+							children: [
+								"© ",
+								(/* @__PURE__ */ new Date()).getFullYear(),
+								" e-eventos"
+							]
 						})]
-					})]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", {
-					"data-uid": "src/components/Layout.tsx:79:9",
-					"data-prohibitions": "[editContent]",
-					className: "hidden md:flex items-center gap-2 mx-6 flex-1 justify-center",
-					children: navigation$1.map((item) => {
-						const isActive = location.pathname === item.href || item.href !== "/" && location.pathname.startsWith(item.href);
-						return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-							"data-uid": "src/components/Layout.tsx:85:15",
-							"data-prohibitions": "[editContent]",
-							to: item.href,
-							className: cn$1("px-3 py-2 text-sm font-medium rounded-md transition-colors", isActive ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"),
-							children: item.name
-						}, item.name);
-					})
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/components/Layout.tsx:101:9",
-					"data-prohibitions": "[]",
-					className: "flex items-center gap-2",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-						"data-uid": "src/components/Layout.tsx:102:11",
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						"data-uid": "src/components/Layout.tsx:155:11",
 						"data-prohibitions": "[]",
-						variant: "ghost",
-						size: "icon",
-						className: "relative text-slate-500 hover:text-slate-900",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bell, {
-							"data-uid": "src/components/Layout.tsx:107:13",
-							"data-prohibitions": "[editContent]",
-							className: "h-5 w-5"
-						})
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-						"data-uid": "src/components/Layout.tsx:109:11",
-						"data-prohibitions": "[]",
-						to: "/profile",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/components/Layout.tsx:110:13",
+						className: "flex items-center gap-3",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							"data-uid": "src/components/Layout.tsx:156:13",
 							"data-prohibitions": "[]",
-							className: "h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center border border-blue-200 text-blue-700 overflow-hidden hover:ring-2 hover:ring-blue-100 hover:ring-offset-1 transition-all ml-2",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(User, {
-								"data-uid": "src/components/Layout.tsx:111:15",
+							className: "text-sm font-medium text-slate-500",
+							children: "Siga-nos:"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+							"data-uid": "src/components/Layout.tsx:157:13",
+							"data-prohibitions": "[]",
+							href: "https://www.instagram.com/lhshoweventos?igsh=MWp6amc0bDUyZjU4cA==",
+							target: "_blank",
+							rel: "noopener noreferrer",
+							className: "flex items-center gap-2 px-4 py-2 rounded-full bg-slate-50 hover:bg-pink-50 text-slate-600 hover:text-pink-600 border border-slate-200 hover:border-pink-200 transition-all shadow-sm hover:shadow",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Instagram, {
+								"data-uid": "src/components/Layout.tsx:163:15",
 								"data-prohibitions": "[editContent]",
 								className: "h-4 w-4"
-							})
-						})
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								"data-uid": "src/components/Layout.tsx:164:15",
+								"data-prohibitions": "[]",
+								className: "text-sm font-semibold",
+								children: "@lhshoweventos"
+							})]
+						})]
 					})]
 				})
-			]
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
-			"data-uid": "src/components/Layout.tsx:117:7",
-			"data-prohibitions": "[]",
-			className: "flex-1 w-full max-w-7xl mx-auto p-4 md:p-6 lg:p-8 relative",
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {
-				"data-uid": "src/components/Layout.tsx:118:9",
-				"data-prohibitions": "[editContent]"
 			})
-		})]
+		]
 	});
 }
 //#endregion
@@ -28564,55 +28687,74 @@ var CreateEvent = () => {
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
 				"data-uid": "src/pages/CreateEvent.tsx:70:7",
 				"data-prohibitions": "[]",
-				className: "flex items-center px-6 py-4 border-b border-border/50 bg-background/95 backdrop-blur sticky top-0 min-h-[72px] z-10",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BackButton, {
+				className: "flex items-center justify-between px-6 py-4 border-b border-border/50 bg-background/95 backdrop-blur sticky top-0 min-h-[72px] z-10",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					"data-uid": "src/pages/CreateEvent.tsx:71:9",
-					"data-prohibitions": "[editContent]",
-					onClick: handleBack,
-					className: "-ml-3"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-					"data-uid": "src/pages/CreateEvent.tsx:72:9",
 					"data-prohibitions": "[]",
-					className: "font-semibold text-lg tracking-tight ml-2",
-					children: "Nova Demanda"
+					className: "flex items-center",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BackButton, {
+						"data-uid": "src/pages/CreateEvent.tsx:72:11",
+						"data-prohibitions": "[editContent]",
+						onClick: handleBack,
+						className: "-ml-3"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+						"data-uid": "src/pages/CreateEvent.tsx:73:11",
+						"data-prohibitions": "[]",
+						className: "font-semibold text-lg tracking-tight ml-2",
+						children: "Nova Demanda"
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+					"data-uid": "src/pages/CreateEvent.tsx:75:9",
+					"data-prohibitions": "[]",
+					href: "https://www.instagram.com/lhshoweventos?igsh=MWp6amc0bDUyZjU4cA==",
+					target: "_blank",
+					rel: "noopener noreferrer",
+					className: "text-muted-foreground hover:text-pink-600 transition-colors p-2 rounded-full hover:bg-pink-500/10 flex items-center justify-center",
+					"aria-label": "Instagram @lhshoweventos",
+					title: "Siga-nos no Instagram",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Instagram, {
+						"data-uid": "src/pages/CreateEvent.tsx:83:11",
+						"data-prohibitions": "[editContent]",
+						className: "h-5 w-5"
+					})
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/CreateEvent.tsx:75:7",
+				"data-uid": "src/pages/CreateEvent.tsx:87:7",
 				"data-prohibitions": "[editContent]",
 				className: "flex-1 p-6 overflow-y-auto pb-24",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/CreateEvent.tsx:76:9",
+						"data-uid": "src/pages/CreateEvent.tsx:88:9",
 						"data-prohibitions": "[editContent]",
 						className: "flex items-center justify-between mb-8 relative",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								"data-uid": "src/pages/CreateEvent.tsx:77:11",
+								"data-uid": "src/pages/CreateEvent.tsx:89:11",
 								"data-prohibitions": "[]",
 								className: "absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-muted rounded-full -z-10"
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								"data-uid": "src/pages/CreateEvent.tsx:78:11",
+								"data-uid": "src/pages/CreateEvent.tsx:90:11",
 								"data-prohibitions": "[]",
 								className: "absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-primary rounded-full -z-10 transition-all duration-300",
 								style: { width: `${(currentStep - 1) / (steps.length - 1) * 100}%` }
 							}),
 							steps.map((label, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/CreateEvent.tsx:83:13",
+								"data-uid": "src/pages/CreateEvent.tsx:95:13",
 								"data-prohibitions": "[editContent]",
 								className: "flex flex-col items-center gap-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									"data-uid": "src/pages/CreateEvent.tsx:84:15",
+									"data-uid": "src/pages/CreateEvent.tsx:96:15",
 									"data-prohibitions": "[editContent]",
 									className: `w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors duration-300 ${currentStep > i ? "bg-primary text-white" : currentStep === i + 1 ? "bg-primary text-white shadow-[0_0_10px_rgba(0,82,255,0.5)]" : "bg-muted text-muted-foreground"}`,
 									children: currentStep > i ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, {
-										"data-uid": "src/pages/CreateEvent.tsx:87:36",
+										"data-uid": "src/pages/CreateEvent.tsx:99:36",
 										"data-prohibitions": "[editContent]",
 										className: "w-5 h-5"
 									}) : i + 1
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									"data-uid": "src/pages/CreateEvent.tsx:89:15",
+									"data-uid": "src/pages/CreateEvent.tsx:101:15",
 									"data-prohibitions": "[editContent]",
 									className: `text-[10px] uppercase tracking-wider ${currentStep >= i + 1 ? "text-primary" : "text-muted-foreground"}`,
 									children: label
@@ -28621,14 +28763,14 @@ var CreateEvent = () => {
 						]
 					}),
 					currentStep === 1 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Step1Basic, {
-						"data-uid": "src/pages/CreateEvent.tsx:99:11",
+						"data-uid": "src/pages/CreateEvent.tsx:111:11",
 						"data-prohibitions": "[editContent]",
 						formData,
 						updateForm,
 						setConfigs
 					}),
 					currentStep === 2 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Step2Services, {
-						"data-uid": "src/pages/CreateEvent.tsx:102:11",
+						"data-uid": "src/pages/CreateEvent.tsx:114:11",
 						"data-prohibitions": "[editContent]",
 						formData,
 						setFormData,
@@ -28636,7 +28778,7 @@ var CreateEvent = () => {
 						setConfigs
 					}),
 					currentStep === 3 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Step3Review, {
-						"data-uid": "src/pages/CreateEvent.tsx:109:31",
+						"data-uid": "src/pages/CreateEvent.tsx:121:31",
 						"data-prohibitions": "[editContent]",
 						formData,
 						totals
@@ -28644,11 +28786,11 @@ var CreateEvent = () => {
 				]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/CreateEvent.tsx:111:7",
+				"data-uid": "src/pages/CreateEvent.tsx:123:7",
 				"data-prohibitions": "[editContent]",
 				className: "absolute bottom-0 left-0 right-0 p-4 bg-background border-t border-border/50",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-					"data-uid": "src/pages/CreateEvent.tsx:112:9",
+					"data-uid": "src/pages/CreateEvent.tsx:124:9",
 					"data-prohibitions": "[editContent]",
 					onClick: currentStep === 3 ? handleSubmit : handleNext,
 					className: "w-full h-12 text-base font-semibold shadow-[0_4px_14px_0_rgba(0,82,255,0.39)]",
@@ -29598,4 +29740,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppProvider, {
 }));
 //#endregion
 
-//# sourceMappingURL=index-Chnh2wlV.js.map
+//# sourceMappingURL=index-DAIYWuDj.js.map
