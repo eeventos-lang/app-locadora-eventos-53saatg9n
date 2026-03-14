@@ -2,6 +2,7 @@ import { Link, Outlet, useLocation } from 'react-router-dom'
 import { Home, ClipboardList, User, Bell, CreditCard } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useApp } from '@/store/AppContext'
+import { BackButton } from '@/components/BackButton'
 
 export default function Layout() {
   const location = useLocation()
@@ -18,25 +19,31 @@ export default function Layout() {
     { path: '/perfil', icon: User, label: 'Perfil' },
   ]
 
+  const isRoot = location.pathname === '/'
+
   return (
     <div className="bg-black min-h-screen flex justify-center">
-      <div className="mobile-container w-full flex flex-col">
+      <div className="mobile-container w-full flex flex-col relative bg-background">
         {/* Header */}
-        <header className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 bg-background/80 backdrop-blur-md border-b border-border/50">
+        <header className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 bg-background/80 backdrop-blur-md border-b border-border/50 min-h-[72px]">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-[0_0_15px_rgba(0,82,255,0.4)]">
-              <span className="font-bold text-white text-lg leading-none">E</span>
-            </div>
+            {!isRoot ? (
+              <BackButton className="-ml-3" />
+            ) : (
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-[0_0_15px_rgba(0,82,255,0.4)]">
+                <span className="font-bold text-white text-lg leading-none">E</span>
+              </div>
+            )}
             <span className="font-bold text-lg tracking-tight">EventMatch</span>
           </div>
-          <button className="relative p-2 text-muted-foreground hover:text-white transition-colors">
+          <button className="relative w-11 h-11 flex items-center justify-center -mr-3 text-muted-foreground hover:text-white transition-colors rounded-full hover:bg-white/10 active:scale-95">
             <Bell className="w-5 h-5" />
-            <span className="absolute top-1 right-1.5 w-2 h-2 bg-accent rounded-full animate-pulse"></span>
+            <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-accent rounded-full animate-pulse"></span>
           </button>
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto pb-24 animate-fade-in">
+        <main className="flex-1 overflow-y-auto pb-24 animate-fade-in relative flex flex-col">
           <Outlet />
         </main>
 

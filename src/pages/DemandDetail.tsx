@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Calendar, MapPin, DollarSign, Users } from 'lucide-react'
+import { Calendar, MapPin, DollarSign, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { useToast } from '@/hooks/use-toast'
@@ -27,17 +27,7 @@ const DemandDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col animate-slide-up relative z-50 pb-20">
-      <header className="flex items-center p-4 border-b border-border/50 sticky top-0 bg-background/95 backdrop-blur z-10">
-        <button
-          onClick={() => navigate(-1)}
-          className="p-2 -ml-2 text-muted-foreground hover:text-white transition-colors"
-        >
-          <ArrowLeft className="w-6 h-6" />
-        </button>
-        <h1 className="font-semibold ml-2 text-white">Detalhes da Demanda</h1>
-      </header>
-
+    <div className="flex flex-col animate-slide-up relative min-h-full">
       <div className="p-6 space-y-6 flex-1">
         <div>
           <h2 className="text-2xl font-bold text-white mb-2">{demand.title}</h2>
@@ -110,7 +100,7 @@ const DemandDetail = () => {
       </div>
 
       {role === 'company' && (
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t border-border/50 max-w-md mx-auto">
+        <div className="sticky bottom-0 w-full p-4 bg-background/95 backdrop-blur border-t border-border/50 z-40 mt-auto">
           <Button
             onClick={handleProposal}
             className="w-full h-14 text-lg font-semibold shadow-[0_4px_20px_0_rgba(0,82,255,0.4)] transition-transform active:scale-95"

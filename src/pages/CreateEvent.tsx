@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, CheckCircle2 } from 'lucide-react'
+import { CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
 import { useApp } from '@/store/AppContext'
@@ -9,6 +9,7 @@ import { Step1Basic } from '@/components/create-event/Step1Basic'
 import { Step2Services } from '@/components/create-event/Step2Services'
 import { Step3Review } from '@/components/create-event/Step3Review'
 import { useEventTotals } from '@/hooks/use-event-totals'
+import { BackButton } from '@/components/BackButton'
 
 const steps = ['Básico', 'Serviços', 'Revisão']
 
@@ -66,11 +67,9 @@ const CreateEvent = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col animate-slide-up relative z-50">
-      <header className="flex items-center p-4 border-b border-border/50 bg-background/95 backdrop-blur sticky top-0">
-        <button onClick={handleBack} className="p-2 -ml-2 text-muted-foreground hover:text-white">
-          <ArrowLeft className="w-6 h-6" />
-        </button>
-        <h1 className="font-semibold ml-2">Nova Demanda</h1>
+      <header className="flex items-center px-6 py-4 border-b border-border/50 bg-background/95 backdrop-blur sticky top-0 min-h-[72px] z-10">
+        <BackButton onClick={handleBack} className="-ml-3" />
+        <h1 className="font-semibold text-lg tracking-tight ml-2">Nova Demanda</h1>
       </header>
 
       <div className="flex-1 p-6 overflow-y-auto pb-24">

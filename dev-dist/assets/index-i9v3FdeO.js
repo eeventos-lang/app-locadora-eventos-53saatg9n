@@ -24581,6 +24581,32 @@ var useApp = () => {
 	return context;
 };
 //#endregion
+//#region src/components/BackButton.tsx
+function BackButton({ className, onClick, label }) {
+	const navigate = useNavigate();
+	const handleBack = () => {
+		if (onClick) onClick();
+		else navigate(-1);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+		"data-uid": "src/components/BackButton.tsx:23:5",
+		"data-prohibitions": "[editContent]",
+		onClick: handleBack,
+		className: cn$1("flex items-center justify-center min-w-[44px] min-h-[44px] rounded-full text-muted-foreground hover:text-white hover:bg-white/10 transition-colors active:scale-95 px-2", className),
+		"aria-label": label || "Voltar",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, {
+			"data-uid": "src/components/BackButton.tsx:31:7",
+			"data-prohibitions": "[editContent]",
+			className: "w-6 h-6"
+		}), label && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+			"data-uid": "src/components/BackButton.tsx:32:17",
+			"data-prohibitions": "[editContent]",
+			className: "ml-1 text-sm font-medium",
+			children: label
+		})]
+	});
+}
+//#endregion
 //#region src/components/Layout.tsx
 function Layout() {
 	const location = useLocation();
@@ -24607,88 +24633,93 @@ function Layout() {
 			label: "Perfil"
 		}
 	];
+	const isRoot = location.pathname === "/";
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		"data-uid": "src/components/Layout.tsx:22:5",
+		"data-uid": "src/components/Layout.tsx:25:5",
 		"data-prohibitions": "[editContent]",
 		className: "bg-black min-h-screen flex justify-center",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			"data-uid": "src/components/Layout.tsx:23:7",
+			"data-uid": "src/components/Layout.tsx:26:7",
 			"data-prohibitions": "[editContent]",
-			className: "mobile-container w-full flex flex-col",
+			className: "mobile-container w-full flex flex-col relative bg-background",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
-					"data-uid": "src/components/Layout.tsx:25:9",
-					"data-prohibitions": "[]",
-					className: "sticky top-0 z-50 flex items-center justify-between px-6 py-4 bg-background/80 backdrop-blur-md border-b border-border/50",
+					"data-uid": "src/components/Layout.tsx:28:9",
+					"data-prohibitions": "[editContent]",
+					className: "sticky top-0 z-50 flex items-center justify-between px-6 py-4 bg-background/80 backdrop-blur-md border-b border-border/50 min-h-[72px]",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/components/Layout.tsx:26:11",
-						"data-prohibitions": "[]",
+						"data-uid": "src/components/Layout.tsx:29:11",
+						"data-prohibitions": "[editContent]",
 						className: "flex items-center gap-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/components/Layout.tsx:27:13",
+						children: [!isRoot ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BackButton, {
+							"data-uid": "src/components/Layout.tsx:31:15",
+							"data-prohibitions": "[editContent]",
+							className: "-ml-3"
+						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							"data-uid": "src/components/Layout.tsx:33:15",
 							"data-prohibitions": "[]",
 							className: "w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-[0_0_15px_rgba(0,82,255,0.4)]",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								"data-uid": "src/components/Layout.tsx:28:15",
+								"data-uid": "src/components/Layout.tsx:34:17",
 								"data-prohibitions": "[]",
 								className: "font-bold text-white text-lg leading-none",
 								children: "E"
 							})
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							"data-uid": "src/components/Layout.tsx:30:13",
+							"data-uid": "src/components/Layout.tsx:37:13",
 							"data-prohibitions": "[]",
 							className: "font-bold text-lg tracking-tight",
 							children: "EventMatch"
 						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-						"data-uid": "src/components/Layout.tsx:32:11",
+						"data-uid": "src/components/Layout.tsx:39:11",
 						"data-prohibitions": "[]",
-						className: "relative p-2 text-muted-foreground hover:text-white transition-colors",
+						className: "relative w-11 h-11 flex items-center justify-center -mr-3 text-muted-foreground hover:text-white transition-colors rounded-full hover:bg-white/10 active:scale-95",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bell, {
-							"data-uid": "src/components/Layout.tsx:33:13",
+							"data-uid": "src/components/Layout.tsx:40:13",
 							"data-prohibitions": "[editContent]",
 							className: "w-5 h-5"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							"data-uid": "src/components/Layout.tsx:34:13",
+							"data-uid": "src/components/Layout.tsx:41:13",
 							"data-prohibitions": "[]",
-							className: "absolute top-1 right-1.5 w-2 h-2 bg-accent rounded-full animate-pulse"
+							className: "absolute top-2.5 right-2.5 w-2 h-2 bg-accent rounded-full animate-pulse"
 						})]
 					})]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
-					"data-uid": "src/components/Layout.tsx:39:9",
+					"data-uid": "src/components/Layout.tsx:46:9",
 					"data-prohibitions": "[]",
-					className: "flex-1 overflow-y-auto pb-24 animate-fade-in",
+					className: "flex-1 overflow-y-auto pb-24 animate-fade-in relative flex flex-col",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {
-						"data-uid": "src/components/Layout.tsx:40:11",
+						"data-uid": "src/components/Layout.tsx:47:11",
 						"data-prohibitions": "[editContent]"
 					})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", {
-					"data-uid": "src/components/Layout.tsx:44:9",
+					"data-uid": "src/components/Layout.tsx:51:9",
 					"data-prohibitions": "[editContent]",
 					className: "absolute bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-lg border-t border-border/50 pb-safe",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
-						"data-uid": "src/components/Layout.tsx:45:11",
+						"data-uid": "src/components/Layout.tsx:52:11",
 						"data-prohibitions": "[editContent]",
 						className: "flex justify-around items-center h-16 px-2",
 						children: navItems.map((item) => {
 							const isActive = location.pathname === item.path || item.path === "/demandas" && location.pathname.startsWith("/demanda/");
 							return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
-								"data-uid": "src/components/Layout.tsx:51:17",
+								"data-uid": "src/components/Layout.tsx:58:17",
 								"data-prohibitions": "[editContent]",
 								className: "flex-1",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-									"data-uid": "src/components/Layout.tsx:52:19",
+									"data-uid": "src/components/Layout.tsx:59:19",
 									"data-prohibitions": "[editContent]",
 									to: item.path,
 									className: "flex flex-col items-center justify-center w-full h-full gap-1",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(item.icon, {
-										"data-uid": "src/components/Layout.tsx:56:21",
+										"data-uid": "src/components/Layout.tsx:63:21",
 										"data-prohibitions": "[editContent]",
 										className: cn$1("w-6 h-6 transition-all duration-300", isActive ? "text-primary scale-110 drop-shadow-[0_0_8px_rgba(0,82,255,0.6)]" : "text-muted-foreground")
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										"data-uid": "src/components/Layout.tsx:64:21",
+										"data-uid": "src/components/Layout.tsx:71:21",
 										"data-prohibitions": "[editContent]",
 										className: cn$1("text-[10px] font-medium transition-colors", isActive ? "text-primary" : "text-muted-foreground"),
 										children: item.label
@@ -25639,200 +25670,176 @@ var DemandDetail = () => {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		"data-uid": "src/pages/DemandDetail.tsx:30:5",
 		"data-prohibitions": "[editContent]",
-		className: "min-h-screen bg-background flex flex-col animate-slide-up relative z-50 pb-20",
-		children: [
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
-				"data-uid": "src/pages/DemandDetail.tsx:31:7",
-				"data-prohibitions": "[]",
-				className: "flex items-center p-4 border-b border-border/50 sticky top-0 bg-background/95 backdrop-blur z-10",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+		className: "flex flex-col animate-slide-up relative min-h-full",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			"data-uid": "src/pages/DemandDetail.tsx:31:7",
+			"data-prohibitions": "[editContent]",
+			className: "p-6 space-y-6 flex-1",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					"data-uid": "src/pages/DemandDetail.tsx:32:9",
-					"data-prohibitions": "[]",
-					onClick: () => navigate(-1),
-					className: "p-2 -ml-2 text-muted-foreground hover:text-white transition-colors",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, {
-						"data-uid": "src/pages/DemandDetail.tsx:36:11",
+					"data-prohibitions": "[editContent]",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+						"data-uid": "src/pages/DemandDetail.tsx:33:11",
 						"data-prohibitions": "[editContent]",
-						className: "w-6 h-6"
-					})
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-					"data-uid": "src/pages/DemandDetail.tsx:38:9",
-					"data-prohibitions": "[]",
-					className: "font-semibold ml-2 text-white",
-					children: "Detalhes da Demanda"
-				})]
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/DemandDetail.tsx:41:7",
-				"data-prohibitions": "[editContent]",
-				className: "p-6 space-y-6 flex-1",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/DemandDetail.tsx:42:9",
+						className: "text-2xl font-bold text-white mb-2",
+						children: demand.title
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						"data-uid": "src/pages/DemandDetail.tsx:34:11",
 						"data-prohibitions": "[editContent]",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-							"data-uid": "src/pages/DemandDetail.tsx:43:11",
-							"data-prohibitions": "[editContent]",
-							className: "text-2xl font-bold text-white mb-2",
-							children: demand.title
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/DemandDetail.tsx:44:11",
-							"data-prohibitions": "[editContent]",
-							className: "flex flex-wrap gap-4 text-sm text-muted-foreground",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/DemandDetail.tsx:45:13",
-									"data-prohibitions": "[editContent]",
-									className: "flex items-center gap-1.5",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, {
-										"data-uid": "src/pages/DemandDetail.tsx:46:15",
-										"data-prohibitions": "[editContent]",
-										className: "w-4 h-4"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										"data-uid": "src/pages/DemandDetail.tsx:47:15",
-										"data-prohibitions": "[editContent]",
-										children: new Date(demand.date).toLocaleDateString("pt-BR")
-									})]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/DemandDetail.tsx:49:13",
-									"data-prohibitions": "[editContent]",
-									className: "flex items-center gap-1.5",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, {
-										"data-uid": "src/pages/DemandDetail.tsx:50:15",
-										"data-prohibitions": "[editContent]",
-										className: "w-4 h-4"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										"data-uid": "src/pages/DemandDetail.tsx:51:15",
-										"data-prohibitions": "[editContent]",
-										children: demand.location
-									})]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/DemandDetail.tsx:53:13",
-									"data-prohibitions": "[editContent]",
-									className: "flex items-center gap-1.5",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, {
-										"data-uid": "src/pages/DemandDetail.tsx:54:15",
-										"data-prohibitions": "[editContent]",
-										className: "w-4 h-4"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-										"data-uid": "src/pages/DemandDetail.tsx:55:15",
-										"data-prohibitions": "[editContent]",
-										children: [demand.guests, " convidados"]
-									})]
-								})
-							]
-						})]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
-						"data-uid": "src/pages/DemandDetail.tsx:60:9",
-						"data-prohibitions": "[editContent]",
-						className: "bg-card border-border border-l-4 border-l-accent overflow-hidden",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-							"data-uid": "src/pages/DemandDetail.tsx:61:11",
-							"data-prohibitions": "[editContent]",
-							className: "p-5 flex items-center justify-between",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/DemandDetail.tsx:62:13",
+						className: "flex flex-wrap gap-4 text-sm text-muted-foreground",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/pages/DemandDetail.tsx:35:13",
 								"data-prohibitions": "[editContent]",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/pages/DemandDetail.tsx:63:15",
+								className: "flex items-center gap-1.5",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, {
+									"data-uid": "src/pages/DemandDetail.tsx:36:15",
 									"data-prohibitions": "[editContent]",
-									className: "text-xs text-muted-foreground uppercase tracking-wide font-medium",
-									children: role === "customer" ? "Orçamento Estimado" : "Valor Líquido (-10% Taxa)"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-									"data-uid": "src/pages/DemandDetail.tsx:66:15",
+									className: "w-4 h-4"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									"data-uid": "src/pages/DemandDetail.tsx:37:15",
 									"data-prohibitions": "[editContent]",
-									className: "text-2xl font-bold text-accent mt-1 flex items-center gap-2",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DollarSign, {
-										"data-uid": "src/pages/DemandDetail.tsx:67:17",
-										"data-prohibitions": "[editContent]",
-										className: "w-6 h-6"
-									}), new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2 }).format(role === "customer" ? demand.budget : demand.budget * .9)]
+									children: new Date(demand.date).toLocaleDateString("pt-BR")
 								})]
-							}), role === "customer" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/DemandDetail.tsx:74:15",
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/pages/DemandDetail.tsx:39:13",
 								"data-prohibitions": "[editContent]",
-								className: "text-right",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/pages/DemandDetail.tsx:75:17",
-									"data-prohibitions": "[]",
-									className: "text-xs text-muted-foreground uppercase tracking-wide font-medium",
-									children: "Propostas"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/pages/DemandDetail.tsx:78:17",
+								className: "flex items-center gap-1.5",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, {
+									"data-uid": "src/pages/DemandDetail.tsx:40:15",
 									"data-prohibitions": "[editContent]",
-									className: "text-xl font-bold text-white mt-1",
-									children: demand.proposals
+									className: "w-4 h-4"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									"data-uid": "src/pages/DemandDetail.tsx:41:15",
+									"data-prohibitions": "[editContent]",
+									children: demand.location
 								})]
-							})]
-						})
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-						"data-uid": "src/pages/DemandDetail.tsx:84:9",
-						"data-prohibitions": "[editContent]",
-						className: "space-y-4",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-							"data-uid": "src/pages/DemandDetail.tsx:85:11",
-							"data-prohibitions": "[]",
-							className: "font-semibold text-white text-lg",
-							children: "Serviços Solicitados"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/pages/DemandDetail.tsx:86:11",
-							"data-prohibitions": "[editContent]",
-							className: "grid grid-cols-2 gap-3",
-							children: SERVICES.map(({ id, icon: Icon, label, color, bg }) => {
-								if (!demand.requirements[id]) return null;
-								return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/DemandDetail.tsx:90:17",
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/pages/DemandDetail.tsx:43:13",
+								"data-prohibitions": "[editContent]",
+								className: "flex items-center gap-1.5",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, {
+									"data-uid": "src/pages/DemandDetail.tsx:44:15",
 									"data-prohibitions": "[editContent]",
-									className: `${bg} border border-border rounded-xl p-4 flex flex-col items-center justify-center text-center gap-2`,
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
-										"data-uid": "src/pages/DemandDetail.tsx:94:19",
-										"data-prohibitions": "[editContent]",
-										className: `w-8 h-8 ${color}`
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										"data-uid": "src/pages/DemandDetail.tsx:95:19",
-										"data-prohibitions": "[editContent]",
-										className: "text-xs font-medium text-white",
-										children: label
-									})]
-								}, id);
+									className: "w-4 h-4"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									"data-uid": "src/pages/DemandDetail.tsx:45:15",
+									"data-prohibitions": "[editContent]",
+									children: [demand.guests, " convidados"]
+								})]
 							})
-						})]
-					}),
-					demand.requirements.details && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-						"data-uid": "src/pages/DemandDetail.tsx:103:11",
+						]
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
+					"data-uid": "src/pages/DemandDetail.tsx:50:9",
+					"data-prohibitions": "[editContent]",
+					className: "bg-card border-border border-l-4 border-l-accent overflow-hidden",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+						"data-uid": "src/pages/DemandDetail.tsx:51:11",
 						"data-prohibitions": "[editContent]",
-						className: "space-y-3",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-							"data-uid": "src/pages/DemandDetail.tsx:104:13",
-							"data-prohibitions": "[]",
-							className: "font-semibold text-white text-lg",
-							children: "Detalhes Adicionais"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/pages/DemandDetail.tsx:105:13",
+						className: "p-5 flex items-center justify-between",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/pages/DemandDetail.tsx:52:13",
 							"data-prohibitions": "[editContent]",
-							className: "bg-card border border-border rounded-xl p-4 text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed",
-							children: demand.requirements.details
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								"data-uid": "src/pages/DemandDetail.tsx:53:15",
+								"data-prohibitions": "[editContent]",
+								className: "text-xs text-muted-foreground uppercase tracking-wide font-medium",
+								children: role === "customer" ? "Orçamento Estimado" : "Valor Líquido (-10% Taxa)"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								"data-uid": "src/pages/DemandDetail.tsx:56:15",
+								"data-prohibitions": "[editContent]",
+								className: "text-2xl font-bold text-accent mt-1 flex items-center gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DollarSign, {
+									"data-uid": "src/pages/DemandDetail.tsx:57:17",
+									"data-prohibitions": "[editContent]",
+									className: "w-6 h-6"
+								}), new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2 }).format(role === "customer" ? demand.budget : demand.budget * .9)]
+							})]
+						}), role === "customer" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/pages/DemandDetail.tsx:64:15",
+							"data-prohibitions": "[editContent]",
+							className: "text-right",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								"data-uid": "src/pages/DemandDetail.tsx:65:17",
+								"data-prohibitions": "[]",
+								className: "text-xs text-muted-foreground uppercase tracking-wide font-medium",
+								children: "Propostas"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								"data-uid": "src/pages/DemandDetail.tsx:68:17",
+								"data-prohibitions": "[editContent]",
+								className: "text-xl font-bold text-white mt-1",
+								children: demand.proposals
+							})]
 						})]
 					})
-				]
-			}),
-			role === "company" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/DemandDetail.tsx:113:9",
-				"data-prohibitions": "[]",
-				className: "fixed bottom-0 left-0 right-0 p-4 bg-background border-t border-border/50 max-w-md mx-auto",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-					"data-uid": "src/pages/DemandDetail.tsx:114:11",
-					"data-prohibitions": "[]",
-					onClick: handleProposal,
-					className: "w-full h-14 text-lg font-semibold shadow-[0_4px_20px_0_rgba(0,82,255,0.4)] transition-transform active:scale-95",
-					children: "Responder / Orçamento"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+					"data-uid": "src/pages/DemandDetail.tsx:74:9",
+					"data-prohibitions": "[editContent]",
+					className: "space-y-4",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+						"data-uid": "src/pages/DemandDetail.tsx:75:11",
+						"data-prohibitions": "[]",
+						className: "font-semibold text-white text-lg",
+						children: "Serviços Solicitados"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						"data-uid": "src/pages/DemandDetail.tsx:76:11",
+						"data-prohibitions": "[editContent]",
+						className: "grid grid-cols-2 gap-3",
+						children: SERVICES.map(({ id, icon: Icon, label, color, bg }) => {
+							if (!demand.requirements[id]) return null;
+							return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/pages/DemandDetail.tsx:80:17",
+								"data-prohibitions": "[editContent]",
+								className: `${bg} border border-border rounded-xl p-4 flex flex-col items-center justify-center text-center gap-2`,
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
+									"data-uid": "src/pages/DemandDetail.tsx:84:19",
+									"data-prohibitions": "[editContent]",
+									className: `w-8 h-8 ${color}`
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									"data-uid": "src/pages/DemandDetail.tsx:85:19",
+									"data-prohibitions": "[editContent]",
+									className: "text-xs font-medium text-white",
+									children: label
+								})]
+							}, id);
+						})
+					})]
+				}),
+				demand.requirements.details && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+					"data-uid": "src/pages/DemandDetail.tsx:93:11",
+					"data-prohibitions": "[editContent]",
+					className: "space-y-3",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+						"data-uid": "src/pages/DemandDetail.tsx:94:13",
+						"data-prohibitions": "[]",
+						className: "font-semibold text-white text-lg",
+						children: "Detalhes Adicionais"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						"data-uid": "src/pages/DemandDetail.tsx:95:13",
+						"data-prohibitions": "[editContent]",
+						className: "bg-card border border-border rounded-xl p-4 text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed",
+						children: demand.requirements.details
+					})]
 				})
+			]
+		}), role === "company" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			"data-uid": "src/pages/DemandDetail.tsx:103:9",
+			"data-prohibitions": "[]",
+			className: "sticky bottom-0 w-full p-4 bg-background/95 backdrop-blur border-t border-border/50 z-40 mt-auto",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+				"data-uid": "src/pages/DemandDetail.tsx:104:11",
+				"data-prohibitions": "[]",
+				onClick: handleProposal,
+				className: "w-full h-14 text-lg font-semibold shadow-[0_4px_20px_0_rgba(0,82,255,0.4)] transition-transform active:scale-95",
+				children: "Responder / Orçamento"
 			})
-		]
+		})]
 	});
 };
 //#endregion
@@ -27099,67 +27106,62 @@ var CreateEvent = () => {
 		navigate("/demandas");
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/CreateEvent.tsx:68:5",
+		"data-uid": "src/pages/CreateEvent.tsx:69:5",
 		"data-prohibitions": "[editContent]",
 		className: "min-h-screen bg-background flex flex-col animate-slide-up relative z-50",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
-				"data-uid": "src/pages/CreateEvent.tsx:69:7",
+				"data-uid": "src/pages/CreateEvent.tsx:70:7",
 				"data-prohibitions": "[]",
-				className: "flex items-center p-4 border-b border-border/50 bg-background/95 backdrop-blur sticky top-0",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-					"data-uid": "src/pages/CreateEvent.tsx:70:9",
-					"data-prohibitions": "[]",
+				className: "flex items-center px-6 py-4 border-b border-border/50 bg-background/95 backdrop-blur sticky top-0 min-h-[72px] z-10",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BackButton, {
+					"data-uid": "src/pages/CreateEvent.tsx:71:9",
+					"data-prohibitions": "[editContent]",
 					onClick: handleBack,
-					className: "p-2 -ml-2 text-muted-foreground hover:text-white",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, {
-						"data-uid": "src/pages/CreateEvent.tsx:71:11",
-						"data-prohibitions": "[editContent]",
-						className: "w-6 h-6"
-					})
+					className: "-ml-3"
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-					"data-uid": "src/pages/CreateEvent.tsx:73:9",
+					"data-uid": "src/pages/CreateEvent.tsx:72:9",
 					"data-prohibitions": "[]",
-					className: "font-semibold ml-2",
+					className: "font-semibold text-lg tracking-tight ml-2",
 					children: "Nova Demanda"
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/CreateEvent.tsx:76:7",
+				"data-uid": "src/pages/CreateEvent.tsx:75:7",
 				"data-prohibitions": "[editContent]",
 				className: "flex-1 p-6 overflow-y-auto pb-24",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/CreateEvent.tsx:77:9",
+						"data-uid": "src/pages/CreateEvent.tsx:76:9",
 						"data-prohibitions": "[editContent]",
 						className: "flex items-center justify-between mb-8 relative",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								"data-uid": "src/pages/CreateEvent.tsx:78:11",
+								"data-uid": "src/pages/CreateEvent.tsx:77:11",
 								"data-prohibitions": "[]",
 								className: "absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-muted rounded-full -z-10"
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								"data-uid": "src/pages/CreateEvent.tsx:79:11",
+								"data-uid": "src/pages/CreateEvent.tsx:78:11",
 								"data-prohibitions": "[]",
 								className: "absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-primary rounded-full -z-10 transition-all duration-300",
 								style: { width: `${(currentStep - 1) / (steps.length - 1) * 100}%` }
 							}),
 							steps.map((label, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/CreateEvent.tsx:84:13",
+								"data-uid": "src/pages/CreateEvent.tsx:83:13",
 								"data-prohibitions": "[editContent]",
 								className: "flex flex-col items-center gap-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									"data-uid": "src/pages/CreateEvent.tsx:85:15",
+									"data-uid": "src/pages/CreateEvent.tsx:84:15",
 									"data-prohibitions": "[editContent]",
 									className: `w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors duration-300 ${currentStep > i ? "bg-primary text-white" : currentStep === i + 1 ? "bg-primary text-white shadow-[0_0_10px_rgba(0,82,255,0.5)]" : "bg-muted text-muted-foreground"}`,
 									children: currentStep > i ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, {
-										"data-uid": "src/pages/CreateEvent.tsx:88:36",
+										"data-uid": "src/pages/CreateEvent.tsx:87:36",
 										"data-prohibitions": "[editContent]",
 										className: "w-5 h-5"
 									}) : i + 1
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									"data-uid": "src/pages/CreateEvent.tsx:90:15",
+									"data-uid": "src/pages/CreateEvent.tsx:89:15",
 									"data-prohibitions": "[editContent]",
 									className: `text-[10px] uppercase tracking-wider ${currentStep >= i + 1 ? "text-primary" : "text-muted-foreground"}`,
 									children: label
@@ -27168,14 +27170,14 @@ var CreateEvent = () => {
 						]
 					}),
 					currentStep === 1 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Step1Basic, {
-						"data-uid": "src/pages/CreateEvent.tsx:100:11",
+						"data-uid": "src/pages/CreateEvent.tsx:99:11",
 						"data-prohibitions": "[editContent]",
 						formData,
 						updateForm,
 						setConfigs
 					}),
 					currentStep === 2 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Step2Services, {
-						"data-uid": "src/pages/CreateEvent.tsx:103:11",
+						"data-uid": "src/pages/CreateEvent.tsx:102:11",
 						"data-prohibitions": "[editContent]",
 						formData,
 						setFormData,
@@ -27183,7 +27185,7 @@ var CreateEvent = () => {
 						setConfigs
 					}),
 					currentStep === 3 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Step3Review, {
-						"data-uid": "src/pages/CreateEvent.tsx:110:31",
+						"data-uid": "src/pages/CreateEvent.tsx:109:31",
 						"data-prohibitions": "[editContent]",
 						formData,
 						totals
@@ -27191,11 +27193,11 @@ var CreateEvent = () => {
 				]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/CreateEvent.tsx:112:7",
+				"data-uid": "src/pages/CreateEvent.tsx:111:7",
 				"data-prohibitions": "[editContent]",
 				className: "absolute bottom-0 left-0 right-0 p-4 bg-background border-t border-border/50",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-					"data-uid": "src/pages/CreateEvent.tsx:113:9",
+					"data-uid": "src/pages/CreateEvent.tsx:112:9",
 					"data-prohibitions": "[editContent]",
 					onClick: currentStep === 3 ? handleSubmit : handleNext,
 					className: "w-full h-12 text-base font-semibold shadow-[0_4px_14px_0_rgba(0,82,255,0.39)]",
@@ -28145,4 +28147,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppProvider, {
 }));
 //#endregion
 
-//# sourceMappingURL=index-C6V5WZe-.js.map
+//# sourceMappingURL=index-i9v3FdeO.js.map
