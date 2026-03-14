@@ -1,6 +1,6 @@
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useApp } from '@/store/AppContext'
-import { MapPin, Star, Heart, BadgeCheck, Trophy, Award } from 'lucide-react'
+import { MapPin, Star, Heart, BadgeCheck, Trophy, Award, MessageSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -10,7 +10,8 @@ import { cn } from '@/lib/utils'
 
 export default function ProviderProfile() {
   const { id } = useParams()
-  const { users, reviews, favorites, toggleFavorite, currentUser } = useApp()
+  const navigate = useNavigate()
+  const { users, reviews, favorites, toggleFavorite, currentUser, createChat } = useApp()
 
   const supplier = users.find((u) => u.id === id)
 
@@ -34,6 +35,12 @@ export default function ProviderProfile() {
 
   const isExpert = fiveStarCount >= 10
   const isHighPerformance = fiveStarCount >= 25
+
+  const handleMessage = () => {
+    if (!currentUser) return
+    const chatId = createChat(supplier.id)
+    navigate(`/messages?chat=${chatId}`)
+  }
 
   return (
     <div className="animate-slide-up pb-12 p-4 sm:p-6 max-w-5xl mx-auto space-y-6">
@@ -90,6 +97,11 @@ export default function ProviderProfile() {
             </div>
 
             <div className="flex flex-col w-full gap-3 mt-8">
+              {currentUser?.id !== supplier.id && (
+                <Button onClick={handleMessage} className="w-full shadow-sm font-semibold gap-2">
+                  <MessageSquare className="w-4 h-4" /> Enviar Mensagem
+                </Button>
+              )}
               <Button
                 variant="outline"
                 className={cn(

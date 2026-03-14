@@ -27,6 +27,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { Checkbox } from '@/components/ui/checkbox'
 import { useToast } from '@/hooks/use-toast'
 import { useApp, TechRequirement } from '@/store/AppContext'
 import { SERVICES } from '@/lib/services'
@@ -35,6 +36,7 @@ import { cn } from '@/lib/utils'
 
 const DemandDetail = () => {
   const { id } = useParams()
+  const navigate = useNavigate()
   const { toast } = useToast()
   const {
     role,
@@ -51,12 +53,16 @@ const DemandDetail = () => {
     reviews,
     addReview,
     users,
+    createChat,
   } = useApp()
 
   const [isProposalOpen, setIsProposalOpen] = useState(false)
   const [proposalValue, setProposalValue] = useState('')
   const [proposalMessage, setProposalMessage] = useState('')
   const [isPaymentOpen, setIsPaymentOpen] = useState(false)
+
+  const [optCancel, setOptCancel] = useState(false)
+  const [optDelivery, setOptDelivery] = useState(false)
 
   const [isDisputeOpen, setIsDisputeOpen] = useState(false)
   const [disputeReason, setDisputeReason] = useState('')
@@ -88,7 +94,6 @@ const DemandDetail = () => {
   }
 
   const demandProposals = proposals.filter((p) => p.demandId === demand.id)
-
   const supplierProposal =
     role === 'company' ? demandProposals.find((p) => p.supplierId === currentUser?.id) : null
 
@@ -143,7 +148,6 @@ const DemandDetail = () => {
       description: 'O serviço foi marcado como atendido para esta etapa do evento.',
     })
 
-    // Simulate External Sync
     const prop = proposals.find((p) => p.id === proposalId)
     if (prop) {
       const supplier = users.find((u) => u.id === prop.supplierId)
@@ -186,6 +190,11 @@ const DemandDetail = () => {
     setIsReviewOpen(false)
     setReviewRating(0)
     setReviewComment('')
+  }
+
+  const handleOpenChat = (supplierId: string) => {
+    const chatId = createChat(supplierId)
+    navigate(`/messages?chat=${chatId}`)
   }
 
   const getStatusBadge = () => {
@@ -247,6 +256,11 @@ const DemandDetail = () => {
   const totalContractedValue = demandProposals
     .filter((p) => p.status === 'accepted')
     .reduce((sum, p) => sum + p.value, 0)
+
+  const cancelCost = totalContractedValue * 0.05
+  const deliveryCost = totalContractedValue * 0.08
+  const finalTotalPayment =
+    totalContractedValue + (optCancel ? cancelCost : 0) + (optDelivery ? deliveryCost : 0)
 
   return (
     <div className="flex flex-col animate-slide-up relative min-h-full space-y-6 pb-24 p-4 sm:p-6 max-w-5xl mx-auto w-full">
@@ -698,90 +712,139 @@ const DemandDetail = () => {
                     size="lg"
                     className="w-full sm:w-auto h-14 text-base px-8 shadow-md bg-emerald-600 hover:bg-emerald-700 text-white"
                   >
-                    Realizar Pagamento Seguro (
-                    {new Intl.NumberFormat('pt-BR', {
-                      style: 'currency',
-                      currency: 'BRL',
-                    }).format(totalContractedValue)}
-                    )
+                    Ir para Pagamento Seguro
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[475px]">
+                <DialogContent className="sm:max-w-[500px]">
                   <DialogHeader>
-                    <DialogTitle>Pagamento Seguro Integrado</DialogTitle>
+                    <DialogTitle>Pagamento e Seguros Opcionais</DialogTitle>
                     <DialogDescription>
-                      O pagamento será mantido em custódia pela plataforma e-eventos.
+                      Personalize sua garantia antes de finalizar o pagamento.
                     </DialogDescription>
                   </DialogHeader>
 
-                  <Tabs defaultValue="credit-card" className="w-full py-4">
-                    <TabsList className="grid w-full grid-cols-2">
-                      <TabsTrigger value="credit-card">Cartão de Crédito</TabsTrigger>
-                      <TabsTrigger value="pix">PIX</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="credit-card" className="space-y-4 pt-4">
-                      <div className="bg-secondary p-4 rounded-xl flex justify-between items-center">
-                        <span className="font-semibold text-muted-foreground">Valor Total</span>
-                        <span className="text-2xl font-bold text-foreground">
-                          {new Intl.NumberFormat('pt-BR', {
-                            style: 'currency',
-                            currency: 'BRL',
-                          }).format(totalContractedValue)}
-                        </span>
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Número do Cartão</Label>
-                        <Input placeholder="0000 0000 0000 0000" />
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label>Validade</Label>
-                          <Input placeholder="MM/AA" />
-                        </div>
-                        <div className="space-y-2">
-                          <Label>CVV</Label>
-                          <Input placeholder="123" type="password" />
-                        </div>
-                      </div>
-                    </TabsContent>
-                    <TabsContent
-                      value="pix"
-                      className="space-y-4 pt-4 text-center flex flex-col items-center"
-                    >
-                      <div className="bg-secondary p-4 rounded-xl flex justify-between items-center w-full mb-2">
-                        <span className="font-semibold text-muted-foreground">Valor Total</span>
-                        <span className="text-2xl font-bold text-foreground">
-                          {new Intl.NumberFormat('pt-BR', {
-                            style: 'currency',
-                            currency: 'BRL',
-                          }).format(totalContractedValue)}
-                        </span>
-                      </div>
-                      <div className="bg-white p-3 inline-block rounded-xl border-2 border-border shadow-sm">
-                        <img
-                          src="https://img.usecurling.com/i?q=qr-code&color=black&shape=outline"
-                          alt="QR Code PIX"
-                          className="w-32 h-32 object-contain"
+                  <div className="space-y-4 py-2">
+                    <div className="bg-secondary/30 p-4 rounded-xl border border-border space-y-3">
+                      <h4 className="font-semibold text-foreground">Proteção e Garantias</h4>
+                      <div className="flex items-start space-x-3 p-3 bg-background rounded-lg border border-border hover:border-primary/50 transition-colors">
+                        <Checkbox
+                          id="optCancel"
+                          checked={optCancel}
+                          onCheckedChange={(c) => setOptCancel(!!c)}
                         />
-                      </div>
-                      <div className="space-y-2 w-full text-left">
-                        <Label>Chave Copia e Cola</Label>
-                        <div className="flex gap-2">
-                          <Input
-                            readOnly
-                            value="00020101021126580014br.gov.bcb.pix..."
-                            className="bg-muted font-mono text-xs"
-                          />
-                          <Button
-                            variant="outline"
-                            onClick={() => toast({ title: 'Chave Copiada!' })}
-                          >
-                            Copiar
-                          </Button>
+                        <div className="grid gap-1 leading-none flex-1">
+                          <Label htmlFor="optCancel" className="font-semibold cursor-pointer">
+                            Seguro de Cancelamento
+                          </Label>
+                          <p className="text-xs text-muted-foreground leading-relaxed">
+                            Garante 100% de reembolso caso precise cancelar o evento até 48h antes
+                            da data.
+                          </p>
+                          <p className="text-xs font-bold text-primary mt-1">
+                            +{' '}
+                            {new Intl.NumberFormat('pt-BR', {
+                              style: 'currency',
+                              currency: 'BRL',
+                            }).format(cancelCost)}{' '}
+                            (5%)
+                          </p>
                         </div>
                       </div>
-                    </TabsContent>
-                  </Tabs>
+                      <div className="flex items-start space-x-3 p-3 bg-background rounded-lg border border-border hover:border-primary/50 transition-colors">
+                        <Checkbox
+                          id="optDelivery"
+                          checked={optDelivery}
+                          onCheckedChange={(c) => setOptDelivery(!!c)}
+                        />
+                        <div className="grid gap-1 leading-none flex-1">
+                          <Label htmlFor="optDelivery" className="font-semibold cursor-pointer">
+                            Garantia de Entrega
+                          </Label>
+                          <p className="text-xs text-muted-foreground leading-relaxed">
+                            Suporte imediato de reposição e reembolso extra caso o fornecedor falhe
+                            no dia.
+                          </p>
+                          <p className="text-xs font-bold text-primary mt-1">
+                            +{' '}
+                            {new Intl.NumberFormat('pt-BR', {
+                              style: 'currency',
+                              currency: 'BRL',
+                            }).format(deliveryCost)}{' '}
+                            (8%)
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <Tabs defaultValue="credit-card" className="w-full">
+                      <TabsList className="grid w-full grid-cols-2">
+                        <TabsTrigger value="credit-card">Cartão de Crédito</TabsTrigger>
+                        <TabsTrigger value="pix">PIX</TabsTrigger>
+                      </TabsList>
+                      <TabsContent value="credit-card" className="space-y-4 pt-4">
+                        <div className="bg-primary/5 p-4 rounded-xl flex justify-between items-center border border-primary/20">
+                          <span className="font-semibold text-primary">Total a Pagar</span>
+                          <span className="text-2xl font-bold text-foreground">
+                            {new Intl.NumberFormat('pt-BR', {
+                              style: 'currency',
+                              currency: 'BRL',
+                            }).format(finalTotalPayment)}
+                          </span>
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Número do Cartão</Label>
+                          <Input placeholder="0000 0000 0000 0000" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label>Validade</Label>
+                            <Input placeholder="MM/AA" />
+                          </div>
+                          <div className="space-y-2">
+                            <Label>CVV</Label>
+                            <Input placeholder="123" type="password" />
+                          </div>
+                        </div>
+                      </TabsContent>
+                      <TabsContent
+                        value="pix"
+                        className="space-y-4 pt-4 text-center flex flex-col items-center"
+                      >
+                        <div className="bg-primary/5 p-4 rounded-xl flex justify-between items-center border border-primary/20 w-full mb-2">
+                          <span className="font-semibold text-primary">Total a Pagar</span>
+                          <span className="text-2xl font-bold text-foreground">
+                            {new Intl.NumberFormat('pt-BR', {
+                              style: 'currency',
+                              currency: 'BRL',
+                            }).format(finalTotalPayment)}
+                          </span>
+                        </div>
+                        <div className="bg-white p-3 inline-block rounded-xl border-2 border-border shadow-sm">
+                          <img
+                            src="https://img.usecurling.com/i?q=qr-code&color=black&shape=outline"
+                            alt="QR Code PIX"
+                            className="w-32 h-32 object-contain"
+                          />
+                        </div>
+                        <div className="space-y-2 w-full text-left">
+                          <Label>Chave Copia e Cola</Label>
+                          <div className="flex gap-2">
+                            <Input
+                              readOnly
+                              value="00020101021126580014br.gov.bcb.pix..."
+                              className="bg-muted font-mono text-xs"
+                            />
+                            <Button
+                              variant="outline"
+                              onClick={() => toast({ title: 'Chave Copiada!' })}
+                            >
+                              Copiar
+                            </Button>
+                          </div>
+                        </div>
+                      </TabsContent>
+                    </Tabs>
+                  </div>
 
                   <DialogFooter>
                     <Button variant="outline" onClick={() => setIsPaymentOpen(false)}>
@@ -797,7 +860,7 @@ const DemandDetail = () => {
                             'O evento está totalmente garantido e os fornecedores foram notificados.',
                         })
                       }}
-                      className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white px-8"
                     >
                       Confirmar Pagamento
                     </Button>
@@ -905,11 +968,21 @@ const DemandDetail = () => {
                                 )
                               })}
                             </div>
-                            <div className="mt-4 flex items-start gap-3 bg-secondary/50 p-4 rounded-lg">
-                              <MessageSquare className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" />
-                              <p className="text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">
-                                {proposal.message}
-                              </p>
+                            <div className="mt-4 flex flex-col gap-3">
+                              <div className="flex items-start gap-3 bg-secondary/50 p-4 rounded-lg">
+                                <MessageSquare className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" />
+                                <p className="text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">
+                                  {proposal.message}
+                                </p>
+                              </div>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="w-fit gap-2"
+                                onClick={() => handleOpenChat(proposal.supplierId)}
+                              >
+                                <MessageSquare className="w-4 h-4" /> Falar com Fornecedor
+                              </Button>
                             </div>
                           </div>
                           <div className="flex flex-col items-start md:items-end justify-between min-w-[150px] border-t md:border-t-0 md:border-l border-border pt-4 md:pt-0 md:pl-6">

@@ -16,6 +16,7 @@ import {
   Heart,
   LineChart,
   CalendarClock,
+  MessageSquare,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet'
@@ -71,6 +72,7 @@ export function Layout() {
 
   const navItems = [
     { name: 'Início', path: '/', icon: LayoutDashboard },
+    { name: 'Mensagens', path: '/messages', icon: MessageSquare },
     { name: 'Demandas', path: '/demands', icon: Calendar },
     ...(role === 'customer'
       ? [
@@ -98,7 +100,7 @@ export function Layout() {
   const unreadCount = myNotifications.filter((n) => !n.read).length
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground">
+    <div className="min-h-screen flex flex-col bg-background text-foreground relative">
       <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 print:hidden">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -120,7 +122,7 @@ export function Layout() {
                     <span className="font-bold tracking-tight text-lg">e-eventos</span>
                   </SheetTitle>
                 </SheetHeader>
-                <nav className="flex flex-col gap-2 mt-6 flex-1">
+                <nav className="flex flex-col gap-2 mt-6 flex-1 overflow-y-auto">
                   {navItems.map((item) => {
                     const Icon = item.icon
                     return (
@@ -194,13 +196,13 @@ export function Layout() {
             </Link>
           </div>
 
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-6 overflow-x-auto">
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
                 className={cn(
-                  'text-sm font-medium transition-colors hover:text-primary',
+                  'text-sm font-medium transition-colors hover:text-primary whitespace-nowrap',
                   location.pathname === item.path ? 'text-primary' : 'text-muted-foreground',
                 )}
               >
@@ -263,7 +265,7 @@ export function Layout() {
                 <div className="flex items-center gap-4">
                   <Link
                     to="/profile"
-                    className="text-sm font-medium hover:text-primary transition-colors"
+                    className="text-sm font-medium hover:text-primary transition-colors whitespace-nowrap"
                   >
                     Olá, {currentUser.name.split(' ')[0]}
                   </Link>
@@ -286,96 +288,98 @@ export function Layout() {
         </div>
       </header>
 
-      <main className="flex-1 w-full print:p-0 print:m-0">
+      <main className="flex-1 w-full print:p-0 print:m-0 flex flex-col">
         <Outlet />
       </main>
 
-      <footer className="border-t border-border bg-card/50 pt-12 pb-8 mt-auto print:hidden">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div className="col-span-1 md:col-span-2">
-              <Link
-                to="/"
-                className="flex items-center gap-3 transition-opacity hover:opacity-90 mb-4 inline-flex"
-              >
-                <img
-                  src={logoImg}
-                  alt="e-eventos"
-                  className="h-10 w-10 rounded-xl object-contain drop-shadow-sm bg-white/5 p-1 border border-white/10"
-                />
-                <span className="font-extrabold text-xl tracking-tight text-foreground">
-                  e-eventos
-                </span>
-              </Link>
-              <p className="text-muted-foreground text-sm max-w-sm">
-                A plataforma líder em locação de equipamentos e serviços para eventos. Conectando
-                você aos melhores fornecedores do mercado.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4 text-foreground">Plataforma</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <Link to="/demands" className="hover:text-primary transition-colors">
-                    Demandas
-                  </Link>
-                </li>
-                {role === 'customer' && (
-                  <>
-                    <li>
-                      <Link to="/suppliers" className="hover:text-primary transition-colors">
-                        Buscar Fornecedores
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/schedules" className="hover:text-primary transition-colors">
-                        Agendamentos
-                      </Link>
-                    </li>
-                  </>
-                )}
-                {role === 'company' && (
+      {location.pathname !== '/messages' && (
+        <footer className="border-t border-border bg-card/50 pt-12 pb-8 mt-auto print:hidden">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+              <div className="col-span-1 md:col-span-2">
+                <Link
+                  to="/"
+                  className="flex items-center gap-3 transition-opacity hover:opacity-90 mb-4 inline-flex"
+                >
+                  <img
+                    src={logoImg}
+                    alt="e-eventos"
+                    className="h-10 w-10 rounded-xl object-contain drop-shadow-sm bg-white/5 p-1 border border-white/10"
+                  />
+                  <span className="font-extrabold text-xl tracking-tight text-foreground">
+                    e-eventos
+                  </span>
+                </Link>
+                <p className="text-muted-foreground text-sm max-w-sm">
+                  A plataforma líder em locação de equipamentos e serviços para eventos. Conectando
+                  você aos melhores fornecedores do mercado.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold mb-4 text-foreground">Plataforma</h3>
+                <ul className="space-y-2 text-sm text-muted-foreground">
                   <li>
-                    <Link to="/insights" className="hover:text-primary transition-colors">
-                      Insights & Desempenho
+                    <Link to="/demands" className="hover:text-primary transition-colors">
+                      Demandas
                     </Link>
                   </li>
-                )}
-                <li>
-                  <Link to="/create-event" className="hover:text-primary transition-colors">
-                    Criar Evento
-                  </Link>
-                </li>
-              </ul>
+                  {role === 'customer' && (
+                    <>
+                      <li>
+                        <Link to="/suppliers" className="hover:text-primary transition-colors">
+                          Buscar Fornecedores
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/schedules" className="hover:text-primary transition-colors">
+                          Agendamentos
+                        </Link>
+                      </li>
+                    </>
+                  )}
+                  {role === 'company' && (
+                    <li>
+                      <Link to="/insights" className="hover:text-primary transition-colors">
+                        Insights & Desempenho
+                      </Link>
+                    </li>
+                  )}
+                  <li>
+                    <Link to="/create-event" className="hover:text-primary transition-colors">
+                      Criar Evento
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="font-semibold mb-4 text-foreground">Suporte</h3>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li>
+                    <Link to="#" className="hover:text-primary transition-colors">
+                      Central de Ajuda
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="#" className="hover:text-primary transition-colors">
+                      Termos de Uso
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="#" className="hover:text-primary transition-colors">
+                      Privacidade
+                    </Link>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div>
-              <h3 className="font-semibold mb-4 text-foreground">Suporte</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <Link to="#" className="hover:text-primary transition-colors">
-                    Central de Ajuda
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#" className="hover:text-primary transition-colors">
-                    Termos de Uso
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#" className="hover:text-primary transition-colors">
-                    Privacidade
-                  </Link>
-                </li>
-              </ul>
+            <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
+              <p className="text-sm text-muted-foreground text-center md:text-left">
+                © {new Date().getFullYear()} e-eventos. Todos os direitos reservados.
+              </p>
             </div>
           </div>
-          <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-muted-foreground text-center md:text-left">
-              © {new Date().getFullYear()} e-eventos. Todos os direitos reservados.
-            </p>
-          </div>
-        </div>
-      </footer>
+        </footer>
+      )}
     </div>
   )
 }

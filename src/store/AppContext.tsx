@@ -147,6 +147,20 @@ export type ScheduledInvitation = {
   createdAt: string
 }
 
+export type Chat = {
+  id: string
+  participants: string[]
+  updatedAt: string
+}
+
+export type ChatMessage = {
+  id: string
+  chatId: string
+  senderId: string
+  text: string
+  createdAt: string
+}
+
 interface AppContextType {
   role: Role
   setRole: (role: Role) => void
@@ -192,6 +206,10 @@ interface AppContextType {
     invitation: Omit<ScheduledInvitation, 'id' | 'createdAt' | 'status'>,
   ) => void
   getSupplierUnavailableDates: (supplierId: string) => Date[]
+  chats: Chat[]
+  messages: ChatMessage[]
+  createChat: (participantId: string) => string
+  sendChatMessage: (chatId: string, text: string) => void
 }
 
 const MOCK_USERS: User[] = [
@@ -315,22 +333,6 @@ for (let i = 0; i < 15; i++) {
     createdAt: new Date(Date.now() - i * 86400000).toISOString(),
   })
 }
-for (let i = 0; i < 28; i++) {
-  MOCK_REVIEWS.push({
-    id: `r_u2_${i}`,
-    demandId: `d_mock2_${i}`,
-    customerId: 'c1',
-    supplierId: 'u2',
-    rating: 5,
-    comment: [
-      'Muito bom',
-      'Equipamento de alta qualidade',
-      'Excelente profissionalismo',
-      'Recomendo a todos',
-    ][i % 4],
-    createdAt: new Date(Date.now() - i * 86400000).toISOString(),
-  })
-}
 
 const MOCK_FAVORITES: Favorite[] = [{ customerId: 'c1', supplierId: 'u1' }]
 
@@ -343,6 +345,31 @@ const MOCK_SCHEDULED: ScheduledInvitation[] = [
     date: '2026-12-15T00:00:00.000Z',
     status: 'pending',
     createdAt: new Date().toISOString(),
+  },
+]
+
+const MOCK_CHATS: Chat[] = [
+  {
+    id: 'chat1',
+    participants: ['c1', 'u1'],
+    updatedAt: new Date().toISOString(),
+  },
+]
+
+const MOCK_MESSAGES: ChatMessage[] = [
+  {
+    id: 'm1',
+    chatId: 'chat1',
+    senderId: 'c1',
+    text: 'Olá! Gostaria de tirar umas dúvidas sobre o orçamento.',
+    createdAt: new Date(Date.now() - 3600000).toISOString(),
+  },
+  {
+    id: 'm2',
+    chatId: 'chat1',
+    senderId: 'u1',
+    text: 'Oi! Claro, como posso ajudar? Estamos à disposição.',
+    createdAt: new Date(Date.now() - 3500000).toISOString(),
   },
 ]
 
@@ -364,6 +391,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [favorites, setFavorites] = useState<Favorite[]>(MOCK_FAVORITES)
   const [scheduledInvitations, setScheduledInvitations] =
     useState<ScheduledInvitation[]>(MOCK_SCHEDULED)
+  const [chats, setChats] = useState<Chat[]>(MOCK_CHATS)
+  const [messages, setMessages] = useState<ChatMessage[]>(MOCK_MESSAGES)
 
   const addDemand = (demandData: any) => {
     const newDemand: Demand = {
@@ -379,9 +408,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setDemands([newDemand, ...demands])
   }
 
-  const addProposal = (propData: any) => {
-    // ...
-  }
+  const addProposal = (propData: any) => {}
 
   const acceptProposal = (proposalId: string) => {
     setProposals((prev) =>
@@ -389,25 +416,15 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     )
   }
 
-  const signContracts = (demandId: string) => {
-    // ...
-  }
+  const signContracts = (demandId: string) => {}
 
-  const payEvent = (demandId: string) => {
-    // ...
-  }
+  const payEvent = (demandId: string) => {}
 
-  const updateSectorStatus = (demandId: string, sector: string, status: SectorStatus) => {
-    // ...
-  }
+  const updateSectorStatus = (demandId: string, sector: string, status: SectorStatus) => {}
 
-  const disputeService = (demandId: string, sector: string, reason: string) => {
-    // ...
-  }
+  const disputeService = (demandId: string, sector: string, reason: string) => {}
 
-  const inviteSupplier = (supplierId: string, demandId: string) => {
-    // ...
-  }
+  const inviteSupplier = (supplierId: string, demandId: string) => {}
 
   const markNotificationsAsRead = () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
@@ -420,21 +437,17 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         ...profile,
         isVerified: !!((prev.cnpj || profile.cnpj) && (prev.portfolio || profile.portfolio)),
       }
-
       if (currentUser) {
         const updatedUsers = users.map((u) =>
           u.id === currentUser.id ? { ...u, companyProfile: updated } : u,
         )
         setUsers(updatedUsers)
       }
-
       return updated
     })
   }
 
-  const registerUser = async (userData: any) => {
-    // ...
-  }
+  const registerUser = async (userData: any) => {}
 
   const login = async (email: string, password?: string) => {
     return new Promise<void>((resolve, reject) => {
@@ -493,19 +506,48 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const getSupplierUnavailableDates = (supplierId: string) => {
     const supplier = users.find((u) => u.id === supplierId)
     const manualDates = supplier?.companyProfile?.unavailableDates || []
-
     const contractedProposals = proposals.filter(
       (p) => p.supplierId === supplierId && p.status === 'accepted',
     )
     const contractedDemandIds = contractedProposals.map((p) => p.demandId)
     const contractedDemands = demands.filter((d) => contractedDemandIds.includes(d.id))
-
     const allDatesStr = new Set([...manualDates, ...contractedDemands.map((d) => d.date)])
 
     return Array.from(allDatesStr).map((dStr) => {
       const [y, m, d] = dStr.split('T')[0].split('-').map(Number)
       return new Date(y, m - 1, d)
     })
+  }
+
+  const createChat = (participantId: string) => {
+    if (!currentUser) return ''
+    const existing = chats.find(
+      (c) => c.participants.includes(currentUser.id) && c.participants.includes(participantId),
+    )
+    if (existing) return existing.id
+
+    const newChat: Chat = {
+      id: Math.random().toString(36).substring(7),
+      participants: [currentUser.id, participantId],
+      updatedAt: new Date().toISOString(),
+    }
+    setChats([newChat, ...chats])
+    return newChat.id
+  }
+
+  const sendChatMessage = (chatId: string, text: string) => {
+    if (!currentUser) return
+    const newMsg: ChatMessage = {
+      id: Math.random().toString(36).substring(7),
+      chatId,
+      senderId: currentUser.id,
+      text,
+      createdAt: new Date().toISOString(),
+    }
+    setMessages((prev) => [...prev, newMsg])
+    setChats((prev) =>
+      prev.map((c) => (c.id === chatId ? { ...c, updatedAt: new Date().toISOString() } : c)),
+    )
   }
 
   return (
@@ -542,6 +584,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         scheduledInvitations,
         addScheduledInvitation,
         getSupplierUnavailableDates,
+        chats,
+        messages,
+        createChat,
+        sendChatMessage,
       }}
     >
       {children}
