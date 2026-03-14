@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useApp } from '@/store/AppContext'
 import { Card, CardContent } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
@@ -10,9 +11,18 @@ import { useToast } from '@/hooks/use-toast'
 import { Upload } from 'lucide-react'
 
 const Profile = () => {
-  const { role, setRole, isSubscribed, setIsSubscribed, companyProfile, updateCompanyProfile } =
-    useApp()
+  const {
+    role,
+    setRole,
+    isSubscribed,
+    setIsSubscribed,
+    companyProfile,
+    updateCompanyProfile,
+    currentUser,
+    logout,
+  } = useApp()
   const { toast } = useToast()
+  const navigate = useNavigate()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [localProfile, setLocalProfile] = useState(companyProfile)
@@ -39,19 +49,30 @@ const Profile = () => {
     }
   }
 
+  const handleLogout = () => {
+    logout()
+    navigate('/')
+  }
+
   return (
-    <div className="space-y-8 animate-slide-up pb-12">
+    <div className="space-y-8 animate-slide-up pb-12 p-6 md:p-8 max-w-5xl mx-auto">
       <div className="flex items-center gap-5">
         <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center border border-border shadow-sm overflow-hidden">
           {isCompany && companyProfile.logo ? (
             <img src={companyProfile.logo} alt="Logo" className="w-full h-full object-cover" />
           ) : (
-            <span className="text-3xl font-bold text-muted-foreground">JD</span>
+            <span className="text-3xl font-bold text-muted-foreground uppercase">
+              {currentUser?.name?.charAt(0) || 'U'}
+            </span>
           )}
         </div>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">João Doe</h1>
-          <p className="text-muted-foreground mt-1">joao.doe@exemplo.com</p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+            {currentUser?.name || 'Usuário'}
+          </h1>
+          <p className="text-muted-foreground mt-1">
+            {currentUser?.email || 'usuario@exemplo.com'}
+          </p>
         </div>
       </div>
 
@@ -96,15 +117,15 @@ const Profile = () => {
           <div className="space-y-4">
             <div className="space-y-2">
               <Label>Nome Completo</Label>
-              <Input defaultValue="João Doe" />
+              <Input defaultValue={currentUser?.name || ''} />
             </div>
             <div className="space-y-2">
               <Label>Telefone</Label>
-              <Input defaultValue="(11) 98765-4321" />
+              <Input placeholder="(11) 90000-0000" />
             </div>
             <div className="space-y-2">
               <Label>CPF / CNPJ</Label>
-              <Input defaultValue="123.456.789-00" />
+              <Input placeholder="000.000.000-00" />
             </div>
             {!isCompany && (
               <Button onClick={handleSave} className="w-full mt-4 h-12 text-md shadow-sm">
@@ -199,6 +220,7 @@ const Profile = () => {
       <div className="pt-8 border-t border-border">
         <Button
           variant="outline"
+          onClick={handleLogout}
           className="w-full sm:w-auto text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground"
         >
           Sair da Conta

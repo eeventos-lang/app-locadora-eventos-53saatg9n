@@ -17802,6 +17802,20 @@ var LogIn = createLucideIcon("log-in", [
 		key: "u53s6r"
 	}]
 ]);
+var LogOut = createLucideIcon("log-out", [
+	["path", {
+		d: "m16 17 5-5-5-5",
+		key: "1bji2h"
+	}],
+	["path", {
+		d: "M21 12H9",
+		key: "dn1m92"
+	}],
+	["path", {
+		d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4",
+		key: "1uf3rs"
+	}]
+]);
 var MapPin = createLucideIcon("map-pin", [["path", {
 	d: "M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0",
 	key: "1r0f0z"
@@ -21933,9 +21947,168 @@ SheetDescription.displayName = Description$1.displayName;
 //#region src/assets/e-eventos-novo-62817.png
 var e_eventos_novo_62817_default = "/assets/e-eventos-novo-62817-CiHgfznd.png";
 //#endregion
+//#region src/store/AppContext.tsx
+var MOCK_USERS = [{
+	id: "u1",
+	name: "João Doe",
+	email: "joao.doe@exemplo.com",
+	role: "company",
+	password: "password123"
+}];
+var MOCK_DEMANDS = [{
+	id: "d1",
+	title: "Casamento Sítio das Palmeiras",
+	budget: 65e3,
+	guests: 300,
+	date: "2026-05-20",
+	location: "São Paulo, SP",
+	requirements: {
+		sound: true,
+		light: true,
+		led: false,
+		grid: true,
+		buffet: true,
+		drinks: false,
+		cocktails: true,
+		photo: false,
+		video: false,
+		singer: false,
+		band: true,
+		dj: true,
+		space: false,
+		ceremonial: true,
+		security: false,
+		details: "Preciso de PA para 300 pessoas, iluminação cênica na pista, grid Q30 e banda para festa."
+	},
+	status: "open",
+	proposals: 2,
+	createdAt: (/* @__PURE__ */ new Date()).toISOString()
+}, {
+	id: "d2",
+	title: "Festa Corporativa Tech",
+	budget: 95e3,
+	guests: 150,
+	date: "2026-06-15",
+	location: "Campinas, SP",
+	requirements: {
+		sound: true,
+		light: true,
+		led: true,
+		grid: true,
+		buffet: true,
+		drinks: true,
+		cocktails: false,
+		photo: true,
+		video: true,
+		singer: false,
+		band: false,
+		dj: true,
+		space: true,
+		ceremonial: false,
+		security: true,
+		details: "Painel de LED 4x3 indoor, som para DJ, luz de palco completa e buffet completo."
+	},
+	status: "open",
+	proposals: 5,
+	createdAt: (/* @__PURE__ */ new Date()).toISOString()
+}];
+var AppContext = (0, import_react.createContext)(void 0);
+var AppProvider = ({ children }) => {
+	const [users, setUsers] = (0, import_react.useState)(MOCK_USERS);
+	const [currentUser, setCurrentUser] = (0, import_react.useState)(null);
+	const [role, setRole] = (0, import_react.useState)("customer");
+	const [isSubscribed, setIsSubscribed] = (0, import_react.useState)(true);
+	const [demands, setDemands] = (0, import_react.useState)(MOCK_DEMANDS);
+	const [companyProfile, setCompanyProfile] = (0, import_react.useState)({
+		name: "JD Eventos Tech",
+		specialties: "Som, Iluminação, Painel de LED",
+		address: "",
+		logo: "",
+		observations: ""
+	});
+	const addDemand = (demandData) => {
+		setDemands([{
+			...demandData,
+			id: Math.random().toString(36).substring(7),
+			status: "open",
+			proposals: 0,
+			createdAt: (/* @__PURE__ */ new Date()).toISOString()
+		}, ...demands]);
+	};
+	const updateCompanyProfile = (profile) => {
+		setCompanyProfile((prev) => ({
+			...prev,
+			...profile
+		}));
+	};
+	const registerUser = async (userData) => {
+		return new Promise((resolve, reject) => {
+			setTimeout(() => {
+				if (users.find((u) => u.email === userData.email)) {
+					reject(/* @__PURE__ */ new Error("Este email já está em uso."));
+					return;
+				}
+				const newUser = {
+					...userData,
+					id: Math.random().toString(36).substring(7)
+				};
+				setUsers((prev) => [...prev, newUser]);
+				resolve();
+			}, 800);
+		});
+	};
+	const login = async (email, password) => {
+		return new Promise((resolve, reject) => {
+			setTimeout(() => {
+				const user = users.find((u) => u.email === email && u.password === password);
+				if (user) {
+					setCurrentUser(user);
+					setRole(user.role);
+					resolve();
+				} else reject(/* @__PURE__ */ new Error("Credenciais inválidas. Tente novamente."));
+			}, 800);
+		});
+	};
+	const logout = () => {
+		setCurrentUser(null);
+		setRole("customer");
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppContext.Provider, {
+		"data-uid": "src/store/AppContext.tsx:207:5",
+		"data-prohibitions": "[editContent]",
+		value: {
+			role,
+			setRole,
+			isSubscribed,
+			setIsSubscribed,
+			demands,
+			addDemand,
+			companyProfile,
+			updateCompanyProfile,
+			users,
+			currentUser,
+			registerUser,
+			login,
+			logout
+		},
+		children
+	});
+};
+var useApp = () => {
+	const context = (0, import_react.useContext)(AppContext);
+	if (context === void 0) throw new Error("useApp must be used within an AppProvider");
+	return context;
+};
+//#endregion
 //#region src/components/Layout.tsx
 function Layout() {
 	const location = useLocation();
+	const navigate = useNavigate();
+	const { currentUser, logout } = useApp();
+	const handleLogout = () => {
+		logout();
+		navigate("/");
+	};
 	const navItems = [
 		{
 			name: "Início",
@@ -21959,134 +22132,154 @@ function Layout() {
 		}
 	];
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/components/Layout.tsx:27:5",
+		"data-uid": "src/components/Layout.tsx:37:5",
 		"data-prohibitions": "[editContent]",
 		className: "min-h-screen flex flex-col bg-background text-foreground",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", {
-				"data-uid": "src/components/Layout.tsx:28:7",
+				"data-uid": "src/components/Layout.tsx:38:7",
 				"data-prohibitions": "[editContent]",
 				className: "sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/components/Layout.tsx:29:9",
+					"data-uid": "src/components/Layout.tsx:39:9",
 					"data-prohibitions": "[editContent]",
 					className: "container mx-auto px-4 h-16 flex items-center justify-between",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/components/Layout.tsx:30:11",
+							"data-uid": "src/components/Layout.tsx:40:11",
 							"data-prohibitions": "[editContent]",
 							className: "flex items-center gap-4",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Sheet, {
-								"data-uid": "src/components/Layout.tsx:31:13",
+								"data-uid": "src/components/Layout.tsx:41:13",
 								"data-prohibitions": "[editContent]",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SheetTrigger, {
-									"data-uid": "src/components/Layout.tsx:32:15",
+									"data-uid": "src/components/Layout.tsx:42:15",
 									"data-prohibitions": "[]",
 									asChild: true,
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-										"data-uid": "src/components/Layout.tsx:33:17",
+										"data-uid": "src/components/Layout.tsx:43:17",
 										"data-prohibitions": "[]",
 										variant: "ghost",
 										size: "icon",
 										className: "md:hidden",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Menu, {
-											"data-uid": "src/components/Layout.tsx:34:19",
+											"data-uid": "src/components/Layout.tsx:44:19",
 											"data-prohibitions": "[editContent]",
 											className: "h-5 w-5"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											"data-uid": "src/components/Layout.tsx:35:19",
+											"data-uid": "src/components/Layout.tsx:45:19",
 											"data-prohibitions": "[]",
 											className: "sr-only",
 											children: "Menu principal"
 										})]
 									})
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SheetContent, {
-									"data-uid": "src/components/Layout.tsx:38:15",
+									"data-uid": "src/components/Layout.tsx:48:15",
 									"data-prohibitions": "[editContent]",
 									side: "left",
 									className: "w-64 sm:max-w-xs flex flex-col",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SheetHeader, {
-											"data-uid": "src/components/Layout.tsx:39:17",
+											"data-uid": "src/components/Layout.tsx:49:17",
 											"data-prohibitions": "[]",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SheetTitle, {
-												"data-uid": "src/components/Layout.tsx:40:19",
+												"data-uid": "src/components/Layout.tsx:50:19",
 												"data-prohibitions": "[]",
 												className: "text-left flex items-center gap-3",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-													"data-uid": "src/components/Layout.tsx:41:21",
+													"data-uid": "src/components/Layout.tsx:51:21",
 													"data-prohibitions": "[editContent]",
 													src: e_eventos_novo_62817_default,
 													alt: "e-eventos",
 													className: "h-8 w-8 rounded-lg object-contain shadow-sm bg-white/5 p-1 border border-white/10"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													"data-uid": "src/components/Layout.tsx:46:21",
+													"data-uid": "src/components/Layout.tsx:56:21",
 													"data-prohibitions": "[]",
 													className: "font-bold tracking-tight text-lg",
 													children: "e-eventos"
 												})]
 											})
 										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", {
-											"data-uid": "src/components/Layout.tsx:49:17",
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
+											"data-uid": "src/components/Layout.tsx:59:17",
 											"data-prohibitions": "[editContent]",
 											className: "flex flex-col gap-2 mt-6 flex-1",
-											children: navItems.map((item) => {
+											children: [navItems.map((item) => {
 												const Icon = item.icon;
 												return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-													"data-uid": "src/components/Layout.tsx:53:23",
+													"data-uid": "src/components/Layout.tsx:63:23",
 													"data-prohibitions": "[editContent]",
 													to: item.path,
 													className: cn$1("flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors", location.pathname === item.path ? "bg-primary text-primary-foreground" : "hover:bg-muted"),
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
-														"data-uid": "src/components/Layout.tsx:63:25",
+														"data-uid": "src/components/Layout.tsx:73:25",
 														"data-prohibitions": "[editContent]",
 														className: "h-4 w-4"
 													}), item.name]
 												}, item.path);
-											})
+											}), currentUser && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+												"data-uid": "src/components/Layout.tsx:79:21",
+												"data-prohibitions": "[editContent]",
+												to: "/profile",
+												className: cn$1("flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors", location.pathname === "/profile" ? "bg-primary text-primary-foreground" : "hover:bg-muted"),
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(User, {
+													"data-uid": "src/components/Layout.tsx:88:23",
+													"data-prohibitions": "[editContent]",
+													className: "h-4 w-4"
+												}), "Meu Perfil"]
+											})]
 										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											"data-uid": "src/components/Layout.tsx:69:17",
-											"data-prohibitions": "[]",
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											"data-uid": "src/components/Layout.tsx:93:17",
+											"data-prohibitions": "[editContent]",
 											className: "flex flex-col gap-2 mt-auto pt-6 border-t border-border",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-												"data-uid": "src/components/Layout.tsx:70:19",
+											children: currentUser ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												"data-uid": "src/components/Layout.tsx:95:21",
+												"data-prohibitions": "[]",
+												onClick: handleLogout,
+												className: "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium hover:bg-muted transition-colors text-destructive",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogOut, {
+													"data-uid": "src/components/Layout.tsx:99:23",
+													"data-prohibitions": "[editContent]",
+													className: "h-4 w-4"
+												}), " Sair da conta"]
+											}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+												"data-uid": "src/components/Layout.tsx:103:23",
 												"data-prohibitions": "[]",
 												to: "/login",
 												className: "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium hover:bg-muted transition-colors",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogIn, {
-													"data-uid": "src/components/Layout.tsx:74:21",
+													"data-uid": "src/components/Layout.tsx:107:25",
 													"data-prohibitions": "[editContent]",
 													className: "h-4 w-4"
 												}), " Entrar"]
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-												"data-uid": "src/components/Layout.tsx:76:19",
+												"data-uid": "src/components/Layout.tsx:109:23",
 												"data-prohibitions": "[]",
 												to: "/register",
 												className: "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium hover:bg-muted transition-colors text-primary",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserPlus, {
-													"data-uid": "src/components/Layout.tsx:80:21",
+													"data-uid": "src/components/Layout.tsx:113:25",
 													"data-prohibitions": "[editContent]",
 													className: "h-4 w-4"
 												}), " Cadastrar"]
-											})]
+											})] })
 										})
 									]
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-								"data-uid": "src/components/Layout.tsx:86:13",
+								"data-uid": "src/components/Layout.tsx:121:13",
 								"data-prohibitions": "[]",
 								to: "/",
 								className: "flex items-center gap-3 transition-opacity hover:opacity-90",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-									"data-uid": "src/components/Layout.tsx:87:15",
+									"data-uid": "src/components/Layout.tsx:122:15",
 									"data-prohibitions": "[editContent]",
 									src: e_eventos_novo_62817_default,
 									alt: "e-eventos",
 									className: "h-10 w-10 sm:h-12 sm:w-12 rounded-xl object-contain drop-shadow-sm bg-white/5 p-1 border border-white/10"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									"data-uid": "src/components/Layout.tsx:92:15",
+									"data-uid": "src/components/Layout.tsx:127:15",
 									"data-prohibitions": "[]",
 									className: "hidden sm:inline-block font-extrabold text-xl tracking-tight text-foreground",
 									children: "e-eventos"
@@ -22094,117 +22287,135 @@ function Layout() {
 							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", {
-							"data-uid": "src/components/Layout.tsx:98:11",
+							"data-uid": "src/components/Layout.tsx:133:11",
 							"data-prohibitions": "[editContent]",
 							className: "hidden md:flex items-center gap-6",
 							children: navItems.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-								"data-uid": "src/components/Layout.tsx:100:15",
+								"data-uid": "src/components/Layout.tsx:135:15",
 								"data-prohibitions": "[editContent]",
 								to: item.path,
 								className: cn$1("text-sm font-medium transition-colors hover:text-primary", location.pathname === item.path ? "text-primary" : "text-muted-foreground"),
 								children: item.name
 							}, item.path))
 						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/components/Layout.tsx:113:11",
-							"data-prohibitions": "[]",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							"data-uid": "src/components/Layout.tsx:148:11",
+							"data-prohibitions": "[editContent]",
 							className: "hidden md:flex items-center gap-3",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-								"data-uid": "src/components/Layout.tsx:114:13",
+							children: currentUser ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/components/Layout.tsx:150:15",
+								"data-prohibitions": "[editContent]",
+								className: "flex items-center gap-4",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+									"data-uid": "src/components/Layout.tsx:151:17",
+									"data-prohibitions": "[editContent]",
+									to: "/profile",
+									className: "text-sm font-medium hover:text-primary transition-colors",
+									children: ["Olá, ", currentUser.name.split(" ")[0]]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									"data-uid": "src/components/Layout.tsx:157:17",
+									"data-prohibitions": "[]",
+									variant: "ghost",
+									size: "sm",
+									onClick: handleLogout,
+									children: "Sair"
+								})]
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+								"data-uid": "src/components/Layout.tsx:163:17",
 								"data-prohibitions": "[]",
 								variant: "ghost",
 								size: "sm",
 								asChild: true,
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-									"data-uid": "src/components/Layout.tsx:115:15",
+									"data-uid": "src/components/Layout.tsx:164:19",
 									"data-prohibitions": "[]",
 									to: "/login",
 									children: "Entrar"
 								})
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-								"data-uid": "src/components/Layout.tsx:117:13",
+								"data-uid": "src/components/Layout.tsx:166:17",
 								"data-prohibitions": "[]",
 								size: "sm",
 								asChild: true,
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-									"data-uid": "src/components/Layout.tsx:118:15",
+									"data-uid": "src/components/Layout.tsx:167:19",
 									"data-prohibitions": "[]",
 									to: "/register",
 									children: "Cadastrar"
 								})
-							})]
+							})] })
 						})
 					]
 				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
-				"data-uid": "src/components/Layout.tsx:124:7",
+				"data-uid": "src/components/Layout.tsx:175:7",
 				"data-prohibitions": "[]",
 				className: "flex-1 w-full",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {
-					"data-uid": "src/components/Layout.tsx:125:9",
+					"data-uid": "src/components/Layout.tsx:176:9",
 					"data-prohibitions": "[editContent]"
 				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("footer", {
-				"data-uid": "src/components/Layout.tsx:128:7",
+				"data-uid": "src/components/Layout.tsx:179:7",
 				"data-prohibitions": "[editContent]",
 				className: "border-t border-border bg-card/50 pt-12 pb-8 mt-auto",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/components/Layout.tsx:129:9",
+					"data-uid": "src/components/Layout.tsx:180:9",
 					"data-prohibitions": "[editContent]",
 					className: "container mx-auto px-4",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/components/Layout.tsx:130:11",
+						"data-uid": "src/components/Layout.tsx:181:11",
 						"data-prohibitions": "[]",
 						className: "grid grid-cols-1 md:grid-cols-4 gap-8 mb-8",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/Layout.tsx:131:13",
+								"data-uid": "src/components/Layout.tsx:182:13",
 								"data-prohibitions": "[]",
 								className: "col-span-1 md:col-span-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-									"data-uid": "src/components/Layout.tsx:132:15",
+									"data-uid": "src/components/Layout.tsx:183:15",
 									"data-prohibitions": "[]",
 									to: "/",
 									className: "flex items-center gap-3 transition-opacity hover:opacity-90 mb-4 inline-flex",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-										"data-uid": "src/components/Layout.tsx:136:17",
+										"data-uid": "src/components/Layout.tsx:187:17",
 										"data-prohibitions": "[editContent]",
 										src: e_eventos_novo_62817_default,
 										alt: "e-eventos",
 										className: "h-10 w-10 rounded-xl object-contain drop-shadow-sm bg-white/5 p-1 border border-white/10"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										"data-uid": "src/components/Layout.tsx:141:17",
+										"data-uid": "src/components/Layout.tsx:192:17",
 										"data-prohibitions": "[]",
 										className: "font-extrabold text-xl tracking-tight text-foreground",
 										children: "e-eventos"
 									})]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/components/Layout.tsx:145:15",
+									"data-uid": "src/components/Layout.tsx:196:15",
 									"data-prohibitions": "[]",
 									className: "text-muted-foreground text-sm max-w-sm",
 									children: "A plataforma líder em locação de equipamentos e serviços para eventos. Conectando você aos melhores fornecedores do mercado."
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/Layout.tsx:150:13",
+								"data-uid": "src/components/Layout.tsx:201:13",
 								"data-prohibitions": "[]",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-									"data-uid": "src/components/Layout.tsx:151:15",
+									"data-uid": "src/components/Layout.tsx:202:15",
 									"data-prohibitions": "[]",
 									className: "font-semibold mb-4 text-foreground",
 									children: "Plataforma"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ul", {
-									"data-uid": "src/components/Layout.tsx:152:15",
+									"data-uid": "src/components/Layout.tsx:203:15",
 									"data-prohibitions": "[]",
 									className: "space-y-2 text-sm text-muted-foreground",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
-											"data-uid": "src/components/Layout.tsx:153:17",
+											"data-uid": "src/components/Layout.tsx:204:17",
 											"data-prohibitions": "[]",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-												"data-uid": "src/components/Layout.tsx:154:19",
+												"data-uid": "src/components/Layout.tsx:205:19",
 												"data-prohibitions": "[]",
 												to: "/demands",
 												className: "hover:text-primary transition-colors",
@@ -22212,10 +22423,10 @@ function Layout() {
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
-											"data-uid": "src/components/Layout.tsx:158:17",
+											"data-uid": "src/components/Layout.tsx:209:17",
 											"data-prohibitions": "[]",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-												"data-uid": "src/components/Layout.tsx:159:19",
+												"data-uid": "src/components/Layout.tsx:210:19",
 												"data-prohibitions": "[]",
 												to: "/create-event",
 												className: "hover:text-primary transition-colors",
@@ -22223,10 +22434,10 @@ function Layout() {
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
-											"data-uid": "src/components/Layout.tsx:163:17",
+											"data-uid": "src/components/Layout.tsx:214:17",
 											"data-prohibitions": "[]",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-												"data-uid": "src/components/Layout.tsx:164:19",
+												"data-uid": "src/components/Layout.tsx:215:19",
 												"data-prohibitions": "[]",
 												to: "/subscription",
 												className: "hover:text-primary transition-colors",
@@ -22237,23 +22448,23 @@ function Layout() {
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/components/Layout.tsx:170:13",
+								"data-uid": "src/components/Layout.tsx:221:13",
 								"data-prohibitions": "[]",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-									"data-uid": "src/components/Layout.tsx:171:15",
+									"data-uid": "src/components/Layout.tsx:222:15",
 									"data-prohibitions": "[]",
 									className: "font-semibold mb-4 text-foreground",
 									children: "Suporte"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ul", {
-									"data-uid": "src/components/Layout.tsx:172:15",
+									"data-uid": "src/components/Layout.tsx:223:15",
 									"data-prohibitions": "[]",
 									className: "space-y-2 text-sm text-muted-foreground",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
-											"data-uid": "src/components/Layout.tsx:173:17",
+											"data-uid": "src/components/Layout.tsx:224:17",
 											"data-prohibitions": "[]",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-												"data-uid": "src/components/Layout.tsx:174:19",
+												"data-uid": "src/components/Layout.tsx:225:19",
 												"data-prohibitions": "[]",
 												to: "#",
 												className: "hover:text-primary transition-colors",
@@ -22261,10 +22472,10 @@ function Layout() {
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
-											"data-uid": "src/components/Layout.tsx:178:17",
+											"data-uid": "src/components/Layout.tsx:229:17",
 											"data-prohibitions": "[]",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-												"data-uid": "src/components/Layout.tsx:179:19",
+												"data-uid": "src/components/Layout.tsx:230:19",
 												"data-prohibitions": "[]",
 												to: "#",
 												className: "hover:text-primary transition-colors",
@@ -22272,10 +22483,10 @@ function Layout() {
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
-											"data-uid": "src/components/Layout.tsx:183:17",
+											"data-uid": "src/components/Layout.tsx:234:17",
 											"data-prohibitions": "[]",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-												"data-uid": "src/components/Layout.tsx:184:19",
+												"data-uid": "src/components/Layout.tsx:235:19",
 												"data-prohibitions": "[]",
 												to: "#",
 												className: "hover:text-primary transition-colors",
@@ -22287,11 +22498,11 @@ function Layout() {
 							})
 						]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						"data-uid": "src/components/Layout.tsx:191:11",
+						"data-uid": "src/components/Layout.tsx:242:11",
 						"data-prohibitions": "[editContent]",
 						className: "pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-							"data-uid": "src/components/Layout.tsx:192:13",
+							"data-uid": "src/components/Layout.tsx:243:13",
 							"data-prohibitions": "[editContent]",
 							className: "text-sm text-muted-foreground text-center md:text-left",
 							children: [
@@ -22602,120 +22813,1054 @@ var CardFooter = import_react.forwardRef(({ className, ...props }, ref) => /* @_
 }));
 CardFooter.displayName = "CardFooter";
 //#endregion
+//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/sonner@2.0.7_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/sonner/dist/index.mjs
+function __insertCSS(code) {
+	if (!code || typeof document == "undefined") return;
+	let head = document.head || document.getElementsByTagName("head")[0];
+	let style = document.createElement("style");
+	style.type = "text/css";
+	head.appendChild(style);
+	style.styleSheet ? style.styleSheet.cssText = code : style.appendChild(document.createTextNode(code));
+}
+var getAsset = (type) => {
+	switch (type) {
+		case "success": return SuccessIcon;
+		case "info": return InfoIcon;
+		case "warning": return WarningIcon;
+		case "error": return ErrorIcon;
+		default: return null;
+	}
+};
+var bars = Array(12).fill(0);
+var Loader = ({ visible, className }) => {
+	return /* @__PURE__ */ import_react.createElement("div", {
+		className: ["sonner-loading-wrapper", className].filter(Boolean).join(" "),
+		"data-visible": visible
+	}, /* @__PURE__ */ import_react.createElement("div", { className: "sonner-spinner" }, bars.map((_, i) => /* @__PURE__ */ import_react.createElement("div", {
+		className: "sonner-loading-bar",
+		key: `spinner-bar-${i}`
+	}))));
+};
+var SuccessIcon = /* @__PURE__ */ import_react.createElement("svg", {
+	xmlns: "http://www.w3.org/2000/svg",
+	viewBox: "0 0 20 20",
+	fill: "currentColor",
+	height: "20",
+	width: "20"
+}, /* @__PURE__ */ import_react.createElement("path", {
+	fillRule: "evenodd",
+	d: "M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z",
+	clipRule: "evenodd"
+}));
+var WarningIcon = /* @__PURE__ */ import_react.createElement("svg", {
+	xmlns: "http://www.w3.org/2000/svg",
+	viewBox: "0 0 24 24",
+	fill: "currentColor",
+	height: "20",
+	width: "20"
+}, /* @__PURE__ */ import_react.createElement("path", {
+	fillRule: "evenodd",
+	d: "M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z",
+	clipRule: "evenodd"
+}));
+var InfoIcon = /* @__PURE__ */ import_react.createElement("svg", {
+	xmlns: "http://www.w3.org/2000/svg",
+	viewBox: "0 0 20 20",
+	fill: "currentColor",
+	height: "20",
+	width: "20"
+}, /* @__PURE__ */ import_react.createElement("path", {
+	fillRule: "evenodd",
+	d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z",
+	clipRule: "evenodd"
+}));
+var ErrorIcon = /* @__PURE__ */ import_react.createElement("svg", {
+	xmlns: "http://www.w3.org/2000/svg",
+	viewBox: "0 0 20 20",
+	fill: "currentColor",
+	height: "20",
+	width: "20"
+}, /* @__PURE__ */ import_react.createElement("path", {
+	fillRule: "evenodd",
+	d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z",
+	clipRule: "evenodd"
+}));
+var CloseIcon = /* @__PURE__ */ import_react.createElement("svg", {
+	xmlns: "http://www.w3.org/2000/svg",
+	width: "12",
+	height: "12",
+	viewBox: "0 0 24 24",
+	fill: "none",
+	stroke: "currentColor",
+	strokeWidth: "1.5",
+	strokeLinecap: "round",
+	strokeLinejoin: "round"
+}, /* @__PURE__ */ import_react.createElement("line", {
+	x1: "18",
+	y1: "6",
+	x2: "6",
+	y2: "18"
+}), /* @__PURE__ */ import_react.createElement("line", {
+	x1: "6",
+	y1: "6",
+	x2: "18",
+	y2: "18"
+}));
+var useIsDocumentHidden = () => {
+	const [isDocumentHidden, setIsDocumentHidden] = import_react.useState(document.hidden);
+	import_react.useEffect(() => {
+		const callback = () => {
+			setIsDocumentHidden(document.hidden);
+		};
+		document.addEventListener("visibilitychange", callback);
+		return () => window.removeEventListener("visibilitychange", callback);
+	}, []);
+	return isDocumentHidden;
+};
+var toastsCounter = 1;
+var Observer = class {
+	constructor() {
+		this.subscribe = (subscriber) => {
+			this.subscribers.push(subscriber);
+			return () => {
+				const index = this.subscribers.indexOf(subscriber);
+				this.subscribers.splice(index, 1);
+			};
+		};
+		this.publish = (data) => {
+			this.subscribers.forEach((subscriber) => subscriber(data));
+		};
+		this.addToast = (data) => {
+			this.publish(data);
+			this.toasts = [...this.toasts, data];
+		};
+		this.create = (data) => {
+			var _data_id;
+			const { message, ...rest } = data;
+			const id = typeof (data == null ? void 0 : data.id) === "number" || ((_data_id = data.id) == null ? void 0 : _data_id.length) > 0 ? data.id : toastsCounter++;
+			const alreadyExists = this.toasts.find((toast) => {
+				return toast.id === id;
+			});
+			const dismissible = data.dismissible === void 0 ? true : data.dismissible;
+			if (this.dismissedToasts.has(id)) this.dismissedToasts.delete(id);
+			if (alreadyExists) this.toasts = this.toasts.map((toast) => {
+				if (toast.id === id) {
+					this.publish({
+						...toast,
+						...data,
+						id,
+						title: message
+					});
+					return {
+						...toast,
+						...data,
+						id,
+						dismissible,
+						title: message
+					};
+				}
+				return toast;
+			});
+			else this.addToast({
+				title: message,
+				...rest,
+				dismissible,
+				id
+			});
+			return id;
+		};
+		this.dismiss = (id) => {
+			if (id) {
+				this.dismissedToasts.add(id);
+				requestAnimationFrame(() => this.subscribers.forEach((subscriber) => subscriber({
+					id,
+					dismiss: true
+				})));
+			} else this.toasts.forEach((toast) => {
+				this.subscribers.forEach((subscriber) => subscriber({
+					id: toast.id,
+					dismiss: true
+				}));
+			});
+			return id;
+		};
+		this.message = (message, data) => {
+			return this.create({
+				...data,
+				message
+			});
+		};
+		this.error = (message, data) => {
+			return this.create({
+				...data,
+				message,
+				type: "error"
+			});
+		};
+		this.success = (message, data) => {
+			return this.create({
+				...data,
+				type: "success",
+				message
+			});
+		};
+		this.info = (message, data) => {
+			return this.create({
+				...data,
+				type: "info",
+				message
+			});
+		};
+		this.warning = (message, data) => {
+			return this.create({
+				...data,
+				type: "warning",
+				message
+			});
+		};
+		this.loading = (message, data) => {
+			return this.create({
+				...data,
+				type: "loading",
+				message
+			});
+		};
+		this.promise = (promise, data) => {
+			if (!data) return;
+			let id = void 0;
+			if (data.loading !== void 0) id = this.create({
+				...data,
+				promise,
+				type: "loading",
+				message: data.loading,
+				description: typeof data.description !== "function" ? data.description : void 0
+			});
+			const p = Promise.resolve(promise instanceof Function ? promise() : promise);
+			let shouldDismiss = id !== void 0;
+			let result;
+			const originalPromise = p.then(async (response) => {
+				result = ["resolve", response];
+				if (import_react.isValidElement(response)) {
+					shouldDismiss = false;
+					this.create({
+						id,
+						type: "default",
+						message: response
+					});
+				} else if (isHttpResponse(response) && !response.ok) {
+					shouldDismiss = false;
+					const promiseData = typeof data.error === "function" ? await data.error(`HTTP error! status: ${response.status}`) : data.error;
+					const description = typeof data.description === "function" ? await data.description(`HTTP error! status: ${response.status}`) : data.description;
+					const toastSettings = typeof promiseData === "object" && !import_react.isValidElement(promiseData) ? promiseData : { message: promiseData };
+					this.create({
+						id,
+						type: "error",
+						description,
+						...toastSettings
+					});
+				} else if (response instanceof Error) {
+					shouldDismiss = false;
+					const promiseData = typeof data.error === "function" ? await data.error(response) : data.error;
+					const description = typeof data.description === "function" ? await data.description(response) : data.description;
+					const toastSettings = typeof promiseData === "object" && !import_react.isValidElement(promiseData) ? promiseData : { message: promiseData };
+					this.create({
+						id,
+						type: "error",
+						description,
+						...toastSettings
+					});
+				} else if (data.success !== void 0) {
+					shouldDismiss = false;
+					const promiseData = typeof data.success === "function" ? await data.success(response) : data.success;
+					const description = typeof data.description === "function" ? await data.description(response) : data.description;
+					const toastSettings = typeof promiseData === "object" && !import_react.isValidElement(promiseData) ? promiseData : { message: promiseData };
+					this.create({
+						id,
+						type: "success",
+						description,
+						...toastSettings
+					});
+				}
+			}).catch(async (error) => {
+				result = ["reject", error];
+				if (data.error !== void 0) {
+					shouldDismiss = false;
+					const promiseData = typeof data.error === "function" ? await data.error(error) : data.error;
+					const description = typeof data.description === "function" ? await data.description(error) : data.description;
+					const toastSettings = typeof promiseData === "object" && !import_react.isValidElement(promiseData) ? promiseData : { message: promiseData };
+					this.create({
+						id,
+						type: "error",
+						description,
+						...toastSettings
+					});
+				}
+			}).finally(() => {
+				if (shouldDismiss) {
+					this.dismiss(id);
+					id = void 0;
+				}
+				data.finally == null || data.finally.call(data);
+			});
+			const unwrap = () => new Promise((resolve, reject) => originalPromise.then(() => result[0] === "reject" ? reject(result[1]) : resolve(result[1])).catch(reject));
+			if (typeof id !== "string" && typeof id !== "number") return { unwrap };
+			else return Object.assign(id, { unwrap });
+		};
+		this.custom = (jsx, data) => {
+			const id = (data == null ? void 0 : data.id) || toastsCounter++;
+			this.create({
+				jsx: jsx(id),
+				id,
+				...data
+			});
+			return id;
+		};
+		this.getActiveToasts = () => {
+			return this.toasts.filter((toast) => !this.dismissedToasts.has(toast.id));
+		};
+		this.subscribers = [];
+		this.toasts = [];
+		this.dismissedToasts = /* @__PURE__ */ new Set();
+	}
+};
+var ToastState = new Observer();
+var toastFunction = (message, data) => {
+	const id = (data == null ? void 0 : data.id) || toastsCounter++;
+	ToastState.addToast({
+		title: message,
+		...data,
+		id
+	});
+	return id;
+};
+var isHttpResponse = (data) => {
+	return data && typeof data === "object" && "ok" in data && typeof data.ok === "boolean" && "status" in data && typeof data.status === "number";
+};
+var basicToast = toastFunction;
+var getHistory = () => ToastState.toasts;
+var getToasts = () => ToastState.getActiveToasts();
+var toast$1 = Object.assign(basicToast, {
+	success: ToastState.success,
+	info: ToastState.info,
+	warning: ToastState.warning,
+	error: ToastState.error,
+	custom: ToastState.custom,
+	message: ToastState.message,
+	promise: ToastState.promise,
+	dismiss: ToastState.dismiss,
+	loading: ToastState.loading
+}, {
+	getHistory,
+	getToasts
+});
+__insertCSS("[data-sonner-toaster][dir=ltr],html[dir=ltr]{--toast-icon-margin-start:-3px;--toast-icon-margin-end:4px;--toast-svg-margin-start:-1px;--toast-svg-margin-end:0px;--toast-button-margin-start:auto;--toast-button-margin-end:0;--toast-close-button-start:0;--toast-close-button-end:unset;--toast-close-button-transform:translate(-35%, -35%)}[data-sonner-toaster][dir=rtl],html[dir=rtl]{--toast-icon-margin-start:4px;--toast-icon-margin-end:-3px;--toast-svg-margin-start:0px;--toast-svg-margin-end:-1px;--toast-button-margin-start:0;--toast-button-margin-end:auto;--toast-close-button-start:unset;--toast-close-button-end:0;--toast-close-button-transform:translate(35%, -35%)}[data-sonner-toaster]{position:fixed;width:var(--width);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;--gray1:hsl(0, 0%, 99%);--gray2:hsl(0, 0%, 97.3%);--gray3:hsl(0, 0%, 95.1%);--gray4:hsl(0, 0%, 93%);--gray5:hsl(0, 0%, 90.9%);--gray6:hsl(0, 0%, 88.7%);--gray7:hsl(0, 0%, 85.8%);--gray8:hsl(0, 0%, 78%);--gray9:hsl(0, 0%, 56.1%);--gray10:hsl(0, 0%, 52.3%);--gray11:hsl(0, 0%, 43.5%);--gray12:hsl(0, 0%, 9%);--border-radius:8px;box-sizing:border-box;padding:0;margin:0;list-style:none;outline:0;z-index:999999999;transition:transform .4s ease}@media (hover:none) and (pointer:coarse){[data-sonner-toaster][data-lifted=true]{transform:none}}[data-sonner-toaster][data-x-position=right]{right:var(--offset-right)}[data-sonner-toaster][data-x-position=left]{left:var(--offset-left)}[data-sonner-toaster][data-x-position=center]{left:50%;transform:translateX(-50%)}[data-sonner-toaster][data-y-position=top]{top:var(--offset-top)}[data-sonner-toaster][data-y-position=bottom]{bottom:var(--offset-bottom)}[data-sonner-toast]{--y:translateY(100%);--lift-amount:calc(var(--lift) * var(--gap));z-index:var(--z-index);position:absolute;opacity:0;transform:var(--y);touch-action:none;transition:transform .4s,opacity .4s,height .4s,box-shadow .2s;box-sizing:border-box;outline:0;overflow-wrap:anywhere}[data-sonner-toast][data-styled=true]{padding:16px;background:var(--normal-bg);border:1px solid var(--normal-border);color:var(--normal-text);border-radius:var(--border-radius);box-shadow:0 4px 12px rgba(0,0,0,.1);width:var(--width);font-size:13px;display:flex;align-items:center;gap:6px}[data-sonner-toast]:focus-visible{box-shadow:0 4px 12px rgba(0,0,0,.1),0 0 0 2px rgba(0,0,0,.2)}[data-sonner-toast][data-y-position=top]{top:0;--y:translateY(-100%);--lift:1;--lift-amount:calc(1 * var(--gap))}[data-sonner-toast][data-y-position=bottom]{bottom:0;--y:translateY(100%);--lift:-1;--lift-amount:calc(var(--lift) * var(--gap))}[data-sonner-toast][data-styled=true] [data-description]{font-weight:400;line-height:1.4;color:#3f3f3f}[data-rich-colors=true][data-sonner-toast][data-styled=true] [data-description]{color:inherit}[data-sonner-toaster][data-sonner-theme=dark] [data-description]{color:#e8e8e8}[data-sonner-toast][data-styled=true] [data-title]{font-weight:500;line-height:1.5;color:inherit}[data-sonner-toast][data-styled=true] [data-icon]{display:flex;height:16px;width:16px;position:relative;justify-content:flex-start;align-items:center;flex-shrink:0;margin-left:var(--toast-icon-margin-start);margin-right:var(--toast-icon-margin-end)}[data-sonner-toast][data-promise=true] [data-icon]>svg{opacity:0;transform:scale(.8);transform-origin:center;animation:sonner-fade-in .3s ease forwards}[data-sonner-toast][data-styled=true] [data-icon]>*{flex-shrink:0}[data-sonner-toast][data-styled=true] [data-icon] svg{margin-left:var(--toast-svg-margin-start);margin-right:var(--toast-svg-margin-end)}[data-sonner-toast][data-styled=true] [data-content]{display:flex;flex-direction:column;gap:2px}[data-sonner-toast][data-styled=true] [data-button]{border-radius:4px;padding-left:8px;padding-right:8px;height:24px;font-size:12px;color:var(--normal-bg);background:var(--normal-text);margin-left:var(--toast-button-margin-start);margin-right:var(--toast-button-margin-end);border:none;font-weight:500;cursor:pointer;outline:0;display:flex;align-items:center;flex-shrink:0;transition:opacity .4s,box-shadow .2s}[data-sonner-toast][data-styled=true] [data-button]:focus-visible{box-shadow:0 0 0 2px rgba(0,0,0,.4)}[data-sonner-toast][data-styled=true] [data-button]:first-of-type{margin-left:var(--toast-button-margin-start);margin-right:var(--toast-button-margin-end)}[data-sonner-toast][data-styled=true] [data-cancel]{color:var(--normal-text);background:rgba(0,0,0,.08)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast][data-styled=true] [data-cancel]{background:rgba(255,255,255,.3)}[data-sonner-toast][data-styled=true] [data-close-button]{position:absolute;left:var(--toast-close-button-start);right:var(--toast-close-button-end);top:0;height:20px;width:20px;display:flex;justify-content:center;align-items:center;padding:0;color:var(--gray12);background:var(--normal-bg);border:1px solid var(--gray4);transform:var(--toast-close-button-transform);border-radius:50%;cursor:pointer;z-index:1;transition:opacity .1s,background .2s,border-color .2s}[data-sonner-toast][data-styled=true] [data-close-button]:focus-visible{box-shadow:0 4px 12px rgba(0,0,0,.1),0 0 0 2px rgba(0,0,0,.2)}[data-sonner-toast][data-styled=true] [data-disabled=true]{cursor:not-allowed}[data-sonner-toast][data-styled=true]:hover [data-close-button]:hover{background:var(--gray2);border-color:var(--gray5)}[data-sonner-toast][data-swiping=true]::before{content:'';position:absolute;left:-100%;right:-100%;height:100%;z-index:-1}[data-sonner-toast][data-y-position=top][data-swiping=true]::before{bottom:50%;transform:scaleY(3) translateY(50%)}[data-sonner-toast][data-y-position=bottom][data-swiping=true]::before{top:50%;transform:scaleY(3) translateY(-50%)}[data-sonner-toast][data-swiping=false][data-removed=true]::before{content:'';position:absolute;inset:0;transform:scaleY(2)}[data-sonner-toast][data-expanded=true]::after{content:'';position:absolute;left:0;height:calc(var(--gap) + 1px);bottom:100%;width:100%}[data-sonner-toast][data-mounted=true]{--y:translateY(0);opacity:1}[data-sonner-toast][data-expanded=false][data-front=false]{--scale:var(--toasts-before) * 0.05 + 1;--y:translateY(calc(var(--lift-amount) * var(--toasts-before))) scale(calc(-1 * var(--scale)));height:var(--front-toast-height)}[data-sonner-toast]>*{transition:opacity .4s}[data-sonner-toast][data-x-position=right]{right:0}[data-sonner-toast][data-x-position=left]{left:0}[data-sonner-toast][data-expanded=false][data-front=false][data-styled=true]>*{opacity:0}[data-sonner-toast][data-visible=false]{opacity:0;pointer-events:none}[data-sonner-toast][data-mounted=true][data-expanded=true]{--y:translateY(calc(var(--lift) * var(--offset)));height:var(--initial-height)}[data-sonner-toast][data-removed=true][data-front=true][data-swipe-out=false]{--y:translateY(calc(var(--lift) * -100%));opacity:0}[data-sonner-toast][data-removed=true][data-front=false][data-swipe-out=false][data-expanded=true]{--y:translateY(calc(var(--lift) * var(--offset) + var(--lift) * -100%));opacity:0}[data-sonner-toast][data-removed=true][data-front=false][data-swipe-out=false][data-expanded=false]{--y:translateY(40%);opacity:0;transition:transform .5s,opacity .2s}[data-sonner-toast][data-removed=true][data-front=false]::before{height:calc(var(--initial-height) + 20%)}[data-sonner-toast][data-swiping=true]{transform:var(--y) translateY(var(--swipe-amount-y,0)) translateX(var(--swipe-amount-x,0));transition:none}[data-sonner-toast][data-swiped=true]{user-select:none}[data-sonner-toast][data-swipe-out=true][data-y-position=bottom],[data-sonner-toast][data-swipe-out=true][data-y-position=top]{animation-duration:.2s;animation-timing-function:ease-out;animation-fill-mode:forwards}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=left]{animation-name:swipe-out-left}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=right]{animation-name:swipe-out-right}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=up]{animation-name:swipe-out-up}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=down]{animation-name:swipe-out-down}@keyframes swipe-out-left{from{transform:var(--y) translateX(var(--swipe-amount-x));opacity:1}to{transform:var(--y) translateX(calc(var(--swipe-amount-x) - 100%));opacity:0}}@keyframes swipe-out-right{from{transform:var(--y) translateX(var(--swipe-amount-x));opacity:1}to{transform:var(--y) translateX(calc(var(--swipe-amount-x) + 100%));opacity:0}}@keyframes swipe-out-up{from{transform:var(--y) translateY(var(--swipe-amount-y));opacity:1}to{transform:var(--y) translateY(calc(var(--swipe-amount-y) - 100%));opacity:0}}@keyframes swipe-out-down{from{transform:var(--y) translateY(var(--swipe-amount-y));opacity:1}to{transform:var(--y) translateY(calc(var(--swipe-amount-y) + 100%));opacity:0}}@media (max-width:600px){[data-sonner-toaster]{position:fixed;right:var(--mobile-offset-right);left:var(--mobile-offset-left);width:100%}[data-sonner-toaster][dir=rtl]{left:calc(var(--mobile-offset-left) * -1)}[data-sonner-toaster] [data-sonner-toast]{left:0;right:0;width:calc(100% - var(--mobile-offset-left) * 2)}[data-sonner-toaster][data-x-position=left]{left:var(--mobile-offset-left)}[data-sonner-toaster][data-y-position=bottom]{bottom:var(--mobile-offset-bottom)}[data-sonner-toaster][data-y-position=top]{top:var(--mobile-offset-top)}[data-sonner-toaster][data-x-position=center]{left:var(--mobile-offset-left);right:var(--mobile-offset-right);transform:none}}[data-sonner-toaster][data-sonner-theme=light]{--normal-bg:#fff;--normal-border:var(--gray4);--normal-text:var(--gray12);--success-bg:hsl(143, 85%, 96%);--success-border:hsl(145, 92%, 87%);--success-text:hsl(140, 100%, 27%);--info-bg:hsl(208, 100%, 97%);--info-border:hsl(221, 91%, 93%);--info-text:hsl(210, 92%, 45%);--warning-bg:hsl(49, 100%, 97%);--warning-border:hsl(49, 91%, 84%);--warning-text:hsl(31, 92%, 45%);--error-bg:hsl(359, 100%, 97%);--error-border:hsl(359, 100%, 94%);--error-text:hsl(360, 100%, 45%)}[data-sonner-toaster][data-sonner-theme=light] [data-sonner-toast][data-invert=true]{--normal-bg:#000;--normal-border:hsl(0, 0%, 20%);--normal-text:var(--gray1)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast][data-invert=true]{--normal-bg:#fff;--normal-border:var(--gray3);--normal-text:var(--gray12)}[data-sonner-toaster][data-sonner-theme=dark]{--normal-bg:#000;--normal-bg-hover:hsl(0, 0%, 12%);--normal-border:hsl(0, 0%, 20%);--normal-border-hover:hsl(0, 0%, 25%);--normal-text:var(--gray1);--success-bg:hsl(150, 100%, 6%);--success-border:hsl(147, 100%, 12%);--success-text:hsl(150, 86%, 65%);--info-bg:hsl(215, 100%, 6%);--info-border:hsl(223, 43%, 17%);--info-text:hsl(216, 87%, 65%);--warning-bg:hsl(64, 100%, 6%);--warning-border:hsl(60, 100%, 9%);--warning-text:hsl(46, 87%, 65%);--error-bg:hsl(358, 76%, 10%);--error-border:hsl(357, 89%, 16%);--error-text:hsl(358, 100%, 81%)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast] [data-close-button]{background:var(--normal-bg);border-color:var(--normal-border);color:var(--normal-text)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast] [data-close-button]:hover{background:var(--normal-bg-hover);border-color:var(--normal-border-hover)}[data-rich-colors=true][data-sonner-toast][data-type=success]{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text)}[data-rich-colors=true][data-sonner-toast][data-type=success] [data-close-button]{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text)}[data-rich-colors=true][data-sonner-toast][data-type=info]{background:var(--info-bg);border-color:var(--info-border);color:var(--info-text)}[data-rich-colors=true][data-sonner-toast][data-type=info] [data-close-button]{background:var(--info-bg);border-color:var(--info-border);color:var(--info-text)}[data-rich-colors=true][data-sonner-toast][data-type=warning]{background:var(--warning-bg);border-color:var(--warning-border);color:var(--warning-text)}[data-rich-colors=true][data-sonner-toast][data-type=warning] [data-close-button]{background:var(--warning-bg);border-color:var(--warning-border);color:var(--warning-text)}[data-rich-colors=true][data-sonner-toast][data-type=error]{background:var(--error-bg);border-color:var(--error-border);color:var(--error-text)}[data-rich-colors=true][data-sonner-toast][data-type=error] [data-close-button]{background:var(--error-bg);border-color:var(--error-border);color:var(--error-text)}.sonner-loading-wrapper{--size:16px;height:var(--size);width:var(--size);position:absolute;inset:0;z-index:10}.sonner-loading-wrapper[data-visible=false]{transform-origin:center;animation:sonner-fade-out .2s ease forwards}.sonner-spinner{position:relative;top:50%;left:50%;height:var(--size);width:var(--size)}.sonner-loading-bar{animation:sonner-spin 1.2s linear infinite;background:var(--gray11);border-radius:6px;height:8%;left:-10%;position:absolute;top:-3.9%;width:24%}.sonner-loading-bar:first-child{animation-delay:-1.2s;transform:rotate(.0001deg) translate(146%)}.sonner-loading-bar:nth-child(2){animation-delay:-1.1s;transform:rotate(30deg) translate(146%)}.sonner-loading-bar:nth-child(3){animation-delay:-1s;transform:rotate(60deg) translate(146%)}.sonner-loading-bar:nth-child(4){animation-delay:-.9s;transform:rotate(90deg) translate(146%)}.sonner-loading-bar:nth-child(5){animation-delay:-.8s;transform:rotate(120deg) translate(146%)}.sonner-loading-bar:nth-child(6){animation-delay:-.7s;transform:rotate(150deg) translate(146%)}.sonner-loading-bar:nth-child(7){animation-delay:-.6s;transform:rotate(180deg) translate(146%)}.sonner-loading-bar:nth-child(8){animation-delay:-.5s;transform:rotate(210deg) translate(146%)}.sonner-loading-bar:nth-child(9){animation-delay:-.4s;transform:rotate(240deg) translate(146%)}.sonner-loading-bar:nth-child(10){animation-delay:-.3s;transform:rotate(270deg) translate(146%)}.sonner-loading-bar:nth-child(11){animation-delay:-.2s;transform:rotate(300deg) translate(146%)}.sonner-loading-bar:nth-child(12){animation-delay:-.1s;transform:rotate(330deg) translate(146%)}@keyframes sonner-fade-in{0%{opacity:0;transform:scale(.8)}100%{opacity:1;transform:scale(1)}}@keyframes sonner-fade-out{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.8)}}@keyframes sonner-spin{0%{opacity:1}100%{opacity:.15}}@media (prefers-reduced-motion){.sonner-loading-bar,[data-sonner-toast],[data-sonner-toast]>*{transition:none!important;animation:none!important}}.sonner-loader{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);transform-origin:center;transition:opacity .2s,transform .2s}.sonner-loader[data-visible=false]{opacity:0;transform:scale(.8) translate(-50%,-50%)}");
+function isAction(action) {
+	return action.label !== void 0;
+}
+var VISIBLE_TOASTS_AMOUNT = 3;
+var VIEWPORT_OFFSET = "24px";
+var MOBILE_VIEWPORT_OFFSET = "16px";
+var TOAST_LIFETIME = 4e3;
+var TOAST_WIDTH = 356;
+var GAP = 14;
+var SWIPE_THRESHOLD = 45;
+var TIME_BEFORE_UNMOUNT = 200;
+function cn(...classes) {
+	return classes.filter(Boolean).join(" ");
+}
+function getDefaultSwipeDirections(position) {
+	const [y, x] = position.split("-");
+	const directions = [];
+	if (y) directions.push(y);
+	if (x) directions.push(x);
+	return directions;
+}
+var Toast$2 = (props) => {
+	var _toast_classNames, _toast_classNames1, _toast_classNames2, _toast_classNames3, _toast_classNames4, _toast_classNames5, _toast_classNames6, _toast_classNames7, _toast_classNames8;
+	const { invert: ToasterInvert, toast, unstyled, interacting, setHeights, visibleToasts, heights, index, toasts, expanded, removeToast, defaultRichColors, closeButton: closeButtonFromToaster, style, cancelButtonStyle, actionButtonStyle, className = "", descriptionClassName = "", duration: durationFromToaster, position, gap, expandByDefault, classNames, icons, closeButtonAriaLabel = "Close toast" } = props;
+	const [swipeDirection, setSwipeDirection] = import_react.useState(null);
+	const [swipeOutDirection, setSwipeOutDirection] = import_react.useState(null);
+	const [mounted, setMounted] = import_react.useState(false);
+	const [removed, setRemoved] = import_react.useState(false);
+	const [swiping, setSwiping] = import_react.useState(false);
+	const [swipeOut, setSwipeOut] = import_react.useState(false);
+	const [isSwiped, setIsSwiped] = import_react.useState(false);
+	const [offsetBeforeRemove, setOffsetBeforeRemove] = import_react.useState(0);
+	const [initialHeight, setInitialHeight] = import_react.useState(0);
+	const remainingTime = import_react.useRef(toast.duration || durationFromToaster || TOAST_LIFETIME);
+	const dragStartTime = import_react.useRef(null);
+	const toastRef = import_react.useRef(null);
+	const isFront = index === 0;
+	const isVisible = index + 1 <= visibleToasts;
+	const toastType = toast.type;
+	const dismissible = toast.dismissible !== false;
+	const toastClassname = toast.className || "";
+	const toastDescriptionClassname = toast.descriptionClassName || "";
+	const heightIndex = import_react.useMemo(() => heights.findIndex((height) => height.toastId === toast.id) || 0, [heights, toast.id]);
+	const closeButton = import_react.useMemo(() => {
+		var _toast_closeButton;
+		return (_toast_closeButton = toast.closeButton) != null ? _toast_closeButton : closeButtonFromToaster;
+	}, [toast.closeButton, closeButtonFromToaster]);
+	const duration = import_react.useMemo(() => toast.duration || durationFromToaster || TOAST_LIFETIME, [toast.duration, durationFromToaster]);
+	const closeTimerStartTimeRef = import_react.useRef(0);
+	const offset = import_react.useRef(0);
+	const lastCloseTimerStartTimeRef = import_react.useRef(0);
+	const pointerStartRef = import_react.useRef(null);
+	const [y, x] = position.split("-");
+	const toastsHeightBefore = import_react.useMemo(() => {
+		return heights.reduce((prev, curr, reducerIndex) => {
+			if (reducerIndex >= heightIndex) return prev;
+			return prev + curr.height;
+		}, 0);
+	}, [heights, heightIndex]);
+	const isDocumentHidden = useIsDocumentHidden();
+	const invert = toast.invert || ToasterInvert;
+	const disabled = toastType === "loading";
+	offset.current = import_react.useMemo(() => heightIndex * gap + toastsHeightBefore, [heightIndex, toastsHeightBefore]);
+	import_react.useEffect(() => {
+		remainingTime.current = duration;
+	}, [duration]);
+	import_react.useEffect(() => {
+		setMounted(true);
+	}, []);
+	import_react.useEffect(() => {
+		const toastNode = toastRef.current;
+		if (toastNode) {
+			const height = toastNode.getBoundingClientRect().height;
+			setInitialHeight(height);
+			setHeights((h) => [{
+				toastId: toast.id,
+				height,
+				position: toast.position
+			}, ...h]);
+			return () => setHeights((h) => h.filter((height) => height.toastId !== toast.id));
+		}
+	}, [setHeights, toast.id]);
+	import_react.useLayoutEffect(() => {
+		if (!mounted) return;
+		const toastNode = toastRef.current;
+		const originalHeight = toastNode.style.height;
+		toastNode.style.height = "auto";
+		const newHeight = toastNode.getBoundingClientRect().height;
+		toastNode.style.height = originalHeight;
+		setInitialHeight(newHeight);
+		setHeights((heights) => {
+			if (!heights.find((height) => height.toastId === toast.id)) return [{
+				toastId: toast.id,
+				height: newHeight,
+				position: toast.position
+			}, ...heights];
+			else return heights.map((height) => height.toastId === toast.id ? {
+				...height,
+				height: newHeight
+			} : height);
+		});
+	}, [
+		mounted,
+		toast.title,
+		toast.description,
+		setHeights,
+		toast.id,
+		toast.jsx,
+		toast.action,
+		toast.cancel
+	]);
+	const deleteToast = import_react.useCallback(() => {
+		setRemoved(true);
+		setOffsetBeforeRemove(offset.current);
+		setHeights((h) => h.filter((height) => height.toastId !== toast.id));
+		setTimeout(() => {
+			removeToast(toast);
+		}, TIME_BEFORE_UNMOUNT);
+	}, [
+		toast,
+		removeToast,
+		setHeights,
+		offset
+	]);
+	import_react.useEffect(() => {
+		if (toast.promise && toastType === "loading" || toast.duration === Infinity || toast.type === "loading") return;
+		let timeoutId;
+		const pauseTimer = () => {
+			if (lastCloseTimerStartTimeRef.current < closeTimerStartTimeRef.current) {
+				const elapsedTime = (/* @__PURE__ */ new Date()).getTime() - closeTimerStartTimeRef.current;
+				remainingTime.current = remainingTime.current - elapsedTime;
+			}
+			lastCloseTimerStartTimeRef.current = (/* @__PURE__ */ new Date()).getTime();
+		};
+		const startTimer = () => {
+			if (remainingTime.current === Infinity) return;
+			closeTimerStartTimeRef.current = (/* @__PURE__ */ new Date()).getTime();
+			timeoutId = setTimeout(() => {
+				toast.onAutoClose == null || toast.onAutoClose.call(toast, toast);
+				deleteToast();
+			}, remainingTime.current);
+		};
+		if (expanded || interacting || isDocumentHidden) pauseTimer();
+		else startTimer();
+		return () => clearTimeout(timeoutId);
+	}, [
+		expanded,
+		interacting,
+		toast,
+		toastType,
+		isDocumentHidden,
+		deleteToast
+	]);
+	import_react.useEffect(() => {
+		if (toast.delete) {
+			deleteToast();
+			toast.onDismiss == null || toast.onDismiss.call(toast, toast);
+		}
+	}, [deleteToast, toast.delete]);
+	function getLoadingIcon() {
+		var _toast_classNames;
+		if (icons == null ? void 0 : icons.loading) {
+			var _toast_classNames1;
+			return /* @__PURE__ */ import_react.createElement("div", {
+				className: cn(classNames == null ? void 0 : classNames.loader, toast == null ? void 0 : (_toast_classNames1 = toast.classNames) == null ? void 0 : _toast_classNames1.loader, "sonner-loader"),
+				"data-visible": toastType === "loading"
+			}, icons.loading);
+		}
+		return /* @__PURE__ */ import_react.createElement(Loader, {
+			className: cn(classNames == null ? void 0 : classNames.loader, toast == null ? void 0 : (_toast_classNames = toast.classNames) == null ? void 0 : _toast_classNames.loader),
+			visible: toastType === "loading"
+		});
+	}
+	const icon = toast.icon || (icons == null ? void 0 : icons[toastType]) || getAsset(toastType);
+	var _toast_richColors, _icons_close;
+	return /* @__PURE__ */ import_react.createElement("li", {
+		tabIndex: 0,
+		ref: toastRef,
+		className: cn(className, toastClassname, classNames == null ? void 0 : classNames.toast, toast == null ? void 0 : (_toast_classNames = toast.classNames) == null ? void 0 : _toast_classNames.toast, classNames == null ? void 0 : classNames.default, classNames == null ? void 0 : classNames[toastType], toast == null ? void 0 : (_toast_classNames1 = toast.classNames) == null ? void 0 : _toast_classNames1[toastType]),
+		"data-sonner-toast": "",
+		"data-rich-colors": (_toast_richColors = toast.richColors) != null ? _toast_richColors : defaultRichColors,
+		"data-styled": !Boolean(toast.jsx || toast.unstyled || unstyled),
+		"data-mounted": mounted,
+		"data-promise": Boolean(toast.promise),
+		"data-swiped": isSwiped,
+		"data-removed": removed,
+		"data-visible": isVisible,
+		"data-y-position": y,
+		"data-x-position": x,
+		"data-index": index,
+		"data-front": isFront,
+		"data-swiping": swiping,
+		"data-dismissible": dismissible,
+		"data-type": toastType,
+		"data-invert": invert,
+		"data-swipe-out": swipeOut,
+		"data-swipe-direction": swipeOutDirection,
+		"data-expanded": Boolean(expanded || expandByDefault && mounted),
+		"data-testid": toast.testId,
+		style: {
+			"--index": index,
+			"--toasts-before": index,
+			"--z-index": toasts.length - index,
+			"--offset": `${removed ? offsetBeforeRemove : offset.current}px`,
+			"--initial-height": expandByDefault ? "auto" : `${initialHeight}px`,
+			...style,
+			...toast.style
+		},
+		onDragEnd: () => {
+			setSwiping(false);
+			setSwipeDirection(null);
+			pointerStartRef.current = null;
+		},
+		onPointerDown: (event) => {
+			if (event.button === 2) return;
+			if (disabled || !dismissible) return;
+			dragStartTime.current = /* @__PURE__ */ new Date();
+			setOffsetBeforeRemove(offset.current);
+			event.target.setPointerCapture(event.pointerId);
+			if (event.target.tagName === "BUTTON") return;
+			setSwiping(true);
+			pointerStartRef.current = {
+				x: event.clientX,
+				y: event.clientY
+			};
+		},
+		onPointerUp: () => {
+			var _toastRef_current, _toastRef_current1, _dragStartTime_current;
+			if (swipeOut || !dismissible) return;
+			pointerStartRef.current = null;
+			const swipeAmountX = Number(((_toastRef_current = toastRef.current) == null ? void 0 : _toastRef_current.style.getPropertyValue("--swipe-amount-x").replace("px", "")) || 0);
+			const swipeAmountY = Number(((_toastRef_current1 = toastRef.current) == null ? void 0 : _toastRef_current1.style.getPropertyValue("--swipe-amount-y").replace("px", "")) || 0);
+			const timeTaken = (/* @__PURE__ */ new Date()).getTime() - ((_dragStartTime_current = dragStartTime.current) == null ? void 0 : _dragStartTime_current.getTime());
+			const swipeAmount = swipeDirection === "x" ? swipeAmountX : swipeAmountY;
+			const velocity = Math.abs(swipeAmount) / timeTaken;
+			if (Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > .11) {
+				setOffsetBeforeRemove(offset.current);
+				toast.onDismiss == null || toast.onDismiss.call(toast, toast);
+				if (swipeDirection === "x") setSwipeOutDirection(swipeAmountX > 0 ? "right" : "left");
+				else setSwipeOutDirection(swipeAmountY > 0 ? "down" : "up");
+				deleteToast();
+				setSwipeOut(true);
+				return;
+			} else {
+				var _toastRef_current2, _toastRef_current3;
+				(_toastRef_current2 = toastRef.current) == null || _toastRef_current2.style.setProperty("--swipe-amount-x", `0px`);
+				(_toastRef_current3 = toastRef.current) == null || _toastRef_current3.style.setProperty("--swipe-amount-y", `0px`);
+			}
+			setIsSwiped(false);
+			setSwiping(false);
+			setSwipeDirection(null);
+		},
+		onPointerMove: (event) => {
+			var _window_getSelection, _toastRef_current, _toastRef_current1;
+			if (!pointerStartRef.current || !dismissible) return;
+			if (((_window_getSelection = window.getSelection()) == null ? void 0 : _window_getSelection.toString().length) > 0) return;
+			const yDelta = event.clientY - pointerStartRef.current.y;
+			const xDelta = event.clientX - pointerStartRef.current.x;
+			var _props_swipeDirections;
+			const swipeDirections = (_props_swipeDirections = props.swipeDirections) != null ? _props_swipeDirections : getDefaultSwipeDirections(position);
+			if (!swipeDirection && (Math.abs(xDelta) > 1 || Math.abs(yDelta) > 1)) setSwipeDirection(Math.abs(xDelta) > Math.abs(yDelta) ? "x" : "y");
+			let swipeAmount = {
+				x: 0,
+				y: 0
+			};
+			const getDampening = (delta) => {
+				return 1 / (1.5 + Math.abs(delta) / 20);
+			};
+			if (swipeDirection === "y") {
+				if (swipeDirections.includes("top") || swipeDirections.includes("bottom")) if (swipeDirections.includes("top") && yDelta < 0 || swipeDirections.includes("bottom") && yDelta > 0) swipeAmount.y = yDelta;
+				else {
+					const dampenedDelta = yDelta * getDampening(yDelta);
+					swipeAmount.y = Math.abs(dampenedDelta) < Math.abs(yDelta) ? dampenedDelta : yDelta;
+				}
+			} else if (swipeDirection === "x") {
+				if (swipeDirections.includes("left") || swipeDirections.includes("right")) if (swipeDirections.includes("left") && xDelta < 0 || swipeDirections.includes("right") && xDelta > 0) swipeAmount.x = xDelta;
+				else {
+					const dampenedDelta = xDelta * getDampening(xDelta);
+					swipeAmount.x = Math.abs(dampenedDelta) < Math.abs(xDelta) ? dampenedDelta : xDelta;
+				}
+			}
+			if (Math.abs(swipeAmount.x) > 0 || Math.abs(swipeAmount.y) > 0) setIsSwiped(true);
+			(_toastRef_current = toastRef.current) == null || _toastRef_current.style.setProperty("--swipe-amount-x", `${swipeAmount.x}px`);
+			(_toastRef_current1 = toastRef.current) == null || _toastRef_current1.style.setProperty("--swipe-amount-y", `${swipeAmount.y}px`);
+		}
+	}, closeButton && !toast.jsx && toastType !== "loading" ? /* @__PURE__ */ import_react.createElement("button", {
+		"aria-label": closeButtonAriaLabel,
+		"data-disabled": disabled,
+		"data-close-button": true,
+		onClick: disabled || !dismissible ? () => {} : () => {
+			deleteToast();
+			toast.onDismiss == null || toast.onDismiss.call(toast, toast);
+		},
+		className: cn(classNames == null ? void 0 : classNames.closeButton, toast == null ? void 0 : (_toast_classNames2 = toast.classNames) == null ? void 0 : _toast_classNames2.closeButton)
+	}, (_icons_close = icons == null ? void 0 : icons.close) != null ? _icons_close : CloseIcon) : null, (toastType || toast.icon || toast.promise) && toast.icon !== null && ((icons == null ? void 0 : icons[toastType]) !== null || toast.icon) ? /* @__PURE__ */ import_react.createElement("div", {
+		"data-icon": "",
+		className: cn(classNames == null ? void 0 : classNames.icon, toast == null ? void 0 : (_toast_classNames3 = toast.classNames) == null ? void 0 : _toast_classNames3.icon)
+	}, toast.promise || toast.type === "loading" && !toast.icon ? toast.icon || getLoadingIcon() : null, toast.type !== "loading" ? icon : null) : null, /* @__PURE__ */ import_react.createElement("div", {
+		"data-content": "",
+		className: cn(classNames == null ? void 0 : classNames.content, toast == null ? void 0 : (_toast_classNames4 = toast.classNames) == null ? void 0 : _toast_classNames4.content)
+	}, /* @__PURE__ */ import_react.createElement("div", {
+		"data-title": "",
+		className: cn(classNames == null ? void 0 : classNames.title, toast == null ? void 0 : (_toast_classNames5 = toast.classNames) == null ? void 0 : _toast_classNames5.title)
+	}, toast.jsx ? toast.jsx : typeof toast.title === "function" ? toast.title() : toast.title), toast.description ? /* @__PURE__ */ import_react.createElement("div", {
+		"data-description": "",
+		className: cn(descriptionClassName, toastDescriptionClassname, classNames == null ? void 0 : classNames.description, toast == null ? void 0 : (_toast_classNames6 = toast.classNames) == null ? void 0 : _toast_classNames6.description)
+	}, typeof toast.description === "function" ? toast.description() : toast.description) : null), /* @__PURE__ */ import_react.isValidElement(toast.cancel) ? toast.cancel : toast.cancel && isAction(toast.cancel) ? /* @__PURE__ */ import_react.createElement("button", {
+		"data-button": true,
+		"data-cancel": true,
+		style: toast.cancelButtonStyle || cancelButtonStyle,
+		onClick: (event) => {
+			if (!isAction(toast.cancel)) return;
+			if (!dismissible) return;
+			toast.cancel.onClick == null || toast.cancel.onClick.call(toast.cancel, event);
+			deleteToast();
+		},
+		className: cn(classNames == null ? void 0 : classNames.cancelButton, toast == null ? void 0 : (_toast_classNames7 = toast.classNames) == null ? void 0 : _toast_classNames7.cancelButton)
+	}, toast.cancel.label) : null, /* @__PURE__ */ import_react.isValidElement(toast.action) ? toast.action : toast.action && isAction(toast.action) ? /* @__PURE__ */ import_react.createElement("button", {
+		"data-button": true,
+		"data-action": true,
+		style: toast.actionButtonStyle || actionButtonStyle,
+		onClick: (event) => {
+			if (!isAction(toast.action)) return;
+			toast.action.onClick == null || toast.action.onClick.call(toast.action, event);
+			if (event.defaultPrevented) return;
+			deleteToast();
+		},
+		className: cn(classNames == null ? void 0 : classNames.actionButton, toast == null ? void 0 : (_toast_classNames8 = toast.classNames) == null ? void 0 : _toast_classNames8.actionButton)
+	}, toast.action.label) : null);
+};
+function getDocumentDirection() {
+	if (typeof window === "undefined") return "ltr";
+	if (typeof document === "undefined") return "ltr";
+	const dirAttribute = document.documentElement.getAttribute("dir");
+	if (dirAttribute === "auto" || !dirAttribute) return window.getComputedStyle(document.documentElement).direction;
+	return dirAttribute;
+}
+function assignOffset(defaultOffset, mobileOffset) {
+	const styles = {};
+	[defaultOffset, mobileOffset].forEach((offset, index) => {
+		const isMobile = index === 1;
+		const prefix = isMobile ? "--mobile-offset" : "--offset";
+		const defaultValue = isMobile ? MOBILE_VIEWPORT_OFFSET : VIEWPORT_OFFSET;
+		function assignAll(offset) {
+			[
+				"top",
+				"right",
+				"bottom",
+				"left"
+			].forEach((key) => {
+				styles[`${prefix}-${key}`] = typeof offset === "number" ? `${offset}px` : offset;
+			});
+		}
+		if (typeof offset === "number" || typeof offset === "string") assignAll(offset);
+		else if (typeof offset === "object") [
+			"top",
+			"right",
+			"bottom",
+			"left"
+		].forEach((key) => {
+			if (offset[key] === void 0) styles[`${prefix}-${key}`] = defaultValue;
+			else styles[`${prefix}-${key}`] = typeof offset[key] === "number" ? `${offset[key]}px` : offset[key];
+		});
+		else assignAll(defaultValue);
+	});
+	return styles;
+}
+var Toaster$2 = /* @__PURE__ */ import_react.forwardRef(function Toaster(props, ref) {
+	const { id, invert, position = "bottom-right", hotkey = ["altKey", "KeyT"], expand, closeButton, className, offset, mobileOffset, theme = "light", richColors, duration, style, visibleToasts = VISIBLE_TOASTS_AMOUNT, toastOptions, dir = getDocumentDirection(), gap = GAP, icons, containerAriaLabel = "Notifications" } = props;
+	const [toasts, setToasts] = import_react.useState([]);
+	const filteredToasts = import_react.useMemo(() => {
+		if (id) return toasts.filter((toast) => toast.toasterId === id);
+		return toasts.filter((toast) => !toast.toasterId);
+	}, [toasts, id]);
+	const possiblePositions = import_react.useMemo(() => {
+		return Array.from(new Set([position].concat(filteredToasts.filter((toast) => toast.position).map((toast) => toast.position))));
+	}, [filteredToasts, position]);
+	const [heights, setHeights] = import_react.useState([]);
+	const [expanded, setExpanded] = import_react.useState(false);
+	const [interacting, setInteracting] = import_react.useState(false);
+	const [actualTheme, setActualTheme] = import_react.useState(theme !== "system" ? theme : typeof window !== "undefined" ? window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light" : "light");
+	const listRef = import_react.useRef(null);
+	const hotkeyLabel = hotkey.join("+").replace(/Key/g, "").replace(/Digit/g, "");
+	const lastFocusedElementRef = import_react.useRef(null);
+	const isFocusWithinRef = import_react.useRef(false);
+	const removeToast = import_react.useCallback((toastToRemove) => {
+		setToasts((toasts) => {
+			var _toasts_find;
+			if (!((_toasts_find = toasts.find((toast) => toast.id === toastToRemove.id)) == null ? void 0 : _toasts_find.delete)) ToastState.dismiss(toastToRemove.id);
+			return toasts.filter(({ id }) => id !== toastToRemove.id);
+		});
+	}, []);
+	import_react.useEffect(() => {
+		return ToastState.subscribe((toast) => {
+			if (toast.dismiss) {
+				requestAnimationFrame(() => {
+					setToasts((toasts) => toasts.map((t) => t.id === toast.id ? {
+						...t,
+						delete: true
+					} : t));
+				});
+				return;
+			}
+			setTimeout(() => {
+				import_react_dom.flushSync(() => {
+					setToasts((toasts) => {
+						const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
+						if (indexOfExistingToast !== -1) return [
+							...toasts.slice(0, indexOfExistingToast),
+							{
+								...toasts[indexOfExistingToast],
+								...toast
+							},
+							...toasts.slice(indexOfExistingToast + 1)
+						];
+						return [toast, ...toasts];
+					});
+				});
+			});
+		});
+	}, [toasts]);
+	import_react.useEffect(() => {
+		if (theme !== "system") {
+			setActualTheme(theme);
+			return;
+		}
+		if (theme === "system") if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) setActualTheme("dark");
+		else setActualTheme("light");
+		if (typeof window === "undefined") return;
+		const darkMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+		try {
+			darkMediaQuery.addEventListener("change", ({ matches }) => {
+				if (matches) setActualTheme("dark");
+				else setActualTheme("light");
+			});
+		} catch (error) {
+			darkMediaQuery.addListener(({ matches }) => {
+				try {
+					if (matches) setActualTheme("dark");
+					else setActualTheme("light");
+				} catch (e) {
+					console.error(e);
+				}
+			});
+		}
+	}, [theme]);
+	import_react.useEffect(() => {
+		if (toasts.length <= 1) setExpanded(false);
+	}, [toasts]);
+	import_react.useEffect(() => {
+		const handleKeyDown = (event) => {
+			var _listRef_current;
+			if (hotkey.every((key) => event[key] || event.code === key)) {
+				var _listRef_current1;
+				setExpanded(true);
+				(_listRef_current1 = listRef.current) == null || _listRef_current1.focus();
+			}
+			if (event.code === "Escape" && (document.activeElement === listRef.current || ((_listRef_current = listRef.current) == null ? void 0 : _listRef_current.contains(document.activeElement)))) setExpanded(false);
+		};
+		document.addEventListener("keydown", handleKeyDown);
+		return () => document.removeEventListener("keydown", handleKeyDown);
+	}, [hotkey]);
+	import_react.useEffect(() => {
+		if (listRef.current) return () => {
+			if (lastFocusedElementRef.current) {
+				lastFocusedElementRef.current.focus({ preventScroll: true });
+				lastFocusedElementRef.current = null;
+				isFocusWithinRef.current = false;
+			}
+		};
+	}, [listRef.current]);
+	return /* @__PURE__ */ import_react.createElement("section", {
+		ref,
+		"aria-label": `${containerAriaLabel} ${hotkeyLabel}`,
+		tabIndex: -1,
+		"aria-live": "polite",
+		"aria-relevant": "additions text",
+		"aria-atomic": "false",
+		suppressHydrationWarning: true
+	}, possiblePositions.map((position, index) => {
+		var _heights_;
+		const [y, x] = position.split("-");
+		if (!filteredToasts.length) return null;
+		return /* @__PURE__ */ import_react.createElement("ol", {
+			key: position,
+			dir: dir === "auto" ? getDocumentDirection() : dir,
+			tabIndex: -1,
+			ref: listRef,
+			className,
+			"data-sonner-toaster": true,
+			"data-sonner-theme": actualTheme,
+			"data-y-position": y,
+			"data-x-position": x,
+			style: {
+				"--front-toast-height": `${((_heights_ = heights[0]) == null ? void 0 : _heights_.height) || 0}px`,
+				"--width": `${TOAST_WIDTH}px`,
+				"--gap": `${gap}px`,
+				...style,
+				...assignOffset(offset, mobileOffset)
+			},
+			onBlur: (event) => {
+				if (isFocusWithinRef.current && !event.currentTarget.contains(event.relatedTarget)) {
+					isFocusWithinRef.current = false;
+					if (lastFocusedElementRef.current) {
+						lastFocusedElementRef.current.focus({ preventScroll: true });
+						lastFocusedElementRef.current = null;
+					}
+				}
+			},
+			onFocus: (event) => {
+				if (event.target instanceof HTMLElement && event.target.dataset.dismissible === "false") return;
+				if (!isFocusWithinRef.current) {
+					isFocusWithinRef.current = true;
+					lastFocusedElementRef.current = event.relatedTarget;
+				}
+			},
+			onMouseEnter: () => setExpanded(true),
+			onMouseMove: () => setExpanded(true),
+			onMouseLeave: () => {
+				if (!interacting) setExpanded(false);
+			},
+			onDragEnd: () => setExpanded(false),
+			onPointerDown: (event) => {
+				if (event.target instanceof HTMLElement && event.target.dataset.dismissible === "false") return;
+				setInteracting(true);
+			},
+			onPointerUp: () => setInteracting(false)
+		}, filteredToasts.filter((toast) => !toast.position && index === 0 || toast.position === position).map((toast, index) => {
+			var _toastOptions_duration, _toastOptions_closeButton;
+			return /* @__PURE__ */ import_react.createElement(Toast$2, {
+				key: toast.id,
+				icons,
+				index,
+				toast,
+				defaultRichColors: richColors,
+				duration: (_toastOptions_duration = toastOptions == null ? void 0 : toastOptions.duration) != null ? _toastOptions_duration : duration,
+				className: toastOptions == null ? void 0 : toastOptions.className,
+				descriptionClassName: toastOptions == null ? void 0 : toastOptions.descriptionClassName,
+				invert,
+				visibleToasts,
+				closeButton: (_toastOptions_closeButton = toastOptions == null ? void 0 : toastOptions.closeButton) != null ? _toastOptions_closeButton : closeButton,
+				interacting,
+				position,
+				style: toastOptions == null ? void 0 : toastOptions.style,
+				unstyled: toastOptions == null ? void 0 : toastOptions.unstyled,
+				classNames: toastOptions == null ? void 0 : toastOptions.classNames,
+				cancelButtonStyle: toastOptions == null ? void 0 : toastOptions.cancelButtonStyle,
+				actionButtonStyle: toastOptions == null ? void 0 : toastOptions.actionButtonStyle,
+				closeButtonAriaLabel: toastOptions == null ? void 0 : toastOptions.closeButtonAriaLabel,
+				removeToast,
+				toasts: filteredToasts.filter((t) => t.position == toast.position),
+				heights: heights.filter((h) => h.position == toast.position),
+				setHeights,
+				expandByDefault: expand,
+				gap,
+				expanded,
+				swipeDirections: props.swipeDirections
+			});
+		}));
+	}));
+});
+//#endregion
 //#region src/pages/Login.tsx
 function Login() {
+	const navigate = useNavigate();
+	const { login } = useApp();
+	const [isLoading, setIsLoading] = (0, import_react.useState)(false);
+	const [email, setEmail] = (0, import_react.useState)("");
+	const [password, setPassword] = (0, import_react.useState)("");
+	const handleLogin = async (e) => {
+		e.preventDefault();
+		setIsLoading(true);
+		try {
+			await login(email, password);
+			toast$1.success("Login realizado com sucesso!");
+			navigate("/");
+		} catch (error) {
+			toast$1.error(error.message || "Falha no login.");
+		} finally {
+			setIsLoading(false);
+		}
+	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		"data-uid": "src/pages/Login.tsx:17:5",
-		"data-prohibitions": "[]",
+		"data-uid": "src/pages/Login.tsx:41:5",
+		"data-prohibitions": "[editContent]",
 		className: "flex min-h-[80vh] items-center justify-center py-12 px-4",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-			"data-uid": "src/pages/Login.tsx:18:7",
-			"data-prohibitions": "[]",
+			"data-uid": "src/pages/Login.tsx:42:7",
+			"data-prohibitions": "[editContent]",
 			className: "w-full max-w-md mx-auto shadow-lg border-primary/10",
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-					"data-uid": "src/pages/Login.tsx:19:9",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+				"data-uid": "src/pages/Login.tsx:43:9",
+				"data-prohibitions": "[]",
+				className: "space-y-4 flex flex-col items-center text-center pt-8",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+					"data-uid": "src/pages/Login.tsx:44:11",
 					"data-prohibitions": "[]",
-					className: "space-y-4 flex flex-col items-center text-center pt-8",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-						"data-uid": "src/pages/Login.tsx:20:11",
+					to: "/",
+					className: "transition-transform hover:scale-105",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+						"data-uid": "src/pages/Login.tsx:45:13",
+						"data-prohibitions": "[editContent]",
+						src: e_eventos_novo_62817_default,
+						alt: "e-eventos",
+						className: "h-24 w-24 rounded-[1.5rem] object-contain shadow-md bg-white/5 p-2 border border-white/10"
+					})
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					"data-uid": "src/pages/Login.tsx:51:11",
+					"data-prohibitions": "[]",
+					className: "space-y-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+						"data-uid": "src/pages/Login.tsx:52:13",
 						"data-prohibitions": "[]",
-						to: "/",
-						className: "transition-transform hover:scale-105",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-							"data-uid": "src/pages/Login.tsx:21:13",
-							"data-prohibitions": "[editContent]",
-							src: e_eventos_novo_62817_default,
-							alt: "e-eventos",
-							className: "h-24 w-24 rounded-[1.5rem] object-contain shadow-md bg-white/5 p-2 border border-white/10"
-						})
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/Login.tsx:27:11",
+						className: "text-2xl font-extrabold tracking-tight",
+						children: "Bem-vindo ao e-eventos"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
+						"data-uid": "src/pages/Login.tsx:55:13",
 						"data-prohibitions": "[]",
-						className: "space-y-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-							"data-uid": "src/pages/Login.tsx:28:13",
-							"data-prohibitions": "[]",
-							className: "text-2xl font-extrabold tracking-tight",
-							children: "Bem-vindo ao e-eventos"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-							"data-uid": "src/pages/Login.tsx:31:13",
-							"data-prohibitions": "[]",
-							className: "text-base",
-							children: "Faça login na sua conta para continuar"
-						})]
+						className: "text-base",
+						children: "Faça login na sua conta para continuar"
 					})]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-					"data-uid": "src/pages/Login.tsx:36:9",
+				})]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+				"data-uid": "src/pages/Login.tsx:60:9",
+				"data-prohibitions": "[editContent]",
+				onSubmit: handleLogin,
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+					"data-uid": "src/pages/Login.tsx:61:11",
 					"data-prohibitions": "[]",
 					className: "space-y-4",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/Login.tsx:37:11",
+						"data-uid": "src/pages/Login.tsx:62:13",
 						"data-prohibitions": "[]",
 						className: "space-y-2",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-							"data-uid": "src/pages/Login.tsx:38:13",
+							"data-uid": "src/pages/Login.tsx:63:15",
 							"data-prohibitions": "[]",
 							htmlFor: "email",
 							children: "Email"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-							"data-uid": "src/pages/Login.tsx:39:13",
+							"data-uid": "src/pages/Login.tsx:64:15",
 							"data-prohibitions": "[editContent]",
 							id: "email",
 							type: "email",
 							placeholder: "m@exemplo.com",
 							required: true,
-							className: "h-11"
+							className: "h-11",
+							value: email,
+							onChange: (e) => setEmail(e.target.value),
+							disabled: isLoading
 						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/Login.tsx:41:11",
+						"data-uid": "src/pages/Login.tsx:75:13",
 						"data-prohibitions": "[]",
 						className: "space-y-2",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/Login.tsx:42:13",
+							"data-uid": "src/pages/Login.tsx:76:15",
 							"data-prohibitions": "[]",
 							className: "flex items-center justify-between",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-								"data-uid": "src/pages/Login.tsx:43:15",
+								"data-uid": "src/pages/Login.tsx:77:17",
 								"data-prohibitions": "[]",
 								htmlFor: "password",
 								children: "Senha"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-								"data-uid": "src/pages/Login.tsx:44:15",
+								"data-uid": "src/pages/Login.tsx:78:17",
 								"data-prohibitions": "[]",
 								to: "#",
 								className: "text-sm font-medium text-primary hover:underline",
 								children: "Esqueceu a senha?"
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-							"data-uid": "src/pages/Login.tsx:48:13",
+							"data-uid": "src/pages/Login.tsx:82:15",
 							"data-prohibitions": "[editContent]",
 							id: "password",
 							type: "password",
 							required: true,
-							className: "h-11"
+							className: "h-11",
+							value: password,
+							onChange: (e) => setPassword(e.target.value),
+							disabled: isLoading
 						})]
 					})]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardFooter, {
-					"data-uid": "src/pages/Login.tsx:51:9",
-					"data-prohibitions": "[]",
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardFooter, {
+					"data-uid": "src/pages/Login.tsx:93:11",
+					"data-prohibitions": "[editContent]",
 					className: "flex flex-col space-y-4 pb-8",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-						"data-uid": "src/pages/Login.tsx:52:11",
-						"data-prohibitions": "[]",
+						"data-uid": "src/pages/Login.tsx:94:13",
+						"data-prohibitions": "[editContent]",
+						type: "submit",
 						className: "w-full h-11 text-md",
-						children: "Entrar"
+						disabled: isLoading,
+						children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, {
+							"data-uid": "src/pages/Login.tsx:97:19",
+							"data-prohibitions": "[editContent]",
+							className: "mr-2 h-4 w-4 animate-spin"
+						}), "Entrando..."] }) : "Entrar"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/Login.tsx:53:11",
+						"data-uid": "src/pages/Login.tsx:104:13",
 						"data-prohibitions": "[]",
 						className: "text-sm text-center text-muted-foreground",
 						children: [
 							"Não tem uma conta?",
 							" ",
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-								"data-uid": "src/pages/Login.tsx:55:13",
+								"data-uid": "src/pages/Login.tsx:106:15",
 								"data-prohibitions": "[]",
 								to: "/register",
 								className: "font-semibold text-primary hover:underline",
@@ -22723,8 +23868,8 @@ function Login() {
 							})
 						]
 					})]
-				})
-			]
+				})]
+			})]
 		})
 	});
 }
@@ -28739,1026 +29884,16 @@ var RadioGroupItem = import_react.forwardRef(({ className, ...props }, ref) => {
 });
 RadioGroupItem.displayName = Item2.displayName;
 //#endregion
-//#region ../../cache/modules/app-locadora-eventos-e881c/node_modules/.pnpm/sonner@2.0.7_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/sonner/dist/index.mjs
-function __insertCSS(code) {
-	if (!code || typeof document == "undefined") return;
-	let head = document.head || document.getElementsByTagName("head")[0];
-	let style = document.createElement("style");
-	style.type = "text/css";
-	head.appendChild(style);
-	style.styleSheet ? style.styleSheet.cssText = code : style.appendChild(document.createTextNode(code));
-}
-var getAsset = (type) => {
-	switch (type) {
-		case "success": return SuccessIcon;
-		case "info": return InfoIcon;
-		case "warning": return WarningIcon;
-		case "error": return ErrorIcon;
-		default: return null;
-	}
-};
-var bars = Array(12).fill(0);
-var Loader = ({ visible, className }) => {
-	return /* @__PURE__ */ import_react.createElement("div", {
-		className: ["sonner-loading-wrapper", className].filter(Boolean).join(" "),
-		"data-visible": visible
-	}, /* @__PURE__ */ import_react.createElement("div", { className: "sonner-spinner" }, bars.map((_, i) => /* @__PURE__ */ import_react.createElement("div", {
-		className: "sonner-loading-bar",
-		key: `spinner-bar-${i}`
-	}))));
-};
-var SuccessIcon = /* @__PURE__ */ import_react.createElement("svg", {
-	xmlns: "http://www.w3.org/2000/svg",
-	viewBox: "0 0 20 20",
-	fill: "currentColor",
-	height: "20",
-	width: "20"
-}, /* @__PURE__ */ import_react.createElement("path", {
-	fillRule: "evenodd",
-	d: "M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z",
-	clipRule: "evenodd"
-}));
-var WarningIcon = /* @__PURE__ */ import_react.createElement("svg", {
-	xmlns: "http://www.w3.org/2000/svg",
-	viewBox: "0 0 24 24",
-	fill: "currentColor",
-	height: "20",
-	width: "20"
-}, /* @__PURE__ */ import_react.createElement("path", {
-	fillRule: "evenodd",
-	d: "M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z",
-	clipRule: "evenodd"
-}));
-var InfoIcon = /* @__PURE__ */ import_react.createElement("svg", {
-	xmlns: "http://www.w3.org/2000/svg",
-	viewBox: "0 0 20 20",
-	fill: "currentColor",
-	height: "20",
-	width: "20"
-}, /* @__PURE__ */ import_react.createElement("path", {
-	fillRule: "evenodd",
-	d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z",
-	clipRule: "evenodd"
-}));
-var ErrorIcon = /* @__PURE__ */ import_react.createElement("svg", {
-	xmlns: "http://www.w3.org/2000/svg",
-	viewBox: "0 0 20 20",
-	fill: "currentColor",
-	height: "20",
-	width: "20"
-}, /* @__PURE__ */ import_react.createElement("path", {
-	fillRule: "evenodd",
-	d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z",
-	clipRule: "evenodd"
-}));
-var CloseIcon = /* @__PURE__ */ import_react.createElement("svg", {
-	xmlns: "http://www.w3.org/2000/svg",
-	width: "12",
-	height: "12",
-	viewBox: "0 0 24 24",
-	fill: "none",
-	stroke: "currentColor",
-	strokeWidth: "1.5",
-	strokeLinecap: "round",
-	strokeLinejoin: "round"
-}, /* @__PURE__ */ import_react.createElement("line", {
-	x1: "18",
-	y1: "6",
-	x2: "6",
-	y2: "18"
-}), /* @__PURE__ */ import_react.createElement("line", {
-	x1: "6",
-	y1: "6",
-	x2: "18",
-	y2: "18"
-}));
-var useIsDocumentHidden = () => {
-	const [isDocumentHidden, setIsDocumentHidden] = import_react.useState(document.hidden);
-	import_react.useEffect(() => {
-		const callback = () => {
-			setIsDocumentHidden(document.hidden);
-		};
-		document.addEventListener("visibilitychange", callback);
-		return () => window.removeEventListener("visibilitychange", callback);
-	}, []);
-	return isDocumentHidden;
-};
-var toastsCounter = 1;
-var Observer = class {
-	constructor() {
-		this.subscribe = (subscriber) => {
-			this.subscribers.push(subscriber);
-			return () => {
-				const index = this.subscribers.indexOf(subscriber);
-				this.subscribers.splice(index, 1);
-			};
-		};
-		this.publish = (data) => {
-			this.subscribers.forEach((subscriber) => subscriber(data));
-		};
-		this.addToast = (data) => {
-			this.publish(data);
-			this.toasts = [...this.toasts, data];
-		};
-		this.create = (data) => {
-			var _data_id;
-			const { message, ...rest } = data;
-			const id = typeof (data == null ? void 0 : data.id) === "number" || ((_data_id = data.id) == null ? void 0 : _data_id.length) > 0 ? data.id : toastsCounter++;
-			const alreadyExists = this.toasts.find((toast) => {
-				return toast.id === id;
-			});
-			const dismissible = data.dismissible === void 0 ? true : data.dismissible;
-			if (this.dismissedToasts.has(id)) this.dismissedToasts.delete(id);
-			if (alreadyExists) this.toasts = this.toasts.map((toast) => {
-				if (toast.id === id) {
-					this.publish({
-						...toast,
-						...data,
-						id,
-						title: message
-					});
-					return {
-						...toast,
-						...data,
-						id,
-						dismissible,
-						title: message
-					};
-				}
-				return toast;
-			});
-			else this.addToast({
-				title: message,
-				...rest,
-				dismissible,
-				id
-			});
-			return id;
-		};
-		this.dismiss = (id) => {
-			if (id) {
-				this.dismissedToasts.add(id);
-				requestAnimationFrame(() => this.subscribers.forEach((subscriber) => subscriber({
-					id,
-					dismiss: true
-				})));
-			} else this.toasts.forEach((toast) => {
-				this.subscribers.forEach((subscriber) => subscriber({
-					id: toast.id,
-					dismiss: true
-				}));
-			});
-			return id;
-		};
-		this.message = (message, data) => {
-			return this.create({
-				...data,
-				message
-			});
-		};
-		this.error = (message, data) => {
-			return this.create({
-				...data,
-				message,
-				type: "error"
-			});
-		};
-		this.success = (message, data) => {
-			return this.create({
-				...data,
-				type: "success",
-				message
-			});
-		};
-		this.info = (message, data) => {
-			return this.create({
-				...data,
-				type: "info",
-				message
-			});
-		};
-		this.warning = (message, data) => {
-			return this.create({
-				...data,
-				type: "warning",
-				message
-			});
-		};
-		this.loading = (message, data) => {
-			return this.create({
-				...data,
-				type: "loading",
-				message
-			});
-		};
-		this.promise = (promise, data) => {
-			if (!data) return;
-			let id = void 0;
-			if (data.loading !== void 0) id = this.create({
-				...data,
-				promise,
-				type: "loading",
-				message: data.loading,
-				description: typeof data.description !== "function" ? data.description : void 0
-			});
-			const p = Promise.resolve(promise instanceof Function ? promise() : promise);
-			let shouldDismiss = id !== void 0;
-			let result;
-			const originalPromise = p.then(async (response) => {
-				result = ["resolve", response];
-				if (import_react.isValidElement(response)) {
-					shouldDismiss = false;
-					this.create({
-						id,
-						type: "default",
-						message: response
-					});
-				} else if (isHttpResponse(response) && !response.ok) {
-					shouldDismiss = false;
-					const promiseData = typeof data.error === "function" ? await data.error(`HTTP error! status: ${response.status}`) : data.error;
-					const description = typeof data.description === "function" ? await data.description(`HTTP error! status: ${response.status}`) : data.description;
-					const toastSettings = typeof promiseData === "object" && !import_react.isValidElement(promiseData) ? promiseData : { message: promiseData };
-					this.create({
-						id,
-						type: "error",
-						description,
-						...toastSettings
-					});
-				} else if (response instanceof Error) {
-					shouldDismiss = false;
-					const promiseData = typeof data.error === "function" ? await data.error(response) : data.error;
-					const description = typeof data.description === "function" ? await data.description(response) : data.description;
-					const toastSettings = typeof promiseData === "object" && !import_react.isValidElement(promiseData) ? promiseData : { message: promiseData };
-					this.create({
-						id,
-						type: "error",
-						description,
-						...toastSettings
-					});
-				} else if (data.success !== void 0) {
-					shouldDismiss = false;
-					const promiseData = typeof data.success === "function" ? await data.success(response) : data.success;
-					const description = typeof data.description === "function" ? await data.description(response) : data.description;
-					const toastSettings = typeof promiseData === "object" && !import_react.isValidElement(promiseData) ? promiseData : { message: promiseData };
-					this.create({
-						id,
-						type: "success",
-						description,
-						...toastSettings
-					});
-				}
-			}).catch(async (error) => {
-				result = ["reject", error];
-				if (data.error !== void 0) {
-					shouldDismiss = false;
-					const promiseData = typeof data.error === "function" ? await data.error(error) : data.error;
-					const description = typeof data.description === "function" ? await data.description(error) : data.description;
-					const toastSettings = typeof promiseData === "object" && !import_react.isValidElement(promiseData) ? promiseData : { message: promiseData };
-					this.create({
-						id,
-						type: "error",
-						description,
-						...toastSettings
-					});
-				}
-			}).finally(() => {
-				if (shouldDismiss) {
-					this.dismiss(id);
-					id = void 0;
-				}
-				data.finally == null || data.finally.call(data);
-			});
-			const unwrap = () => new Promise((resolve, reject) => originalPromise.then(() => result[0] === "reject" ? reject(result[1]) : resolve(result[1])).catch(reject));
-			if (typeof id !== "string" && typeof id !== "number") return { unwrap };
-			else return Object.assign(id, { unwrap });
-		};
-		this.custom = (jsx, data) => {
-			const id = (data == null ? void 0 : data.id) || toastsCounter++;
-			this.create({
-				jsx: jsx(id),
-				id,
-				...data
-			});
-			return id;
-		};
-		this.getActiveToasts = () => {
-			return this.toasts.filter((toast) => !this.dismissedToasts.has(toast.id));
-		};
-		this.subscribers = [];
-		this.toasts = [];
-		this.dismissedToasts = /* @__PURE__ */ new Set();
-	}
-};
-var ToastState = new Observer();
-var toastFunction = (message, data) => {
-	const id = (data == null ? void 0 : data.id) || toastsCounter++;
-	ToastState.addToast({
-		title: message,
-		...data,
-		id
-	});
-	return id;
-};
-var isHttpResponse = (data) => {
-	return data && typeof data === "object" && "ok" in data && typeof data.ok === "boolean" && "status" in data && typeof data.status === "number";
-};
-var basicToast = toastFunction;
-var getHistory = () => ToastState.toasts;
-var getToasts = () => ToastState.getActiveToasts();
-var toast$1 = Object.assign(basicToast, {
-	success: ToastState.success,
-	info: ToastState.info,
-	warning: ToastState.warning,
-	error: ToastState.error,
-	custom: ToastState.custom,
-	message: ToastState.message,
-	promise: ToastState.promise,
-	dismiss: ToastState.dismiss,
-	loading: ToastState.loading
-}, {
-	getHistory,
-	getToasts
-});
-__insertCSS("[data-sonner-toaster][dir=ltr],html[dir=ltr]{--toast-icon-margin-start:-3px;--toast-icon-margin-end:4px;--toast-svg-margin-start:-1px;--toast-svg-margin-end:0px;--toast-button-margin-start:auto;--toast-button-margin-end:0;--toast-close-button-start:0;--toast-close-button-end:unset;--toast-close-button-transform:translate(-35%, -35%)}[data-sonner-toaster][dir=rtl],html[dir=rtl]{--toast-icon-margin-start:4px;--toast-icon-margin-end:-3px;--toast-svg-margin-start:0px;--toast-svg-margin-end:-1px;--toast-button-margin-start:0;--toast-button-margin-end:auto;--toast-close-button-start:unset;--toast-close-button-end:0;--toast-close-button-transform:translate(35%, -35%)}[data-sonner-toaster]{position:fixed;width:var(--width);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;--gray1:hsl(0, 0%, 99%);--gray2:hsl(0, 0%, 97.3%);--gray3:hsl(0, 0%, 95.1%);--gray4:hsl(0, 0%, 93%);--gray5:hsl(0, 0%, 90.9%);--gray6:hsl(0, 0%, 88.7%);--gray7:hsl(0, 0%, 85.8%);--gray8:hsl(0, 0%, 78%);--gray9:hsl(0, 0%, 56.1%);--gray10:hsl(0, 0%, 52.3%);--gray11:hsl(0, 0%, 43.5%);--gray12:hsl(0, 0%, 9%);--border-radius:8px;box-sizing:border-box;padding:0;margin:0;list-style:none;outline:0;z-index:999999999;transition:transform .4s ease}@media (hover:none) and (pointer:coarse){[data-sonner-toaster][data-lifted=true]{transform:none}}[data-sonner-toaster][data-x-position=right]{right:var(--offset-right)}[data-sonner-toaster][data-x-position=left]{left:var(--offset-left)}[data-sonner-toaster][data-x-position=center]{left:50%;transform:translateX(-50%)}[data-sonner-toaster][data-y-position=top]{top:var(--offset-top)}[data-sonner-toaster][data-y-position=bottom]{bottom:var(--offset-bottom)}[data-sonner-toast]{--y:translateY(100%);--lift-amount:calc(var(--lift) * var(--gap));z-index:var(--z-index);position:absolute;opacity:0;transform:var(--y);touch-action:none;transition:transform .4s,opacity .4s,height .4s,box-shadow .2s;box-sizing:border-box;outline:0;overflow-wrap:anywhere}[data-sonner-toast][data-styled=true]{padding:16px;background:var(--normal-bg);border:1px solid var(--normal-border);color:var(--normal-text);border-radius:var(--border-radius);box-shadow:0 4px 12px rgba(0,0,0,.1);width:var(--width);font-size:13px;display:flex;align-items:center;gap:6px}[data-sonner-toast]:focus-visible{box-shadow:0 4px 12px rgba(0,0,0,.1),0 0 0 2px rgba(0,0,0,.2)}[data-sonner-toast][data-y-position=top]{top:0;--y:translateY(-100%);--lift:1;--lift-amount:calc(1 * var(--gap))}[data-sonner-toast][data-y-position=bottom]{bottom:0;--y:translateY(100%);--lift:-1;--lift-amount:calc(var(--lift) * var(--gap))}[data-sonner-toast][data-styled=true] [data-description]{font-weight:400;line-height:1.4;color:#3f3f3f}[data-rich-colors=true][data-sonner-toast][data-styled=true] [data-description]{color:inherit}[data-sonner-toaster][data-sonner-theme=dark] [data-description]{color:#e8e8e8}[data-sonner-toast][data-styled=true] [data-title]{font-weight:500;line-height:1.5;color:inherit}[data-sonner-toast][data-styled=true] [data-icon]{display:flex;height:16px;width:16px;position:relative;justify-content:flex-start;align-items:center;flex-shrink:0;margin-left:var(--toast-icon-margin-start);margin-right:var(--toast-icon-margin-end)}[data-sonner-toast][data-promise=true] [data-icon]>svg{opacity:0;transform:scale(.8);transform-origin:center;animation:sonner-fade-in .3s ease forwards}[data-sonner-toast][data-styled=true] [data-icon]>*{flex-shrink:0}[data-sonner-toast][data-styled=true] [data-icon] svg{margin-left:var(--toast-svg-margin-start);margin-right:var(--toast-svg-margin-end)}[data-sonner-toast][data-styled=true] [data-content]{display:flex;flex-direction:column;gap:2px}[data-sonner-toast][data-styled=true] [data-button]{border-radius:4px;padding-left:8px;padding-right:8px;height:24px;font-size:12px;color:var(--normal-bg);background:var(--normal-text);margin-left:var(--toast-button-margin-start);margin-right:var(--toast-button-margin-end);border:none;font-weight:500;cursor:pointer;outline:0;display:flex;align-items:center;flex-shrink:0;transition:opacity .4s,box-shadow .2s}[data-sonner-toast][data-styled=true] [data-button]:focus-visible{box-shadow:0 0 0 2px rgba(0,0,0,.4)}[data-sonner-toast][data-styled=true] [data-button]:first-of-type{margin-left:var(--toast-button-margin-start);margin-right:var(--toast-button-margin-end)}[data-sonner-toast][data-styled=true] [data-cancel]{color:var(--normal-text);background:rgba(0,0,0,.08)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast][data-styled=true] [data-cancel]{background:rgba(255,255,255,.3)}[data-sonner-toast][data-styled=true] [data-close-button]{position:absolute;left:var(--toast-close-button-start);right:var(--toast-close-button-end);top:0;height:20px;width:20px;display:flex;justify-content:center;align-items:center;padding:0;color:var(--gray12);background:var(--normal-bg);border:1px solid var(--gray4);transform:var(--toast-close-button-transform);border-radius:50%;cursor:pointer;z-index:1;transition:opacity .1s,background .2s,border-color .2s}[data-sonner-toast][data-styled=true] [data-close-button]:focus-visible{box-shadow:0 4px 12px rgba(0,0,0,.1),0 0 0 2px rgba(0,0,0,.2)}[data-sonner-toast][data-styled=true] [data-disabled=true]{cursor:not-allowed}[data-sonner-toast][data-styled=true]:hover [data-close-button]:hover{background:var(--gray2);border-color:var(--gray5)}[data-sonner-toast][data-swiping=true]::before{content:'';position:absolute;left:-100%;right:-100%;height:100%;z-index:-1}[data-sonner-toast][data-y-position=top][data-swiping=true]::before{bottom:50%;transform:scaleY(3) translateY(50%)}[data-sonner-toast][data-y-position=bottom][data-swiping=true]::before{top:50%;transform:scaleY(3) translateY(-50%)}[data-sonner-toast][data-swiping=false][data-removed=true]::before{content:'';position:absolute;inset:0;transform:scaleY(2)}[data-sonner-toast][data-expanded=true]::after{content:'';position:absolute;left:0;height:calc(var(--gap) + 1px);bottom:100%;width:100%}[data-sonner-toast][data-mounted=true]{--y:translateY(0);opacity:1}[data-sonner-toast][data-expanded=false][data-front=false]{--scale:var(--toasts-before) * 0.05 + 1;--y:translateY(calc(var(--lift-amount) * var(--toasts-before))) scale(calc(-1 * var(--scale)));height:var(--front-toast-height)}[data-sonner-toast]>*{transition:opacity .4s}[data-sonner-toast][data-x-position=right]{right:0}[data-sonner-toast][data-x-position=left]{left:0}[data-sonner-toast][data-expanded=false][data-front=false][data-styled=true]>*{opacity:0}[data-sonner-toast][data-visible=false]{opacity:0;pointer-events:none}[data-sonner-toast][data-mounted=true][data-expanded=true]{--y:translateY(calc(var(--lift) * var(--offset)));height:var(--initial-height)}[data-sonner-toast][data-removed=true][data-front=true][data-swipe-out=false]{--y:translateY(calc(var(--lift) * -100%));opacity:0}[data-sonner-toast][data-removed=true][data-front=false][data-swipe-out=false][data-expanded=true]{--y:translateY(calc(var(--lift) * var(--offset) + var(--lift) * -100%));opacity:0}[data-sonner-toast][data-removed=true][data-front=false][data-swipe-out=false][data-expanded=false]{--y:translateY(40%);opacity:0;transition:transform .5s,opacity .2s}[data-sonner-toast][data-removed=true][data-front=false]::before{height:calc(var(--initial-height) + 20%)}[data-sonner-toast][data-swiping=true]{transform:var(--y) translateY(var(--swipe-amount-y,0)) translateX(var(--swipe-amount-x,0));transition:none}[data-sonner-toast][data-swiped=true]{user-select:none}[data-sonner-toast][data-swipe-out=true][data-y-position=bottom],[data-sonner-toast][data-swipe-out=true][data-y-position=top]{animation-duration:.2s;animation-timing-function:ease-out;animation-fill-mode:forwards}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=left]{animation-name:swipe-out-left}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=right]{animation-name:swipe-out-right}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=up]{animation-name:swipe-out-up}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=down]{animation-name:swipe-out-down}@keyframes swipe-out-left{from{transform:var(--y) translateX(var(--swipe-amount-x));opacity:1}to{transform:var(--y) translateX(calc(var(--swipe-amount-x) - 100%));opacity:0}}@keyframes swipe-out-right{from{transform:var(--y) translateX(var(--swipe-amount-x));opacity:1}to{transform:var(--y) translateX(calc(var(--swipe-amount-x) + 100%));opacity:0}}@keyframes swipe-out-up{from{transform:var(--y) translateY(var(--swipe-amount-y));opacity:1}to{transform:var(--y) translateY(calc(var(--swipe-amount-y) - 100%));opacity:0}}@keyframes swipe-out-down{from{transform:var(--y) translateY(var(--swipe-amount-y));opacity:1}to{transform:var(--y) translateY(calc(var(--swipe-amount-y) + 100%));opacity:0}}@media (max-width:600px){[data-sonner-toaster]{position:fixed;right:var(--mobile-offset-right);left:var(--mobile-offset-left);width:100%}[data-sonner-toaster][dir=rtl]{left:calc(var(--mobile-offset-left) * -1)}[data-sonner-toaster] [data-sonner-toast]{left:0;right:0;width:calc(100% - var(--mobile-offset-left) * 2)}[data-sonner-toaster][data-x-position=left]{left:var(--mobile-offset-left)}[data-sonner-toaster][data-y-position=bottom]{bottom:var(--mobile-offset-bottom)}[data-sonner-toaster][data-y-position=top]{top:var(--mobile-offset-top)}[data-sonner-toaster][data-x-position=center]{left:var(--mobile-offset-left);right:var(--mobile-offset-right);transform:none}}[data-sonner-toaster][data-sonner-theme=light]{--normal-bg:#fff;--normal-border:var(--gray4);--normal-text:var(--gray12);--success-bg:hsl(143, 85%, 96%);--success-border:hsl(145, 92%, 87%);--success-text:hsl(140, 100%, 27%);--info-bg:hsl(208, 100%, 97%);--info-border:hsl(221, 91%, 93%);--info-text:hsl(210, 92%, 45%);--warning-bg:hsl(49, 100%, 97%);--warning-border:hsl(49, 91%, 84%);--warning-text:hsl(31, 92%, 45%);--error-bg:hsl(359, 100%, 97%);--error-border:hsl(359, 100%, 94%);--error-text:hsl(360, 100%, 45%)}[data-sonner-toaster][data-sonner-theme=light] [data-sonner-toast][data-invert=true]{--normal-bg:#000;--normal-border:hsl(0, 0%, 20%);--normal-text:var(--gray1)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast][data-invert=true]{--normal-bg:#fff;--normal-border:var(--gray3);--normal-text:var(--gray12)}[data-sonner-toaster][data-sonner-theme=dark]{--normal-bg:#000;--normal-bg-hover:hsl(0, 0%, 12%);--normal-border:hsl(0, 0%, 20%);--normal-border-hover:hsl(0, 0%, 25%);--normal-text:var(--gray1);--success-bg:hsl(150, 100%, 6%);--success-border:hsl(147, 100%, 12%);--success-text:hsl(150, 86%, 65%);--info-bg:hsl(215, 100%, 6%);--info-border:hsl(223, 43%, 17%);--info-text:hsl(216, 87%, 65%);--warning-bg:hsl(64, 100%, 6%);--warning-border:hsl(60, 100%, 9%);--warning-text:hsl(46, 87%, 65%);--error-bg:hsl(358, 76%, 10%);--error-border:hsl(357, 89%, 16%);--error-text:hsl(358, 100%, 81%)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast] [data-close-button]{background:var(--normal-bg);border-color:var(--normal-border);color:var(--normal-text)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast] [data-close-button]:hover{background:var(--normal-bg-hover);border-color:var(--normal-border-hover)}[data-rich-colors=true][data-sonner-toast][data-type=success]{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text)}[data-rich-colors=true][data-sonner-toast][data-type=success] [data-close-button]{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text)}[data-rich-colors=true][data-sonner-toast][data-type=info]{background:var(--info-bg);border-color:var(--info-border);color:var(--info-text)}[data-rich-colors=true][data-sonner-toast][data-type=info] [data-close-button]{background:var(--info-bg);border-color:var(--info-border);color:var(--info-text)}[data-rich-colors=true][data-sonner-toast][data-type=warning]{background:var(--warning-bg);border-color:var(--warning-border);color:var(--warning-text)}[data-rich-colors=true][data-sonner-toast][data-type=warning] [data-close-button]{background:var(--warning-bg);border-color:var(--warning-border);color:var(--warning-text)}[data-rich-colors=true][data-sonner-toast][data-type=error]{background:var(--error-bg);border-color:var(--error-border);color:var(--error-text)}[data-rich-colors=true][data-sonner-toast][data-type=error] [data-close-button]{background:var(--error-bg);border-color:var(--error-border);color:var(--error-text)}.sonner-loading-wrapper{--size:16px;height:var(--size);width:var(--size);position:absolute;inset:0;z-index:10}.sonner-loading-wrapper[data-visible=false]{transform-origin:center;animation:sonner-fade-out .2s ease forwards}.sonner-spinner{position:relative;top:50%;left:50%;height:var(--size);width:var(--size)}.sonner-loading-bar{animation:sonner-spin 1.2s linear infinite;background:var(--gray11);border-radius:6px;height:8%;left:-10%;position:absolute;top:-3.9%;width:24%}.sonner-loading-bar:first-child{animation-delay:-1.2s;transform:rotate(.0001deg) translate(146%)}.sonner-loading-bar:nth-child(2){animation-delay:-1.1s;transform:rotate(30deg) translate(146%)}.sonner-loading-bar:nth-child(3){animation-delay:-1s;transform:rotate(60deg) translate(146%)}.sonner-loading-bar:nth-child(4){animation-delay:-.9s;transform:rotate(90deg) translate(146%)}.sonner-loading-bar:nth-child(5){animation-delay:-.8s;transform:rotate(120deg) translate(146%)}.sonner-loading-bar:nth-child(6){animation-delay:-.7s;transform:rotate(150deg) translate(146%)}.sonner-loading-bar:nth-child(7){animation-delay:-.6s;transform:rotate(180deg) translate(146%)}.sonner-loading-bar:nth-child(8){animation-delay:-.5s;transform:rotate(210deg) translate(146%)}.sonner-loading-bar:nth-child(9){animation-delay:-.4s;transform:rotate(240deg) translate(146%)}.sonner-loading-bar:nth-child(10){animation-delay:-.3s;transform:rotate(270deg) translate(146%)}.sonner-loading-bar:nth-child(11){animation-delay:-.2s;transform:rotate(300deg) translate(146%)}.sonner-loading-bar:nth-child(12){animation-delay:-.1s;transform:rotate(330deg) translate(146%)}@keyframes sonner-fade-in{0%{opacity:0;transform:scale(.8)}100%{opacity:1;transform:scale(1)}}@keyframes sonner-fade-out{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.8)}}@keyframes sonner-spin{0%{opacity:1}100%{opacity:.15}}@media (prefers-reduced-motion){.sonner-loading-bar,[data-sonner-toast],[data-sonner-toast]>*{transition:none!important;animation:none!important}}.sonner-loader{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);transform-origin:center;transition:opacity .2s,transform .2s}.sonner-loader[data-visible=false]{opacity:0;transform:scale(.8) translate(-50%,-50%)}");
-function isAction(action) {
-	return action.label !== void 0;
-}
-var VISIBLE_TOASTS_AMOUNT = 3;
-var VIEWPORT_OFFSET = "24px";
-var MOBILE_VIEWPORT_OFFSET = "16px";
-var TOAST_LIFETIME = 4e3;
-var TOAST_WIDTH = 356;
-var GAP = 14;
-var SWIPE_THRESHOLD = 45;
-var TIME_BEFORE_UNMOUNT = 200;
-function cn(...classes) {
-	return classes.filter(Boolean).join(" ");
-}
-function getDefaultSwipeDirections(position) {
-	const [y, x] = position.split("-");
-	const directions = [];
-	if (y) directions.push(y);
-	if (x) directions.push(x);
-	return directions;
-}
-var Toast$2 = (props) => {
-	var _toast_classNames, _toast_classNames1, _toast_classNames2, _toast_classNames3, _toast_classNames4, _toast_classNames5, _toast_classNames6, _toast_classNames7, _toast_classNames8;
-	const { invert: ToasterInvert, toast, unstyled, interacting, setHeights, visibleToasts, heights, index, toasts, expanded, removeToast, defaultRichColors, closeButton: closeButtonFromToaster, style, cancelButtonStyle, actionButtonStyle, className = "", descriptionClassName = "", duration: durationFromToaster, position, gap, expandByDefault, classNames, icons, closeButtonAriaLabel = "Close toast" } = props;
-	const [swipeDirection, setSwipeDirection] = import_react.useState(null);
-	const [swipeOutDirection, setSwipeOutDirection] = import_react.useState(null);
-	const [mounted, setMounted] = import_react.useState(false);
-	const [removed, setRemoved] = import_react.useState(false);
-	const [swiping, setSwiping] = import_react.useState(false);
-	const [swipeOut, setSwipeOut] = import_react.useState(false);
-	const [isSwiped, setIsSwiped] = import_react.useState(false);
-	const [offsetBeforeRemove, setOffsetBeforeRemove] = import_react.useState(0);
-	const [initialHeight, setInitialHeight] = import_react.useState(0);
-	const remainingTime = import_react.useRef(toast.duration || durationFromToaster || TOAST_LIFETIME);
-	const dragStartTime = import_react.useRef(null);
-	const toastRef = import_react.useRef(null);
-	const isFront = index === 0;
-	const isVisible = index + 1 <= visibleToasts;
-	const toastType = toast.type;
-	const dismissible = toast.dismissible !== false;
-	const toastClassname = toast.className || "";
-	const toastDescriptionClassname = toast.descriptionClassName || "";
-	const heightIndex = import_react.useMemo(() => heights.findIndex((height) => height.toastId === toast.id) || 0, [heights, toast.id]);
-	const closeButton = import_react.useMemo(() => {
-		var _toast_closeButton;
-		return (_toast_closeButton = toast.closeButton) != null ? _toast_closeButton : closeButtonFromToaster;
-	}, [toast.closeButton, closeButtonFromToaster]);
-	const duration = import_react.useMemo(() => toast.duration || durationFromToaster || TOAST_LIFETIME, [toast.duration, durationFromToaster]);
-	const closeTimerStartTimeRef = import_react.useRef(0);
-	const offset = import_react.useRef(0);
-	const lastCloseTimerStartTimeRef = import_react.useRef(0);
-	const pointerStartRef = import_react.useRef(null);
-	const [y, x] = position.split("-");
-	const toastsHeightBefore = import_react.useMemo(() => {
-		return heights.reduce((prev, curr, reducerIndex) => {
-			if (reducerIndex >= heightIndex) return prev;
-			return prev + curr.height;
-		}, 0);
-	}, [heights, heightIndex]);
-	const isDocumentHidden = useIsDocumentHidden();
-	const invert = toast.invert || ToasterInvert;
-	const disabled = toastType === "loading";
-	offset.current = import_react.useMemo(() => heightIndex * gap + toastsHeightBefore, [heightIndex, toastsHeightBefore]);
-	import_react.useEffect(() => {
-		remainingTime.current = duration;
-	}, [duration]);
-	import_react.useEffect(() => {
-		setMounted(true);
-	}, []);
-	import_react.useEffect(() => {
-		const toastNode = toastRef.current;
-		if (toastNode) {
-			const height = toastNode.getBoundingClientRect().height;
-			setInitialHeight(height);
-			setHeights((h) => [{
-				toastId: toast.id,
-				height,
-				position: toast.position
-			}, ...h]);
-			return () => setHeights((h) => h.filter((height) => height.toastId !== toast.id));
-		}
-	}, [setHeights, toast.id]);
-	import_react.useLayoutEffect(() => {
-		if (!mounted) return;
-		const toastNode = toastRef.current;
-		const originalHeight = toastNode.style.height;
-		toastNode.style.height = "auto";
-		const newHeight = toastNode.getBoundingClientRect().height;
-		toastNode.style.height = originalHeight;
-		setInitialHeight(newHeight);
-		setHeights((heights) => {
-			if (!heights.find((height) => height.toastId === toast.id)) return [{
-				toastId: toast.id,
-				height: newHeight,
-				position: toast.position
-			}, ...heights];
-			else return heights.map((height) => height.toastId === toast.id ? {
-				...height,
-				height: newHeight
-			} : height);
-		});
-	}, [
-		mounted,
-		toast.title,
-		toast.description,
-		setHeights,
-		toast.id,
-		toast.jsx,
-		toast.action,
-		toast.cancel
-	]);
-	const deleteToast = import_react.useCallback(() => {
-		setRemoved(true);
-		setOffsetBeforeRemove(offset.current);
-		setHeights((h) => h.filter((height) => height.toastId !== toast.id));
-		setTimeout(() => {
-			removeToast(toast);
-		}, TIME_BEFORE_UNMOUNT);
-	}, [
-		toast,
-		removeToast,
-		setHeights,
-		offset
-	]);
-	import_react.useEffect(() => {
-		if (toast.promise && toastType === "loading" || toast.duration === Infinity || toast.type === "loading") return;
-		let timeoutId;
-		const pauseTimer = () => {
-			if (lastCloseTimerStartTimeRef.current < closeTimerStartTimeRef.current) {
-				const elapsedTime = (/* @__PURE__ */ new Date()).getTime() - closeTimerStartTimeRef.current;
-				remainingTime.current = remainingTime.current - elapsedTime;
-			}
-			lastCloseTimerStartTimeRef.current = (/* @__PURE__ */ new Date()).getTime();
-		};
-		const startTimer = () => {
-			if (remainingTime.current === Infinity) return;
-			closeTimerStartTimeRef.current = (/* @__PURE__ */ new Date()).getTime();
-			timeoutId = setTimeout(() => {
-				toast.onAutoClose == null || toast.onAutoClose.call(toast, toast);
-				deleteToast();
-			}, remainingTime.current);
-		};
-		if (expanded || interacting || isDocumentHidden) pauseTimer();
-		else startTimer();
-		return () => clearTimeout(timeoutId);
-	}, [
-		expanded,
-		interacting,
-		toast,
-		toastType,
-		isDocumentHidden,
-		deleteToast
-	]);
-	import_react.useEffect(() => {
-		if (toast.delete) {
-			deleteToast();
-			toast.onDismiss == null || toast.onDismiss.call(toast, toast);
-		}
-	}, [deleteToast, toast.delete]);
-	function getLoadingIcon() {
-		var _toast_classNames;
-		if (icons == null ? void 0 : icons.loading) {
-			var _toast_classNames1;
-			return /* @__PURE__ */ import_react.createElement("div", {
-				className: cn(classNames == null ? void 0 : classNames.loader, toast == null ? void 0 : (_toast_classNames1 = toast.classNames) == null ? void 0 : _toast_classNames1.loader, "sonner-loader"),
-				"data-visible": toastType === "loading"
-			}, icons.loading);
-		}
-		return /* @__PURE__ */ import_react.createElement(Loader, {
-			className: cn(classNames == null ? void 0 : classNames.loader, toast == null ? void 0 : (_toast_classNames = toast.classNames) == null ? void 0 : _toast_classNames.loader),
-			visible: toastType === "loading"
-		});
-	}
-	const icon = toast.icon || (icons == null ? void 0 : icons[toastType]) || getAsset(toastType);
-	var _toast_richColors, _icons_close;
-	return /* @__PURE__ */ import_react.createElement("li", {
-		tabIndex: 0,
-		ref: toastRef,
-		className: cn(className, toastClassname, classNames == null ? void 0 : classNames.toast, toast == null ? void 0 : (_toast_classNames = toast.classNames) == null ? void 0 : _toast_classNames.toast, classNames == null ? void 0 : classNames.default, classNames == null ? void 0 : classNames[toastType], toast == null ? void 0 : (_toast_classNames1 = toast.classNames) == null ? void 0 : _toast_classNames1[toastType]),
-		"data-sonner-toast": "",
-		"data-rich-colors": (_toast_richColors = toast.richColors) != null ? _toast_richColors : defaultRichColors,
-		"data-styled": !Boolean(toast.jsx || toast.unstyled || unstyled),
-		"data-mounted": mounted,
-		"data-promise": Boolean(toast.promise),
-		"data-swiped": isSwiped,
-		"data-removed": removed,
-		"data-visible": isVisible,
-		"data-y-position": y,
-		"data-x-position": x,
-		"data-index": index,
-		"data-front": isFront,
-		"data-swiping": swiping,
-		"data-dismissible": dismissible,
-		"data-type": toastType,
-		"data-invert": invert,
-		"data-swipe-out": swipeOut,
-		"data-swipe-direction": swipeOutDirection,
-		"data-expanded": Boolean(expanded || expandByDefault && mounted),
-		"data-testid": toast.testId,
-		style: {
-			"--index": index,
-			"--toasts-before": index,
-			"--z-index": toasts.length - index,
-			"--offset": `${removed ? offsetBeforeRemove : offset.current}px`,
-			"--initial-height": expandByDefault ? "auto" : `${initialHeight}px`,
-			...style,
-			...toast.style
-		},
-		onDragEnd: () => {
-			setSwiping(false);
-			setSwipeDirection(null);
-			pointerStartRef.current = null;
-		},
-		onPointerDown: (event) => {
-			if (event.button === 2) return;
-			if (disabled || !dismissible) return;
-			dragStartTime.current = /* @__PURE__ */ new Date();
-			setOffsetBeforeRemove(offset.current);
-			event.target.setPointerCapture(event.pointerId);
-			if (event.target.tagName === "BUTTON") return;
-			setSwiping(true);
-			pointerStartRef.current = {
-				x: event.clientX,
-				y: event.clientY
-			};
-		},
-		onPointerUp: () => {
-			var _toastRef_current, _toastRef_current1, _dragStartTime_current;
-			if (swipeOut || !dismissible) return;
-			pointerStartRef.current = null;
-			const swipeAmountX = Number(((_toastRef_current = toastRef.current) == null ? void 0 : _toastRef_current.style.getPropertyValue("--swipe-amount-x").replace("px", "")) || 0);
-			const swipeAmountY = Number(((_toastRef_current1 = toastRef.current) == null ? void 0 : _toastRef_current1.style.getPropertyValue("--swipe-amount-y").replace("px", "")) || 0);
-			const timeTaken = (/* @__PURE__ */ new Date()).getTime() - ((_dragStartTime_current = dragStartTime.current) == null ? void 0 : _dragStartTime_current.getTime());
-			const swipeAmount = swipeDirection === "x" ? swipeAmountX : swipeAmountY;
-			const velocity = Math.abs(swipeAmount) / timeTaken;
-			if (Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > .11) {
-				setOffsetBeforeRemove(offset.current);
-				toast.onDismiss == null || toast.onDismiss.call(toast, toast);
-				if (swipeDirection === "x") setSwipeOutDirection(swipeAmountX > 0 ? "right" : "left");
-				else setSwipeOutDirection(swipeAmountY > 0 ? "down" : "up");
-				deleteToast();
-				setSwipeOut(true);
-				return;
-			} else {
-				var _toastRef_current2, _toastRef_current3;
-				(_toastRef_current2 = toastRef.current) == null || _toastRef_current2.style.setProperty("--swipe-amount-x", `0px`);
-				(_toastRef_current3 = toastRef.current) == null || _toastRef_current3.style.setProperty("--swipe-amount-y", `0px`);
-			}
-			setIsSwiped(false);
-			setSwiping(false);
-			setSwipeDirection(null);
-		},
-		onPointerMove: (event) => {
-			var _window_getSelection, _toastRef_current, _toastRef_current1;
-			if (!pointerStartRef.current || !dismissible) return;
-			if (((_window_getSelection = window.getSelection()) == null ? void 0 : _window_getSelection.toString().length) > 0) return;
-			const yDelta = event.clientY - pointerStartRef.current.y;
-			const xDelta = event.clientX - pointerStartRef.current.x;
-			var _props_swipeDirections;
-			const swipeDirections = (_props_swipeDirections = props.swipeDirections) != null ? _props_swipeDirections : getDefaultSwipeDirections(position);
-			if (!swipeDirection && (Math.abs(xDelta) > 1 || Math.abs(yDelta) > 1)) setSwipeDirection(Math.abs(xDelta) > Math.abs(yDelta) ? "x" : "y");
-			let swipeAmount = {
-				x: 0,
-				y: 0
-			};
-			const getDampening = (delta) => {
-				return 1 / (1.5 + Math.abs(delta) / 20);
-			};
-			if (swipeDirection === "y") {
-				if (swipeDirections.includes("top") || swipeDirections.includes("bottom")) if (swipeDirections.includes("top") && yDelta < 0 || swipeDirections.includes("bottom") && yDelta > 0) swipeAmount.y = yDelta;
-				else {
-					const dampenedDelta = yDelta * getDampening(yDelta);
-					swipeAmount.y = Math.abs(dampenedDelta) < Math.abs(yDelta) ? dampenedDelta : yDelta;
-				}
-			} else if (swipeDirection === "x") {
-				if (swipeDirections.includes("left") || swipeDirections.includes("right")) if (swipeDirections.includes("left") && xDelta < 0 || swipeDirections.includes("right") && xDelta > 0) swipeAmount.x = xDelta;
-				else {
-					const dampenedDelta = xDelta * getDampening(xDelta);
-					swipeAmount.x = Math.abs(dampenedDelta) < Math.abs(xDelta) ? dampenedDelta : xDelta;
-				}
-			}
-			if (Math.abs(swipeAmount.x) > 0 || Math.abs(swipeAmount.y) > 0) setIsSwiped(true);
-			(_toastRef_current = toastRef.current) == null || _toastRef_current.style.setProperty("--swipe-amount-x", `${swipeAmount.x}px`);
-			(_toastRef_current1 = toastRef.current) == null || _toastRef_current1.style.setProperty("--swipe-amount-y", `${swipeAmount.y}px`);
-		}
-	}, closeButton && !toast.jsx && toastType !== "loading" ? /* @__PURE__ */ import_react.createElement("button", {
-		"aria-label": closeButtonAriaLabel,
-		"data-disabled": disabled,
-		"data-close-button": true,
-		onClick: disabled || !dismissible ? () => {} : () => {
-			deleteToast();
-			toast.onDismiss == null || toast.onDismiss.call(toast, toast);
-		},
-		className: cn(classNames == null ? void 0 : classNames.closeButton, toast == null ? void 0 : (_toast_classNames2 = toast.classNames) == null ? void 0 : _toast_classNames2.closeButton)
-	}, (_icons_close = icons == null ? void 0 : icons.close) != null ? _icons_close : CloseIcon) : null, (toastType || toast.icon || toast.promise) && toast.icon !== null && ((icons == null ? void 0 : icons[toastType]) !== null || toast.icon) ? /* @__PURE__ */ import_react.createElement("div", {
-		"data-icon": "",
-		className: cn(classNames == null ? void 0 : classNames.icon, toast == null ? void 0 : (_toast_classNames3 = toast.classNames) == null ? void 0 : _toast_classNames3.icon)
-	}, toast.promise || toast.type === "loading" && !toast.icon ? toast.icon || getLoadingIcon() : null, toast.type !== "loading" ? icon : null) : null, /* @__PURE__ */ import_react.createElement("div", {
-		"data-content": "",
-		className: cn(classNames == null ? void 0 : classNames.content, toast == null ? void 0 : (_toast_classNames4 = toast.classNames) == null ? void 0 : _toast_classNames4.content)
-	}, /* @__PURE__ */ import_react.createElement("div", {
-		"data-title": "",
-		className: cn(classNames == null ? void 0 : classNames.title, toast == null ? void 0 : (_toast_classNames5 = toast.classNames) == null ? void 0 : _toast_classNames5.title)
-	}, toast.jsx ? toast.jsx : typeof toast.title === "function" ? toast.title() : toast.title), toast.description ? /* @__PURE__ */ import_react.createElement("div", {
-		"data-description": "",
-		className: cn(descriptionClassName, toastDescriptionClassname, classNames == null ? void 0 : classNames.description, toast == null ? void 0 : (_toast_classNames6 = toast.classNames) == null ? void 0 : _toast_classNames6.description)
-	}, typeof toast.description === "function" ? toast.description() : toast.description) : null), /* @__PURE__ */ import_react.isValidElement(toast.cancel) ? toast.cancel : toast.cancel && isAction(toast.cancel) ? /* @__PURE__ */ import_react.createElement("button", {
-		"data-button": true,
-		"data-cancel": true,
-		style: toast.cancelButtonStyle || cancelButtonStyle,
-		onClick: (event) => {
-			if (!isAction(toast.cancel)) return;
-			if (!dismissible) return;
-			toast.cancel.onClick == null || toast.cancel.onClick.call(toast.cancel, event);
-			deleteToast();
-		},
-		className: cn(classNames == null ? void 0 : classNames.cancelButton, toast == null ? void 0 : (_toast_classNames7 = toast.classNames) == null ? void 0 : _toast_classNames7.cancelButton)
-	}, toast.cancel.label) : null, /* @__PURE__ */ import_react.isValidElement(toast.action) ? toast.action : toast.action && isAction(toast.action) ? /* @__PURE__ */ import_react.createElement("button", {
-		"data-button": true,
-		"data-action": true,
-		style: toast.actionButtonStyle || actionButtonStyle,
-		onClick: (event) => {
-			if (!isAction(toast.action)) return;
-			toast.action.onClick == null || toast.action.onClick.call(toast.action, event);
-			if (event.defaultPrevented) return;
-			deleteToast();
-		},
-		className: cn(classNames == null ? void 0 : classNames.actionButton, toast == null ? void 0 : (_toast_classNames8 = toast.classNames) == null ? void 0 : _toast_classNames8.actionButton)
-	}, toast.action.label) : null);
-};
-function getDocumentDirection() {
-	if (typeof window === "undefined") return "ltr";
-	if (typeof document === "undefined") return "ltr";
-	const dirAttribute = document.documentElement.getAttribute("dir");
-	if (dirAttribute === "auto" || !dirAttribute) return window.getComputedStyle(document.documentElement).direction;
-	return dirAttribute;
-}
-function assignOffset(defaultOffset, mobileOffset) {
-	const styles = {};
-	[defaultOffset, mobileOffset].forEach((offset, index) => {
-		const isMobile = index === 1;
-		const prefix = isMobile ? "--mobile-offset" : "--offset";
-		const defaultValue = isMobile ? MOBILE_VIEWPORT_OFFSET : VIEWPORT_OFFSET;
-		function assignAll(offset) {
-			[
-				"top",
-				"right",
-				"bottom",
-				"left"
-			].forEach((key) => {
-				styles[`${prefix}-${key}`] = typeof offset === "number" ? `${offset}px` : offset;
-			});
-		}
-		if (typeof offset === "number" || typeof offset === "string") assignAll(offset);
-		else if (typeof offset === "object") [
-			"top",
-			"right",
-			"bottom",
-			"left"
-		].forEach((key) => {
-			if (offset[key] === void 0) styles[`${prefix}-${key}`] = defaultValue;
-			else styles[`${prefix}-${key}`] = typeof offset[key] === "number" ? `${offset[key]}px` : offset[key];
-		});
-		else assignAll(defaultValue);
-	});
-	return styles;
-}
-var Toaster$2 = /* @__PURE__ */ import_react.forwardRef(function Toaster(props, ref) {
-	const { id, invert, position = "bottom-right", hotkey = ["altKey", "KeyT"], expand, closeButton, className, offset, mobileOffset, theme = "light", richColors, duration, style, visibleToasts = VISIBLE_TOASTS_AMOUNT, toastOptions, dir = getDocumentDirection(), gap = GAP, icons, containerAriaLabel = "Notifications" } = props;
-	const [toasts, setToasts] = import_react.useState([]);
-	const filteredToasts = import_react.useMemo(() => {
-		if (id) return toasts.filter((toast) => toast.toasterId === id);
-		return toasts.filter((toast) => !toast.toasterId);
-	}, [toasts, id]);
-	const possiblePositions = import_react.useMemo(() => {
-		return Array.from(new Set([position].concat(filteredToasts.filter((toast) => toast.position).map((toast) => toast.position))));
-	}, [filteredToasts, position]);
-	const [heights, setHeights] = import_react.useState([]);
-	const [expanded, setExpanded] = import_react.useState(false);
-	const [interacting, setInteracting] = import_react.useState(false);
-	const [actualTheme, setActualTheme] = import_react.useState(theme !== "system" ? theme : typeof window !== "undefined" ? window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light" : "light");
-	const listRef = import_react.useRef(null);
-	const hotkeyLabel = hotkey.join("+").replace(/Key/g, "").replace(/Digit/g, "");
-	const lastFocusedElementRef = import_react.useRef(null);
-	const isFocusWithinRef = import_react.useRef(false);
-	const removeToast = import_react.useCallback((toastToRemove) => {
-		setToasts((toasts) => {
-			var _toasts_find;
-			if (!((_toasts_find = toasts.find((toast) => toast.id === toastToRemove.id)) == null ? void 0 : _toasts_find.delete)) ToastState.dismiss(toastToRemove.id);
-			return toasts.filter(({ id }) => id !== toastToRemove.id);
-		});
-	}, []);
-	import_react.useEffect(() => {
-		return ToastState.subscribe((toast) => {
-			if (toast.dismiss) {
-				requestAnimationFrame(() => {
-					setToasts((toasts) => toasts.map((t) => t.id === toast.id ? {
-						...t,
-						delete: true
-					} : t));
-				});
-				return;
-			}
-			setTimeout(() => {
-				import_react_dom.flushSync(() => {
-					setToasts((toasts) => {
-						const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
-						if (indexOfExistingToast !== -1) return [
-							...toasts.slice(0, indexOfExistingToast),
-							{
-								...toasts[indexOfExistingToast],
-								...toast
-							},
-							...toasts.slice(indexOfExistingToast + 1)
-						];
-						return [toast, ...toasts];
-					});
-				});
-			});
-		});
-	}, [toasts]);
-	import_react.useEffect(() => {
-		if (theme !== "system") {
-			setActualTheme(theme);
-			return;
-		}
-		if (theme === "system") if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) setActualTheme("dark");
-		else setActualTheme("light");
-		if (typeof window === "undefined") return;
-		const darkMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-		try {
-			darkMediaQuery.addEventListener("change", ({ matches }) => {
-				if (matches) setActualTheme("dark");
-				else setActualTheme("light");
-			});
-		} catch (error) {
-			darkMediaQuery.addListener(({ matches }) => {
-				try {
-					if (matches) setActualTheme("dark");
-					else setActualTheme("light");
-				} catch (e) {
-					console.error(e);
-				}
-			});
-		}
-	}, [theme]);
-	import_react.useEffect(() => {
-		if (toasts.length <= 1) setExpanded(false);
-	}, [toasts]);
-	import_react.useEffect(() => {
-		const handleKeyDown = (event) => {
-			var _listRef_current;
-			if (hotkey.every((key) => event[key] || event.code === key)) {
-				var _listRef_current1;
-				setExpanded(true);
-				(_listRef_current1 = listRef.current) == null || _listRef_current1.focus();
-			}
-			if (event.code === "Escape" && (document.activeElement === listRef.current || ((_listRef_current = listRef.current) == null ? void 0 : _listRef_current.contains(document.activeElement)))) setExpanded(false);
-		};
-		document.addEventListener("keydown", handleKeyDown);
-		return () => document.removeEventListener("keydown", handleKeyDown);
-	}, [hotkey]);
-	import_react.useEffect(() => {
-		if (listRef.current) return () => {
-			if (lastFocusedElementRef.current) {
-				lastFocusedElementRef.current.focus({ preventScroll: true });
-				lastFocusedElementRef.current = null;
-				isFocusWithinRef.current = false;
-			}
-		};
-	}, [listRef.current]);
-	return /* @__PURE__ */ import_react.createElement("section", {
-		ref,
-		"aria-label": `${containerAriaLabel} ${hotkeyLabel}`,
-		tabIndex: -1,
-		"aria-live": "polite",
-		"aria-relevant": "additions text",
-		"aria-atomic": "false",
-		suppressHydrationWarning: true
-	}, possiblePositions.map((position, index) => {
-		var _heights_;
-		const [y, x] = position.split("-");
-		if (!filteredToasts.length) return null;
-		return /* @__PURE__ */ import_react.createElement("ol", {
-			key: position,
-			dir: dir === "auto" ? getDocumentDirection() : dir,
-			tabIndex: -1,
-			ref: listRef,
-			className,
-			"data-sonner-toaster": true,
-			"data-sonner-theme": actualTheme,
-			"data-y-position": y,
-			"data-x-position": x,
-			style: {
-				"--front-toast-height": `${((_heights_ = heights[0]) == null ? void 0 : _heights_.height) || 0}px`,
-				"--width": `${TOAST_WIDTH}px`,
-				"--gap": `${gap}px`,
-				...style,
-				...assignOffset(offset, mobileOffset)
-			},
-			onBlur: (event) => {
-				if (isFocusWithinRef.current && !event.currentTarget.contains(event.relatedTarget)) {
-					isFocusWithinRef.current = false;
-					if (lastFocusedElementRef.current) {
-						lastFocusedElementRef.current.focus({ preventScroll: true });
-						lastFocusedElementRef.current = null;
-					}
-				}
-			},
-			onFocus: (event) => {
-				if (event.target instanceof HTMLElement && event.target.dataset.dismissible === "false") return;
-				if (!isFocusWithinRef.current) {
-					isFocusWithinRef.current = true;
-					lastFocusedElementRef.current = event.relatedTarget;
-				}
-			},
-			onMouseEnter: () => setExpanded(true),
-			onMouseMove: () => setExpanded(true),
-			onMouseLeave: () => {
-				if (!interacting) setExpanded(false);
-			},
-			onDragEnd: () => setExpanded(false),
-			onPointerDown: (event) => {
-				if (event.target instanceof HTMLElement && event.target.dataset.dismissible === "false") return;
-				setInteracting(true);
-			},
-			onPointerUp: () => setInteracting(false)
-		}, filteredToasts.filter((toast) => !toast.position && index === 0 || toast.position === position).map((toast, index) => {
-			var _toastOptions_duration, _toastOptions_closeButton;
-			return /* @__PURE__ */ import_react.createElement(Toast$2, {
-				key: toast.id,
-				icons,
-				index,
-				toast,
-				defaultRichColors: richColors,
-				duration: (_toastOptions_duration = toastOptions == null ? void 0 : toastOptions.duration) != null ? _toastOptions_duration : duration,
-				className: toastOptions == null ? void 0 : toastOptions.className,
-				descriptionClassName: toastOptions == null ? void 0 : toastOptions.descriptionClassName,
-				invert,
-				visibleToasts,
-				closeButton: (_toastOptions_closeButton = toastOptions == null ? void 0 : toastOptions.closeButton) != null ? _toastOptions_closeButton : closeButton,
-				interacting,
-				position,
-				style: toastOptions == null ? void 0 : toastOptions.style,
-				unstyled: toastOptions == null ? void 0 : toastOptions.unstyled,
-				classNames: toastOptions == null ? void 0 : toastOptions.classNames,
-				cancelButtonStyle: toastOptions == null ? void 0 : toastOptions.cancelButtonStyle,
-				actionButtonStyle: toastOptions == null ? void 0 : toastOptions.actionButtonStyle,
-				closeButtonAriaLabel: toastOptions == null ? void 0 : toastOptions.closeButtonAriaLabel,
-				removeToast,
-				toasts: filteredToasts.filter((t) => t.position == toast.position),
-				heights: heights.filter((h) => h.position == toast.position),
-				setHeights,
-				expandByDefault: expand,
-				gap,
-				expanded,
-				swipeDirections: props.swipeDirections
-			});
-		}));
-	}));
-});
-//#endregion
-//#region src/store/AppContext.tsx
-var MOCK_DEMANDS = [{
-	id: "d1",
-	title: "Casamento Sítio das Palmeiras",
-	budget: 65e3,
-	guests: 300,
-	date: "2026-05-20",
-	location: "São Paulo, SP",
-	requirements: {
-		sound: true,
-		light: true,
-		led: false,
-		grid: true,
-		buffet: true,
-		drinks: false,
-		cocktails: true,
-		photo: false,
-		video: false,
-		singer: false,
-		band: true,
-		dj: true,
-		space: false,
-		ceremonial: true,
-		security: false,
-		details: "Preciso de PA para 300 pessoas, iluminação cênica na pista, grid Q30 e banda para festa."
-	},
-	status: "open",
-	proposals: 2,
-	createdAt: (/* @__PURE__ */ new Date()).toISOString()
-}, {
-	id: "d2",
-	title: "Festa Corporativa Tech",
-	budget: 95e3,
-	guests: 150,
-	date: "2026-06-15",
-	location: "Campinas, SP",
-	requirements: {
-		sound: true,
-		light: true,
-		led: true,
-		grid: true,
-		buffet: true,
-		drinks: true,
-		cocktails: false,
-		photo: true,
-		video: true,
-		singer: false,
-		band: false,
-		dj: true,
-		space: true,
-		ceremonial: false,
-		security: true,
-		details: "Painel de LED 4x3 indoor, som para DJ, luz de palco completa e buffet completo."
-	},
-	status: "open",
-	proposals: 5,
-	createdAt: (/* @__PURE__ */ new Date()).toISOString()
-}];
-var AppContext = (0, import_react.createContext)(void 0);
-var AppProvider = ({ children }) => {
-	const [role, setRole] = (0, import_react.useState)("customer");
-	const [isSubscribed, setIsSubscribed] = (0, import_react.useState)(true);
-	const [demands, setDemands] = (0, import_react.useState)(MOCK_DEMANDS);
-	const [companyProfile, setCompanyProfile] = (0, import_react.useState)({
-		name: "JD Eventos Tech",
-		specialties: "Som, Iluminação, Painel de LED",
-		address: "",
-		logo: "",
-		observations: ""
-	});
-	const addDemand = (demandData) => {
-		setDemands([{
-			...demandData,
-			id: Math.random().toString(36).substring(7),
-			status: "open",
-			proposals: 0,
-			createdAt: (/* @__PURE__ */ new Date()).toISOString()
-		}, ...demands]);
-	};
-	const updateCompanyProfile = (profile) => {
-		setCompanyProfile((prev) => ({
-			...prev,
-			...profile
-		}));
-	};
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppContext.Provider, {
-		"data-uid": "src/store/AppContext.tsx:148:5",
-		"data-prohibitions": "[editContent]",
-		value: {
-			role,
-			setRole,
-			isSubscribed,
-			setIsSubscribed,
-			demands,
-			addDemand,
-			companyProfile,
-			updateCompanyProfile
-		},
-		children
-	});
-};
-var useApp = () => {
-	const context = (0, import_react.useContext)(AppContext);
-	if (context === void 0) throw new Error("useApp must be used within an AppProvider");
-	return context;
-};
-//#endregion
 //#region src/pages/Register.tsx
 var formSchema = object({
 	name: string().min(2, "Nome deve ter pelo menos 2 caracteres"),
-	email: string().email("Email inválido"),
-	password: string().min(6, "Senha deve ter pelo menos 6 caracteres"),
+	email: string().email("Email inválido. Verifique o formato."),
+	password: string().min(6, "A senha deve ter pelo menos 6 caracteres."),
 	role: _enum(["customer", "company"], { required_error: "Por favor, selecione o tipo de perfil." })
 });
 function Register() {
 	const navigate = useNavigate();
-	const { setRole } = useApp();
+	const { registerUser } = useApp();
 	const [isLoading, setIsLoading] = (0, import_react.useState)(false);
 	const form = useForm({
 		resolver: a(formSchema),
@@ -29771,84 +29906,93 @@ function Register() {
 	});
 	async function onSubmit(data) {
 		setIsLoading(true);
-		await new Promise((resolve) => setTimeout(resolve, 1e3));
-		setIsLoading(false);
-		setRole(data.role);
-		toast$1.success("Conta criada com sucesso!");
-		navigate("/");
+		try {
+			await registerUser({
+				name: data.name,
+				email: data.email,
+				password: data.password,
+				role: data.role
+			});
+			toast$1.success("Conta criada com sucesso! Faça seu login.");
+			navigate("/login");
+		} catch (error) {
+			toast$1.error(error.message || "Erro ao criar conta.");
+		} finally {
+			setIsLoading(false);
+		}
 	}
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		"data-uid": "src/pages/Register.tsx:73:5",
+		"data-uid": "src/pages/Register.tsx:79:5",
 		"data-prohibitions": "[editContent]",
 		className: "flex min-h-[80vh] items-center justify-center py-12 px-4",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-			"data-uid": "src/pages/Register.tsx:74:7",
+			"data-uid": "src/pages/Register.tsx:80:7",
 			"data-prohibitions": "[editContent]",
 			className: "w-full max-w-md mx-auto shadow-lg border-primary/10",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-				"data-uid": "src/pages/Register.tsx:75:9",
+				"data-uid": "src/pages/Register.tsx:81:9",
 				"data-prohibitions": "[]",
 				className: "space-y-4 flex flex-col items-center text-center pt-8",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-					"data-uid": "src/pages/Register.tsx:76:11",
+					"data-uid": "src/pages/Register.tsx:82:11",
 					"data-prohibitions": "[]",
 					to: "/",
 					className: "transition-transform hover:scale-105",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-						"data-uid": "src/pages/Register.tsx:77:13",
+						"data-uid": "src/pages/Register.tsx:83:13",
 						"data-prohibitions": "[editContent]",
 						src: e_eventos_novo_62817_default,
 						alt: "e-eventos",
 						className: "h-24 w-24 rounded-[1.5rem] object-contain shadow-md bg-white/5 p-2 border border-white/10"
 					})
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/pages/Register.tsx:83:11",
+					"data-uid": "src/pages/Register.tsx:89:11",
 					"data-prohibitions": "[]",
 					className: "space-y-2",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-						"data-uid": "src/pages/Register.tsx:84:13",
+						"data-uid": "src/pages/Register.tsx:90:13",
 						"data-prohibitions": "[]",
 						className: "text-2xl font-extrabold tracking-tight",
 						children: "Criar Conta"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-						"data-uid": "src/pages/Register.tsx:85:13",
+						"data-uid": "src/pages/Register.tsx:91:13",
 						"data-prohibitions": "[]",
 						className: "text-base",
 						children: "Junte-se ao e-eventos e comece agora"
 					})]
 				})]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Form, {
-				"data-uid": "src/pages/Register.tsx:91:9",
+				"data-uid": "src/pages/Register.tsx:97:9",
 				"data-prohibitions": "[editContent]",
 				...form,
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
-					"data-uid": "src/pages/Register.tsx:92:11",
+					"data-uid": "src/pages/Register.tsx:98:11",
 					"data-prohibitions": "[editContent]",
 					onSubmit: form.handleSubmit(onSubmit),
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-						"data-uid": "src/pages/Register.tsx:93:13",
+						"data-uid": "src/pages/Register.tsx:99:13",
 						"data-prohibitions": "[]",
 						className: "space-y-5",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
-								"data-uid": "src/pages/Register.tsx:94:15",
+								"data-uid": "src/pages/Register.tsx:100:15",
 								"data-prohibitions": "[editContent]",
 								control: form.control,
 								name: "name",
 								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, {
-									"data-uid": "src/pages/Register.tsx:98:19",
+									"data-uid": "src/pages/Register.tsx:104:19",
 									"data-prohibitions": "[]",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, {
-											"data-uid": "src/pages/Register.tsx:99:21",
+											"data-uid": "src/pages/Register.tsx:105:21",
 											"data-prohibitions": "[]",
 											children: "Nome completo"
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, {
-											"data-uid": "src/pages/Register.tsx:100:21",
+											"data-uid": "src/pages/Register.tsx:106:21",
 											"data-prohibitions": "[]",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-												"data-uid": "src/pages/Register.tsx:101:23",
+												"data-uid": "src/pages/Register.tsx:107:23",
 												"data-prohibitions": "[editContent]",
 												placeholder: "João Silva",
 												className: "h-11",
@@ -29856,31 +30000,31 @@ function Register() {
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {
-											"data-uid": "src/pages/Register.tsx:103:21",
+											"data-uid": "src/pages/Register.tsx:109:21",
 											"data-prohibitions": "[editContent]"
 										})
 									]
 								})
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
-								"data-uid": "src/pages/Register.tsx:108:15",
+								"data-uid": "src/pages/Register.tsx:114:15",
 								"data-prohibitions": "[editContent]",
 								control: form.control,
 								name: "email",
 								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, {
-									"data-uid": "src/pages/Register.tsx:112:19",
+									"data-uid": "src/pages/Register.tsx:118:19",
 									"data-prohibitions": "[]",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, {
-											"data-uid": "src/pages/Register.tsx:113:21",
+											"data-uid": "src/pages/Register.tsx:119:21",
 											"data-prohibitions": "[]",
 											children: "Email"
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, {
-											"data-uid": "src/pages/Register.tsx:114:21",
+											"data-uid": "src/pages/Register.tsx:120:21",
 											"data-prohibitions": "[]",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-												"data-uid": "src/pages/Register.tsx:115:23",
+												"data-uid": "src/pages/Register.tsx:121:23",
 												"data-prohibitions": "[editContent]",
 												type: "email",
 												placeholder: "m@exemplo.com",
@@ -29889,31 +30033,31 @@ function Register() {
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {
-											"data-uid": "src/pages/Register.tsx:117:21",
+											"data-uid": "src/pages/Register.tsx:123:21",
 											"data-prohibitions": "[editContent]"
 										})
 									]
 								})
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
-								"data-uid": "src/pages/Register.tsx:122:15",
+								"data-uid": "src/pages/Register.tsx:128:15",
 								"data-prohibitions": "[editContent]",
 								control: form.control,
 								name: "password",
 								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, {
-									"data-uid": "src/pages/Register.tsx:126:19",
+									"data-uid": "src/pages/Register.tsx:132:19",
 									"data-prohibitions": "[]",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, {
-											"data-uid": "src/pages/Register.tsx:127:21",
+											"data-uid": "src/pages/Register.tsx:133:21",
 											"data-prohibitions": "[]",
 											children: "Senha"
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, {
-											"data-uid": "src/pages/Register.tsx:128:21",
+											"data-uid": "src/pages/Register.tsx:134:21",
 											"data-prohibitions": "[]",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-												"data-uid": "src/pages/Register.tsx:129:23",
+												"data-uid": "src/pages/Register.tsx:135:23",
 												"data-prohibitions": "[editContent]",
 												type: "password",
 												placeholder: "••••••••",
@@ -29922,64 +30066,64 @@ function Register() {
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {
-											"data-uid": "src/pages/Register.tsx:131:21",
+											"data-uid": "src/pages/Register.tsx:137:21",
 											"data-prohibitions": "[editContent]"
 										})
 									]
 								})
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
-								"data-uid": "src/pages/Register.tsx:136:15",
+								"data-uid": "src/pages/Register.tsx:142:15",
 								"data-prohibitions": "[editContent]",
 								control: form.control,
 								name: "role",
 								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, {
-									"data-uid": "src/pages/Register.tsx:140:19",
+									"data-uid": "src/pages/Register.tsx:146:19",
 									"data-prohibitions": "[editContent]",
 									className: "space-y-3",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, {
-											"data-uid": "src/pages/Register.tsx:141:21",
+											"data-uid": "src/pages/Register.tsx:147:21",
 											"data-prohibitions": "[]",
 											children: "Tipo de Perfil"
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, {
-											"data-uid": "src/pages/Register.tsx:142:21",
+											"data-uid": "src/pages/Register.tsx:148:21",
 											"data-prohibitions": "[editContent]",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(RadioGroup, {
-												"data-uid": "src/pages/Register.tsx:143:23",
+												"data-uid": "src/pages/Register.tsx:149:23",
 												"data-prohibitions": "[editContent]",
 												onValueChange: field.onChange,
 												defaultValue: field.value,
 												className: "flex flex-col sm:flex-row gap-3",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormItem, {
-													"data-uid": "src/pages/Register.tsx:148:25",
+													"data-uid": "src/pages/Register.tsx:154:25",
 													"data-prohibitions": "[editContent]",
 													className: "flex-1 space-y-0",
 													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, {
-														"data-uid": "src/pages/Register.tsx:149:27",
+														"data-uid": "src/pages/Register.tsx:155:27",
 														"data-prohibitions": "[editContent]",
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-															"data-uid": "src/pages/Register.tsx:150:29",
+															"data-uid": "src/pages/Register.tsx:156:29",
 															"data-prohibitions": "[editContent]",
 															className: "relative",
 															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupItem, {
-																"data-uid": "src/pages/Register.tsx:151:31",
+																"data-uid": "src/pages/Register.tsx:157:31",
 																"data-prohibitions": "[editContent]",
 																value: "customer",
 																id: "role-customer",
 																className: "peer sr-only"
 															}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
-																"data-uid": "src/pages/Register.tsx:156:31",
+																"data-uid": "src/pages/Register.tsx:162:31",
 																"data-prohibitions": "[editContent]",
 																htmlFor: "role-customer",
 																className: cn$1("flex flex-col items-center justify-center rounded-lg border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-background cursor-pointer transition-all gap-2", field.value === "customer" ? "border-primary bg-primary/5 text-primary" : "text-muted-foreground"),
 																children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(User, {
-																	"data-uid": "src/pages/Register.tsx:165:33",
+																	"data-uid": "src/pages/Register.tsx:171:33",
 																	"data-prohibitions": "[editContent]",
 																	className: cn$1("h-6 w-6 mb-1", field.value === "customer" ? "text-primary" : "")
 																}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-																	"data-uid": "src/pages/Register.tsx:171:33",
+																	"data-uid": "src/pages/Register.tsx:177:33",
 																	"data-prohibitions": "[editContent]",
 																	className: cn$1("font-semibold text-sm", field.value === "customer" ? "text-foreground" : "text-foreground/80"),
 																	children: "Cliente"
@@ -29988,33 +30132,33 @@ function Register() {
 														})
 													})
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormItem, {
-													"data-uid": "src/pages/Register.tsx:186:25",
+													"data-uid": "src/pages/Register.tsx:192:25",
 													"data-prohibitions": "[editContent]",
 													className: "flex-1 space-y-0",
 													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, {
-														"data-uid": "src/pages/Register.tsx:187:27",
+														"data-uid": "src/pages/Register.tsx:193:27",
 														"data-prohibitions": "[editContent]",
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-															"data-uid": "src/pages/Register.tsx:188:29",
+															"data-uid": "src/pages/Register.tsx:194:29",
 															"data-prohibitions": "[editContent]",
 															className: "relative",
 															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupItem, {
-																"data-uid": "src/pages/Register.tsx:189:31",
+																"data-uid": "src/pages/Register.tsx:195:31",
 																"data-prohibitions": "[editContent]",
 																value: "company",
 																id: "role-company",
 																className: "peer sr-only"
 															}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
-																"data-uid": "src/pages/Register.tsx:194:31",
+																"data-uid": "src/pages/Register.tsx:200:31",
 																"data-prohibitions": "[editContent]",
 																htmlFor: "role-company",
 																className: cn$1("flex flex-col items-center justify-center rounded-lg border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-background cursor-pointer transition-all gap-2", field.value === "company" ? "border-primary bg-primary/5 text-primary" : "text-muted-foreground"),
 																children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Briefcase, {
-																	"data-uid": "src/pages/Register.tsx:203:33",
+																	"data-uid": "src/pages/Register.tsx:209:33",
 																	"data-prohibitions": "[editContent]",
 																	className: cn$1("h-6 w-6 mb-1", field.value === "company" ? "text-primary" : "")
 																}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-																	"data-uid": "src/pages/Register.tsx:209:33",
+																	"data-uid": "src/pages/Register.tsx:215:33",
 																	"data-prohibitions": "[editContent]",
 																	className: cn$1("font-semibold text-sm", field.value === "company" ? "text-foreground" : "text-foreground/80"),
 																	children: "Fornecedor"
@@ -30026,7 +30170,7 @@ function Register() {
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {
-											"data-uid": "src/pages/Register.tsx:225:21",
+											"data-uid": "src/pages/Register.tsx:231:21",
 											"data-prohibitions": "[editContent]",
 											className: "text-destructive font-medium"
 										})
@@ -30035,29 +30179,29 @@ function Register() {
 							})
 						]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardFooter, {
-						"data-uid": "src/pages/Register.tsx:231:13",
+						"data-uid": "src/pages/Register.tsx:237:13",
 						"data-prohibitions": "[editContent]",
 						className: "flex flex-col space-y-4 pb-8",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-							"data-uid": "src/pages/Register.tsx:232:15",
+							"data-uid": "src/pages/Register.tsx:238:15",
 							"data-prohibitions": "[editContent]",
 							type: "submit",
 							className: "w-full h-11 text-md",
 							disabled: isLoading,
 							children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, {
-								"data-uid": "src/pages/Register.tsx:235:21",
+								"data-uid": "src/pages/Register.tsx:241:21",
 								"data-prohibitions": "[editContent]",
 								className: "mr-2 h-4 w-4 animate-spin"
 							}), "Criando conta..."] }) : "Cadastrar"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/Register.tsx:242:15",
+							"data-uid": "src/pages/Register.tsx:248:15",
 							"data-prohibitions": "[]",
 							className: "text-sm text-center text-muted-foreground",
 							children: [
 								"Já tem uma conta?",
 								" ",
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-									"data-uid": "src/pages/Register.tsx:244:17",
+									"data-uid": "src/pages/Register.tsx:250:17",
 									"data-prohibitions": "[]",
 									to: "/login",
 									className: "font-semibold text-primary hover:underline",
@@ -31718,8 +31862,9 @@ Switch.displayName = Root$2.displayName;
 //#endregion
 //#region src/pages/Profile.tsx
 var Profile = () => {
-	const { role, setRole, isSubscribed, setIsSubscribed, companyProfile, updateCompanyProfile } = useApp();
+	const { role, setRole, isSubscribed, setIsSubscribed, companyProfile, updateCompanyProfile, currentUser, logout } = useApp();
 	const { toast } = useToast();
+	const navigate = useNavigate();
 	const fileInputRef = (0, import_react.useRef)(null);
 	const [localProfile, setLocalProfile] = (0, import_react.useState)(companyProfile);
 	(0, import_react.useEffect)(() => {
@@ -31743,104 +31888,108 @@ var Profile = () => {
 			});
 		}
 	};
+	const handleLogout = () => {
+		logout();
+		navigate("/");
+	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/Profile.tsx:43:5",
+		"data-uid": "src/pages/Profile.tsx:58:5",
 		"data-prohibitions": "[editContent]",
-		className: "space-y-8 animate-slide-up pb-12",
+		className: "space-y-8 animate-slide-up pb-12 p-6 md:p-8 max-w-5xl mx-auto",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/Profile.tsx:44:7",
+				"data-uid": "src/pages/Profile.tsx:59:7",
 				"data-prohibitions": "[editContent]",
 				className: "flex items-center gap-5",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					"data-uid": "src/pages/Profile.tsx:45:9",
+					"data-uid": "src/pages/Profile.tsx:60:9",
 					"data-prohibitions": "[editContent]",
 					className: "w-20 h-20 rounded-full bg-secondary flex items-center justify-center border border-border shadow-sm overflow-hidden",
 					children: isCompany && companyProfile.logo ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-						"data-uid": "src/pages/Profile.tsx:47:13",
+						"data-uid": "src/pages/Profile.tsx:62:13",
 						"data-prohibitions": "[editContent]",
 						src: companyProfile.logo,
 						alt: "Logo",
 						className: "w-full h-full object-cover"
 					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						"data-uid": "src/pages/Profile.tsx:49:13",
-						"data-prohibitions": "[]",
-						className: "text-3xl font-bold text-muted-foreground",
-						children: "JD"
+						"data-uid": "src/pages/Profile.tsx:64:13",
+						"data-prohibitions": "[editContent]",
+						className: "text-3xl font-bold text-muted-foreground uppercase",
+						children: currentUser?.name?.charAt(0) || "U"
 					})
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/pages/Profile.tsx:52:9",
-					"data-prohibitions": "[]",
+					"data-uid": "src/pages/Profile.tsx:69:9",
+					"data-prohibitions": "[editContent]",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-						"data-uid": "src/pages/Profile.tsx:53:11",
-						"data-prohibitions": "[]",
+						"data-uid": "src/pages/Profile.tsx:70:11",
+						"data-prohibitions": "[editContent]",
 						className: "text-3xl font-bold tracking-tight text-foreground",
-						children: "João Doe"
+						children: currentUser?.name || "Usuário"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						"data-uid": "src/pages/Profile.tsx:54:11",
-						"data-prohibitions": "[]",
+						"data-uid": "src/pages/Profile.tsx:73:11",
+						"data-prohibitions": "[editContent]",
 						className: "text-muted-foreground mt-1",
-						children: "joao.doe@exemplo.com"
+						children: currentUser?.email || "usuario@exemplo.com"
 					})]
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/Profile.tsx:58:7",
+				"data-uid": "src/pages/Profile.tsx:79:7",
 				"data-prohibitions": "[editContent]",
 				className: "grid gap-4 md:grid-cols-2",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
-					"data-uid": "src/pages/Profile.tsx:59:9",
+					"data-uid": "src/pages/Profile.tsx:80:9",
 					"data-prohibitions": "[]",
 					className: "border-border shadow-sm",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-						"data-uid": "src/pages/Profile.tsx:60:11",
+						"data-uid": "src/pages/Profile.tsx:81:11",
 						"data-prohibitions": "[]",
 						className: "p-6 flex items-center justify-between",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/Profile.tsx:61:13",
+							"data-uid": "src/pages/Profile.tsx:82:13",
 							"data-prohibitions": "[]",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-								"data-uid": "src/pages/Profile.tsx:62:15",
+								"data-uid": "src/pages/Profile.tsx:83:15",
 								"data-prohibitions": "[]",
 								className: "text-base text-foreground font-semibold",
 								children: "Modo Locadora"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								"data-uid": "src/pages/Profile.tsx:63:15",
+								"data-uid": "src/pages/Profile.tsx:84:15",
 								"data-prohibitions": "[]",
 								className: "text-sm text-muted-foreground mt-1",
 								children: "Ative para ver oportunidades de eventos"
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Switch, {
-							"data-uid": "src/pages/Profile.tsx:67:13",
+							"data-uid": "src/pages/Profile.tsx:88:13",
 							"data-prohibitions": "[editContent]",
 							checked: isCompany,
 							onCheckedChange: (checked) => setRole(checked ? "company" : "customer")
 						})]
 					})
 				}), isCompany && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
-					"data-uid": "src/pages/Profile.tsx:75:11",
+					"data-uid": "src/pages/Profile.tsx:96:11",
 					"data-prohibitions": "[]",
 					className: "border-border shadow-sm animate-fade-in",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-						"data-uid": "src/pages/Profile.tsx:76:13",
+						"data-uid": "src/pages/Profile.tsx:97:13",
 						"data-prohibitions": "[]",
 						className: "p-6 flex items-center justify-between",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/Profile.tsx:77:15",
+							"data-uid": "src/pages/Profile.tsx:98:15",
 							"data-prohibitions": "[]",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-								"data-uid": "src/pages/Profile.tsx:78:17",
+								"data-uid": "src/pages/Profile.tsx:99:17",
 								"data-prohibitions": "[]",
 								className: "text-base text-foreground font-semibold",
 								children: "Assinatura Premium"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								"data-uid": "src/pages/Profile.tsx:81:17",
+								"data-uid": "src/pages/Profile.tsx:102:17",
 								"data-prohibitions": "[]",
 								className: "text-sm text-muted-foreground mt-1",
 								children: "Receba e responda demandas ilimitadas"
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Switch, {
-							"data-uid": "src/pages/Profile.tsx:85:15",
+							"data-uid": "src/pages/Profile.tsx:106:15",
 							"data-prohibitions": "[editContent]",
 							checked: isSubscribed,
 							onCheckedChange: setIsSubscribed
@@ -31849,67 +31998,67 @@ var Profile = () => {
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/Profile.tsx:91:7",
+				"data-uid": "src/pages/Profile.tsx:112:7",
 				"data-prohibitions": "[editContent]",
 				className: "grid gap-8 md:grid-cols-2",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-					"data-uid": "src/pages/Profile.tsx:92:9",
+					"data-uid": "src/pages/Profile.tsx:113:9",
 					"data-prohibitions": "[editContent]",
 					className: "space-y-6",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-						"data-uid": "src/pages/Profile.tsx:93:11",
+						"data-uid": "src/pages/Profile.tsx:114:11",
 						"data-prohibitions": "[]",
 						className: "text-xl font-bold text-foreground border-b border-border pb-2",
 						children: "Dados Pessoais"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/Profile.tsx:96:11",
+						"data-uid": "src/pages/Profile.tsx:117:11",
 						"data-prohibitions": "[editContent]",
 						className: "space-y-4",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/Profile.tsx:97:13",
+								"data-uid": "src/pages/Profile.tsx:118:13",
 								"data-prohibitions": "[]",
 								className: "space-y-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-									"data-uid": "src/pages/Profile.tsx:98:15",
+									"data-uid": "src/pages/Profile.tsx:119:15",
 									"data-prohibitions": "[]",
 									children: "Nome Completo"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									"data-uid": "src/pages/Profile.tsx:99:15",
+									"data-uid": "src/pages/Profile.tsx:120:15",
 									"data-prohibitions": "[editContent]",
-									defaultValue: "João Doe"
+									defaultValue: currentUser?.name || ""
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/Profile.tsx:101:13",
+								"data-uid": "src/pages/Profile.tsx:122:13",
 								"data-prohibitions": "[]",
 								className: "space-y-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-									"data-uid": "src/pages/Profile.tsx:102:15",
+									"data-uid": "src/pages/Profile.tsx:123:15",
 									"data-prohibitions": "[]",
 									children: "Telefone"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									"data-uid": "src/pages/Profile.tsx:103:15",
+									"data-uid": "src/pages/Profile.tsx:124:15",
 									"data-prohibitions": "[editContent]",
-									defaultValue: "(11) 98765-4321"
+									placeholder: "(11) 90000-0000"
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/Profile.tsx:105:13",
+								"data-uid": "src/pages/Profile.tsx:126:13",
 								"data-prohibitions": "[]",
 								className: "space-y-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-									"data-uid": "src/pages/Profile.tsx:106:15",
+									"data-uid": "src/pages/Profile.tsx:127:15",
 									"data-prohibitions": "[]",
 									children: "CPF / CNPJ"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									"data-uid": "src/pages/Profile.tsx:107:15",
+									"data-uid": "src/pages/Profile.tsx:128:15",
 									"data-prohibitions": "[editContent]",
-									defaultValue: "123.456.789-00"
+									placeholder: "000.000.000-00"
 								})]
 							}),
 							!isCompany && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-								"data-uid": "src/pages/Profile.tsx:110:15",
+								"data-uid": "src/pages/Profile.tsx:131:15",
 								"data-prohibitions": "[]",
 								onClick: handleSave,
 								className: "w-full mt-4 h-12 text-md shadow-sm",
@@ -31918,54 +32067,54 @@ var Profile = () => {
 						]
 					})]
 				}), isCompany && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-					"data-uid": "src/pages/Profile.tsx:118:11",
+					"data-uid": "src/pages/Profile.tsx:139:11",
 					"data-prohibitions": "[editContent]",
 					className: "space-y-6 animate-fade-in",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-						"data-uid": "src/pages/Profile.tsx:119:13",
+						"data-uid": "src/pages/Profile.tsx:140:13",
 						"data-prohibitions": "[]",
 						className: "text-xl font-bold text-foreground border-b border-border pb-2",
 						children: "Perfil da Locadora"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/Profile.tsx:122:13",
+						"data-uid": "src/pages/Profile.tsx:143:13",
 						"data-prohibitions": "[editContent]",
 						className: "space-y-4",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/Profile.tsx:123:15",
+								"data-uid": "src/pages/Profile.tsx:144:15",
 								"data-prohibitions": "[editContent]",
 								className: "space-y-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-									"data-uid": "src/pages/Profile.tsx:124:17",
+									"data-uid": "src/pages/Profile.tsx:145:17",
 									"data-prohibitions": "[]",
 									children: "Logo Marca da Empresa"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/Profile.tsx:125:17",
+									"data-uid": "src/pages/Profile.tsx:146:17",
 									"data-prohibitions": "[editContent]",
 									className: "flex flex-col items-center justify-center border-2 border-dashed border-border rounded-xl p-6 cursor-pointer hover:border-primary/50 hover:bg-secondary/50 transition-colors bg-card",
 									onClick: () => fileInputRef.current?.click(),
 									children: [localProfile.logo ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-										"data-uid": "src/pages/Profile.tsx:130:21",
+										"data-uid": "src/pages/Profile.tsx:151:21",
 										"data-prohibitions": "[editContent]",
 										src: localProfile.logo,
 										alt: "Logo Preview",
 										className: "h-24 w-auto object-contain rounded"
 									}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/Profile.tsx:136:21",
+										"data-uid": "src/pages/Profile.tsx:157:21",
 										"data-prohibitions": "[]",
 										className: "flex flex-col items-center text-muted-foreground",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Upload, {
-											"data-uid": "src/pages/Profile.tsx:137:23",
+											"data-uid": "src/pages/Profile.tsx:158:23",
 											"data-prohibitions": "[editContent]",
 											className: "h-8 w-8 mb-2 opacity-50"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											"data-uid": "src/pages/Profile.tsx:138:23",
+											"data-uid": "src/pages/Profile.tsx:159:23",
 											"data-prohibitions": "[]",
 											className: "text-sm font-medium",
 											children: "Clique para fazer upload"
 										})]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-										"data-uid": "src/pages/Profile.tsx:141:19",
+										"data-uid": "src/pages/Profile.tsx:162:19",
 										"data-prohibitions": "[editContent]",
 										type: "file",
 										ref: fileInputRef,
@@ -31976,15 +32125,15 @@ var Profile = () => {
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/Profile.tsx:151:15",
+								"data-uid": "src/pages/Profile.tsx:172:15",
 								"data-prohibitions": "[]",
 								className: "space-y-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-									"data-uid": "src/pages/Profile.tsx:152:17",
+									"data-uid": "src/pages/Profile.tsx:173:17",
 									"data-prohibitions": "[]",
 									children: "Nome da Empresa"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									"data-uid": "src/pages/Profile.tsx:153:17",
+									"data-uid": "src/pages/Profile.tsx:174:17",
 									"data-prohibitions": "[editContent]",
 									value: localProfile.name,
 									onChange: (e) => setLocalProfile({
@@ -31994,15 +32143,15 @@ var Profile = () => {
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/Profile.tsx:159:15",
+								"data-uid": "src/pages/Profile.tsx:180:15",
 								"data-prohibitions": "[]",
 								className: "space-y-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-									"data-uid": "src/pages/Profile.tsx:160:17",
+									"data-uid": "src/pages/Profile.tsx:181:17",
 									"data-prohibitions": "[]",
 									children: "Endereço da Empresa"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									"data-uid": "src/pages/Profile.tsx:161:17",
+									"data-uid": "src/pages/Profile.tsx:182:17",
 									"data-prohibitions": "[editContent]",
 									value: localProfile.address,
 									onChange: (e) => setLocalProfile({
@@ -32013,15 +32162,15 @@ var Profile = () => {
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/Profile.tsx:168:15",
+								"data-uid": "src/pages/Profile.tsx:189:15",
 								"data-prohibitions": "[]",
 								className: "space-y-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-									"data-uid": "src/pages/Profile.tsx:169:17",
+									"data-uid": "src/pages/Profile.tsx:190:17",
 									"data-prohibitions": "[]",
 									children: "Especialidades"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									"data-uid": "src/pages/Profile.tsx:170:17",
+									"data-uid": "src/pages/Profile.tsx:191:17",
 									"data-prohibitions": "[editContent]",
 									value: localProfile.specialties,
 									onChange: (e) => setLocalProfile({
@@ -32032,15 +32181,15 @@ var Profile = () => {
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/Profile.tsx:179:15",
+								"data-uid": "src/pages/Profile.tsx:200:15",
 								"data-prohibitions": "[]",
 								className: "space-y-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-									"data-uid": "src/pages/Profile.tsx:180:17",
+									"data-uid": "src/pages/Profile.tsx:201:17",
 									"data-prohibitions": "[]",
 									children: "Observações"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
-									"data-uid": "src/pages/Profile.tsx:181:17",
+									"data-uid": "src/pages/Profile.tsx:202:17",
 									"data-prohibitions": "[editContent]",
 									value: localProfile.observations,
 									onChange: (e) => setLocalProfile({
@@ -32052,7 +32201,7 @@ var Profile = () => {
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-								"data-uid": "src/pages/Profile.tsx:191:15",
+								"data-uid": "src/pages/Profile.tsx:212:15",
 								"data-prohibitions": "[]",
 								onClick: handleSave,
 								className: "w-full mt-4 h-12 text-md shadow-sm",
@@ -32063,13 +32212,14 @@ var Profile = () => {
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/Profile.tsx:199:7",
+				"data-uid": "src/pages/Profile.tsx:220:7",
 				"data-prohibitions": "[]",
 				className: "pt-8 border-t border-border",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-					"data-uid": "src/pages/Profile.tsx:200:9",
+					"data-uid": "src/pages/Profile.tsx:221:9",
 					"data-prohibitions": "[]",
 					variant: "outline",
+					onClick: handleLogout,
 					className: "w-full sm:w-auto text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground",
 					children: "Sair da Conta"
 				})
@@ -35707,4 +35857,4 @@ function App() {
 }));
 //#endregion
 
-//# sourceMappingURL=index-C-hF7V_2.js.map
+//# sourceMappingURL=index-CqI5gvxJ.js.map

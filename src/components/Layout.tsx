@@ -1,4 +1,4 @@
-import { Link, Outlet, useLocation } from 'react-router-dom'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
   Menu,
   Calendar,
@@ -7,14 +7,24 @@ import {
   LayoutDashboard,
   LogIn,
   UserPlus,
+  LogOut,
+  User,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
 import logoImg from '@/assets/e-eventos-novo-62817.png'
+import { useApp } from '@/store/AppContext'
 
 export function Layout() {
   const location = useLocation()
+  const navigate = useNavigate()
+  const { currentUser, logout } = useApp()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/')
+  }
 
   const navItems = [
     { name: 'Início', path: '/', icon: LayoutDashboard },
@@ -65,20 +75,45 @@ export function Layout() {
                       </Link>
                     )
                   })}
+                  {currentUser && (
+                    <Link
+                      to="/profile"
+                      className={cn(
+                        'flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors',
+                        location.pathname === '/profile'
+                          ? 'bg-primary text-primary-foreground'
+                          : 'hover:bg-muted',
+                      )}
+                    >
+                      <User className="h-4 w-4" />
+                      Meu Perfil
+                    </Link>
+                  )}
                 </nav>
                 <div className="flex flex-col gap-2 mt-auto pt-6 border-t border-border">
-                  <Link
-                    to="/login"
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium hover:bg-muted transition-colors"
-                  >
-                    <LogIn className="h-4 w-4" /> Entrar
-                  </Link>
-                  <Link
-                    to="/register"
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium hover:bg-muted transition-colors text-primary"
-                  >
-                    <UserPlus className="h-4 w-4" /> Cadastrar
-                  </Link>
+                  {currentUser ? (
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium hover:bg-muted transition-colors text-destructive"
+                    >
+                      <LogOut className="h-4 w-4" /> Sair da conta
+                    </button>
+                  ) : (
+                    <>
+                      <Link
+                        to="/login"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium hover:bg-muted transition-colors"
+                      >
+                        <LogIn className="h-4 w-4" /> Entrar
+                      </Link>
+                      <Link
+                        to="/register"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium hover:bg-muted transition-colors text-primary"
+                      >
+                        <UserPlus className="h-4 w-4" /> Cadastrar
+                      </Link>
+                    </>
+                  )}
                 </div>
               </SheetContent>
             </Sheet>
@@ -111,12 +146,28 @@ export function Layout() {
           </nav>
 
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/login">Entrar</Link>
-            </Button>
-            <Button size="sm" asChild>
-              <Link to="/register">Cadastrar</Link>
-            </Button>
+            {currentUser ? (
+              <div className="flex items-center gap-4">
+                <Link
+                  to="/profile"
+                  className="text-sm font-medium hover:text-primary transition-colors"
+                >
+                  Olá, {currentUser.name.split(' ')[0]}
+                </Link>
+                <Button variant="ghost" size="sm" onClick={handleLogout}>
+                  Sair
+                </Button>
+              </div>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/login">Entrar</Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link to="/register">Cadastrar</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </header>

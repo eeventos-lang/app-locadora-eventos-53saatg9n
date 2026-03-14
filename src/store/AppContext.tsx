@@ -42,6 +42,14 @@ export type CompanyProfile = {
   observations: string
 }
 
+export type User = {
+  id: string
+  name: string
+  email: string
+  role: Role
+  password?: string
+}
+
 interface AppContextType {
   role: Role
   setRole: (role: Role) => void
@@ -51,7 +59,22 @@ interface AppContextType {
   addDemand: (demand: Omit<Demand, 'id' | 'status' | 'proposals' | 'createdAt'>) => void
   companyProfile: CompanyProfile
   updateCompanyProfile: (profile: Partial<CompanyProfile>) => void
+  users: User[]
+  currentUser: User | null
+  registerUser: (user: Omit<User, 'id'>) => Promise<void>
+  login: (email: string, password?: string) => Promise<void>
+  logout: () => void
 }
+
+const MOCK_USERS: User[] = [
+  {
+    id: 'u1',
+    name: 'João Doe',
+    email: 'joao.doe@exemplo.com',
+    role: 'company',
+    password: 'password123',
+  },
+]
 
 const MOCK_DEMANDS: Demand[] = [
   {
@@ -118,6 +141,8 @@ const MOCK_DEMANDS: Demand[] = [
 const AppContext = createContext<AppContextType | undefined>(undefined)
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
+  const [users, setUsers] = useState<User[]>(MOCK_USERS)
+  const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [role, setRole] = useState<Role>('customer')
   const [isSubscribed, setIsSubscribed] = useState<boolean>(true)
   const [demands, setDemands] = useState<Demand[]>(MOCK_DEMANDS)
@@ -144,6 +169,40 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setCompanyProfile((prev) => ({ ...prev, ...profile }))
   }
 
+  const registerUser = async (userData: Omit<User, 'id'>) => {
+    return new Promise<void>((resolve, reject) => {
+      setTimeout(() => {
+        if (users.find((u) => u.email === userData.email)) {
+          reject(new Error('Este email já está em uso.'))
+          return
+        }
+        const newUser: User = { ...userData, id: Math.random().toString(36).substring(7) }
+        setUsers((prev) => [...prev, newUser])
+        resolve()
+      }, 800)
+    })
+  }
+
+  const login = async (email: string, password?: string) => {
+    return new Promise<void>((resolve, reject) => {
+      setTimeout(() => {
+        const user = users.find((u) => u.email === email && u.password === password)
+        if (user) {
+          setCurrentUser(user)
+          setRole(user.role)
+          resolve()
+        } else {
+          reject(new Error('Credenciais inválidas. Tente novamente.'))
+        }
+      }, 800)
+    })
+  }
+
+  const logout = () => {
+    setCurrentUser(null)
+    setRole('customer')
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -155,6 +214,11 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         addDemand,
         companyProfile,
         updateCompanyProfile,
+        users,
+        currentUser,
+        registerUser,
+        login,
+        logout,
       }}
     >
       {children}

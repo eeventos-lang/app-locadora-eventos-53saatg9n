@@ -33,8 +33,8 @@ import { cn } from '@/lib/utils'
 
 const formSchema = z.object({
   name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
-  email: z.string().email('Email inválido'),
-  password: z.string().min(6, 'Senha deve ter pelo menos 6 caracteres'),
+  email: z.string().email('Email inválido. Verifique o formato.'),
+  password: z.string().min(6, 'A senha deve ter pelo menos 6 caracteres.'),
   role: z.enum(['customer', 'company'], {
     required_error: 'Por favor, selecione o tipo de perfil.',
   }),
@@ -44,7 +44,7 @@ type FormValues = z.infer<typeof formSchema>
 
 export default function Register() {
   const navigate = useNavigate()
-  const { setRole } = useApp()
+  const { registerUser } = useApp()
   const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<FormValues>({
@@ -59,14 +59,20 @@ export default function Register() {
 
   async function onSubmit(data: FormValues) {
     setIsLoading(true)
-
-    // Simula uma chamada de API
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    setIsLoading(false)
-    setRole(data.role)
-    toast.success('Conta criada com sucesso!')
-    navigate('/')
+    try {
+      await registerUser({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        role: data.role,
+      })
+      toast.success('Conta criada com sucesso! Faça seu login.')
+      navigate('/login')
+    } catch (error: any) {
+      toast.error(error.message || 'Erro ao criar conta.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
