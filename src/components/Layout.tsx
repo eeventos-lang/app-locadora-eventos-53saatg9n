@@ -11,6 +11,7 @@ import {
   User,
   Bell,
   Users,
+  Receipt,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet'
@@ -41,6 +42,7 @@ export function Layout() {
     { name: 'Início', path: '/', icon: LayoutDashboard },
     { name: 'Demandas', path: '/demands', icon: Calendar },
     ...(role === 'customer' ? [{ name: 'Fornecedores', path: '/suppliers', icon: Users }] : []),
+    { name: 'Financeiro', path: '/finance', icon: Receipt },
     { name: 'Criar Evento', path: '/create-event', icon: PlusCircle },
     { name: 'Planos', path: '/subscription', icon: CreditCard },
   ]

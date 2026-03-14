@@ -31,7 +31,7 @@ export type PaymentStatus =
   | 'escrow'
   | 'completed'
 
-export type SectorStatus = 'pending' | 'contracted' | 'concluded' | 'not_delivered'
+export type SectorStatus = 'pending' | 'contracted' | 'concluded' | 'not_delivered' | 'disputed'
 
 export type Demand = {
   id: string
@@ -96,6 +96,21 @@ export type User = {
   companyProfile?: CompanyProfile
 }
 
+export type TransactionStatus = 'pending' | 'completed' | 'refunded' | 'disputed'
+
+export type Transaction = {
+  id: string
+  demandId: string
+  demandTitle: string
+  customerId: string
+  clientName: string
+  supplierId: string
+  supplierName: string
+  amount: number
+  date: string
+  status: TransactionStatus
+}
+
 interface AppContextType {
   role: Role
   setRole: (role: Role) => void
@@ -127,6 +142,8 @@ interface AppContextType {
   signContracts: (demandId: string) => void
   payEvent: (demandId: string) => void
   updateSectorStatus: (demandId: string, sector: string, status: SectorStatus) => void
+  disputeService: (demandId: string, sector: string, reason: string) => void
+  transactions: Transaction[]
   notifications: Notification[]
   markNotificationsAsRead: () => void
   inviteSupplier: (supplierId: string, demandId: string) => void
@@ -308,6 +325,21 @@ const MOCK_PROPOSALS: Proposal[] = [
   },
 ]
 
+const MOCK_TRANSACTIONS: Transaction[] = [
+  {
+    id: 't1',
+    demandId: 'd1',
+    demandTitle: 'Casamento Sítio das Palmeiras',
+    customerId: 'c1',
+    clientName: 'Cliente Teste',
+    supplierId: 'u1',
+    supplierName: 'JD Decorações',
+    amount: 3200,
+    date: new Date(Date.now() - 86400000 * 5).toISOString(),
+    status: 'pending',
+  },
+]
+
 const AppContext = createContext<AppContextType | undefined>(undefined)
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
@@ -317,6 +349,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [isSubscribed, setIsSubscribed] = useState<boolean>(true)
   const [demands, setDemands] = useState<Demand[]>(MOCK_DEMANDS)
   const [proposals, setProposals] = useState<Proposal[]>(MOCK_PROPOSALS)
+  const [transactions, setTransactions] = useState<Transaction[]>(MOCK_TRANSACTIONS)
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [companyProfile, setCompanyProfile] = useState<CompanyProfile>(
     MOCK_USERS[1].companyProfile!,
@@ -478,6 +511,26 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         ),
       )
 
+      const client = users.find((u) => u.id === demand.customerId)
+      const acceptedProposals = proposals.filter(
+        (p) => p.demandId === demand.id && p.status === 'accepted',
+      )
+
+      const newTransactions: Transaction[] = acceptedProposals.map((p) => ({
+        id: Math.random().toString(36).substring(7),
+        demandId: demand.id,
+        demandTitle: demand.title,
+        customerId: demand.customerId,
+        clientName: client?.name || 'Cliente',
+        supplierId: p.supplierId,
+        supplierName: p.supplierName,
+        amount: p.value,
+        date: new Date().toISOString(),
+        status: 'pending',
+      }))
+
+      setTransactions((prev) => [...newTransactions, ...prev])
+
       const newNotifs = uniqueProviders.map((supId) => ({
         id: Math.random().toString(36).substring(7),
         title: 'Evento Pago e Confirmado!',
@@ -510,6 +563,63 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         return d
       }),
     )
+
+    const demand = demands.find((d) => d.id === demandId)
+    if (demand) {
+      const providerId = demand.contractedProviders[sector]
+      const proposal = proposals.find((p) => p.id === providerId)
+      if (proposal) {
+        setTransactions((prev) =>
+          prev.map((t) => {
+            if (t.demandId === demandId && t.supplierId === proposal.supplierId) {
+              return {
+                ...t,
+                status:
+                  status === 'concluded'
+                    ? 'completed'
+                    : status === 'not_delivered'
+                      ? 'refunded'
+                      : t.status,
+              }
+            }
+            return t
+          }),
+        )
+      }
+    }
+  }
+
+  const disputeService = (demandId: string, sector: string, reason: string) => {
+    updateSectorStatus(demandId, sector, 'disputed')
+
+    const demand = demands.find((d) => d.id === demandId)
+    if (demand) {
+      const providerId = demand.contractedProviders[sector]
+      const proposal = proposals.find((p) => p.id === providerId)
+
+      const newNotif: Notification = {
+        id: Math.random().toString(36).substring(7),
+        title: 'Serviço em Disputa!',
+        message: `O cliente abriu uma disputa para o serviço contratado. Motivo: ${reason}`,
+        demandId: demand.id,
+        sector,
+        read: false,
+        createdAt: new Date().toISOString(),
+        targetSupplierId: proposal?.supplierId,
+      }
+      setNotifications((prev) => [newNotif, ...prev])
+
+      if (proposal) {
+        setTransactions((prev) =>
+          prev.map((t) => {
+            if (t.demandId === demandId && t.supplierId === proposal.supplierId) {
+              return { ...t, status: 'disputed' }
+            }
+            return t
+          }),
+        )
+      }
+    }
   }
 
   const inviteSupplier = (supplierId: string, demandId: string) => {
@@ -619,6 +729,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         signContracts,
         payEvent,
         updateSectorStatus,
+        disputeService,
+        transactions,
         notifications,
         markNotificationsAsRead,
         inviteSupplier,

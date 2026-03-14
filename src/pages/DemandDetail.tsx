@@ -22,6 +22,7 @@ import {
   DialogFooter,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -43,6 +44,7 @@ const DemandDetail = () => {
     signContracts,
     payEvent,
     updateSectorStatus,
+    disputeService,
     currentUser,
     companyProfile,
   } = useApp()
@@ -51,6 +53,10 @@ const DemandDetail = () => {
   const [proposalValue, setProposalValue] = useState('')
   const [proposalMessage, setProposalMessage] = useState('')
   const [isPaymentOpen, setIsPaymentOpen] = useState(false)
+
+  const [isDisputeOpen, setIsDisputeOpen] = useState(false)
+  const [disputeReason, setDisputeReason] = useState('')
+  const [disputeSector, setDisputeSector] = useState('')
 
   const demand = demands.find((d) => d.id === id)
 
@@ -128,6 +134,15 @@ const DemandDetail = () => {
   }
 
   const getStatusBadge = () => {
+    const hasDispute = Object.values(demand.sectorStatus || {}).some((s) => s === 'disputed')
+    if (hasDispute) {
+      return (
+        <Badge className="bg-red-500/10 text-red-600 border-red-500/20 uppercase tracking-wider font-bold shrink-0">
+          Em Disputa
+        </Badge>
+      )
+    }
+
     if (demand.paymentStatus === 'completed') {
       return (
         <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 uppercase tracking-wider font-bold shrink-0">
@@ -287,7 +302,8 @@ const DemandDetail = () => {
             </div>
             <p className="text-sm text-muted-foreground mb-4">
               Confirme a entrega dos serviços para liberar o repasse final aos fornecedores. Caso
-              algum serviço não tenha sido entregue, solicite o reembolso proporcional.
+              algum serviço não tenha sido entregue, solicite o reembolso proporcional ou abra uma
+              disputa.
             </p>
             <div className="grid grid-cols-1 gap-4">
               {SERVICES.filter((s) => demand.requirements[s.id as keyof TechRequirement]).map(
@@ -320,23 +336,23 @@ const DemandDetail = () => {
                         {status === 'contracted' && (
                           <>
                             <Button
+                              className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white shadow-md order-1 sm:order-2"
+                              onClick={() => updateSectorStatus(demand.id, s.id, 'concluded')}
+                            >
+                              Concluído
+                            </Button>
+                            <Button
                               variant="outline"
-                              className="w-full sm:w-auto text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground"
+                              className="w-full sm:w-auto text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground order-2 sm:order-1"
                               onClick={() => updateSectorStatus(demand.id, s.id, 'not_delivered')}
                             >
                               Não Entregue
-                            </Button>
-                            <Button
-                              className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white shadow-md"
-                              onClick={() => updateSectorStatus(demand.id, s.id, 'concluded')}
-                            >
-                              Marcar como Concluído
                             </Button>
                           </>
                         )}
                         {status === 'concluded' && (
                           <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 px-4 py-2 text-sm">
-                            Serviço Concluído (Pagamento Liberado)
+                            Serviço Concluído
                           </Badge>
                         )}
                         {status === 'not_delivered' && (
@@ -344,12 +360,74 @@ const DemandDetail = () => {
                             Reembolso Solicitado
                           </Badge>
                         )}
+                        {status === 'disputed' && (
+                          <Badge className="bg-amber-500/10 text-amber-600 border-amber-500/20 px-4 py-2 text-sm">
+                            Em Disputa (Retido)
+                          </Badge>
+                        )}
+
+                        {(status === 'contracted' || status === 'concluded') && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-amber-600 hover:text-amber-700 hover:bg-amber-50 underline decoration-dashed underline-offset-4 order-3"
+                            onClick={() => {
+                              setDisputeSector(s.id)
+                              setIsDisputeOpen(true)
+                            }}
+                          >
+                            Abrir Disputa
+                          </Button>
+                        )}
                       </div>
                     </Card>
                   )
                 },
               )}
             </div>
+
+            <Dialog open={isDisputeOpen} onOpenChange={setIsDisputeOpen}>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Disputar Serviço</DialogTitle>
+                  <DialogDescription>
+                    Houve algum problema com a entrega? Descreva o motivo da disputa. Os pagamentos
+                    serão retidos até que um administrador da plataforma faça a mediação.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="py-4">
+                  <Label htmlFor="reason">Motivo da Disputa</Label>
+                  <Textarea
+                    id="reason"
+                    value={disputeReason}
+                    onChange={(e) => setDisputeReason(e.target.value)}
+                    placeholder="Descreva detalhadamente o problema ocorrido..."
+                    className="mt-2"
+                  />
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setIsDisputeOpen(false)}>
+                    Cancelar
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={() => {
+                      if (!disputeReason) return
+                      disputeService(demand.id, disputeSector, disputeReason)
+                      toast({
+                        title: 'Disputa Aberta',
+                        description: 'Os fundos foram retidos. Um administrador analisará o caso.',
+                        variant: 'destructive',
+                      })
+                      setIsDisputeOpen(false)
+                      setDisputeReason('')
+                    }}
+                  >
+                    Confirmar Disputa
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </section>
         )}
 
@@ -446,38 +524,83 @@ const DemandDetail = () => {
                     )
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent className="sm:max-w-[475px]">
                   <DialogHeader>
                     <DialogTitle>Pagamento Seguro Integrado</DialogTitle>
                     <DialogDescription>
                       O pagamento será mantido em custódia pela plataforma e-eventos.
                     </DialogDescription>
                   </DialogHeader>
-                  <div className="py-6 space-y-4">
-                    <div className="bg-secondary p-4 rounded-xl flex justify-between items-center">
-                      <span className="font-semibold text-muted-foreground">Valor Total</span>
-                      <span className="text-2xl font-bold text-foreground">
-                        {new Intl.NumberFormat('pt-BR', {
-                          style: 'currency',
-                          currency: 'BRL',
-                        }).format(totalContractedValue)}
-                      </span>
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Número do Cartão</Label>
-                      <Input placeholder="0000 0000 0000 0000" />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label>Validade</Label>
-                        <Input placeholder="MM/AA" />
+
+                  <Tabs defaultValue="credit-card" className="w-full py-4">
+                    <TabsList className="grid w-full grid-cols-2">
+                      <TabsTrigger value="credit-card">Cartão de Crédito</TabsTrigger>
+                      <TabsTrigger value="pix">PIX</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="credit-card" className="space-y-4 pt-4">
+                      <div className="bg-secondary p-4 rounded-xl flex justify-between items-center">
+                        <span className="font-semibold text-muted-foreground">Valor Total</span>
+                        <span className="text-2xl font-bold text-foreground">
+                          {new Intl.NumberFormat('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+                          }).format(totalContractedValue)}
+                        </span>
                       </div>
                       <div className="space-y-2">
-                        <Label>CVV</Label>
-                        <Input placeholder="123" type="password" />
+                        <Label>Número do Cartão</Label>
+                        <Input placeholder="0000 0000 0000 0000" />
                       </div>
-                    </div>
-                  </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label>Validade</Label>
+                          <Input placeholder="MM/AA" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>CVV</Label>
+                          <Input placeholder="123" type="password" />
+                        </div>
+                      </div>
+                    </TabsContent>
+                    <TabsContent
+                      value="pix"
+                      className="space-y-4 pt-4 text-center flex flex-col items-center"
+                    >
+                      <div className="bg-secondary p-4 rounded-xl flex justify-between items-center w-full mb-2">
+                        <span className="font-semibold text-muted-foreground">Valor Total</span>
+                        <span className="text-2xl font-bold text-foreground">
+                          {new Intl.NumberFormat('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+                          }).format(totalContractedValue)}
+                        </span>
+                      </div>
+                      <div className="bg-white p-3 inline-block rounded-xl border-2 border-border shadow-sm">
+                        <img
+                          src="https://img.usecurling.com/i?q=qr-code&color=black&shape=outline"
+                          alt="QR Code PIX"
+                          className="w-32 h-32 object-contain"
+                        />
+                      </div>
+                      <div className="space-y-2 w-full text-left">
+                        <Label>Chave Copia e Cola</Label>
+                        <div className="flex gap-2">
+                          <Input
+                            readOnly
+                            value="00020101021126580014br.gov.bcb.pix..."
+                            className="bg-muted font-mono text-xs"
+                          />
+                          <Button
+                            variant="outline"
+                            onClick={() => toast({ title: 'Chave Copiada!' })}
+                          >
+                            Copiar
+                          </Button>
+                        </div>
+                      </div>
+                    </TabsContent>
+                  </Tabs>
+
                   <DialogFooter>
                     <Button variant="outline" onClick={() => setIsPaymentOpen(false)}>
                       Cancelar
