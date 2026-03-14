@@ -1,202 +1,136 @@
-import { Link } from 'react-router-dom'
-import { Plus, Speaker, MapPin, ArrowRight } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { useApp } from '@/store/AppContext'
-import { SERVICES } from '@/lib/services'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { CalendarPlus, ClipboardList, TrendingUp, Users, ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
-const Index = () => {
-  const { role, demands, isSubscribed } = useApp()
-
-  if (role === 'customer') {
-    const myDemands = demands.slice(0, 2)
-    return (
-      <div className="p-6 space-y-8 animate-slide-up">
-        <section className="space-y-4">
-          <div>
-            <h1 className="text-2xl font-bold">Olá, Organizador!</h1>
-            <p className="text-muted-foreground text-sm mt-1">
-              O que você precisa para o seu próximo evento?
-            </p>
-          </div>
-
-          <Link to="/novo-evento" className="block">
-            <Card className="bg-gradient-to-br from-primary/20 to-secondary/20 border-primary/30 hover:border-primary/50 transition-colors cursor-pointer group">
-              <CardContent className="p-6 flex items-center justify-between">
-                <div>
-                  <h2 className="font-semibold text-lg text-white group-hover:text-primary transition-colors">
-                    Criar Nova Demanda
-                  </h2>
-                  <p className="text-sm text-muted-foreground mt-1">Receba propostas em minutos</p>
-                </div>
-                <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white shadow-[0_0_15px_rgba(0,82,255,0.5)] group-hover:scale-105 transition-transform">
-                  <Plus className="w-6 h-6" />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        </section>
-
-        <section>
-          <h3 className="font-semibold mb-4 text-white">Categorias Populares</h3>
-          <div className="grid grid-cols-4 gap-4">
-            {[SERVICES[0], SERVICES[4], SERVICES[7], SERVICES[12]].map((cat, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center">
-                  <cat.icon className={`w-6 h-6 ${cat.color}`} />
-                </div>
-                <span className="text-[10px] font-medium text-muted-foreground text-center leading-tight">
-                  {cat.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-white">Minhas Demandas Recentes</h3>
-            <Link to="/demandas" className="text-xs font-medium text-primary flex items-center">
-              Ver todas <ArrowRight className="w-3 h-3 ml-1" />
-            </Link>
-          </div>
-          <div className="space-y-3">
-            {myDemands.map((demand) => (
-              <Card key={demand.id} className="bg-card/50 border-border overflow-hidden">
-                <CardContent className="p-4 flex justify-between items-center">
-                  <div>
-                    <h4 className="font-medium text-sm text-white">{demand.title}</h4>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {demand.proposals} propostas recebidas
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-accent font-semibold text-sm">
-                      {new Intl.NumberFormat('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL',
-                      }).format(demand.budget)}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-      </div>
-    )
-  }
-
-  // Company View
-  if (!isSubscribed) {
-    return (
-      <div className="p-6 space-y-6 animate-slide-up flex flex-col items-center justify-center min-h-[60vh] text-center">
-        <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-4">
-          <Speaker className="w-8 h-8 text-primary" />
-        </div>
-        <h2 className="text-xl font-bold">Assinatura Necessária</h2>
-        <p className="text-muted-foreground text-sm max-w-[250px]">
-          Assine o plano Premium no seu perfil para visualizar as demandas de clientes e enviar
-          orçamentos.
-        </p>
-        <Button asChild className="mt-4">
-          <Link to="/perfil">Ir para Perfil</Link>
-        </Button>
-      </div>
-    )
-  }
-
+export default function Index() {
   return (
-    <div className="p-6 space-y-6 animate-slide-up">
-      <div className="flex items-center justify-between">
+    <div className="flex flex-col gap-8 animate-in fade-in duration-500">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Painel de Oportunidades</h1>
-          <p className="text-muted-foreground text-sm mt-1">Encontre novos clientes agora</p>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Painel e-eventos</h1>
+          <p className="text-slate-500 mt-1">Bem-vindo(a) ao seu hub de gestão de locações.</p>
         </div>
+        <Link to="/demandas">
+          <Button className="gap-2 bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
+            <CalendarPlus className="h-4 w-4" />
+            Nova Demanda
+          </Button>
+        </Link>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <Card className="bg-card border-border">
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-primary">{demands.length}</div>
-            <p className="text-xs text-muted-foreground mt-1">Demandas Abertas</p>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="hover:shadow-md transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-slate-600">Total de Demandas</CardTitle>
+            <ClipboardList className="h-4 w-4 text-blue-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-slate-900">128</div>
+            <p className="text-xs text-emerald-600 font-medium mt-1 flex items-center gap-1">
+              <TrendingUp className="h-3 w-3" /> +14% este mês
+            </p>
           </CardContent>
         </Card>
-        <Card className="bg-card border-border">
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-accent">12</div>
-            <p className="text-xs text-muted-foreground mt-1">Eventos Fechados</p>
+        <Card className="hover:shadow-md transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-slate-600">Locações Ativas</CardTitle>
+            <CalendarPlus className="h-4 w-4 text-emerald-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-slate-900">42</div>
+            <p className="text-xs text-emerald-600 font-medium mt-1 flex items-center gap-1">
+              <TrendingUp className="h-3 w-3" /> +5% este mês
+            </p>
+          </CardContent>
+        </Card>
+        <Card className="hover:shadow-md transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-slate-600">Novos Clientes</CardTitle>
+            <Users className="h-4 w-4 text-amber-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-slate-900">24</div>
+            <p className="text-xs text-slate-500 mt-1">Cadastrados nos últimos 30 dias</p>
+          </CardContent>
+        </Card>
+        <Card className="hover:shadow-md transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-slate-600">
+              Faturamento Previsto
+            </CardTitle>
+            <span className="h-4 w-4 text-purple-600 font-bold flex items-center justify-center">
+              R$
+            </span>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-slate-900">R$ 45.231</div>
+            <p className="text-xs text-slate-500 mt-1">Para os próximos 30 dias</p>
           </CardContent>
         </Card>
       </div>
 
-      <section>
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-white">Últimas Demandas Publicadas</h3>
-        </div>
-        <div className="space-y-4">
-          {demands.slice(0, 3).map((demand) => (
-            <Link key={demand.id} to={`/demanda/${demand.id}`} className="block">
-              <Card className="bg-card border-border hover:border-primary/50 transition-colors">
-                <CardContent className="p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-medium text-white line-clamp-1">{demand.title}</h4>
-                    <span className="bg-primary/20 text-primary text-[10px] px-2 py-1 rounded-full font-medium whitespace-nowrap ml-2">
-                      Nova
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground mb-3">
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-3 h-3" /> {demand.location}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between pt-3 border-t border-border/50">
-                    <div className="flex items-center gap-2">
-                      {(() => {
-                        const activeReqs = SERVICES.filter(
-                          (s) => demand.requirements[s.id as keyof typeof demand.requirements],
-                        )
-                        return (
-                          <>
-                            <div className="flex gap-1.5">
-                              {activeReqs.slice(0, 3).map((req) => (
-                                <req.icon key={req.id} className={`w-4 h-4 ${req.color}`} />
-                              ))}
-                            </div>
-                            {activeReqs.length > 3 && (
-                              <span className="text-[10px] text-muted-foreground font-medium">
-                                +{activeReqs.length - 3}
-                              </span>
-                            )}
-                          </>
-                        )
-                      })()}
-                    </div>
-                    <div className="text-right">
-                      <p className="text-[10px] text-muted-foreground mb-0.5">Valor Líquido</p>
-                      <span className="text-accent font-semibold text-sm">
-                        {new Intl.NumberFormat('pt-BR', {
-                          style: 'currency',
-                          currency: 'BRL',
-                        }).format(demand.budget * 0.9)}
-                      </span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <Card className="lg:col-span-2 shadow-sm">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Últimas Demandas</CardTitle>
+              <CardDescription>Resumo das atividades recentes no sistema.</CardDescription>
+            </div>
+            <Link to="/demandas">
+              <Button variant="ghost" size="sm" className="gap-1 text-blue-600 hover:text-blue-700">
+                Ver todas <ArrowRight className="h-4 w-4" />
+              </Button>
             </Link>
-          ))}
-        </div>
-        <Button
-          asChild
-          variant="outline"
-          className="w-full mt-4 bg-transparent border-primary/30 text-primary hover:bg-primary/10"
-        >
-          <Link to="/demandas">Ver Todas as Demandas</Link>
-        </Button>
-      </section>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-4 rounded-lg border p-3 hover:bg-slate-50 transition-colors cursor-pointer"
+                >
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600 shrink-0">
+                    <CalendarPlus className="h-5 w-5" />
+                  </div>
+                  <div className="flex-1 min-w-0 space-y-1">
+                    <p className="text-sm font-medium leading-none truncate">
+                      Casamento Silva & Souza
+                    </p>
+                    <p className="text-sm text-slate-500 truncate">Mobiliário e Iluminação</p>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <p className="text-sm font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full inline-block">
+                      Pendente
+                    </p>
+                    <p className="text-xs text-slate-500 mt-1">Há 2 horas</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-100 shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-blue-900">Avisos</CardTitle>
+            <CardDescription className="text-blue-700/70">
+              Atualizações da plataforma
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="rounded-lg bg-white/70 p-4 text-sm text-blue-950 shadow-sm border border-white">
+              <p className="mb-2 font-semibold flex items-center gap-2">
+                <span className="flex h-2 w-2 rounded-full bg-blue-600"></span>
+                Nova Identidade Visual
+              </p>
+              <p className="leading-relaxed">
+                Bem-vindo ao <strong>e-eventos</strong>! Nossa plataforma mudou de nome e identidade
+                visual para refletir melhor nossa marca profissional. Aproveite as funcionalidades!
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }
-
-export default Index

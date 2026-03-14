@@ -1,88 +1,122 @@
-import { Link, Outlet, useLocation } from 'react-router-dom'
-import { Home, ClipboardList, User, Bell, CreditCard } from 'lucide-react'
+import { Outlet, Link, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
-import { useApp } from '@/store/AppContext'
-import { BackButton } from '@/components/BackButton'
+import { Calendar, Home, Settings, User, Menu, Bell } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet'
+import logoUrl from '../assets/logo-marca-e-eventos-66b1b.png'
+
+const navigation = [
+  { name: 'Painel', href: '/', icon: Home },
+  { name: 'Demandas', href: '/demandas', icon: Calendar },
+  { name: 'Assinatura', href: '/subscription', icon: Settings },
+  { name: 'Perfil', href: '/profile', icon: User },
+]
 
 export default function Layout() {
   const location = useLocation()
-  const { role } = useApp()
-
-  const navItems = [
-    { path: '/', icon: Home, label: 'Início' },
-    {
-      path: '/demandas',
-      icon: ClipboardList,
-      label: role === 'customer' ? 'Meus Eventos' : 'Demandas',
-    },
-    ...(role === 'company' ? [{ path: '/assinatura', icon: CreditCard, label: 'Assinatura' }] : []),
-    { path: '/perfil', icon: User, label: 'Perfil' },
-  ]
-
-  const isRoot = location.pathname === '/'
 
   return (
-    <div className="bg-black min-h-screen flex justify-center">
-      <div className="mobile-container w-full flex flex-col relative bg-background">
-        {/* Header */}
-        <header className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 bg-background/80 backdrop-blur-md border-b border-border/50 min-h-[72px]">
-          <div className="flex items-center gap-2">
-            {!isRoot ? (
-              <BackButton className="-ml-3" />
-            ) : (
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-[0_0_15px_rgba(0,82,255,0.4)]">
-                <span className="font-bold text-white text-lg leading-none">E</span>
+    <div className="min-h-screen bg-slate-50 flex flex-col">
+      <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b bg-white px-4 md:px-6 shadow-sm">
+        <div className="flex items-center gap-4">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-72 sm:w-80">
+              <SheetTitle className="sr-only">Menu de Navegação</SheetTitle>
+              <div className="flex items-center gap-3 mb-8 mt-4 px-2">
+                <img
+                  src={logoUrl}
+                  alt="e-eventos logo"
+                  className="h-9 w-auto rounded object-contain"
+                />
+                <span className="text-xl font-bold tracking-tight text-slate-900">e-eventos</span>
               </div>
-            )}
-            <span className="font-bold text-lg tracking-tight">EventMatch</span>
-          </div>
-          <button className="relative w-11 h-11 flex items-center justify-center -mr-3 text-muted-foreground hover:text-white transition-colors rounded-full hover:bg-white/10 active:scale-95">
-            <Bell className="w-5 h-5" />
-            <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-accent rounded-full animate-pulse"></span>
-          </button>
-        </header>
-
-        {/* Main Content */}
-        <main className="flex-1 overflow-y-auto pb-24 animate-fade-in relative flex flex-col">
-          <Outlet />
-        </main>
-
-        {/* Bottom Navigation */}
-        <nav className="absolute bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-lg border-t border-border/50 pb-safe">
-          <ul className="flex justify-around items-center h-16 px-2">
-            {navItems.map((item) => {
-              const isActive =
-                location.pathname === item.path ||
-                (item.path === '/demandas' && location.pathname.startsWith('/demanda/'))
-              return (
-                <li key={item.path} className="flex-1">
-                  <Link
-                    to={item.path}
-                    className="flex flex-col items-center justify-center w-full h-full gap-1"
-                  >
-                    <item.icon
+              <nav className="flex flex-col gap-2">
+                {navigation.map((item) => {
+                  const isActive =
+                    location.pathname === item.href ||
+                    (item.href !== '/' && location.pathname.startsWith(item.href))
+                  return (
+                    <Link
+                      key={item.name}
+                      to={item.href}
                       className={cn(
-                        'w-6 h-6 transition-all duration-300',
+                        'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all',
                         isActive
-                          ? 'text-primary scale-110 drop-shadow-[0_0_8px_rgba(0,82,255,0.6)]'
-                          : 'text-muted-foreground',
-                      )}
-                    />
-                    <span
-                      className={cn(
-                        'text-[10px] font-medium transition-colors',
-                        isActive ? 'text-primary' : 'text-muted-foreground',
+                          ? 'bg-blue-50 text-blue-700'
+                          : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
                       )}
                     >
-                      {item.label}
-                    </span>
-                  </Link>
-                </li>
-              )
-            })}
-          </ul>
+                      <item.icon
+                        className={cn('h-5 w-5', isActive ? 'text-blue-700' : 'text-slate-400')}
+                      />
+                      {item.name}
+                    </Link>
+                  )
+                })}
+              </nav>
+            </SheetContent>
+          </Sheet>
+
+          <Link
+            to="/"
+            className="hidden md:flex items-center gap-3 transition-opacity hover:opacity-90"
+          >
+            <img
+              src={logoUrl}
+              alt="e-eventos logo"
+              className="h-9 w-auto rounded-sm object-contain drop-shadow-sm"
+            />
+            <span className="text-xl font-bold tracking-tight text-slate-900">e-eventos</span>
+          </Link>
+        </div>
+
+        <nav className="hidden md:flex items-center gap-2 mx-6 flex-1 justify-center">
+          {navigation.map((item) => {
+            const isActive =
+              location.pathname === item.href ||
+              (item.href !== '/' && location.pathname.startsWith(item.href))
+            return (
+              <Link
+                key={item.name}
+                to={item.href}
+                className={cn(
+                  'px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                  isActive
+                    ? 'bg-slate-100 text-slate-900'
+                    : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900',
+                )}
+              >
+                {item.name}
+              </Link>
+            )
+          })}
         </nav>
-      </div>
+
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative text-slate-500 hover:text-slate-900"
+          >
+            <Bell className="h-5 w-5" />
+          </Button>
+          <Link to="/profile">
+            <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center border border-blue-200 text-blue-700 overflow-hidden hover:ring-2 hover:ring-blue-100 hover:ring-offset-1 transition-all ml-2">
+              <User className="h-4 w-4" />
+            </div>
+          </Link>
+        </div>
+      </header>
+
+      <main className="flex-1 w-full max-w-7xl mx-auto p-4 md:p-6 lg:p-8 relative">
+        <Outlet />
+      </main>
     </div>
   )
 }
