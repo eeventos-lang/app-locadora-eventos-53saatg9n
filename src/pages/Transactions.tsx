@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -17,21 +17,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { useApp, Proposal, Demand, User, Transaction } from '@/store/AppContext'
-import { Receipt, ShieldCheck, FileText, Ban, Loader2 } from 'lucide-react'
+import { Receipt, ShieldCheck, FileText, Loader2 } from 'lucide-react'
 import { SERVICES } from '@/lib/services'
 import logoImg from '@/assets/e-eventos-novo-62817.png'
 import { useExportQueue } from '@/hooks/use-export-queue'
+import { cn } from '@/lib/utils'
+import { Progress } from '@/components/ui/progress'
+import { useToast } from '@/hooks/use-toast'
 
 const Transactions = () => {
   const { role, transactions, currentUser, proposals, demands, users } = useApp()
-  const { addToQueue, isProcessing } = useExportQueue()
+  const { toast } = useToast()
+  const { addToQueue, isProcessing, queueLength } = useExportQueue()
   const [insuranceFilter, setInsuranceFilter] = useState('all')
   const [paymentFilter, setPaymentFilter] = useState('all')
 
   const [selectedReceipt, setSelectedReceipt] = useState<Transaction | null>(null)
+  const [bulkTotal, setBulkTotal] = useState(0)
 
   const myTransactions = useMemo(() => {
     if (role === 'customer') {
@@ -110,22 +115,80 @@ const Transactions = () => {
     }
   }
 
+  const handleBulkExport = () => {
+    const toExport = myTransactions.filter((t) => {
+      const d = new Date(t.date)
+      const now = new Date()
+      return (
+        d.getMonth() === now.getMonth() &&
+        d.getFullYear() === now.getFullYear() &&
+        ['completed', 'escrow', 'processing_refund', 'refunded'].includes(t.status)
+      )
+    })
+
+    if (toExport.length === 0) {
+      return toast({
+        title: 'Nenhum recibo elegível',
+        description: 'Não há recibos concluídos para o mês atual.',
+      })
+    }
+
+    setBulkTotal(toExport.length)
+    toExport.forEach((t) => {
+      addToQueue(`Recibo_${t.id}`, () => new Promise((res) => setTimeout(res, 800)))
+    })
+  }
+
+  useEffect(() => {
+    if (queueLength === 0 && bulkTotal > 0) {
+      const timer = setTimeout(() => setBulkTotal(0), 1500)
+      return () => clearTimeout(timer)
+    }
+  }, [queueLength, bulkTotal])
+
   return (
     <>
       <div className="space-y-6 animate-slide-up pb-12 p-4 sm:p-6 max-w-7xl mx-auto print:hidden">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-3 bg-primary/10 rounded-xl">
-            <Receipt className="w-8 h-8 text-primary" />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <div className="flex items-center gap-3">
+            <div className="p-3 bg-primary/10 rounded-xl">
+              <Receipt className="w-8 h-8 text-primary" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight text-foreground">
+                Financeiro & Pagamentos
+              </h1>
+              <p className="text-muted-foreground mt-1">
+                Gerencie e acompanhe todos os seus recebimentos e status de contratos.
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">
-              Financeiro & Pagamentos
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Gerencie e acompanhe todos os seus recebimentos e status de contratos.
-            </p>
-          </div>
+          <Button
+            variant="outline"
+            className="w-full sm:w-auto gap-2"
+            onClick={handleBulkExport}
+            disabled={isProcessing}
+          >
+            {isProcessing ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <FileText className="w-4 h-4" />
+            )}
+            Exportar Todos os Recibos do Mês
+          </Button>
         </div>
+
+        {bulkTotal > 0 && (
+          <div className="mb-6 p-4 bg-card border border-border shadow-sm rounded-xl space-y-3 animate-fade-in-down">
+            <div className="flex justify-between text-sm">
+              <span className="font-semibold text-foreground">Gerando Recibos em Lote...</span>
+              <span className="text-muted-foreground font-medium">
+                {bulkTotal - queueLength} de {bulkTotal} processados
+              </span>
+            </div>
+            <Progress value={((bulkTotal - queueLength) / bulkTotal) * 100} className="h-2" />
+          </div>
+        )}
 
         <Tabs
           defaultValue={role === 'company' ? 'reconciliation' : 'history'}

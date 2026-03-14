@@ -20,9 +20,9 @@ export function getLoyaltyTier(points: number = 0) {
       name: 'Ouro',
       id: 'gold',
       icon: Trophy,
-      colorClass: 'text-yellow-500',
-      borderClass: 'border-yellow-500/30',
-      bgClass: 'bg-yellow-500/10',
+      colorClass: 'text-amber-700',
+      borderClass: 'border-amber-300',
+      bgClass: 'bg-amber-100',
       nextThreshold: null,
     }
   } else if (points >= 500) {
@@ -30,9 +30,9 @@ export function getLoyaltyTier(points: number = 0) {
       name: 'Prata',
       id: 'silver',
       icon: Shield,
-      colorClass: 'text-slate-400',
-      borderClass: 'border-slate-400/30',
-      bgClass: 'bg-slate-400/10',
+      colorClass: 'text-slate-700',
+      borderClass: 'border-slate-300',
+      bgClass: 'bg-slate-200',
       nextThreshold: 1000,
     }
   } else {
@@ -40,9 +40,9 @@ export function getLoyaltyTier(points: number = 0) {
       name: 'Bronze',
       id: 'bronze',
       icon: Medal,
-      colorClass: 'text-amber-600',
-      borderClass: 'border-amber-600/30',
-      bgClass: 'bg-amber-600/10',
+      colorClass: 'text-orange-700',
+      borderClass: 'border-orange-200',
+      bgClass: 'bg-orange-900/10',
       nextThreshold: 500,
     }
   }
