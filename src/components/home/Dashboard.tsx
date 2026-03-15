@@ -1,7 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { CalendarDays, GripVertical, TrendingUp, Medal, ArrowRight } from 'lucide-react'
+import {
+  CalendarDays,
+  GripVertical,
+  TrendingUp,
+  Medal,
+  ArrowRight,
+  BellRing,
+  AlertTriangle,
+} from 'lucide-react'
+import { isBefore, addDays, isToday, startOfDay } from 'date-fns'
 import { useApp } from '@/store/AppContext'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -9,12 +18,19 @@ import { getLoyaltyTier, cn } from '@/lib/utils'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts'
 
-const WIDGETS_LIST = ['finance', 'loyalty', 'events']
-
 export default function Dashboard() {
-  const { currentUser, companyProfile, demands } = useApp()
-  const [widgets, setWidgets] = useState(WIDGETS_LIST)
+  const { currentUser, companyProfile, demands, role, supplierFinances, suppliersCRM } = useApp()
+  const defaultWidgets =
+    role === 'company'
+      ? ['alerts', 'finance', 'loyalty', 'events']
+      : ['finance', 'loyalty', 'events']
+  const [widgets, setWidgets] = useState(defaultWidgets)
   const [draggedWidget, setDraggedWidget] = useState<string | null>(null)
+
+  useEffect(() => {
+    setWidgets(defaultWidgets)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [role])
 
   const handleDragStart = (e: React.DragEvent, id: string) => {
     setDraggedWidget(id)
@@ -56,6 +72,112 @@ export default function Dashboard() {
   ]
 
   const renderWidget = (id: string) => {
+    if (id === 'alerts') {
+      const today = startOfDay(new Date())
+      const next7Days = addDays(today, 7)
+
+      const upcomingFinances = supplierFinances
+        .filter((f) => {
+          if (f.status === 'paid') return false
+          const dueDate = startOfDay(new Date(f.dueDate))
+          return isBefore(dueDate, next7Days) || isToday(dueDate) || isBefore(dueDate, today)
+        })
+        .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
+
+      return (
+        <Card className="h-full flex flex-col hover:border-primary/30 transition-colors bg-card border-amber-500/20 shadow-sm relative overflow-hidden">
+          <div className="absolute right-0 top-0 h-full w-1.5 bg-amber-500"></div>
+          <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-border/50">
+            <CardTitle className="text-lg font-bold flex items-center gap-2">
+              <BellRing className="w-5 h-5 text-amber-500" /> Alertas de Vencimento
+            </CardTitle>
+            <div
+              className="cursor-grab active:cursor-grabbing p-1 rounded hover:bg-secondary transition-colors"
+              title="Arraste para mover"
+            >
+              <GripVertical className="w-5 h-5 text-muted-foreground" />
+            </div>
+          </CardHeader>
+          <CardContent className="pt-4 flex-1">
+            {upcomingFinances.length === 0 ? (
+              <div className="text-center text-muted-foreground py-8 text-sm flex flex-col items-center gap-2">
+                <AlertTriangle className="w-8 h-8 opacity-20" />
+                Nenhum vencimento nos próximos 7 dias.
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {upcomingFinances.slice(0, 5).map((f) => {
+                  const supplier = suppliersCRM.find((s) => s.id === f.supplierId)
+                  const dueDate = startOfDay(new Date(f.dueDate))
+                  const overdue = isBefore(dueDate, today) && !isToday(dueDate)
+                  const dueToday = isToday(dueDate)
+
+                  return (
+                    <div
+                      key={f.id}
+                      className={cn(
+                        'flex justify-between items-center p-3 rounded-xl border border-border/50 bg-secondary/30 transition-colors',
+                        overdue && 'border-red-500/50 bg-red-500/10',
+                        dueToday && 'border-amber-500/50 bg-amber-500/10',
+                      )}
+                    >
+                      <div>
+                        <p
+                          className={cn(
+                            'font-semibold text-sm',
+                            overdue && 'text-red-600',
+                            dueToday && 'text-amber-600',
+                          )}
+                        >
+                          {supplier?.name || 'Desconhecido'}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-0.5 font-medium">
+                          Vence:{' '}
+                          <span
+                            className={cn(
+                              overdue && 'text-red-600 font-bold',
+                              dueToday && 'text-amber-600 font-bold',
+                            )}
+                          >
+                            {new Date(f.dueDate).toLocaleDateString('pt-BR')}
+                          </span>
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p
+                          className={cn(
+                            'font-bold text-sm',
+                            overdue && 'text-red-600',
+                            dueToday && 'text-amber-600',
+                          )}
+                        >
+                          R${' '}
+                          {f.amount.toLocaleString('pt-BR', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </p>
+                        {overdue && (
+                          <Badge variant="destructive" className="text-[10px] mt-1 h-4">
+                            Atrasado
+                          </Badge>
+                        )}
+                        {dueToday && (
+                          <Badge className="bg-amber-500 hover:bg-amber-600 text-[10px] mt-1 h-4 border-transparent text-white">
+                            Hoje
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )
+    }
+
     if (id === 'finance') {
       return (
         <Card className="h-full flex flex-col hover:border-primary/30 transition-colors bg-card">
@@ -104,7 +226,7 @@ export default function Dashboard() {
                       fontSize={12}
                       tickLine={false}
                       axisLine={false}
-                      tickFormatter={(v) => `R$${v}`}
+                      tickFormatter={(v) => `R${v}`}
                     />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Area

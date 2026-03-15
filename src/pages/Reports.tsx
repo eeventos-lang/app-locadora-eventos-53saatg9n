@@ -1,7 +1,14 @@
 import { useState, useMemo } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useApp } from '@/store/AppContext'
-import { PieChart, DollarSign, CheckCircle2, AlertCircle, FileBarChart } from 'lucide-react'
+import {
+  PieChart,
+  DollarSign,
+  FileBarChart,
+  LineChartIcon,
+  ArrowUpRight,
+  ArrowDownRight,
+} from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import {
   Select,
@@ -11,7 +18,16 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts'
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+} from 'recharts'
 import { SERVICES } from '@/lib/services'
 
 const MONTHS = [
@@ -30,7 +46,7 @@ const MONTHS = [
 ]
 
 export default function Reports() {
-  const { role, supplierFinances, suppliersCRM } = useApp()
+  const { role, supplierFinances, suppliersCRM, incomeRecords, currentUser } = useApp()
   const currentMonth = new Date().getMonth().toString()
   const currentYear = new Date().getFullYear().toString()
 
@@ -43,26 +59,37 @@ export default function Reports() {
       const year = new Date(f.dueDate).getFullYear().toString()
       y.add(year)
     })
+    incomeRecords.forEach((r) => {
+      const year = new Date(r.date).getFullYear().toString()
+      y.add(year)
+    })
     return Array.from(y).sort((a, b) => parseInt(b) - parseInt(a))
-  }, [supplierFinances, currentYear])
+  }, [supplierFinances, incomeRecords, currentYear])
 
   const filteredFinances = useMemo(() => {
     return supplierFinances.filter((f) => {
-      const date = new Date(f.dueDate)
-      // Using UTC methods if needed, but local usually matches input date strings better
-      // Wait, date input is "yyyy-mm-dd", so taking local timezone can shift it.
-      // Safe fallback is string prefix match:
-      const yearMonthStr = `${selectedYear}-${(parseInt(selectedMonth) + 1).toString().padStart(2, '0')}`
-      return f.dueDate.startsWith(yearMonthStr)
+      const d = new Date(f.dueDate)
+      return (
+        d.getFullYear().toString() === selectedYear && d.getMonth().toString() === selectedMonth
+      )
     })
   }, [supplierFinances, selectedMonth, selectedYear])
 
-  const totalPaid = filteredFinances
-    .filter((f) => f.status === 'paid')
-    .reduce((sum, f) => sum + f.amount, 0)
-  const totalPending = filteredFinances
-    .filter((f) => f.status === 'pending' || f.status === 'overdue')
-    .reduce((sum, f) => sum + f.amount, 0)
+  const filteredIncome = useMemo(() => {
+    return incomeRecords.filter((r) => {
+      if (r.companyId !== currentUser?.id) return false
+      const d = new Date(r.date)
+      return (
+        d.getFullYear().toString() === selectedYear && d.getMonth().toString() === selectedMonth
+      )
+    })
+  }, [incomeRecords, selectedMonth, selectedYear, currentUser])
+
+  const totalExpenses = filteredFinances.reduce((sum, f) => sum + f.amount, 0)
+  const totalReceivedIncome = filteredIncome
+    .filter((r) => r.status === 'received')
+    .reduce((sum, r) => sum + r.amount, 0)
+  const netProfit = totalReceivedIncome - totalExpenses
 
   const chartData = useMemo(() => {
     const categoryTotals: Record<string, number> = {}
@@ -84,6 +111,22 @@ export default function Reports() {
       .sort((a, b) => b.total - a.total)
   }, [filteredFinances, suppliersCRM])
 
+  const evolutionaryData = useMemo(() => {
+    const monthsData = Array.from({ length: 12 }, (_, i) => ({
+      month: MONTHS[i].label.substring(0, 3),
+      expenses: 0,
+    }))
+
+    supplierFinances.forEach((f) => {
+      const d = new Date(f.dueDate)
+      if (d.getFullYear().toString() === selectedYear) {
+        monthsData[d.getMonth()].expenses += f.amount
+      }
+    })
+
+    return monthsData
+  }, [supplierFinances, selectedYear])
+
   if (role !== 'company') {
     return <Navigate to="/" replace />
   }
@@ -91,10 +134,17 @@ export default function Reports() {
   const formatCurrency = (val: number) =>
     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val)
 
-  const chartConfig = {
+  const barChartConfig = {
     total: {
       label: 'Total Gasto (R$)',
       color: 'hsl(var(--primary))',
+    },
+  }
+
+  const lineChartConfig = {
+    expenses: {
+      label: 'Despesas (R$)',
+      color: 'hsl(var(--destructive))',
     },
   }
 
@@ -107,12 +157,13 @@ export default function Reports() {
             Dashboard Financeiro
           </h1>
           <p className="text-muted-foreground">
-            Monitore seus gastos com fornecedores sub-contratados e analise suas despesas mensais.
+            Monitore suas receitas, despesas e acompanhe a evolução do seu fluxo de caixa e lucro
+            líquido.
           </p>
         </div>
         <div className="flex gap-3">
           <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-            <SelectTrigger className="w-[140px] bg-card">
+            <SelectTrigger className="w-[140px] bg-card h-11">
               <SelectValue placeholder="Mês" />
             </SelectTrigger>
             <SelectContent>
@@ -124,7 +175,7 @@ export default function Reports() {
             </SelectContent>
           </Select>
           <Select value={selectedYear} onValueChange={setSelectedYear}>
-            <SelectTrigger className="w-[110px] bg-card">
+            <SelectTrigger className="w-[110px] bg-card h-11">
               <SelectValue placeholder="Ano" />
             </SelectTrigger>
             <SelectContent>
@@ -138,67 +189,82 @@ export default function Reports() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <Card className="bg-card border-border shadow-sm relative overflow-hidden">
-          <div className="absolute right-0 top-0 h-full w-2 bg-emerald-500"></div>
+          <div className="absolute right-0 top-0 h-full w-1.5 bg-emerald-500"></div>
           <CardContent className="p-6 flex items-center gap-5">
             <div className="p-4 bg-emerald-500/10 rounded-full shrink-0">
-              <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+              <ArrowUpRight className="w-8 h-8 text-emerald-600" />
             </div>
             <div className="flex-1">
               <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-1">
-                Total Pago
+                Total de Entradas
               </p>
-              <h2 className="text-4xl font-black text-foreground">{formatCurrency(totalPaid)}</h2>
+              <h2 className="text-4xl font-black text-foreground">
+                {formatCurrency(totalReceivedIncome)}
+              </h2>
             </div>
           </CardContent>
         </Card>
 
         <Card className="bg-card border-border shadow-sm relative overflow-hidden">
-          <div className="absolute right-0 top-0 h-full w-2 bg-amber-500"></div>
+          <div className="absolute right-0 top-0 h-full w-1.5 bg-destructive"></div>
           <CardContent className="p-6 flex items-center gap-5">
-            <div className="p-4 bg-amber-500/10 rounded-full shrink-0">
-              <AlertCircle className="w-8 h-8 text-amber-600" />
+            <div className="p-4 bg-destructive/10 rounded-full shrink-0">
+              <ArrowDownRight className="w-8 h-8 text-destructive" />
             </div>
             <div className="flex-1">
               <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-1">
-                Total Pendente
+                Total de Despesas
               </p>
               <h2 className="text-4xl font-black text-foreground">
-                {formatCurrency(totalPending)}
+                {formatCurrency(totalExpenses)}
               </h2>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-card border-border shadow-sm relative overflow-hidden">
+          <div className="absolute right-0 top-0 h-full w-1.5 bg-primary"></div>
+          <CardContent className="p-6 flex items-center gap-5">
+            <div className="p-4 bg-primary/10 rounded-full shrink-0">
+              <DollarSign className="w-8 h-8 text-primary" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-1">
+                Lucro Líquido
+              </p>
+              <h2 className="text-4xl font-black text-foreground">{formatCurrency(netProfit)}</h2>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="bg-card border-border shadow-sm">
-        <CardHeader>
-          <CardTitle className="text-xl flex items-center gap-2">
-            <FileBarChart className="w-5 h-5 text-primary" /> Gasto por Categoria
-          </CardTitle>
-          <CardDescription>
-            Distribuição dos custos no mês selecionado agrupada por tipo de serviço.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {chartData.length === 0 ? (
-            <div className="py-16 text-center text-muted-foreground border-2 border-dashed border-border rounded-xl bg-secondary/20 flex flex-col items-center gap-3">
-              <DollarSign className="w-10 h-10 opacity-20" />
-              <p className="text-lg font-medium">Nenhum gasto registrado neste período.</p>
-            </div>
-          ) : (
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="bg-card border-border shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-xl flex items-center gap-2">
+              <LineChartIcon className="w-5 h-5 text-primary" /> Gráficos Evolutivos
+            </CardTitle>
+            <CardDescription>
+              Evolução mensal de despesas ao longo do ano de {selectedYear}.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
             <div className="h-[350px] w-full mt-4">
-              <ChartContainer config={chartConfig} className="h-full w-full">
+              <ChartContainer config={lineChartConfig} className="h-full w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+                  <LineChart
+                    data={evolutionaryData}
+                    margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+                  >
                     <CartesianGrid
                       strokeDasharray="3 3"
                       vertical={false}
                       stroke="hsl(var(--border))"
                     />
                     <XAxis
-                      dataKey="category"
+                      dataKey="month"
                       tickLine={false}
                       axisLine={false}
                       tickMargin={10}
@@ -215,21 +281,85 @@ export default function Reports() {
                       content={
                         <ChartTooltipContent formatter={(val) => formatCurrency(Number(val))} />
                       }
-                      cursor={{ fill: 'hsl(var(--secondary))', opacity: 0.5 }}
+                      cursor={{ stroke: 'hsl(var(--secondary))', strokeWidth: 2 }}
                     />
-                    <Bar
-                      dataKey="total"
-                      fill="hsl(var(--primary))"
-                      radius={[6, 6, 0, 0]}
-                      maxBarSize={80}
+                    <Line
+                      type="monotone"
+                      dataKey="expenses"
+                      stroke="hsl(var(--destructive))"
+                      strokeWidth={3}
+                      dot={{ r: 4, fill: 'hsl(var(--destructive))' }}
+                      activeDot={{ r: 6 }}
                     />
-                  </BarChart>
+                  </LineChart>
                 </ResponsiveContainer>
               </ChartContainer>
             </div>
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-card border-border shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-xl flex items-center gap-2">
+              <FileBarChart className="w-5 h-5 text-primary" /> Gasto por Categoria
+            </CardTitle>
+            <CardDescription>
+              Distribuição dos custos no mês selecionado agrupada por tipo de serviço.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {chartData.length === 0 ? (
+              <div className="py-16 text-center text-muted-foreground border-2 border-dashed border-border rounded-xl bg-secondary/20 flex flex-col items-center gap-3">
+                <DollarSign className="w-10 h-10 opacity-20" />
+                <p className="text-lg font-medium">Nenhum gasto registrado neste período.</p>
+              </div>
+            ) : (
+              <div className="h-[350px] w-full mt-4">
+                <ChartContainer config={barChartConfig} className="h-full w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={chartData}
+                      margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+                    >
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        vertical={false}
+                        stroke="hsl(var(--border))"
+                      />
+                      <XAxis
+                        dataKey="category"
+                        tickLine={false}
+                        axisLine={false}
+                        tickMargin={10}
+                        className="text-xs font-semibold"
+                      />
+                      <YAxis
+                        tickFormatter={(value) => `R$ ${value}`}
+                        tickLine={false}
+                        axisLine={false}
+                        width={80}
+                        className="text-xs font-medium text-muted-foreground"
+                      />
+                      <ChartTooltip
+                        content={
+                          <ChartTooltipContent formatter={(val) => formatCurrency(Number(val))} />
+                        }
+                        cursor={{ fill: 'hsl(var(--secondary))', opacity: 0.5 }}
+                      />
+                      <Bar
+                        dataKey="total"
+                        fill="hsl(var(--primary))"
+                        radius={[6, 6, 0, 0]}
+                        maxBarSize={80}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }

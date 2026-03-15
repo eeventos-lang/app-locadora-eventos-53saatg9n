@@ -17,10 +17,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { useApp, Proposal, Demand, User, Transaction } from '@/store/AppContext'
-import { Receipt, ShieldCheck, FileText, Loader2 } from 'lucide-react'
+import { Receipt, ShieldCheck, FileText, Loader2, Plus, Search, FilterX } from 'lucide-react'
 import { SERVICES } from '@/lib/services'
 import logoImg from '@/assets/e-eventos-novo-62817.png'
 import { useExportQueue } from '@/hooks/use-export-queue'
@@ -29,14 +39,40 @@ import { Progress } from '@/components/ui/progress'
 import { useToast } from '@/hooks/use-toast'
 
 const Transactions = () => {
-  const { role, transactions, currentUser, proposals, demands, users } = useApp()
+  const {
+    role,
+    transactions,
+    currentUser,
+    proposals,
+    demands,
+    users,
+    incomeRecords,
+    addIncomeRecord,
+  } = useApp()
   const { toast } = useToast()
   const { addToQueue, isProcessing, queueLength } = useExportQueue()
+
+  // Reconcilation Filters
   const [insuranceFilter, setInsuranceFilter] = useState('all')
   const [paymentFilter, setPaymentFilter] = useState('all')
 
+  // Income Filters
+  const [incomeSearch, setIncomeSearch] = useState('')
+  const [incomeMonth, setIncomeMonth] = useState('')
+
+  // Modals
   const [selectedReceipt, setSelectedReceipt] = useState<Transaction | null>(null)
+  const [isIncomeOpen, setIsIncomeOpen] = useState(false)
   const [bulkTotal, setBulkTotal] = useState(0)
+
+  // New Income Form
+  const [newIncome, setNewIncome] = useState({
+    clientName: '',
+    amount: '',
+    date: new Date().toISOString().split('T')[0],
+    category: 'Locação de Equipamento',
+    status: 'received',
+  })
 
   const myTransactions = useMemo(() => {
     if (role === 'customer') {
@@ -84,21 +120,38 @@ const Transactions = () => {
     })
   }, [reconciliationData, insuranceFilter, paymentFilter])
 
+  const myIncomeRecords = useMemo(() => {
+    return incomeRecords
+      .filter((r) => {
+        if (r.companyId !== currentUser?.id) return false
+        if (incomeSearch && !r.clientName.toLowerCase().includes(incomeSearch.toLowerCase()))
+          return false
+        if (incomeMonth && !r.date.startsWith(incomeMonth)) return false
+        return true
+      })
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  }, [incomeRecords, currentUser, incomeSearch, incomeMonth])
+
   const formatCurrency = (val: number) =>
     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val)
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'completed':
+      case 'received':
         return (
           <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20">
-            Concluído
+            {status === 'received' ? 'Recebido' : 'Concluído'}
           </Badge>
         )
       case 'pending':
         return (
-          <Badge className="bg-amber-500/10 text-amber-600 border-amber-500/20">
-            Pendente (Escrow)
+          <Badge className="bg-amber-500/10 text-amber-600 border-amber-500/20">Pendente</Badge>
+        )
+      case 'cancelled':
+        return (
+          <Badge className="bg-destructive/10 text-destructive border-destructive/20">
+            Cancelado
           </Badge>
         )
       case 'processing_refund':
@@ -139,6 +192,34 @@ const Transactions = () => {
     })
   }
 
+  const handleSaveIncome = () => {
+    if (!newIncome.clientName || !newIncome.amount || !newIncome.date) {
+      return toast({
+        title: 'Atenção',
+        description: 'Preencha todos os campos obrigatórios.',
+        variant: 'destructive',
+      })
+    }
+
+    addIncomeRecord({
+      clientName: newIncome.clientName,
+      amount: Number(newIncome.amount),
+      date: new Date(newIncome.date).toISOString(),
+      category: newIncome.category,
+      status: newIncome.status as any,
+    })
+
+    setIsIncomeOpen(false)
+    setNewIncome({
+      clientName: '',
+      amount: '',
+      date: new Date().toISOString().split('T')[0],
+      category: 'Locação de Equipamento',
+      status: 'received',
+    })
+    toast({ title: 'Entrada registrada com sucesso!' })
+  }
+
   useEffect(() => {
     if (queueLength === 0 && bulkTotal > 0) {
       const timer = setTimeout(() => setBulkTotal(0), 1500)
@@ -156,10 +237,10 @@ const Transactions = () => {
             </div>
             <div>
               <h1 className="text-3xl font-bold tracking-tight text-foreground">
-                Financeiro & Pagamentos
+                Fluxo de Caixa & Pagamentos
               </h1>
               <p className="text-muted-foreground mt-1">
-                Gerencie e acompanhe todos os seus recebimentos e status de contratos.
+                Gerencie conciliações de plataforma e registre suas entradas manuais.
               </p>
             </div>
           </div>
@@ -174,7 +255,7 @@ const Transactions = () => {
             ) : (
               <FileText className="w-4 h-4" />
             )}
-            Exportar Todos os Recibos do Mês
+            Exportar Todos os Recibos
           </Button>
         </div>
 
@@ -190,20 +271,201 @@ const Transactions = () => {
           </div>
         )}
 
-        <Tabs
-          defaultValue={role === 'company' ? 'reconciliation' : 'history'}
-          className="space-y-6"
-        >
-          <TabsList className="bg-secondary p-1 h-auto flex flex-wrap w-full sm:max-w-md">
+        <Tabs defaultValue={role === 'company' ? 'income' : 'history'} className="space-y-6">
+          <TabsList className="bg-secondary p-1 h-auto flex flex-wrap w-full sm:max-w-xl">
             {role === 'company' && (
-              <TabsTrigger value="reconciliation" className="flex-1 py-2 text-sm font-semibold">
-                Conciliação
-              </TabsTrigger>
+              <>
+                <TabsTrigger value="income" className="flex-1 py-2 text-sm font-semibold">
+                  Entradas Manuais
+                </TabsTrigger>
+                <TabsTrigger value="reconciliation" className="flex-1 py-2 text-sm font-semibold">
+                  Conciliação
+                </TabsTrigger>
+              </>
             )}
             <TabsTrigger value="history" className="flex-1 py-2 text-sm font-semibold">
               Extrato Histórico
             </TabsTrigger>
           </TabsList>
+
+          {role === 'company' && (
+            <TabsContent value="income" className="space-y-4">
+              <Card className="border-border shadow-sm bg-card">
+                <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4">
+                  <div className="space-y-1">
+                    <CardTitle className="text-lg">Gestão de Entradas (Receitas)</CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                      Registre recebimentos externos ou pagamentos de clientes diretos.
+                    </p>
+                  </div>
+                  <Dialog open={isIncomeOpen} onOpenChange={setIsIncomeOpen}>
+                    <DialogTrigger asChild>
+                      <Button className="shrink-0 gap-2">
+                        <Plus className="w-4 h-4" /> Nova Entrada
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Registrar Nova Entrada</DialogTitle>
+                        <DialogDescription>
+                          Adicione os detalhes do pagamento recebido.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="space-y-2">
+                          <Label>Cliente / Origem</Label>
+                          <Input
+                            placeholder="Nome do cliente"
+                            value={newIncome.clientName}
+                            onChange={(e) =>
+                              setNewIncome({ ...newIncome, clientName: e.target.value })
+                            }
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Valor (R$)</Label>
+                          <Input
+                            type="number"
+                            placeholder="0,00"
+                            value={newIncome.amount}
+                            onChange={(e) => setNewIncome({ ...newIncome, amount: e.target.value })}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Data do Pagamento</Label>
+                          <Input
+                            type="date"
+                            value={newIncome.date}
+                            onChange={(e) => setNewIncome({ ...newIncome, date: e.target.value })}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Categoria</Label>
+                          <Select
+                            value={newIncome.category}
+                            onValueChange={(v) => setNewIncome({ ...newIncome, category: v })}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione..." />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Locação de Equipamento">
+                                Locação de Equipamento
+                              </SelectItem>
+                              <SelectItem value="Serviços Adicionais">
+                                Serviços Adicionais
+                              </SelectItem>
+                              <SelectItem value="Consultoria">Consultoria</SelectItem>
+                              <SelectItem value="Outros">Outros</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Status</Label>
+                          <Select
+                            value={newIncome.status}
+                            onValueChange={(v) => setNewIncome({ ...newIncome, status: v })}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione..." />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="received">Recebido</SelectItem>
+                              <SelectItem value="pending">Pendente</SelectItem>
+                              <SelectItem value="cancelled">Cancelado</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button variant="outline" onClick={() => setIsIncomeOpen(false)}>
+                          Cancelar
+                        </Button>
+                        <Button onClick={handleSaveIncome}>Salvar Registro</Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        placeholder="Buscar por cliente..."
+                        value={incomeSearch}
+                        onChange={(e) => setIncomeSearch(e.target.value)}
+                        className="pl-9 bg-background h-10"
+                      />
+                    </div>
+                    <div className="w-full sm:w-[200px]">
+                      <Input
+                        type="month"
+                        value={incomeMonth}
+                        onChange={(e) => setIncomeMonth(e.target.value)}
+                        className="bg-background h-10"
+                      />
+                    </div>
+                    {(incomeSearch || incomeMonth) && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => {
+                          setIncomeSearch('')
+                          setIncomeMonth('')
+                        }}
+                      >
+                        <FilterX className="h-5 w-5" />
+                      </Button>
+                    )}
+                  </div>
+
+                  <div className="rounded-md border border-border overflow-hidden">
+                    <Table>
+                      <TableHeader className="bg-muted/50">
+                        <TableRow>
+                          <TableHead>Data</TableHead>
+                          <TableHead>Cliente</TableHead>
+                          <TableHead>Categoria</TableHead>
+                          <TableHead className="text-right">Valor</TableHead>
+                          <TableHead className="text-center">Status</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {myIncomeRecords.length === 0 ? (
+                          <TableRow>
+                            <TableCell
+                              colSpan={5}
+                              className="text-center py-12 text-muted-foreground border-dashed border-2 border-border/50 rounded-xl m-4 bg-secondary/20"
+                            >
+                              Nenhuma entrada encontrada para os filtros selecionados.
+                            </TableCell>
+                          </TableRow>
+                        ) : (
+                          myIncomeRecords.map((r) => (
+                            <TableRow key={r.id} className="hover:bg-muted/50 transition-colors">
+                              <TableCell className="whitespace-nowrap text-muted-foreground">
+                                {new Date(r.date).toLocaleDateString('pt-BR')}
+                              </TableCell>
+                              <TableCell className="font-medium text-foreground">
+                                {r.clientName}
+                              </TableCell>
+                              <TableCell className="text-muted-foreground">{r.category}</TableCell>
+                              <TableCell className="text-right font-bold text-foreground">
+                                {formatCurrency(r.amount)}
+                              </TableCell>
+                              <TableCell className="text-center">
+                                {getStatusBadge(r.status)}
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        )}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )}
 
           {role === 'company' && (
             <TabsContent value="reconciliation" className="space-y-4">
@@ -232,7 +494,9 @@ const Transactions = () => {
 
               <Card className="border-border shadow-sm bg-card">
                 <CardHeader>
-                  <CardTitle className="text-lg">Contratos Ativos e Pagamentos</CardTitle>
+                  <CardTitle className="text-lg">
+                    Contratos Ativos e Repasses da Plataforma
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="rounded-md border border-border overflow-hidden">
@@ -338,7 +602,9 @@ const Transactions = () => {
             <Card className="border-border shadow-sm bg-card">
               <CardHeader>
                 <CardTitle className="text-lg">
-                  {role === 'customer' ? 'Pagamentos Realizados' : 'Extrato de Recebimentos'}
+                  {role === 'customer'
+                    ? 'Pagamentos Realizados'
+                    : 'Extrato de Recebimentos da Plataforma'}
                 </CardTitle>
               </CardHeader>
               <CardContent>

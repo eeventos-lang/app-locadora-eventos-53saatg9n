@@ -243,6 +243,19 @@ export type SupplierFinance = {
   status: SupplierFinanceStatus
 }
 
+export type IncomeStatus = 'received' | 'pending' | 'cancelled'
+
+export type IncomeRecord = {
+  id: string
+  companyId: string
+  clientName: string
+  amount: number
+  date: string
+  category: string
+  status: IncomeStatus
+  createdAt: string
+}
+
 interface AppContextType {
   role: Role
   setRole: (role: Role) => void
@@ -304,6 +317,8 @@ interface AppContextType {
   deleteSupplierDocument: (id: string) => void
   supplierFinances: SupplierFinance[]
   addSupplierFinance: (fin: Omit<SupplierFinance, 'id'>) => void
+  incomeRecords: IncomeRecord[]
+  addIncomeRecord: (record: Omit<IncomeRecord, 'id' | 'createdAt' | 'companyId'>) => void
 }
 
 const MOCK_USERS: User[] = [
@@ -642,14 +657,45 @@ const MOCK_SUPPLIER_FINANCES: SupplierFinance[] = [
     dueDate: new Date(Date.now() - 86400000 * 2).toISOString(),
     status: 'paid',
   },
+  {
+    id: 'fin3',
+    supplierId: 'scrm1',
+    description: 'Taxa de Manutenção Estrutural',
+    amount: 800,
+    dueDate: new Date(Date.now() - 86400000 * 2).toISOString(),
+    status: 'overdue',
+  },
+]
+
+const MOCK_INCOME_RECORDS: IncomeRecord[] = [
+  {
+    id: 'inc1',
+    companyId: 'u1',
+    clientName: 'Empresa Alpha',
+    amount: 8500,
+    date: new Date().toISOString(),
+    category: 'Locação de Equipamento',
+    status: 'received',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'inc2',
+    companyId: 'u1',
+    clientName: 'Roberto Almeida',
+    amount: 3200,
+    date: new Date().toISOString(),
+    category: 'Serviços Adicionais',
+    status: 'pending',
+    createdAt: new Date().toISOString(),
+  },
 ]
 
 const AppContext = createContext<AppContextType | undefined>(undefined)
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [users, setUsers] = useState<User[]>(MOCK_USERS)
-  const [currentUser, setCurrentUser] = useState<User | null>(MOCK_USERS[0])
-  const [role, setRole] = useState<Role>('customer')
+  const [currentUser, setCurrentUser] = useState<User | null>(MOCK_USERS[1])
+  const [role, setRole] = useState<Role>('company')
   const [isSubscribed, setIsSubscribed] = useState<boolean>(true)
   const [demands, setDemands] = useState<Demand[]>(MOCK_DEMANDS)
   const [proposals, setProposals] = useState<Proposal[]>(MOCK_PROPOSALS)
@@ -669,6 +715,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [supplierDocuments, setSupplierDocuments] = useState<SupplierDocument[]>(MOCK_SUPPLIER_DOCS)
   const [supplierFinances, setSupplierFinances] =
     useState<SupplierFinance[]>(MOCK_SUPPLIER_FINANCES)
+  const [incomeRecords, setIncomeRecords] = useState<IncomeRecord[]>(MOCK_INCOME_RECORDS)
 
   const addDemand = (demandData: any) => {
     const newDemand: Demand = {
@@ -1123,6 +1170,19 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     ])
   }
 
+  const addIncomeRecord = (record: Omit<IncomeRecord, 'id' | 'createdAt' | 'companyId'>) => {
+    if (!currentUser) return
+    setIncomeRecords((prev) => [
+      {
+        ...record,
+        id: Math.random().toString(36).substring(7),
+        companyId: currentUser.id,
+        createdAt: new Date().toISOString(),
+      },
+      ...prev,
+    ])
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -1173,6 +1233,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         deleteSupplierDocument,
         supplierFinances,
         addSupplierFinance,
+        incomeRecords,
+        addIncomeRecord,
       }}
     >
       {children}

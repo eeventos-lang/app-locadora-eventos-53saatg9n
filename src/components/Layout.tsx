@@ -92,7 +92,7 @@ export function Layout() {
           { name: 'Cadastros', path: '/registrations', icon: Users },
           { name: 'Relatórios', path: '/reports', icon: PieChart },
         ]),
-    { name: 'Financeiro', path: '/finance', icon: Receipt },
+    { name: 'Fluxo de Caixa', path: '/finance', icon: Receipt },
     { name: 'Criar Evento', path: '/create-event', icon: PlusCircle },
     { name: 'Planos', path: '/subscription', icon: CreditCard },
   ]
