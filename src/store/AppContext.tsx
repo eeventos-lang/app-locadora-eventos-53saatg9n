@@ -241,6 +241,7 @@ export type SupplierFinance = {
   amount: number
   dueDate: string
   status: SupplierFinanceStatus
+  demandId?: string
 }
 
 export type IncomeStatus = 'received' | 'pending' | 'cancelled'
@@ -254,6 +255,7 @@ export type IncomeRecord = {
   category: string
   status: IncomeStatus
   createdAt: string
+  demandId?: string
 }
 
 interface AppContextType {
@@ -648,6 +650,7 @@ const MOCK_SUPPLIER_FINANCES: SupplierFinance[] = [
     amount: 2500,
     dueDate: new Date(Date.now() + 86400000 * 5).toISOString(),
     status: 'pending',
+    demandId: 'd1',
   },
   {
     id: 'fin2',
@@ -677,6 +680,7 @@ const MOCK_INCOME_RECORDS: IncomeRecord[] = [
     category: 'Locação de Equipamento',
     status: 'received',
     createdAt: new Date().toISOString(),
+    demandId: 'd1',
   },
   {
     id: 'inc2',

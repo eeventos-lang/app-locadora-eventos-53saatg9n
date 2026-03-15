@@ -9,6 +9,7 @@ import {
   ArrowRight,
   BellRing,
   AlertTriangle,
+  MessageCircle,
 } from 'lucide-react'
 import { isBefore, addDays, isToday, startOfDay } from 'date-fns'
 import { useApp } from '@/store/AppContext'
@@ -112,6 +113,10 @@ export default function Dashboard() {
                   const overdue = isBefore(dueDate, today) && !isToday(dueDate)
                   const dueToday = isToday(dueDate)
 
+                  const phone = supplier?.phone?.replace(/\D/g, '') || ''
+                  const wppMsg = `Olá, gostaria de confirmar o status do pagamento referente a ${f.description} com vencimento em ${new Date(f.dueDate).toLocaleDateString('pt-BR')}.`
+                  const wppLink = `https://wa.me/55${phone}?text=${encodeURIComponent(wppMsg)}`
+
                   return (
                     <div
                       key={f.id}
@@ -143,30 +148,54 @@ export default function Dashboard() {
                           </span>
                         </p>
                       </div>
-                      <div className="text-right">
-                        <p
-                          className={cn(
-                            'font-bold text-sm',
-                            overdue && 'text-red-600',
-                            dueToday && 'text-amber-600',
+                      <div className="flex flex-col items-end gap-1">
+                        <div className="flex items-center gap-2">
+                          <p
+                            className={cn(
+                              'font-bold text-sm',
+                              overdue && 'text-red-600',
+                              dueToday && 'text-amber-600',
+                            )}
+                          >
+                            R${' '}
+                            {f.amount.toLocaleString('pt-BR', {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}
+                          </p>
+                          {phone && (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              asChild
+                              className={cn(
+                                'h-6 w-6',
+                                overdue
+                                  ? 'text-red-600 hover:text-red-700 hover:bg-red-50'
+                                  : dueToday
+                                    ? 'text-amber-600 hover:text-amber-700 hover:bg-amber-50'
+                                    : 'text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50',
+                              )}
+                              title="Enviar Lembrete"
+                            >
+                              <a href={wppLink} target="_blank" rel="noreferrer">
+                                <MessageCircle className="w-4 h-4" />
+                              </a>
+                            </Button>
                           )}
-                        >
-                          R${' '}
-                          {f.amount.toLocaleString('pt-BR', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}
-                        </p>
-                        {overdue && (
-                          <Badge variant="destructive" className="text-[10px] mt-1 h-4">
-                            Atrasado
-                          </Badge>
-                        )}
-                        {dueToday && (
-                          <Badge className="bg-amber-500 hover:bg-amber-600 text-[10px] mt-1 h-4 border-transparent text-white">
-                            Hoje
-                          </Badge>
-                        )}
+                        </div>
+                        <div className="flex gap-1">
+                          {overdue && (
+                            <Badge variant="destructive" className="text-[10px] h-4">
+                              Atrasado
+                            </Badge>
+                          )}
+                          {dueToday && (
+                            <Badge className="bg-amber-500 hover:bg-amber-600 text-[10px] h-4 border-transparent text-white">
+                              Hoje
+                            </Badge>
+                          )}
+                        </div>
                       </div>
                     </div>
                   )

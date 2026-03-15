@@ -72,6 +72,7 @@ const Transactions = () => {
     date: new Date().toISOString().split('T')[0],
     category: 'Locação de Equipamento',
     status: 'received',
+    demandId: 'none',
   })
 
   const myTransactions = useMemo(() => {
@@ -207,6 +208,7 @@ const Transactions = () => {
       date: new Date(newIncome.date).toISOString(),
       category: newIncome.category,
       status: newIncome.status as any,
+      demandId: newIncome.demandId !== 'none' ? newIncome.demandId : undefined,
     })
 
     setIsIncomeOpen(false)
@@ -216,6 +218,7 @@ const Transactions = () => {
       date: new Date().toISOString().split('T')[0],
       category: 'Locação de Equipamento',
       status: 'received',
+      demandId: 'none',
     })
     toast({ title: 'Entrada registrada com sucesso!' })
   }
@@ -311,7 +314,7 @@ const Transactions = () => {
                           Adicione os detalhes do pagamento recebido.
                         </DialogDescription>
                       </DialogHeader>
-                      <div className="grid gap-4 py-4">
+                      <div className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto px-1">
                         <div className="space-y-2">
                           <Label>Cliente / Origem</Label>
                           <Input
@@ -338,6 +341,25 @@ const Transactions = () => {
                             value={newIncome.date}
                             onChange={(e) => setNewIncome({ ...newIncome, date: e.target.value })}
                           />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Evento / Projeto (Opcional)</Label>
+                          <Select
+                            value={newIncome.demandId}
+                            onValueChange={(v) => setNewIncome({ ...newIncome, demandId: v })}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione o projeto vinculado..." />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="none">Nenhum projeto vinculado</SelectItem>
+                              {demands.map((d) => (
+                                <SelectItem key={d.id} value={d.id}>
+                                  {d.title}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
                         </div>
                         <div className="space-y-2">
                           <Label>Categoria</Label>
@@ -425,7 +447,7 @@ const Transactions = () => {
                         <TableRow>
                           <TableHead>Data</TableHead>
                           <TableHead>Cliente</TableHead>
-                          <TableHead>Categoria</TableHead>
+                          <TableHead>Projeto/Evento</TableHead>
                           <TableHead className="text-right">Valor</TableHead>
                           <TableHead className="text-center">Status</TableHead>
                         </TableRow>
@@ -441,23 +463,32 @@ const Transactions = () => {
                             </TableCell>
                           </TableRow>
                         ) : (
-                          myIncomeRecords.map((r) => (
-                            <TableRow key={r.id} className="hover:bg-muted/50 transition-colors">
-                              <TableCell className="whitespace-nowrap text-muted-foreground">
-                                {new Date(r.date).toLocaleDateString('pt-BR')}
-                              </TableCell>
-                              <TableCell className="font-medium text-foreground">
-                                {r.clientName}
-                              </TableCell>
-                              <TableCell className="text-muted-foreground">{r.category}</TableCell>
-                              <TableCell className="text-right font-bold text-foreground">
-                                {formatCurrency(r.amount)}
-                              </TableCell>
-                              <TableCell className="text-center">
-                                {getStatusBadge(r.status)}
-                              </TableCell>
-                            </TableRow>
-                          ))
+                          myIncomeRecords.map((r) => {
+                            const demandTitle =
+                              demands.find((d) => d.id === r.demandId)?.title || '-'
+                            return (
+                              <TableRow key={r.id} className="hover:bg-muted/50 transition-colors">
+                                <TableCell className="whitespace-nowrap text-muted-foreground">
+                                  {new Date(r.date).toLocaleDateString('pt-BR')}
+                                </TableCell>
+                                <TableCell className="font-medium text-foreground">
+                                  {r.clientName}
+                                  <div className="text-xs text-muted-foreground mt-0.5">
+                                    {r.category}
+                                  </div>
+                                </TableCell>
+                                <TableCell className="text-muted-foreground">
+                                  {demandTitle}
+                                </TableCell>
+                                <TableCell className="text-right font-bold text-foreground">
+                                  {formatCurrency(r.amount)}
+                                </TableCell>
+                                <TableCell className="text-center">
+                                  {getStatusBadge(r.status)}
+                                </TableCell>
+                              </TableRow>
+                            )
+                          })
                         )}
                       </TableBody>
                     </Table>

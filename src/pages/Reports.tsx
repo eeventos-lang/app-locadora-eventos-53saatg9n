@@ -8,6 +8,7 @@ import {
   LineChartIcon,
   ArrowUpRight,
   ArrowDownRight,
+  Download,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import {
@@ -17,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Button } from '@/components/ui/button'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import {
   BarChart,
@@ -29,6 +31,15 @@ import {
   Line,
 } from 'recharts'
 import { SERVICES } from '@/lib/services'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import { cn } from '@/lib/utils'
 
 const MONTHS = [
   { value: '0', label: 'Janeiro' },
@@ -46,7 +57,7 @@ const MONTHS = [
 ]
 
 export default function Reports() {
-  const { role, supplierFinances, suppliersCRM, incomeRecords, currentUser } = useApp()
+  const { role, supplierFinances, suppliersCRM, incomeRecords, currentUser, demands } = useApp()
   const currentMonth = new Date().getMonth().toString()
   const currentYear = new Date().getFullYear().toString()
 
@@ -127,6 +138,72 @@ export default function Reports() {
     return monthsData
   }, [supplierFinances, selectedYear])
 
+  const profitabilityData = useMemo(() => {
+    return demands
+      .map((d) => {
+        const incomes = incomeRecords.filter(
+          (r) => r.demandId === d.id && r.status === 'received' && r.companyId === currentUser?.id,
+        )
+        const expenses = supplierFinances.filter((f) => f.demandId === d.id && f.status === 'paid')
+
+        const totalIncome = incomes.reduce((sum, r) => sum + r.amount, 0)
+        const totalExpense = expenses.reduce((sum, f) => sum + f.amount, 0)
+        const profit = totalIncome - totalExpense
+
+        return {
+          demand: d,
+          totalIncome,
+          totalExpense,
+          profit,
+        }
+      })
+      .filter((data) => data.totalIncome > 0 || data.totalExpense > 0)
+      .sort((a, b) => b.profit - a.profit)
+  }, [demands, incomeRecords, supplierFinances, currentUser])
+
+  const handleExportCSV = () => {
+    const rows = [['Data', 'Tipo', 'Categoria', 'Evento/Projeto', 'Descrição', 'Valor', 'Status']]
+
+    incomeRecords
+      .filter((r) => r.companyId === currentUser?.id)
+      .forEach((r) => {
+        const eventTitle = demands.find((d) => d.id === r.demandId)?.title || 'N/A'
+        rows.push([
+          new Date(r.date).toLocaleDateString('pt-BR'),
+          'Entrada',
+          r.category,
+          eventTitle,
+          r.clientName,
+          r.amount.toString().replace('.', ','),
+          r.status,
+        ])
+      })
+
+    supplierFinances.forEach((f) => {
+      const eventTitle = demands.find((d) => d.id === f.demandId)?.title || 'N/A'
+      const supplier = suppliersCRM.find((s) => s.id === f.supplierId)
+      rows.push([
+        new Date(f.dueDate).toLocaleDateString('pt-BR'),
+        'Saída',
+        supplier ? SERVICES.find((sv) => sv.id === supplier.category)?.label || 'Outros' : 'Outros',
+        eventTitle,
+        f.description,
+        f.amount.toString().replace('.', ','),
+        f.status,
+      ])
+    })
+
+    const csvContent = '\uFEFF' + rows.map((e) => e.join(';')).join('\n')
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.setAttribute('href', url)
+    link.setAttribute('download', 'relatorio_financeiro.csv')
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   if (role !== 'company') {
     return <Navigate to="/" replace />
   }
@@ -161,7 +238,7 @@ export default function Reports() {
             líquido.
           </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           <Select value={selectedMonth} onValueChange={setSelectedMonth}>
             <SelectTrigger className="w-[140px] bg-card h-11">
               <SelectValue placeholder="Mês" />
@@ -186,6 +263,10 @@ export default function Reports() {
               ))}
             </SelectContent>
           </Select>
+          <Button onClick={handleExportCSV} variant="outline" className="h-11">
+            <Download className="w-4 h-4 mr-2" />
+            Exportar CSV
+          </Button>
         </div>
       </div>
 
@@ -240,7 +321,7 @@ export default function Reports() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <Card className="bg-card border-border shadow-sm">
           <CardHeader>
             <CardTitle className="text-xl flex items-center gap-2">
@@ -360,6 +441,64 @@ export default function Reports() {
           </CardContent>
         </Card>
       </div>
+
+      <Card className="bg-card border-border shadow-sm">
+        <CardHeader>
+          <CardTitle className="text-xl flex items-center gap-2">
+            <DollarSign className="w-5 h-5 text-primary" /> Lucratividade por Evento
+          </CardTitle>
+          <CardDescription>
+            Acompanhe o saldo líquido de cada projeto baseado em entradas recebidas e saídas pagas
+            vinculadas.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="rounded-md border border-border overflow-hidden">
+            <Table>
+              <TableHeader className="bg-muted/50">
+                <TableRow>
+                  <TableHead>Evento / Projeto</TableHead>
+                  <TableHead className="text-right">Total Recebido (Entradas)</TableHead>
+                  <TableHead className="text-right">Total Pago (Saídas)</TableHead>
+                  <TableHead className="text-right">Lucro Líquido</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {profitabilityData.length === 0 ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={4}
+                      className="text-center py-8 text-muted-foreground text-sm"
+                    >
+                      Nenhum projeto com movimentações vinculadas.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  profitabilityData.map((data) => (
+                    <TableRow key={data.demand.id}>
+                      <TableCell className="font-medium">{data.demand.title}</TableCell>
+                      <TableCell className="text-right text-emerald-600 font-medium">
+                        {formatCurrency(data.totalIncome)}
+                      </TableCell>
+                      <TableCell className="text-right text-destructive font-medium">
+                        {formatCurrency(data.totalExpense)}
+                      </TableCell>
+                      <TableCell
+                        className={cn(
+                          'text-right font-bold',
+                          data.profit >= 0 ? 'text-primary' : 'text-destructive',
+                        )}
+                      >
+                        {formatCurrency(data.profit)}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

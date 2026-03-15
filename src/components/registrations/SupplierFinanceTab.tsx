@@ -37,7 +37,7 @@ const formatCurrency = (val: number) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val)
 
 export function SupplierFinanceTab({ supplierId }: { supplierId: string }) {
-  const { supplierFinances, addSupplierFinance, suppliersCRM } = useApp()
+  const { supplierFinances, addSupplierFinance, suppliersCRM, demands } = useApp()
   const { addToQueue, isProcessing } = useExportQueue()
 
   const [isOpen, setIsOpen] = useState(false)
@@ -45,6 +45,7 @@ export function SupplierFinanceTab({ supplierId }: { supplierId: string }) {
   const [amount, setAmount] = useState('')
   const [date, setDate] = useState('')
   const [status, setStatus] = useState<SupplierFinanceStatus>('pending')
+  const [demandId, setDemandId] = useState<string>('none')
 
   const [receiptRecord, setReceiptRecord] = useState<SupplierFinance | null>(null)
 
@@ -64,12 +65,14 @@ export function SupplierFinanceTab({ supplierId }: { supplierId: string }) {
       amount: Number(amount),
       dueDate: date,
       status,
+      demandId: demandId !== 'none' ? demandId : undefined,
     })
     setIsOpen(false)
     setDesc('')
     setAmount('')
     setDate('')
     setStatus('pending')
+    setDemandId('none')
   }
 
   const getStatusBadge = (s: SupplierFinanceStatus) => {
@@ -141,7 +144,7 @@ export function SupplierFinanceTab({ supplierId }: { supplierId: string }) {
                 <DialogHeader>
                   <DialogTitle>Registrar Pagamento</DialogTitle>
                 </DialogHeader>
-                <div className="space-y-4 py-4">
+                <div className="space-y-4 py-4 max-h-[70vh] overflow-y-auto px-1">
                   <div className="space-y-2">
                     <Label>Descrição do Serviço</Label>
                     <Input
@@ -169,6 +172,22 @@ export function SupplierFinanceTab({ supplierId }: { supplierId: string }) {
                         className="w-full"
                       />
                     </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Evento / Projeto (Opcional)</Label>
+                    <Select value={demandId} onValueChange={(v) => setDemandId(v)}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o projeto vinculado..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">Nenhum projeto vinculado</SelectItem>
+                        {demands.map((d) => (
+                          <SelectItem key={d.id} value={d.id}>
+                            {d.title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div className="space-y-2">
                     <Label>Status</Label>
@@ -204,6 +223,7 @@ export function SupplierFinanceTab({ supplierId }: { supplierId: string }) {
                 <TableRow>
                   <TableHead>Data</TableHead>
                   <TableHead>Descrição</TableHead>
+                  <TableHead>Projeto</TableHead>
                   <TableHead>Valor</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="text-right">Ação</TableHead>
@@ -213,34 +233,40 @@ export function SupplierFinanceTab({ supplierId }: { supplierId: string }) {
                 {finances.length === 0 ? (
                   <TableRow>
                     <TableCell
-                      colSpan={5}
+                      colSpan={6}
                       className="text-center py-6 text-muted-foreground text-sm"
                     >
                       Nenhum lançamento financeiro registrado.
                     </TableCell>
                   </TableRow>
                 ) : (
-                  finances.map((f) => (
-                    <TableRow key={f.id}>
-                      <TableCell className="text-sm">
-                        {new Date(f.dueDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}
-                      </TableCell>
-                      <TableCell className="text-sm font-medium">{f.description}</TableCell>
-                      <TableCell className="text-sm">{formatCurrency(f.amount)}</TableCell>
-                      <TableCell>{getStatusBadge(f.status)}</TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 gap-2 px-2 text-primary"
-                          onClick={() => setReceiptRecord(f)}
-                        >
-                          <FileText className="w-4 h-4" />
-                          <span className="hidden sm:inline-block">Recibo</span>
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                  finances.map((f) => {
+                    const demandTitle = demands.find((d) => d.id === f.demandId)?.title || '-'
+                    return (
+                      <TableRow key={f.id}>
+                        <TableCell className="text-sm">
+                          {new Date(f.dueDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}
+                        </TableCell>
+                        <TableCell className="text-sm font-medium">{f.description}</TableCell>
+                        <TableCell className="text-sm text-muted-foreground truncate max-w-[120px]">
+                          {demandTitle}
+                        </TableCell>
+                        <TableCell className="text-sm">{formatCurrency(f.amount)}</TableCell>
+                        <TableCell>{getStatusBadge(f.status)}</TableCell>
+                        <TableCell className="text-right">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 gap-2 px-2 text-primary"
+                            onClick={() => setReceiptRecord(f)}
+                          >
+                            <FileText className="w-4 h-4" />
+                            <span className="hidden sm:inline-block">Recibo</span>
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })
                 )}
               </TableBody>
             </Table>
@@ -296,6 +322,15 @@ export function SupplierFinanceTab({ supplierId }: { supplierId: string }) {
                         {receiptRecord.description}
                       </span>
                     </div>
+                    {receiptRecord.demandId && (
+                      <div className="flex justify-between items-center border-b border-border pb-3">
+                        <span className="font-medium text-muted-foreground">Projeto/Evento</span>
+                        <span className="font-semibold text-foreground text-right">
+                          {demands.find((d) => d.id === receiptRecord.demandId)?.title ||
+                            'Não especificado'}
+                        </span>
+                      </div>
+                    )}
                     <div className="flex justify-between items-center pt-2">
                       <span className="text-lg font-bold text-foreground">Valor Total</span>
                       <span className="text-2xl font-black text-primary">
@@ -381,6 +416,12 @@ export function SupplierFinanceTab({ supplierId }: { supplierId: string }) {
               <tr className="border-b border-gray-200">
                 <td className="py-5">
                   <p className="font-bold text-lg">{receiptRecord.description}</p>
+                  {receiptRecord.demandId && (
+                    <p className="text-sm text-gray-500 mt-1">
+                      Projeto:{' '}
+                      {demands.find((d) => d.id === receiptRecord.demandId)?.title || 'N/A'}
+                    </p>
+                  )}
                 </td>
                 <td className="py-5 text-right font-bold text-lg">
                   {receiptRecord.amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
