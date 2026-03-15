@@ -18,6 +18,7 @@ import {
   CalendarClock,
   MessageSquare,
   PieChart,
+  Package,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet'
@@ -90,6 +91,7 @@ export function Layout() {
       : [
           { name: 'Insights', path: '/insights', icon: LineChart },
           { name: 'Cadastros', path: '/registrations', icon: Users },
+          { name: 'Estoque', path: '/inventory', icon: Package },
           { name: 'Relatórios', path: '/reports', icon: PieChart },
         ]),
     { name: 'Fluxo de Caixa', path: '/finance', icon: Receipt },
@@ -358,6 +360,11 @@ export function Layout() {
                       <li>
                         <Link to="/registrations" className="hover:text-primary transition-colors">
                           Gestão de Cadastros
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/inventory" className="hover:text-primary transition-colors">
+                          Estoque
                         </Link>
                       </li>
                       <li>

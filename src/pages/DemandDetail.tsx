@@ -12,6 +12,9 @@ import {
   Ban,
   FileText,
   Loader2,
+  Package,
+  Plus,
+  Trash2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -31,6 +34,13 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Checkbox } from '@/components/ui/checkbox'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
 import { useApp, TechRequirement } from '@/store/AppContext'
 import { SERVICES } from '@/lib/services'
@@ -38,6 +48,14 @@ import { BackButton } from '@/components/BackButton'
 import { cn } from '@/lib/utils'
 import logoImg from '@/assets/e-eventos-novo-62817.png'
 import { useExportQueue } from '@/hooks/use-export-queue'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 
 const DemandDetail = () => {
   const { id } = useParams()
@@ -59,8 +77,11 @@ const DemandDetail = () => {
     companyProfile,
     reviews,
     addReview,
-    users,
     createChat,
+    inventoryItems,
+    inventoryAllocations,
+    allocateInventory,
+    deallocateInventory,
   } = useApp()
 
   const [isProposalOpen, setIsProposalOpen] = useState(false)
@@ -83,6 +104,10 @@ const DemandDetail = () => {
   const [reviewRating, setReviewRating] = useState(0)
   const [reviewComment, setReviewComment] = useState('')
   const [hoverRating, setHoverRating] = useState(0)
+
+  // Inventory Allocation State
+  const [allocItemId, setAllocItemId] = useState('')
+  const [allocQuantity, setAllocQuantity] = useState('')
 
   const demand = demands.find((d) => d.id === id)
 
@@ -203,6 +228,34 @@ const DemandDetail = () => {
     })
   }
 
+  const handleAllocate = () => {
+    if (!allocItemId || !allocQuantity)
+      return toast({ title: 'Preencha os campos', variant: 'destructive' })
+    const qty = Number(allocQuantity)
+    if (qty <= 0) return toast({ title: 'Quantidade inválida', variant: 'destructive' })
+
+    const item = inventoryItems.find((i) => i.id === allocItemId)
+    if (!item) return
+
+    const used = inventoryAllocations
+      .filter((a) => a.inventoryItemId === item.id)
+      .reduce((sum, a) => sum + a.quantity, 0)
+
+    if (qty > item.totalQuantity - used) {
+      return toast({ title: 'Estoque insuficiente', variant: 'destructive' })
+    }
+
+    allocateInventory({
+      inventoryItemId: item.id,
+      demandId: demand.id,
+      quantity: qty,
+    })
+
+    setAllocItemId('')
+    setAllocQuantity('')
+    toast({ title: 'Item alocado com sucesso!' })
+  }
+
   const getStatusBadge = () => {
     const hasDispute = Object.values(demand.sectorStatus || {}).some((s) => s === 'disputed')
     if (hasDispute) {
@@ -288,6 +341,9 @@ const DemandDetail = () => {
     demand.paymentStatus === 'completed' ||
     demand.paymentStatus === 'processing_refund' ||
     demand.paymentStatus === 'refunded'
+
+  const myAllocations = inventoryAllocations.filter((a) => a.demandId === demand.id)
+  const myItems = inventoryItems.filter((i) => i.companyId === currentUser?.id)
 
   return (
     <>
@@ -388,52 +444,6 @@ const DemandDetail = () => {
             </DialogContent>
           </Dialog>
 
-          {isProviderContracted && supplierProposal && demand.status !== 'canceled' && (
-            <Card className="border-emerald-500/30 bg-emerald-500/5 shadow-sm mt-8 animate-fade-in">
-              <CardHeader className="pb-4 border-b border-emerald-500/10 mb-4">
-                <CardTitle className="text-lg text-emerald-700 flex items-center gap-2">
-                  <DollarSign className="w-5 h-5" /> Gestão Financeira e Repasse
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex justify-between items-center text-sm border-b border-emerald-500/10 pb-3">
-                  <span className="text-muted-foreground font-medium">Valor Total Acordado</span>
-                  <span className="font-bold text-base">
-                    R${' '}
-                    {supplierProposal.value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center text-sm border-b border-emerald-500/10 pb-3">
-                  <span className="text-muted-foreground font-medium">
-                    Adiantamento Liberado (30% Custos)
-                  </span>
-                  <span className="font-bold text-emerald-600">
-                    R${' '}
-                    {(supplierProposal.value * 0.3).toLocaleString('pt-BR', {
-                      minimumFractionDigits: 2,
-                    })}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center text-sm pb-1">
-                  <span className="text-muted-foreground font-medium">
-                    Retido pela Plataforma (70%)
-                  </span>
-                  <span className="font-bold text-amber-600">
-                    R${' '}
-                    {(supplierProposal.value * 0.7).toLocaleString('pt-BR', {
-                      minimumFractionDigits: 2,
-                    })}
-                  </span>
-                </div>
-                <div className="bg-emerald-500/10 p-3 rounded-lg mt-2 text-xs text-emerald-800 leading-relaxed font-medium">
-                  O cliente realizou o pagamento total. Os 70% restantes estão em custódia segura na
-                  plataforma e serão depositados na sua conta assim que o cliente confirmar a
-                  conclusão do serviço.
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
           <Card
             className={cn(
               'border-border overflow-hidden shadow-sm',
@@ -464,6 +474,102 @@ const DemandDetail = () => {
               )}
             </CardContent>
           </Card>
+
+          {role === 'company' && demand.status !== 'canceled' && isProviderContracted && (
+            <Card className="border-border shadow-sm animate-fade-in-up bg-card">
+              <CardHeader className="pb-3 border-b border-border mb-4 flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="text-lg flex items-center gap-2 text-foreground">
+                    <Package className="w-5 h-5 text-primary" /> Alocação de Estoque
+                  </CardTitle>
+                  <CardDescription className="mt-1">
+                    Reserve itens do seu estoque físico para este evento.
+                  </CardDescription>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="flex flex-col sm:flex-row gap-4 items-end">
+                  <div className="space-y-2 flex-1 w-full">
+                    <Label>Selecionar Item</Label>
+                    <Select value={allocItemId} onValueChange={setAllocItemId}>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue placeholder="Escolha um item disponível..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {myItems.map((item) => {
+                          const used = inventoryAllocations
+                            .filter((a) => a.inventoryItemId === item.id)
+                            .reduce((s, a) => s + a.quantity, 0)
+                          const avail = item.totalQuantity - used
+                          return (
+                            <SelectItem key={item.id} value={item.id} disabled={avail <= 0}>
+                              {item.name} ({avail} disponíveis)
+                            </SelectItem>
+                          )
+                        })}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2 w-full sm:w-32">
+                    <Label>Quantidade</Label>
+                    <Input
+                      type="number"
+                      min="1"
+                      placeholder="Qtd"
+                      value={allocQuantity}
+                      onChange={(e) => setAllocQuantity(e.target.value)}
+                      className="bg-background"
+                    />
+                  </div>
+                  <Button onClick={handleAllocate} className="w-full sm:w-auto shadow-sm gap-2">
+                    <Plus className="w-4 h-4" /> Alocar
+                  </Button>
+                </div>
+
+                {myAllocations.length > 0 && (
+                  <div className="rounded-md border border-border overflow-hidden">
+                    <Table>
+                      <TableHeader className="bg-muted/50">
+                        <TableRow>
+                          <TableHead>Item</TableHead>
+                          <TableHead className="text-center">Qtd. Alocada</TableHead>
+                          <TableHead className="text-right">Ação</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {myAllocations.map((alloc) => {
+                          const item = myItems.find((i) => i.id === alloc.inventoryItemId)
+                          return (
+                            <TableRow key={alloc.id}>
+                              <TableCell className="font-medium">
+                                {item?.name || 'Desconhecido'}
+                              </TableCell>
+                              <TableCell className="text-center font-bold text-primary">
+                                {alloc.quantity}
+                              </TableCell>
+                              <TableCell className="text-right">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-destructive hover:text-destructive hover:bg-destructive/10 h-8"
+                                  onClick={() => {
+                                    deallocateInventory(alloc.id)
+                                    toast({ title: 'Alocação removida.' })
+                                  }}
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          )
+                        })}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
 
           {role === 'customer' &&
             demand.paymentStatus === 'escrow' &&
@@ -692,7 +798,7 @@ const DemandDetail = () => {
                   <DialogHeader>
                     <DialogTitle>Avaliar {reviewSupplierName}</DialogTitle>
                     <DialogDescription>
-                      Compartilhe sua experiência. Sua avaliação ficará visível no perfil do
+                      Compartilhe sua experience. Sua avaliação ficará visível no perfil do
                       fornecedor.
                     </DialogDescription>
                   </DialogHeader>
@@ -734,56 +840,6 @@ const DemandDetail = () => {
               </Dialog>
             </section>
           )}
-
-          {role === 'customer' &&
-            demand.paymentStatus !== 'escrow' &&
-            demand.paymentStatus !== 'completed' &&
-            demand.status !== 'canceled' && (
-              <section className="space-y-4 mt-8">
-                <h3 className="font-semibold text-foreground text-xl border-b border-border pb-2">
-                  Status da Contratação (Multi-Fornecedores)
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {SERVICES.filter((s) => demand.requirements[s.id as keyof TechRequirement]).map(
-                    (s) => {
-                      const status = demand.sectorStatus[s.id] || 'pending'
-                      const pId = demand.contractedProviders[s.id]
-                      const providerName = pId
-                        ? proposals.find((p) => p.id === pId)?.supplierName
-                        : null
-
-                      return (
-                        <div
-                          key={s.id}
-                          className="flex items-center justify-between p-4 bg-card border border-border rounded-xl shadow-sm"
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className={`p-2 rounded-lg ${s.bg}`}>
-                              <s.icon className={`w-5 h-5 ${s.color}`} />
-                            </div>
-                            <div>
-                              <p className="font-semibold text-sm">{s.label}</p>
-                              {providerName && (
-                                <p className="text-xs text-muted-foreground">{providerName}</p>
-                              )}
-                            </div>
-                          </div>
-                          {status === 'pending' ? (
-                            <Badge variant="secondary" className="text-[10px]">
-                              Pendente
-                            </Badge>
-                          ) : (
-                            <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 text-[10px] shrink-0 gap-1 pl-1.5">
-                              <CheckCircle2 className="w-3 h-3" /> Definido
-                            </Badge>
-                          )}
-                        </div>
-                      )
-                    },
-                  )}
-                </div>
-              </section>
-            )}
 
           {role === 'customer' && demand.paymentStatus === 'pending_signature' && (
             <Card className="bg-primary/5 border-primary/20 shadow-sm mt-8 animate-fade-in-up">
@@ -1329,112 +1385,6 @@ const DemandDetail = () => {
           </div>
         </DialogContent>
       </Dialog>
-
-      {/* Hidden printable version */}
-      <div className="hidden print:block print:absolute print:inset-0 print:bg-white print:text-black print:z-[9999] print:p-12 font-sans min-h-screen">
-        <div className="border-b-4 border-black pb-8 mb-10 flex justify-between items-start">
-          <div>
-            <h1 className="text-4xl font-black uppercase tracking-tighter">e-eventos</h1>
-            <p className="text-gray-500 font-bold uppercase tracking-widest text-sm mt-1">
-              Recibo de Pagamento Oficial
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="text-2xl font-bold">#{demand.id.toUpperCase()}</p>
-            <p className="text-gray-500 font-medium mt-1">
-              Data: {new Date().toLocaleDateString('pt-BR')}
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-12 mb-12">
-          <div className="p-6 bg-gray-50 rounded-2xl border border-gray-200">
-            <p className="text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">
-              Dados do Cliente
-            </p>
-            <p className="text-xl font-bold">{currentUser?.name || 'Cliente'}</p>
-            <p className="text-gray-600 mt-1">{currentUser?.email || ''}</p>
-          </div>
-          <div className="p-6 bg-gray-50 rounded-2xl border border-gray-200">
-            <p className="text-xs uppercase tracking-widest font-bold text-gray-500 mb-2">
-              Detalhes do Evento
-            </p>
-            <p className="text-xl font-bold">{demand.title}</p>
-            <p className="text-gray-600 mt-1">
-              Data: {new Date(demand.date).toLocaleDateString('pt-BR')}
-            </p>
-            <p className="text-gray-600">Local: {demand.location}</p>
-          </div>
-        </div>
-
-        <table className="w-full mb-12 border-collapse">
-          <thead>
-            <tr className="border-b-2 border-black">
-              <th className="text-left py-4 font-bold uppercase tracking-wider text-sm">
-                Descrição do Serviço / Fornecedor
-              </th>
-              <th className="text-right py-4 font-bold uppercase tracking-wider text-sm">
-                Valor (R$)
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {demandProposals
-              .filter((p) => p.status === 'accepted')
-              .map((p) => (
-                <tr key={p.id} className="border-b border-gray-200">
-                  <td className="py-5">
-                    <p className="font-bold text-lg">{p.supplierName}</p>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Serviços:{' '}
-                      {p.offeredSectors
-                        ?.map((sec) => SERVICES.find((s) => s.id === sec)?.label)
-                        .join(', ')}
-                    </p>
-                  </td>
-                  <td className="py-5 text-right font-bold text-lg">
-                    {p.value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                  </td>
-                </tr>
-              ))}
-            {demand.hasInsurance && (
-              <tr className="border-b border-gray-200 bg-gray-50">
-                <td className="py-5 pl-4">
-                  <p className="font-bold">Seguro / Garantia da Plataforma</p>
-                </td>
-                <td className="py-5 pr-4 text-right font-bold text-gray-600">Incluso</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-
-        <div className="flex justify-end mb-16">
-          <div className="w-1/2 bg-gray-100 p-8 rounded-3xl border border-gray-300">
-            <div className="flex justify-between items-center mb-4">
-              <span className="text-gray-600 font-bold uppercase tracking-wider text-sm">
-                Status
-              </span>
-              <span className="font-black uppercase">
-                {demand.paymentStatus === 'refunded' ? 'REEMBOLSADO' : 'PAGO (QUITADO)'}
-              </span>
-            </div>
-            <div className="flex justify-between items-center border-t border-gray-300 pt-4">
-              <span className="text-2xl font-black">TOTAL</span>
-              <span className="text-3xl font-black">
-                R$ {totalContractedValue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="text-center text-sm text-gray-400 font-medium pt-8 border-t border-gray-200">
-          <p>
-            Este documento é um comprovante digital gerado automaticamente pela plataforma
-            e-eventos.
-          </p>
-          <p className="mt-1">app-locadora-eventos.com</p>
-        </div>
-      </div>
     </>
   )
 }

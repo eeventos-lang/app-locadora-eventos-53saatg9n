@@ -9,6 +9,8 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Download,
+  Activity,
+  Award,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import {
@@ -39,6 +41,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { cn } from '@/lib/utils'
 
 const MONTHS = [
@@ -161,6 +164,40 @@ export default function Reports() {
       .sort((a, b) => b.profit - a.profit)
   }, [demands, incomeRecords, supplierFinances, currentUser])
 
+  const supplierPerformance = useMemo(() => {
+    const stats: Record<
+      string,
+      { id: string; name: string; events: Set<string>; totalPaid: number }
+    > = {}
+
+    supplierFinances.forEach((f) => {
+      if (f.status === 'paid') {
+        if (!stats[f.supplierId]) {
+          const sup = suppliersCRM.find((s) => s.id === f.supplierId)
+          stats[f.supplierId] = {
+            id: f.supplierId,
+            name: sup?.name || 'Desconhecido',
+            events: new Set(),
+            totalPaid: 0,
+          }
+        }
+        stats[f.supplierId].totalPaid += f.amount
+        if (f.demandId) stats[f.supplierId].events.add(f.demandId)
+      }
+    })
+
+    return Object.values(stats)
+      .map((s) => ({ ...s, eventCount: s.events.size }))
+      .sort((a, b) => b.eventCount - a.eventCount || b.totalPaid - a.totalPaid)
+  }, [supplierFinances, suppliersCRM])
+
+  const performanceChartData = useMemo(() => {
+    return supplierPerformance.slice(0, 5).map((s) => ({
+      name: s.name.substring(0, 15),
+      totalPaid: s.totalPaid,
+    }))
+  }, [supplierPerformance])
+
   const handleExportCSV = () => {
     const rows = [['Data', 'Tipo', 'Categoria', 'Evento/Projeto', 'Descrição', 'Valor', 'Status']]
 
@@ -212,17 +249,13 @@ export default function Reports() {
     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val)
 
   const barChartConfig = {
-    total: {
-      label: 'Total Gasto (R$)',
-      color: 'hsl(var(--primary))',
-    },
+    total: { label: 'Total Gasto (R$)', color: 'hsl(var(--primary))' },
   }
-
+  const perfChartConfig = {
+    totalPaid: { label: 'Total Investido (R$)', color: 'hsl(var(--primary))' },
+  }
   const lineChartConfig = {
-    expenses: {
-      label: 'Despesas (R$)',
-      color: 'hsl(var(--destructive))',
-    },
+    expenses: { label: 'Despesas (R$)', color: 'hsl(var(--destructive))' },
   }
 
   return (
@@ -231,11 +264,10 @@ export default function Reports() {
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-3">
             <PieChart className="w-8 h-8 text-primary" />
-            Dashboard Financeiro
+            Relatórios e Dados
           </h1>
           <p className="text-muted-foreground">
-            Monitore suas receitas, despesas e acompanhe a evolução do seu fluxo de caixa e lucro
-            líquido.
+            Monitore suas receitas, despesas e a performance dos seus parceiros de negócio.
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
@@ -270,235 +302,370 @@ export default function Reports() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <Card className="bg-card border-border shadow-sm relative overflow-hidden">
-          <div className="absolute right-0 top-0 h-full w-1.5 bg-emerald-500"></div>
-          <CardContent className="p-6 flex items-center gap-5">
-            <div className="p-4 bg-emerald-500/10 rounded-full shrink-0">
-              <ArrowUpRight className="w-8 h-8 text-emerald-600" />
-            </div>
-            <div className="flex-1">
-              <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-1">
-                Total de Entradas
-              </p>
-              <h2 className="text-4xl font-black text-foreground">
-                {formatCurrency(totalReceivedIncome)}
-              </h2>
-            </div>
-          </CardContent>
-        </Card>
+      <Tabs defaultValue="financial" className="space-y-6">
+        <TabsList className="grid w-full sm:w-[400px] grid-cols-2 bg-secondary p-1 h-auto">
+          <TabsTrigger value="financial" className="py-2 text-sm font-semibold">
+            Resumo Financeiro
+          </TabsTrigger>
+          <TabsTrigger value="performance" className="py-2 text-sm font-semibold">
+            Performance de Fornecedores
+          </TabsTrigger>
+        </TabsList>
 
-        <Card className="bg-card border-border shadow-sm relative overflow-hidden">
-          <div className="absolute right-0 top-0 h-full w-1.5 bg-destructive"></div>
-          <CardContent className="p-6 flex items-center gap-5">
-            <div className="p-4 bg-destructive/10 rounded-full shrink-0">
-              <ArrowDownRight className="w-8 h-8 text-destructive" />
-            </div>
-            <div className="flex-1">
-              <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-1">
-                Total de Despesas
-              </p>
-              <h2 className="text-4xl font-black text-foreground">
-                {formatCurrency(totalExpenses)}
-              </h2>
-            </div>
-          </CardContent>
-        </Card>
+        <TabsContent value="financial" className="space-y-6 animate-fade-in">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="bg-card border-border shadow-sm relative overflow-hidden">
+              <div className="absolute right-0 top-0 h-full w-1.5 bg-emerald-500"></div>
+              <CardContent className="p-6 flex items-center gap-5">
+                <div className="p-4 bg-emerald-500/10 rounded-full shrink-0">
+                  <ArrowUpRight className="w-8 h-8 text-emerald-600" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-1">
+                    Total de Entradas
+                  </p>
+                  <h2 className="text-4xl font-black text-foreground">
+                    {formatCurrency(totalReceivedIncome)}
+                  </h2>
+                </div>
+              </CardContent>
+            </Card>
 
-        <Card className="bg-card border-border shadow-sm relative overflow-hidden">
-          <div className="absolute right-0 top-0 h-full w-1.5 bg-primary"></div>
-          <CardContent className="p-6 flex items-center gap-5">
-            <div className="p-4 bg-primary/10 rounded-full shrink-0">
-              <DollarSign className="w-8 h-8 text-primary" />
-            </div>
-            <div className="flex-1">
-              <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-1">
-                Lucro Líquido
-              </p>
-              <h2 className="text-4xl font-black text-foreground">{formatCurrency(netProfit)}</h2>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            <Card className="bg-card border-border shadow-sm relative overflow-hidden">
+              <div className="absolute right-0 top-0 h-full w-1.5 bg-destructive"></div>
+              <CardContent className="p-6 flex items-center gap-5">
+                <div className="p-4 bg-destructive/10 rounded-full shrink-0">
+                  <ArrowDownRight className="w-8 h-8 text-destructive" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-1">
+                    Total de Despesas
+                  </p>
+                  <h2 className="text-4xl font-black text-foreground">
+                    {formatCurrency(totalExpenses)}
+                  </h2>
+                </div>
+              </CardContent>
+            </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <Card className="bg-card border-border shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-xl flex items-center gap-2">
-              <LineChartIcon className="w-5 h-5 text-primary" /> Gráficos Evolutivos
-            </CardTitle>
-            <CardDescription>
-              Evolução mensal de despesas ao longo do ano de {selectedYear}.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="h-[350px] w-full mt-4">
-              <ChartContainer config={lineChartConfig} className="h-full w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart
-                    data={evolutionaryData}
-                    margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-                  >
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      vertical={false}
-                      stroke="hsl(var(--border))"
-                    />
-                    <XAxis
-                      dataKey="month"
-                      tickLine={false}
-                      axisLine={false}
-                      tickMargin={10}
-                      className="text-xs font-semibold"
-                    />
-                    <YAxis
-                      tickFormatter={(value) => `R$ ${value}`}
-                      tickLine={false}
-                      axisLine={false}
-                      width={80}
-                      className="text-xs font-medium text-muted-foreground"
-                    />
-                    <ChartTooltip
-                      content={
-                        <ChartTooltipContent formatter={(val) => formatCurrency(Number(val))} />
-                      }
-                      cursor={{ stroke: 'hsl(var(--secondary))', strokeWidth: 2 }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="expenses"
-                      stroke="hsl(var(--destructive))"
-                      strokeWidth={3}
-                      dot={{ r: 4, fill: 'hsl(var(--destructive))' }}
-                      activeDot={{ r: 6 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </ChartContainer>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-card border-border shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-xl flex items-center gap-2">
-              <FileBarChart className="w-5 h-5 text-primary" /> Gasto por Categoria
-            </CardTitle>
-            <CardDescription>
-              Distribuição dos custos no mês selecionado agrupada por tipo de serviço.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {chartData.length === 0 ? (
-              <div className="py-16 text-center text-muted-foreground border-2 border-dashed border-border rounded-xl bg-secondary/20 flex flex-col items-center gap-3">
-                <DollarSign className="w-10 h-10 opacity-20" />
-                <p className="text-lg font-medium">Nenhum gasto registrado neste período.</p>
-              </div>
-            ) : (
-              <div className="h-[350px] w-full mt-4">
-                <ChartContainer config={barChartConfig} className="h-full w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      data={chartData}
-                      margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-                    >
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        vertical={false}
-                        stroke="hsl(var(--border))"
-                      />
-                      <XAxis
-                        dataKey="category"
-                        tickLine={false}
-                        axisLine={false}
-                        tickMargin={10}
-                        className="text-xs font-semibold"
-                      />
-                      <YAxis
-                        tickFormatter={(value) => `R$ ${value}`}
-                        tickLine={false}
-                        axisLine={false}
-                        width={80}
-                        className="text-xs font-medium text-muted-foreground"
-                      />
-                      <ChartTooltip
-                        content={
-                          <ChartTooltipContent formatter={(val) => formatCurrency(Number(val))} />
-                        }
-                        cursor={{ fill: 'hsl(var(--secondary))', opacity: 0.5 }}
-                      />
-                      <Bar
-                        dataKey="total"
-                        fill="hsl(var(--primary))"
-                        radius={[6, 6, 0, 0]}
-                        maxBarSize={80}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card className="bg-card border-border shadow-sm">
-        <CardHeader>
-          <CardTitle className="text-xl flex items-center gap-2">
-            <DollarSign className="w-5 h-5 text-primary" /> Lucratividade por Evento
-          </CardTitle>
-          <CardDescription>
-            Acompanhe o saldo líquido de cada projeto baseado em entradas recebidas e saídas pagas
-            vinculadas.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="rounded-md border border-border overflow-hidden">
-            <Table>
-              <TableHeader className="bg-muted/50">
-                <TableRow>
-                  <TableHead>Evento / Projeto</TableHead>
-                  <TableHead className="text-right">Total Recebido (Entradas)</TableHead>
-                  <TableHead className="text-right">Total Pago (Saídas)</TableHead>
-                  <TableHead className="text-right">Lucro Líquido</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {profitabilityData.length === 0 ? (
-                  <TableRow>
-                    <TableCell
-                      colSpan={4}
-                      className="text-center py-8 text-muted-foreground text-sm"
-                    >
-                      Nenhum projeto com movimentações vinculadas.
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  profitabilityData.map((data) => (
-                    <TableRow key={data.demand.id}>
-                      <TableCell className="font-medium">{data.demand.title}</TableCell>
-                      <TableCell className="text-right text-emerald-600 font-medium">
-                        {formatCurrency(data.totalIncome)}
-                      </TableCell>
-                      <TableCell className="text-right text-destructive font-medium">
-                        {formatCurrency(data.totalExpense)}
-                      </TableCell>
-                      <TableCell
-                        className={cn(
-                          'text-right font-bold',
-                          data.profit >= 0 ? 'text-primary' : 'text-destructive',
-                        )}
-                      >
-                        {formatCurrency(data.profit)}
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
+            <Card className="bg-card border-border shadow-sm relative overflow-hidden">
+              <div className="absolute right-0 top-0 h-full w-1.5 bg-primary"></div>
+              <CardContent className="p-6 flex items-center gap-5">
+                <div className="p-4 bg-primary/10 rounded-full shrink-0">
+                  <DollarSign className="w-8 h-8 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-1">
+                    Lucro Líquido
+                  </p>
+                  <h2 className="text-4xl font-black text-foreground">
+                    {formatCurrency(netProfit)}
+                  </h2>
+                </div>
+              </CardContent>
+            </Card>
           </div>
-        </CardContent>
-      </Card>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card className="bg-card border-border shadow-sm">
+              <CardHeader>
+                <CardTitle className="text-xl flex items-center gap-2">
+                  <LineChartIcon className="w-5 h-5 text-primary" /> Gráficos Evolutivos
+                </CardTitle>
+                <CardDescription>
+                  Evolução mensal de despesas ao longo do ano de {selectedYear}.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[350px] w-full mt-4">
+                  <ChartContainer config={lineChartConfig} className="h-full w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart
+                        data={evolutionaryData}
+                        margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+                      >
+                        <CartesianGrid
+                          strokeDasharray="3 3"
+                          vertical={false}
+                          stroke="hsl(var(--border))"
+                        />
+                        <XAxis
+                          dataKey="month"
+                          tickLine={false}
+                          axisLine={false}
+                          tickMargin={10}
+                          className="text-xs font-semibold"
+                        />
+                        <YAxis
+                          tickFormatter={(value) => `R$ ${value}`}
+                          tickLine={false}
+                          axisLine={false}
+                          width={80}
+                          className="text-xs font-medium text-muted-foreground"
+                        />
+                        <ChartTooltip
+                          content={
+                            <ChartTooltipContent formatter={(val) => formatCurrency(Number(val))} />
+                          }
+                          cursor={{ stroke: 'hsl(var(--secondary))', strokeWidth: 2 }}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="expenses"
+                          stroke="hsl(var(--destructive))"
+                          strokeWidth={3}
+                          dot={{ r: 4, fill: 'hsl(var(--destructive))' }}
+                          activeDot={{ r: 6 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-card border-border shadow-sm">
+              <CardHeader>
+                <CardTitle className="text-xl flex items-center gap-2">
+                  <FileBarChart className="w-5 h-5 text-primary" /> Gasto por Categoria
+                </CardTitle>
+                <CardDescription>
+                  Distribuição dos custos no mês selecionado agrupada por tipo de serviço.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {chartData.length === 0 ? (
+                  <div className="py-16 text-center text-muted-foreground border-2 border-dashed border-border rounded-xl bg-secondary/20 flex flex-col items-center gap-3">
+                    <DollarSign className="w-10 h-10 opacity-20" />
+                    <p className="text-lg font-medium">Nenhum gasto registrado neste período.</p>
+                  </div>
+                ) : (
+                  <div className="h-[350px] w-full mt-4">
+                    <ChartContainer config={barChartConfig} className="h-full w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart
+                          data={chartData}
+                          margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+                        >
+                          <CartesianGrid
+                            strokeDasharray="3 3"
+                            vertical={false}
+                            stroke="hsl(var(--border))"
+                          />
+                          <XAxis
+                            dataKey="category"
+                            tickLine={false}
+                            axisLine={false}
+                            tickMargin={10}
+                            className="text-xs font-semibold"
+                          />
+                          <YAxis
+                            tickFormatter={(value) => `R$ ${value}`}
+                            tickLine={false}
+                            axisLine={false}
+                            width={80}
+                            className="text-xs font-medium text-muted-foreground"
+                          />
+                          <ChartTooltip
+                            content={
+                              <ChartTooltipContent
+                                formatter={(val) => formatCurrency(Number(val))}
+                              />
+                            }
+                            cursor={{ fill: 'hsl(var(--secondary))', opacity: 0.5 }}
+                          />
+                          <Bar
+                            dataKey="total"
+                            fill="hsl(var(--primary))"
+                            radius={[6, 6, 0, 0]}
+                            maxBarSize={80}
+                          />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          <Card className="bg-card border-border shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-xl flex items-center gap-2">
+                <DollarSign className="w-5 h-5 text-primary" /> Lucratividade por Evento
+              </CardTitle>
+              <CardDescription>
+                Acompanhe o saldo líquido de cada projeto baseado em entradas e saídas vinculadas.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="rounded-md border border-border overflow-hidden">
+                <Table>
+                  <TableHeader className="bg-muted/50">
+                    <TableRow>
+                      <TableHead>Evento / Projeto</TableHead>
+                      <TableHead className="text-right">Total Recebido</TableHead>
+                      <TableHead className="text-right">Total Pago</TableHead>
+                      <TableHead className="text-right">Lucro Líquido</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {profitabilityData.length === 0 ? (
+                      <TableRow>
+                        <TableCell
+                          colSpan={4}
+                          className="text-center py-8 text-muted-foreground text-sm"
+                        >
+                          Nenhum projeto com movimentações vinculadas.
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      profitabilityData.map((data) => (
+                        <TableRow key={data.demand.id}>
+                          <TableCell className="font-medium">{data.demand.title}</TableCell>
+                          <TableCell className="text-right text-emerald-600 font-medium">
+                            {formatCurrency(data.totalIncome)}
+                          </TableCell>
+                          <TableCell className="text-right text-destructive font-medium">
+                            {formatCurrency(data.totalExpense)}
+                          </TableCell>
+                          <TableCell
+                            className={cn(
+                              'text-right font-bold',
+                              data.profit >= 0 ? 'text-primary' : 'text-destructive',
+                            )}
+                          >
+                            {formatCurrency(data.profit)}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="performance" className="space-y-6 animate-fade-in">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card className="bg-card border-border shadow-sm">
+              <CardHeader>
+                <CardTitle className="text-xl flex items-center gap-2">
+                  <Activity className="w-5 h-5 text-primary" /> Custo vs Benefício (Top 5)
+                </CardTitle>
+                <CardDescription>
+                  Comparativo de investimento entre os fornecedores mais utilizados.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {performanceChartData.length === 0 ? (
+                  <div className="py-16 text-center text-muted-foreground border-2 border-dashed border-border rounded-xl bg-secondary/20">
+                    Sem dados suficientes.
+                  </div>
+                ) : (
+                  <div className="h-[350px] w-full mt-4">
+                    <ChartContainer config={perfChartConfig} className="h-full w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart
+                          data={performanceChartData}
+                          margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+                        >
+                          <CartesianGrid
+                            strokeDasharray="3 3"
+                            vertical={false}
+                            stroke="hsl(var(--border))"
+                          />
+                          <XAxis
+                            dataKey="name"
+                            tickLine={false}
+                            axisLine={false}
+                            tickMargin={10}
+                            className="text-xs font-semibold"
+                          />
+                          <YAxis
+                            tickFormatter={(value) => `R$ ${value}`}
+                            tickLine={false}
+                            axisLine={false}
+                            width={80}
+                            className="text-xs font-medium text-muted-foreground"
+                          />
+                          <ChartTooltip
+                            content={
+                              <ChartTooltipContent
+                                formatter={(val) => formatCurrency(Number(val))}
+                              />
+                            }
+                            cursor={{ fill: 'hsl(var(--secondary))', opacity: 0.5 }}
+                          />
+                          <Bar
+                            dataKey="totalPaid"
+                            fill="hsl(var(--primary))"
+                            radius={[6, 6, 0, 0]}
+                            maxBarSize={60}
+                          />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            <Card className="bg-card border-border shadow-sm">
+              <CardHeader>
+                <CardTitle className="text-xl flex items-center gap-2">
+                  <Award className="w-5 h-5 text-primary" /> Ranking de Fornecedores
+                </CardTitle>
+                <CardDescription>
+                  Lista de parceiros baseada em frequência de contratação e volume financeiro.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="rounded-md border border-border overflow-hidden">
+                  <Table>
+                    <TableHeader className="bg-muted/50">
+                      <TableRow>
+                        <TableHead>#</TableHead>
+                        <TableHead>Fornecedor</TableHead>
+                        <TableHead className="text-center">Eventos</TableHead>
+                        <TableHead className="text-right">Total Pago</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {supplierPerformance.length === 0 ? (
+                        <TableRow>
+                          <TableCell
+                            colSpan={4}
+                            className="text-center py-8 text-muted-foreground text-sm"
+                          >
+                            Nenhum fornecedor registrado.
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        supplierPerformance.map((s, index) => (
+                          <TableRow key={s.id}>
+                            <TableCell className="font-bold text-muted-foreground">
+                              {index + 1}
+                            </TableCell>
+                            <TableCell className="font-medium text-foreground">{s.name}</TableCell>
+                            <TableCell className="text-center font-semibold">
+                              {s.eventCount}
+                            </TableCell>
+                            <TableCell className="text-right font-bold">
+                              {formatCurrency(s.totalPaid)}
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

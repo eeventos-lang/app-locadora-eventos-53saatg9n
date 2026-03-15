@@ -16,6 +16,7 @@ import Insights from '@/pages/Insights'
 import Schedules from '@/pages/Schedules'
 import Messages from '@/pages/Messages'
 import Registrations from '@/pages/Registrations'
+import Inventory from '@/pages/Inventory'
 import Reports from '@/pages/Reports'
 import NotFound from '@/pages/NotFound'
 import { Toaster } from '@/components/ui/toaster'
@@ -146,6 +147,7 @@ function App() {
               <Route path="insights" element={<Insights />} />
               <Route path="messages" element={<Messages />} />
               <Route path="registrations" element={<Registrations />} />
+              <Route path="inventory" element={<Inventory />} />
               <Route path="reports" element={<Reports />} />
               <Route path="*" element={<NotFound />} />
             </Route>

@@ -100,6 +100,12 @@ export type MonthlyStats = {
   feeSavingsPrev: number
 }
 
+export type BillingSettings = {
+  autoSend: boolean
+  subject: string
+  body: string
+}
+
 export type CompanyProfile = {
   name: string
   specialties: string
@@ -119,6 +125,7 @@ export type CompanyProfile = {
   loyaltyPoints?: number
   paymentGateway?: PaymentGateway
   monthlyStats?: MonthlyStats
+  billingSettings?: BillingSettings
 }
 
 export type User = {
@@ -242,6 +249,8 @@ export type SupplierFinance = {
   dueDate: string
   status: SupplierFinanceStatus
   demandId?: string
+  billingStatus?: 'pending' | 'sent' | 'failed'
+  lastBilledAt?: string
 }
 
 export type IncomeStatus = 'received' | 'pending' | 'cancelled'
@@ -256,6 +265,25 @@ export type IncomeRecord = {
   status: IncomeStatus
   createdAt: string
   demandId?: string
+  billingStatus?: 'pending' | 'sent' | 'failed'
+  lastBilledAt?: string
+}
+
+export type InventoryItem = {
+  id: string
+  companyId: string
+  name: string
+  category: string
+  totalQuantity: number
+  createdAt: string
+}
+
+export type InventoryAllocation = {
+  id: string
+  inventoryItemId: string
+  demandId: string
+  quantity: number
+  createdAt: string
 }
 
 interface AppContextType {
@@ -321,6 +349,13 @@ interface AppContextType {
   addSupplierFinance: (fin: Omit<SupplierFinance, 'id'>) => void
   incomeRecords: IncomeRecord[]
   addIncomeRecord: (record: Omit<IncomeRecord, 'id' | 'createdAt' | 'companyId'>) => void
+  updateBillingStatus: (type: 'income' | 'finance', id: string, status: 'sent' | 'failed') => void
+  inventoryItems: InventoryItem[]
+  addInventoryItem: (item: Omit<InventoryItem, 'id' | 'createdAt' | 'companyId'>) => void
+  deleteInventoryItem: (id: string) => void
+  inventoryAllocations: InventoryAllocation[]
+  allocateInventory: (alloc: Omit<InventoryAllocation, 'id' | 'createdAt'>) => void
+  deallocateInventory: (id: string) => void
 }
 
 const MOCK_USERS: User[] = [
@@ -368,6 +403,11 @@ const MOCK_USERS: User[] = [
           lastSync: new Date().toISOString(),
           account: 'agenda.jd@gmail.com',
         },
+      },
+      billingSettings: {
+        autoSend: true,
+        subject: 'Aviso de Vencimento: Fatura Pendente',
+        body: 'Olá [Customer Name],\n\nIdentificamos uma fatura pendente no valor de R$ [Amount] com vencimento em [Due Date].\n\nPor favor, realize o pagamento para evitar multas.',
       },
     },
   },
@@ -648,9 +688,10 @@ const MOCK_SUPPLIER_FINANCES: SupplierFinance[] = [
     supplierId: 'scrm1',
     description: 'Adiantamento - Casamento Sítio das Palmeiras',
     amount: 2500,
-    dueDate: new Date(Date.now() + 86400000 * 5).toISOString(),
-    status: 'pending',
+    dueDate: new Date(Date.now() - 86400000 * 5).toISOString(),
+    status: 'overdue',
     demandId: 'd1',
+    billingStatus: 'pending',
   },
   {
     id: 'fin2',
@@ -659,14 +700,6 @@ const MOCK_SUPPLIER_FINANCES: SupplierFinance[] = [
     amount: 1500,
     dueDate: new Date(Date.now() - 86400000 * 2).toISOString(),
     status: 'paid',
-  },
-  {
-    id: 'fin3',
-    supplierId: 'scrm1',
-    description: 'Taxa de Manutenção Estrutural',
-    amount: 800,
-    dueDate: new Date(Date.now() - 86400000 * 2).toISOString(),
-    status: 'overdue',
   },
 ]
 
@@ -687,9 +720,55 @@ const MOCK_INCOME_RECORDS: IncomeRecord[] = [
     companyId: 'u1',
     clientName: 'Roberto Almeida',
     amount: 3200,
-    date: new Date().toISOString(),
+    date: new Date(Date.now() - 86400000 * 10).toISOString(),
     category: 'Serviços Adicionais',
     status: 'pending',
+    createdAt: new Date().toISOString(),
+    billingStatus: 'sent',
+    lastBilledAt: new Date().toISOString(),
+  },
+]
+
+const MOCK_INVENTORY_ITEMS: InventoryItem[] = [
+  {
+    id: 'inv1',
+    companyId: 'u1',
+    name: 'Mesa de Jantar Madeira',
+    category: 'Móveis',
+    totalQuantity: 50,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'inv2',
+    companyId: 'u1',
+    name: 'Cadeira Tiffany Dourada',
+    category: 'Móveis',
+    totalQuantity: 300,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'inv3',
+    companyId: 'u1',
+    name: 'Arranjo de Flores Grande',
+    category: 'Decoração',
+    totalQuantity: 20,
+    createdAt: new Date().toISOString(),
+  },
+]
+
+const MOCK_INVENTORY_ALLOCATIONS: InventoryAllocation[] = [
+  {
+    id: 'alloc1',
+    inventoryItemId: 'inv1',
+    demandId: 'd1',
+    quantity: 15,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'alloc2',
+    inventoryItemId: 'inv2',
+    demandId: 'd1',
+    quantity: 100,
     createdAt: new Date().toISOString(),
   },
 ]
@@ -720,6 +799,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [supplierFinances, setSupplierFinances] =
     useState<SupplierFinance[]>(MOCK_SUPPLIER_FINANCES)
   const [incomeRecords, setIncomeRecords] = useState<IncomeRecord[]>(MOCK_INCOME_RECORDS)
+  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>(MOCK_INVENTORY_ITEMS)
+  const [inventoryAllocations, setInventoryAllocations] = useState<InventoryAllocation[]>(
+    MOCK_INVENTORY_ALLOCATIONS,
+  )
 
   const addDemand = (demandData: any) => {
     const newDemand: Demand = {
@@ -1187,6 +1270,59 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     ])
   }
 
+  const updateBillingStatus = (
+    type: 'income' | 'finance',
+    id: string,
+    status: 'sent' | 'failed',
+  ) => {
+    if (type === 'income') {
+      setIncomeRecords((prev) =>
+        prev.map((r) =>
+          r.id === id ? { ...r, billingStatus: status, lastBilledAt: new Date().toISOString() } : r,
+        ),
+      )
+    } else {
+      setSupplierFinances((prev) =>
+        prev.map((f) =>
+          f.id === id ? { ...f, billingStatus: status, lastBilledAt: new Date().toISOString() } : f,
+        ),
+      )
+    }
+  }
+
+  const addInventoryItem = (item: Omit<InventoryItem, 'id' | 'createdAt' | 'companyId'>) => {
+    if (!currentUser) return
+    setInventoryItems((prev) => [
+      {
+        ...item,
+        id: Math.random().toString(36).substring(7),
+        companyId: currentUser.id,
+        createdAt: new Date().toISOString(),
+      },
+      ...prev,
+    ])
+  }
+
+  const deleteInventoryItem = (id: string) => {
+    setInventoryItems((prev) => prev.filter((i) => i.id !== id))
+    setInventoryAllocations((prev) => prev.filter((a) => a.inventoryItemId !== id))
+  }
+
+  const allocateInventory = (alloc: Omit<InventoryAllocation, 'id' | 'createdAt'>) => {
+    setInventoryAllocations((prev) => [
+      ...prev,
+      {
+        ...alloc,
+        id: Math.random().toString(36).substring(7),
+        createdAt: new Date().toISOString(),
+      },
+    ])
+  }
+
+  const deallocateInventory = (id: string) => {
+    setInventoryAllocations((prev) => prev.filter((a) => a.id !== id))
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -1239,6 +1375,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         addSupplierFinance,
         incomeRecords,
         addIncomeRecord,
+        updateBillingStatus,
+        inventoryItems,
+        addInventoryItem,
+        deleteInventoryItem,
+        inventoryAllocations,
+        allocateInventory,
+        deallocateInventory,
       }}
     >
       {children}

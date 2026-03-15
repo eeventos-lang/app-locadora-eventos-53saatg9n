@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
   Table,
@@ -29,8 +29,21 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
+import { Textarea } from '@/components/ui/textarea'
 import { useApp, Proposal, Demand, User, Transaction } from '@/store/AppContext'
-import { Receipt, ShieldCheck, FileText, Loader2, Plus, Search, FilterX } from 'lucide-react'
+import {
+  Receipt,
+  ShieldCheck,
+  FileText,
+  Loader2,
+  Plus,
+  Search,
+  FilterX,
+  Mail,
+  Send,
+  AlertTriangle,
+} from 'lucide-react'
 import { SERVICES } from '@/lib/services'
 import logoImg from '@/assets/e-eventos-novo-62817.png'
 import { useExportQueue } from '@/hooks/use-export-queue'
@@ -48,6 +61,10 @@ const Transactions = () => {
     users,
     incomeRecords,
     addIncomeRecord,
+    companyProfile,
+    updateCompanyProfile,
+    updateBillingStatus,
+    supplierFinances,
   } = useApp()
   const { toast } = useToast()
   const { addToQueue, isProcessing, queueLength } = useExportQueue()
@@ -64,6 +81,15 @@ const Transactions = () => {
   const [selectedReceipt, setSelectedReceipt] = useState<Transaction | null>(null)
   const [isIncomeOpen, setIsIncomeOpen] = useState(false)
   const [bulkTotal, setBulkTotal] = useState(0)
+
+  // Automation Form
+  const [autoSettings, setAutoSettings] = useState({
+    autoSend: companyProfile?.billingSettings?.autoSend ?? false,
+    subject: companyProfile?.billingSettings?.subject || 'Aviso de Vencimento: Fatura Pendente',
+    body:
+      companyProfile?.billingSettings?.body ||
+      'Olá [Customer Name],\n\nIdentificamos uma fatura pendente no valor de R$ [Amount] com vencimento em [Due Date].\n\nPor favor, realize o pagamento para evitar multas.',
+  })
 
   // New Income Form
   const [newIncome, setNewIncome] = useState({
@@ -132,6 +158,32 @@ const Transactions = () => {
       })
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   }, [incomeRecords, currentUser, incomeSearch, incomeMonth])
+
+  const overdueRecords = useMemo(() => {
+    if (role !== 'company') return []
+    const today = new Date().toISOString().split('T')[0]
+
+    const overdueIncomes = incomeRecords
+      .filter((r) => r.companyId === currentUser?.id && r.status === 'pending' && r.date < today)
+      .map((r) => ({ ...r, type: 'income' as const, dueDate: r.date, entityName: r.clientName }))
+
+    const overdueFinances = supplierFinances
+      .filter((f) => f.status === 'overdue' || (f.status === 'pending' && f.dueDate < today))
+      .map((f) => {
+        const supplier = users.find((u) => u.id === f.supplierId)?.name || 'Fornecedor Desconhecido'
+        return {
+          ...f,
+          type: 'finance' as const,
+          entityName: supplier,
+          clientName: supplier,
+          category: 'Pagamento Fornecedor',
+        }
+      })
+
+    return [...overdueIncomes, ...overdueFinances].sort(
+      (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime(),
+    )
+  }, [incomeRecords, supplierFinances, role, currentUser, users])
 
   const formatCurrency = (val: number) =>
     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val)
@@ -223,6 +275,20 @@ const Transactions = () => {
     toast({ title: 'Entrada registrada com sucesso!' })
   }
 
+  const saveAutomationSettings = () => {
+    updateCompanyProfile({ billingSettings: autoSettings })
+    toast({ title: 'Configurações de automação salvas com sucesso.' })
+  }
+
+  const handleSendBillingEmail = (type: 'income' | 'finance', id: string) => {
+    // Simulate email sending
+    toast({ title: 'Enviando e-mail...', description: 'A cobrança está sendo enviada.' })
+    setTimeout(() => {
+      updateBillingStatus(type, id, 'sent')
+      toast({ title: 'E-mail de cobrança enviado com sucesso!' })
+    }, 1000)
+  }
+
   useEffect(() => {
     if (queueLength === 0 && bulkTotal > 0) {
       const timer = setTimeout(() => setBulkTotal(0), 1500)
@@ -275,14 +341,17 @@ const Transactions = () => {
         )}
 
         <Tabs defaultValue={role === 'company' ? 'income' : 'history'} className="space-y-6">
-          <TabsList className="bg-secondary p-1 h-auto flex flex-wrap w-full sm:max-w-xl">
+          <TabsList className="bg-secondary p-1 h-auto flex flex-wrap w-full">
             {role === 'company' && (
               <>
                 <TabsTrigger value="income" className="flex-1 py-2 text-sm font-semibold">
                   Entradas Manuais
                 </TabsTrigger>
                 <TabsTrigger value="reconciliation" className="flex-1 py-2 text-sm font-semibold">
-                  Conciliação
+                  Conciliação Plataforma
+                </TabsTrigger>
+                <TabsTrigger value="automation" className="flex-1 py-2 text-sm font-semibold">
+                  Automação Cobrança
                 </TabsTrigger>
               </>
             )}
@@ -620,6 +689,134 @@ const Transactions = () => {
                               </TableRow>
                             )
                           })
+                        )}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )}
+
+          {role === 'company' && (
+            <TabsContent value="automation" className="space-y-6">
+              <Card className="border-border shadow-sm bg-card">
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Mail className="w-5 h-5 text-primary" /> Configurações de E-mail
+                  </CardTitle>
+                  <CardDescription>
+                    Gerencie o envio automático de cobranças para faturas vencidas.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-xl border border-border">
+                    <div>
+                      <Label className="text-base">Auto-enviar cobrança</Label>
+                      <p className="text-sm text-muted-foreground">
+                        O sistema enviará o e-mail 1 dia após o vencimento.
+                      </p>
+                    </div>
+                    <Switch
+                      checked={autoSettings.autoSend}
+                      onCheckedChange={(c) => setAutoSettings({ ...autoSettings, autoSend: c })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Assunto do E-mail</Label>
+                    <Input
+                      value={autoSettings.subject}
+                      onChange={(e) =>
+                        setAutoSettings({ ...autoSettings, subject: e.target.value })
+                      }
+                      className="bg-background"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Corpo da Mensagem</Label>
+                    <Textarea
+                      value={autoSettings.body}
+                      onChange={(e) => setAutoSettings({ ...autoSettings, body: e.target.value })}
+                      className="bg-background min-h-[120px]"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Variáveis disponíveis:{' '}
+                      <code className="bg-secondary px-1 rounded">[Customer Name]</code>{' '}
+                      <code className="bg-secondary px-1 rounded">[Amount]</code>{' '}
+                      <code className="bg-secondary px-1 rounded">[Due Date]</code>
+                    </p>
+                  </div>
+                  <Button onClick={saveAutomationSettings}>Salvar Configurações</Button>
+                </CardContent>
+              </Card>
+
+              <Card className="border-border shadow-sm bg-card">
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <AlertTriangle className="w-5 h-5 text-destructive" /> Faturas Vencidas
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="rounded-md border border-border overflow-hidden">
+                    <Table>
+                      <TableHeader className="bg-muted/50">
+                        <TableRow>
+                          <TableHead>Vencimento</TableHead>
+                          <TableHead>Cliente / Fornecedor</TableHead>
+                          <TableHead className="text-right">Valor</TableHead>
+                          <TableHead className="text-center">Status de Cobrança</TableHead>
+                          <TableHead className="text-right">Ação</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {overdueRecords.length === 0 ? (
+                          <TableRow>
+                            <TableCell
+                              colSpan={5}
+                              className="text-center py-8 text-muted-foreground"
+                            >
+                              Nenhuma fatura vencida no momento.
+                            </TableCell>
+                          </TableRow>
+                        ) : (
+                          overdueRecords.map((r) => (
+                            <TableRow key={r.id}>
+                              <TableCell className="text-destructive font-medium">
+                                {new Date(r.dueDate).toLocaleDateString('pt-BR')}
+                              </TableCell>
+                              <TableCell>
+                                <span className="font-medium text-foreground">{r.entityName}</span>
+                                <span className="block text-xs text-muted-foreground">
+                                  {r.type === 'income' ? 'Cliente' : 'Fornecedor'}
+                                </span>
+                              </TableCell>
+                              <TableCell className="text-right font-bold text-foreground">
+                                {formatCurrency(r.amount)}
+                              </TableCell>
+                              <TableCell className="text-center">
+                                {r.billingStatus === 'sent' ? (
+                                  <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 text-[10px]">
+                                    Enviado em{' '}
+                                    {new Date(r.lastBilledAt!).toLocaleDateString('pt-BR')}
+                                  </Badge>
+                                ) : (
+                                  <Badge variant="secondary" className="text-[10px]">
+                                    Não enviado
+                                  </Badge>
+                                )}
+                              </TableCell>
+                              <TableCell className="text-right">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-8 gap-2 text-primary"
+                                  onClick={() => handleSendBillingEmail(r.type, r.id)}
+                                >
+                                  <Send className="w-4 h-4" /> Cobrar
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          ))
                         )}
                       </TableBody>
                     </Table>

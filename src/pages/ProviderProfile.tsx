@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useMemo } from 'react'
 import { useApp } from '@/store/AppContext'
 import {
   MapPin,
@@ -9,21 +9,46 @@ import {
   Award,
   MessageSquare,
   ShieldCheck,
+  LineChartIcon,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { BackButton } from '@/components/BackButton'
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts'
 import { SERVICES } from '@/lib/services'
 import { getLoyaltyTier, cn } from '@/lib/utils'
 
 export default function ProviderProfile() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { users, reviews, favorites, toggleFavorite, currentUser, createChat, getSafetyIndex } =
-    useApp()
+  const {
+    users,
+    reviews,
+    favorites,
+    toggleFavorite,
+    currentUser,
+    createChat,
+    getSafetyIndex,
+    proposals,
+  } = useApp()
 
   const supplier = users.find((u) => u.id === id)
+
+  const priceEvolutionData = useMemo(() => {
+    if (!supplier) return []
+    const supplierProposals = proposals
+      .filter((p) => p.supplierId === supplier.id && p.status === 'accepted')
+      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+      .slice(-10) // last 10 proposals to show trend
+
+    return supplierProposals.map((p, i) => ({
+      index: `E${i + 1}`,
+      value: p.value,
+      date: new Date(p.createdAt).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }),
+    }))
+  }, [proposals, supplier])
 
   if (!supplier || supplier.role !== 'company' || !supplier.companyProfile) {
     return (
@@ -54,6 +79,10 @@ export default function ProviderProfile() {
     if (!currentUser) return
     const chatId = createChat(supplier.id)
     navigate(`/messages?chat=${chatId}`)
+  }
+
+  const priceChartConfig = {
+    value: { label: 'Ticket Médio (R$)', color: 'hsl(var(--primary))' },
   }
 
   return (
@@ -101,7 +130,7 @@ export default function ProviderProfile() {
                     : 'bg-amber-500/20 text-amber-600 border-amber-500/30',
                 )}
               >
-                <ShieldCheck className="w-4 h-4 mr-1.5" /> Índice de Segurança: {safetyIndex}%
+                <ShieldCheck className="w-4 h-4 mr-1.5" /> Confiabilidade: {safetyIndex}%
               </Badge>
 
               {isHighPerformance && (
@@ -193,6 +222,65 @@ export default function ProviderProfile() {
                   })}
                 </div>
               </div>
+            </CardContent>
+          </Card>
+
+          <Card className="shadow-sm border-border bg-card">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg font-semibold flex items-center gap-2">
+                <LineChartIcon className="w-5 h-5 text-primary" />
+                Evolução de Preços
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {priceEvolutionData.length < 2 ? (
+                <div className="py-8 text-center text-muted-foreground border-2 border-dashed border-border rounded-xl bg-secondary/10">
+                  Histórico insuficiente para gerar o gráfico.
+                </div>
+              ) : (
+                <div className="h-[250px] w-full mt-4">
+                  <ChartContainer config={priceChartConfig} className="h-full w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart
+                        data={priceEvolutionData}
+                        margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+                      >
+                        <CartesianGrid
+                          strokeDasharray="3 3"
+                          vertical={false}
+                          stroke="hsl(var(--border))"
+                        />
+                        <XAxis
+                          dataKey="date"
+                          tickLine={false}
+                          axisLine={false}
+                          tickMargin={10}
+                          className="text-xs font-semibold"
+                        />
+                        <YAxis
+                          tickFormatter={(val) => `R$ ${val}`}
+                          tickLine={false}
+                          axisLine={false}
+                          width={80}
+                          className="text-xs font-medium text-muted-foreground"
+                        />
+                        <ChartTooltip
+                          content={<ChartTooltipContent />}
+                          cursor={{ stroke: 'hsl(var(--secondary))', strokeWidth: 2 }}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="value"
+                          stroke="hsl(var(--primary))"
+                          strokeWidth={3}
+                          dot={{ r: 4, fill: 'hsl(var(--primary))' }}
+                          activeDot={{ r: 6 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </div>
+              )}
             </CardContent>
           </Card>
 
