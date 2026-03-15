@@ -46,8 +46,6 @@ export default function Inventory() {
   const [newItem, setNewItem] = useState({ name: '', category: '', totalQuantity: '' })
   const [searchTerm, setSearchTerm] = useState('')
 
-  if (role !== 'company') return <Navigate to="/" replace />
-
   const myItems = useMemo(() => {
     return inventoryItems
       .filter((i) => i.companyId === currentUser?.id)
@@ -66,6 +64,8 @@ export default function Inventory() {
         }
       })
   }, [inventoryItems, currentUser, searchTerm, inventoryAllocations, demands])
+
+  if (role !== 'company') return <Navigate to="/" replace />
 
   const handleSave = () => {
     if (!newItem.name || !newItem.category || !newItem.totalQuantity) {
