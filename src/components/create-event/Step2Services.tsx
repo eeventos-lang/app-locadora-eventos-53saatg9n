@@ -60,7 +60,7 @@ export const Step2Services = ({ formData, setFormData, configs, setConfigs }: Pr
             <div className="space-y-4 p-4 border border-border rounded-xl bg-card">
               <h4 className="font-medium text-foreground">Opções de Buffet</h4>
               <div className="space-y-2 pt-2">
-                <Label>Quantidade de Pessoas (R$ 150/pessoa)</Label>
+                <Label>Quantidade de Pessoas</Label>
                 <Input
                   type="number"
                   min="1"
@@ -74,7 +74,7 @@ export const Step2Services = ({ formData, setFormData, configs, setConfigs }: Pr
 
           {formData.requirements.cocktails && (
             <div className="space-y-2">
-              <Label>Pessoas no Bar de Drinks (R$ 70/pessoa)</Label>
+              <Label>Pessoas no Bar de Drinks</Label>
               <Input
                 type="number"
                 min="1"
@@ -86,7 +86,7 @@ export const Step2Services = ({ formData, setFormData, configs, setConfigs }: Pr
           )}
           {formData.requirements.drinks && (
             <div className="space-y-2">
-              <Label>Pessoas para Bebidas (R$ 50/pessoa)</Label>
+              <Label>Pessoas para Bebidas</Label>
               <Input
                 type="number"
                 min="1"
@@ -98,7 +98,7 @@ export const Step2Services = ({ formData, setFormData, configs, setConfigs }: Pr
           )}
           {formData.requirements.security && (
             <div className="space-y-2">
-              <Label>Quantidade de Seguranças (R$ 150/cada)</Label>
+              <Label>Quantidade de Seguranças</Label>
               <Input
                 type="number"
                 min="1"
