@@ -1,5 +1,7 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 import { Layout } from '@/components/Layout'
+import pb from '@/lib/pocketbase/client'
 import Index from '@/pages/Index'
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
@@ -122,6 +124,26 @@ if (typeof window !== 'undefined') {
   }
 }
 
+function AuthGuard({ children }: { children: React.ReactNode }) {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const unsub = pb.authStore.onChange((token, model) => {
+      if (!model || !pb.authStore.isValid) {
+        navigate('/login')
+      }
+    })
+
+    if (!pb.authStore.isValid) {
+      navigate('/login')
+    }
+
+    return () => unsub()
+  }, [navigate])
+
+  return <>{children}</>
+}
+
 function App() {
   return (
     <AppProvider>
@@ -129,29 +151,31 @@ function App() {
         <Toaster />
         <Sonner />
         <Router>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Index />} />
-              <Route path="login" element={<Login />} />
-              <Route path="register" element={<Register />} />
-              <Route path="demands" element={<Demands />} />
-              <Route path="demands/:id" element={<DemandDetail />} />
-              <Route path="create-event" element={<CreateEvent />} />
-              <Route path="profile" element={<Profile />} />
-              <Route path="subscription" element={<Subscription />} />
-              <Route path="suppliers" element={<SupplierSearch />} />
-              <Route path="suppliers/:id" element={<ProviderProfile />} />
-              <Route path="favorites" element={<Favorites />} />
-              <Route path="schedules" element={<Schedules />} />
-              <Route path="finance" element={<Transactions />} />
-              <Route path="insights" element={<Insights />} />
-              <Route path="messages" element={<Messages />} />
-              <Route path="registrations" element={<Registrations />} />
-              <Route path="inventory" element={<Inventory />} />
-              <Route path="reports" element={<Reports />} />
-              <Route path="*" element={<NotFound />} />
-            </Route>
-          </Routes>
+          <AuthGuard>
+            <Routes>
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Index />} />
+                <Route path="login" element={<Login />} />
+                <Route path="register" element={<Register />} />
+                <Route path="demands" element={<Demands />} />
+                <Route path="demands/:id" element={<DemandDetail />} />
+                <Route path="create-event" element={<CreateEvent />} />
+                <Route path="profile" element={<Profile />} />
+                <Route path="subscription" element={<Subscription />} />
+                <Route path="suppliers" element={<SupplierSearch />} />
+                <Route path="suppliers/:id" element={<ProviderProfile />} />
+                <Route path="favorites" element={<Favorites />} />
+                <Route path="schedules" element={<Schedules />} />
+                <Route path="finance" element={<Transactions />} />
+                <Route path="insights" element={<Insights />} />
+                <Route path="messages" element={<Messages />} />
+                <Route path="registrations" element={<Registrations />} />
+                <Route path="inventory" element={<Inventory />} />
+                <Route path="reports" element={<Reports />} />
+                <Route path="*" element={<NotFound />} />
+              </Route>
+            </Routes>
+          </AuthGuard>
         </Router>
       </TooltipProvider>
     </AppProvider>

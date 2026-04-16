@@ -358,6 +358,7 @@ interface AppContextType {
   inventoryAllocations: InventoryAllocation[]
   allocateInventory: (alloc: Omit<InventoryAllocation, 'id' | 'createdAt'>) => void
   deallocateInventory: (id: string) => void
+  isInitializing: boolean
 }
 
 const MOCK_USERS: User[] = [
@@ -764,9 +765,14 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [inventoryAllocations, setInventoryAllocations] = useState<InventoryAllocation[]>(
     MOCK_INVENTORY_ALLOCATIONS,
   )
+  const [isInitializing, setIsInitializing] = useState(true)
 
   const loadCRMData = useCallback(async () => {
-    if (!pb.authStore.isValid) return
+    if (!pb.authStore.isValid) {
+      setClientsCRM([])
+      setSuppliersCRM([])
+      return
+    }
     try {
       const [clientsRecords, suppliersRecords] = await Promise.all([
         pb.collection('crm_clients').getFullList({ sort: '-created' }),
@@ -814,8 +820,36 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   useEffect(() => {
-    loadCRMData()
-  }, [currentUser, loadCRMData])
+    const initApp = async () => {
+      try {
+        if (!pb.authStore.isValid) {
+          await pb.collection('users').authWithPassword('joao.doe@exemplo.com', 'Skip@Pass')
+        }
+        if (pb.authStore.isValid && pb.authStore.record) {
+          setCurrentUser((prev) => (prev ? { ...prev, id: pb.authStore.record!.id } : null))
+        }
+      } catch (err) {
+        console.error('Init Auth failed:', err)
+      } finally {
+        setIsInitializing(false)
+        loadCRMData()
+      }
+    }
+
+    initApp()
+
+    const unsub = pb.authStore.onChange((token, model) => {
+      if (model) {
+        setCurrentUser((prev) => (prev ? { ...prev, id: model.id } : null))
+        loadCRMData()
+      } else {
+        setClientsCRM([])
+        setSuppliersCRM([])
+      }
+    })
+
+    return () => unsub()
+  }, [loadCRMData])
 
   useRealtime('crm_clients', () => {
     loadCRMData()
@@ -1085,14 +1119,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setUsers([...users, newUser])
   }
 
-  useEffect(() => {
-    if (!pb.authStore.isValid) {
-      pb.collection('users')
-        .authWithPassword('joao.doe@exemplo.com', 'Skip@Pass')
-        .catch(() => {})
-    }
-  }, [])
-
   const login = async (email: string, password?: string) => {
     let pbUser: any = null
     try {
@@ -1265,20 +1291,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const addClientCRM = async (clientData: Omit<ClientCRM, 'id' | 'createdAt' | 'supplierId'>) => {
-    if (!currentUser) return
-    if (!pb.authStore.isValid) {
-      const newClient: ClientCRM = {
-        ...clientData,
-        id: Math.random().toString(36).substring(7),
-        supplierId: currentUser.id,
-        createdAt: new Date().toISOString(),
-      }
-      setClientsCRM((prev) => [newClient, ...prev])
-      return
+    if (!pb.authStore.isValid || !pb.authStore.record) {
+      throw new Error('Você precisa estar autenticado para salvar clientes.')
     }
 
     await pb.collection('crm_clients').create({
-      supplier_id: currentUser.id,
+      supplier_id: pb.authStore.record.id,
       name: clientData.name,
       document: clientData.cpf,
       rg: clientData.rg,
@@ -1292,20 +1310,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const addSupplierCRM = async (
     supplierData: Omit<SupplierCRM, 'id' | 'createdAt' | 'companyId'>,
   ) => {
-    if (!currentUser) return
-    if (!pb.authStore.isValid) {
-      const newSupplier: SupplierCRM = {
-        ...supplierData,
-        id: Math.random().toString(36).substring(7),
-        companyId: currentUser.id,
-        createdAt: new Date().toISOString(),
-      }
-      setSuppliersCRM((prev) => [newSupplier, ...prev])
-      return
+    if (!pb.authStore.isValid || !pb.authStore.record) {
+      throw new Error('Você precisa estar autenticado para salvar fornecedores.')
     }
 
     await pb.collection('crm_suppliers').create({
-      company_id: currentUser.id,
+      company_id: pb.authStore.record.id,
       name: supplierData.name,
       document: supplierData.cnpjCpf,
       stateRegistration: supplierData.stateRegistration,
@@ -1469,9 +1479,19 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         inventoryAllocations,
         allocateInventory,
         deallocateInventory,
+        isInitializing,
       }}
     >
-      {children}
+      {isInitializing ? (
+        <div className="flex h-screen w-full items-center justify-center bg-background">
+          <div className="flex flex-col items-center space-y-4">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+            <p className="text-sm text-muted-foreground">Inicializando aplicação...</p>
+          </div>
+        </div>
+      ) : (
+        children
+      )}
     </AppContext.Provider>
   )
 }
