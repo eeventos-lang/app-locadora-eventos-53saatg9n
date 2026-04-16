@@ -55,6 +55,7 @@ export function SupplierFormDialog({
   const { addSupplierCRM } = useApp()
   const [isLoadingCep, setIsLoadingCep] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const lastFetchedCep = useRef('')
 
   const form = useForm<SupplierFormValues>({
@@ -109,14 +110,18 @@ export function SupplierFormDialog({
   const onSubmit = async (values: SupplierFormValues) => {
     setIsSubmitting(true)
     try {
-      await addSupplierCRM({
-        ...values,
-        complement: values.complement || '',
-        stateRegistration: values.stateRegistration || '',
-      })
+      await addSupplierCRM(
+        {
+          ...values,
+          complement: values.complement || '',
+          stateRegistration: values.stateRegistration || '',
+        },
+        selectedFiles,
+      )
       toast.success('Fornecedor cadastrado com sucesso!')
       onOpenChange(false)
       form.reset()
+      setSelectedFiles([])
     } catch (err) {
       const fieldErrors = extractFieldErrors(err)
       if (Object.keys(fieldErrors).length > 0) {
@@ -242,8 +247,27 @@ export function SupplierFormDialog({
               {renderInput('neighborhood', 'Bairro', 'Centro')}
               {renderInput('city', 'Cidade', 'São Paulo')}
               {renderInput('state', 'UF', 'SP', false, (v) => v.toUpperCase())}
+
+              <div className="md:col-span-2 border-t border-border pt-4 mt-2">
+                <FormLabel className="flex items-center gap-2 mb-2 font-semibold">
+                  Anexos (Documentos / Fotos)
+                </FormLabel>
+                <Input
+                  type="file"
+                  multiple
+                  onChange={(e) =>
+                    setSelectedFiles(e.target.files ? Array.from(e.target.files) : [])
+                  }
+                  accept="image/*,.pdf,.doc,.docx"
+                  className="cursor-pointer bg-card"
+                />
+                <p className="text-[11px] text-muted-foreground mt-1">
+                  Máx 10 arquivos, até 5MB cada.
+                </p>
+              </div>
             </div>
             <div className="flex justify-end gap-3 pt-4 border-t border-border mt-4">
+              {' '}
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Cancelar
               </Button>

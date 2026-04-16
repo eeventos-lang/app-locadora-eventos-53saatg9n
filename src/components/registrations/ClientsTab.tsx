@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { Plus, Search, Fingerprint, Eye } from 'lucide-react'
+import { Plus, Search, Fingerprint, Eye, FileDown, Printer } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -34,6 +34,69 @@ export default function ClientsTab() {
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
   }, [clientsCRM, currentUser, filterName, filterCpf])
 
+  const exportCSV = () => {
+    const headers = ['Nome', 'CPF', 'E-mail', 'Telefone', 'Endereço', 'Data de Cadastro']
+    const rows = myClients.map((c) =>
+      [
+        c.name,
+        c.cpf,
+        c.email,
+        c.phone,
+        c.address,
+        new Date(c.createdAt).toLocaleDateString('pt-BR'),
+      ]
+        .map((v) => `"${(v || '').replace(/"/g, '""')}"`)
+        .join(','),
+    )
+    const csv = [headers.join(','), ...rows].join('\n')
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', 'clientes_crm.csv')
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
+  const exportPDF = () => {
+    const printWindow = window.open('', '', 'width=800,height=600')
+    if (!printWindow) return
+    const html = `
+      <html>
+        <head>
+          <title>Relatório de Clientes CRM</title>
+          <style>
+            body { font-family: sans-serif; padding: 20px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 12px; }
+            th { background-color: #f4f4f4; }
+            h2 { color: #333; margin-bottom: 5px; }
+          </style>
+        </head>
+        <body>
+          <h2>Relatório de Clientes</h2>
+          <p style="font-size:12px;color:#666;margin-top:0;">Gerado em: ${new Date().toLocaleString('pt-BR')}</p>
+          <table>
+            <thead>
+              <tr><th>Nome</th><th>CPF</th><th>E-mail</th><th>Telefone</th></tr>
+            </thead>
+            <tbody>
+              ${myClients.map((c) => `<tr><td>${c.name}</td><td>${c.cpf}</td><td>${c.email || '-'}</td><td>${c.phone}</td></tr>`).join('')}
+            </tbody>
+          </table>
+        </body>
+      </html>
+    `
+    printWindow.document.write(html)
+    printWindow.document.close()
+    printWindow.focus()
+    setTimeout(() => {
+      printWindow.print()
+      printWindow.close()
+    }, 250)
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -57,12 +120,27 @@ export default function ClientsTab() {
             />
           </div>
         </div>
-        <Button
-          onClick={() => setIsFormOpen(true)}
-          className="w-full sm:w-auto shrink-0 shadow-sm h-11"
-        >
-          <Plus className="w-4 h-4 mr-2" /> Novo Cliente
-        </Button>
+        <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
+          <Button
+            variant="outline"
+            onClick={exportCSV}
+            className="h-11 shadow-sm"
+            title="Exportar CSV"
+          >
+            <FileDown className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">CSV</span>
+          </Button>
+          <Button
+            variant="outline"
+            onClick={exportPDF}
+            className="h-11 shadow-sm"
+            title="Exportar PDF"
+          >
+            <Printer className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">PDF</span>
+          </Button>
+          <Button onClick={() => setIsFormOpen(true)} className="shadow-sm h-11">
+            <Plus className="w-4 h-4 mr-2" /> Novo Cliente
+          </Button>
+        </div>
       </div>
 
       <div className="border border-border rounded-xl overflow-hidden bg-card shadow-sm">

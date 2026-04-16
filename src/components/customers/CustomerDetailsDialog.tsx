@@ -15,7 +15,8 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { useApp, ClientCRM } from '@/store/AppContext'
-import { User, Calendar, AlertCircle } from 'lucide-react'
+import { User, Calendar, AlertCircle, FileText, Paperclip } from 'lucide-react'
+import pb from '@/lib/pocketbase/client'
 
 const statusMap: Record<string, string> = {
   pending: 'Pendente',
@@ -60,9 +61,10 @@ export function CustomerDetailsDialog({
         </DialogHeader>
 
         <Tabs defaultValue="details" className="mt-4">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="details">Dados do Cliente</TabsTrigger>
             <TabsTrigger value="history">Histórico de Eventos</TabsTrigger>
+            <TabsTrigger value="attachments">Anexos</TabsTrigger>
           </TabsList>
 
           <TabsContent value="details" className="space-y-4 pt-4 animate-fade-in">
@@ -134,6 +136,39 @@ export function CustomerDetailsDialog({
                     ))}
                   </TableBody>
                 </Table>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="attachments" className="pt-4 animate-fade-in">
+            {!client.attachments || client.attachments.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-10 text-muted-foreground border rounded-xl bg-secondary/10">
+                <Paperclip className="w-10 h-10 mb-3 opacity-20" />
+                <p className="text-sm font-medium">Nenhum anexo encontrado.</p>
+                <p className="text-xs mt-1">Documentos e fotos aparecerão aqui.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {client.attachments.map((filename, i) => {
+                  const url = pb.files.getUrl(
+                    { collectionId: client.collectionId, id: client.id } as any,
+                    filename,
+                  )
+                  return (
+                    <a
+                      key={i}
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 p-3 border rounded-xl hover:bg-muted transition-colors bg-secondary/10"
+                    >
+                      <FileText className="w-5 h-5 text-primary shrink-0" />
+                      <span className="text-sm font-medium truncate" title={filename}>
+                        {filename}
+                      </span>
+                    </a>
+                  )
+                })}
               </div>
             )}
           </TabsContent>

@@ -7,9 +7,10 @@ import {
 } from '@/components/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { SupplierCRM } from '@/store/AppContext'
-import { Truck } from 'lucide-react'
+import { Truck, FileText } from 'lucide-react'
 import { SERVICES } from '@/lib/services'
 import { SupplierDocumentsTab } from './SupplierDocumentsTab'
+import pb from '@/lib/pocketbase/client'
 import { SupplierFinanceTab } from './SupplierFinanceTab'
 
 export function SupplierDetailsDialog({
@@ -103,6 +104,36 @@ export function SupplierDetailsDialog({
                   <br />
                   CEP: {supplier.cep}
                 </div>
+
+                {supplier.attachments && supplier.attachments.length > 0 && (
+                  <div className="col-span-2 border-t border-border pt-3 mt-1">
+                    <span className="text-muted-foreground block text-xs font-semibold mb-3">
+                      Anexos (CRM)
+                    </span>
+                    <div className="grid grid-cols-2 gap-3">
+                      {supplier.attachments.map((filename, i) => {
+                        const url = pb.files.getUrl(
+                          { collectionId: supplier.collectionId, id: supplier.id } as any,
+                          filename,
+                        )
+                        return (
+                          <a
+                            key={i}
+                            href={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 p-2.5 border rounded-lg hover:bg-muted transition-colors bg-background"
+                          >
+                            <FileText className="w-4 h-4 text-primary shrink-0" />
+                            <span className="text-xs font-medium truncate" title={filename}>
+                              {filename}
+                            </span>
+                          </a>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
             </TabsContent>
 

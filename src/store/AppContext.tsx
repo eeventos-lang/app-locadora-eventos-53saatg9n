@@ -203,6 +203,7 @@ export type ChatMessage = {
 
 export type ClientCRM = {
   id: string
+  collectionId: string
   supplierId: string
   name: string
   cpf: string
@@ -211,11 +212,13 @@ export type ClientCRM = {
   cep: string
   phone: string
   email: string
+  attachments?: string[]
   createdAt: string
 }
 
 export type SupplierCRM = {
   id: string
+  collectionId: string
   companyId: string
   name: string
   cnpjCpf: string
@@ -230,6 +233,7 @@ export type SupplierCRM = {
   phone: string
   email: string
   category: string
+  attachments?: string[]
   createdAt: string
 }
 
@@ -341,9 +345,15 @@ interface AppContextType {
   getSafetyIndex: (supplierId: string) => number
   redeemLoyaltyPoints: (points: number, reward: string) => void
   clientsCRM: ClientCRM[]
-  addClientCRM: (client: Omit<ClientCRM, 'id' | 'createdAt' | 'supplierId'>) => Promise<void>
+  addClientCRM: (
+    client: Omit<ClientCRM, 'id' | 'createdAt' | 'supplierId' | 'collectionId' | 'attachments'>,
+    files?: File[],
+  ) => Promise<void>
   suppliersCRM: SupplierCRM[]
-  addSupplierCRM: (supplier: Omit<SupplierCRM, 'id' | 'createdAt' | 'companyId'>) => Promise<void>
+  addSupplierCRM: (
+    supplier: Omit<SupplierCRM, 'id' | 'createdAt' | 'companyId' | 'collectionId' | 'attachments'>,
+    files?: File[],
+  ) => Promise<void>
   supplierDocuments: SupplierDocument[]
   addSupplierDocument: (doc: Omit<SupplierDocument, 'id' | 'uploadDate'>) => void
   deleteSupplierDocument: (id: string) => void
@@ -411,6 +421,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       setClientsCRM(
         clientsRecords.map((r) => ({
           id: r.id,
+          collectionId: r.collectionId,
           supplierId: r.supplier_id,
           name: r.name,
           cpf: r.document,
@@ -419,6 +430,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
           cep: r.cep,
           phone: r.phone,
           email: r.email,
+          attachments: r.attachments || [],
           createdAt: r.created,
         })),
       )
@@ -426,6 +438,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       setSuppliersCRM(
         suppliersRecords.map((r) => ({
           id: r.id,
+          collectionId: r.collectionId,
           companyId: r.company_id,
           name: r.name,
           cnpjCpf: r.document,
@@ -440,6 +453,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
           phone: r.phone,
           email: r.email,
           category: r.service_category,
+          attachments: r.attachments || [],
           createdAt: r.created,
         })),
       )
@@ -451,16 +465,23 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const initApp = async () => {
       try {
-        if (pb.authStore.isValid && pb.authStore.record) {
-          const pbUser = pb.authStore.record
-          const user: User = {
-            id: pbUser.id,
-            name: pbUser.name || pbUser.email.split('@')[0],
-            email: pbUser.email,
-            role: (pbUser.role as Role) || 'customer',
+        if (pb.authStore.isValid) {
+          try {
+            await pb.collection('users').authRefresh()
+            if (pb.authStore.record) {
+              const pbUser = pb.authStore.record
+              const user: User = {
+                id: pbUser.id,
+                name: pbUser.name || pbUser.email.split('@')[0],
+                email: pbUser.email,
+                role: (pbUser.role as Role) || 'customer',
+              }
+              setCurrentUser(user)
+              setRole(user.role)
+            }
+          } catch (e) {
+            pb.authStore.clear()
           }
-          setCurrentUser(user)
-          setRole(user.role)
         }
       } catch (err) {
         console.error('Init Auth failed:', err)
@@ -919,46 +940,63 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     ])
   }
 
-  const addClientCRM = async (clientData: Omit<ClientCRM, 'id' | 'createdAt' | 'supplierId'>) => {
+  const addClientCRM = async (
+    clientData: Omit<ClientCRM, 'id' | 'createdAt' | 'supplierId' | 'collectionId' | 'attachments'>,
+    files?: File[],
+  ) => {
     if (!pb.authStore.isValid || !pb.authStore.record) {
       throw new Error('Você precisa estar autenticado para salvar clientes.')
     }
 
-    await pb.collection('crm_clients').create({
-      supplier_id: pb.authStore.record.id,
-      name: clientData.name,
-      document: clientData.cpf,
-      rg: clientData.rg,
-      address: clientData.address,
-      cep: clientData.cep,
-      phone: clientData.phone,
-      email: clientData.email,
-    })
+    const formData = new FormData()
+    formData.append('supplier_id', pb.authStore.record.id)
+    formData.append('name', clientData.name)
+    formData.append('document', clientData.cpf)
+    formData.append('rg', clientData.rg || '')
+    formData.append('address', clientData.address)
+    formData.append('cep', clientData.cep)
+    formData.append('phone', clientData.phone)
+    formData.append('email', clientData.email || '')
+
+    if (files && files.length > 0) {
+      files.forEach((file) => formData.append('attachments', file))
+    }
+
+    await pb.collection('crm_clients').create(formData)
   }
 
   const addSupplierCRM = async (
-    supplierData: Omit<SupplierCRM, 'id' | 'createdAt' | 'companyId'>,
+    supplierData: Omit<
+      SupplierCRM,
+      'id' | 'createdAt' | 'companyId' | 'collectionId' | 'attachments'
+    >,
+    files?: File[],
   ) => {
     if (!pb.authStore.isValid || !pb.authStore.record) {
       throw new Error('Você precisa estar autenticado para salvar fornecedores.')
     }
 
-    await pb.collection('crm_suppliers').create({
-      company_id: pb.authStore.record.id,
-      name: supplierData.name,
-      document: supplierData.cnpjCpf,
-      stateRegistration: supplierData.stateRegistration,
-      cep: supplierData.cep,
-      street: supplierData.street,
-      number: supplierData.number,
-      complement: supplierData.complement,
-      neighborhood: supplierData.neighborhood,
-      city: supplierData.city,
-      state: supplierData.state,
-      phone: supplierData.phone,
-      email: supplierData.email,
-      service_category: supplierData.category,
-    })
+    const formData = new FormData()
+    formData.append('company_id', pb.authStore.record.id)
+    formData.append('name', supplierData.name)
+    formData.append('document', supplierData.cnpjCpf)
+    formData.append('stateRegistration', supplierData.stateRegistration || '')
+    formData.append('service_category', supplierData.category)
+    formData.append('cep', supplierData.cep)
+    formData.append('street', supplierData.street)
+    formData.append('number', supplierData.number)
+    formData.append('complement', supplierData.complement || '')
+    formData.append('neighborhood', supplierData.neighborhood)
+    formData.append('city', supplierData.city)
+    formData.append('state', supplierData.state)
+    formData.append('phone', supplierData.phone)
+    formData.append('email', supplierData.email || '')
+
+    if (files && files.length > 0) {
+      files.forEach((file) => formData.append('attachments', file))
+    }
+
+    await pb.collection('crm_suppliers').create(formData)
   }
 
   const addSupplierDocument = (docData: Omit<SupplierDocument, 'id' | 'uploadDate'>) => {

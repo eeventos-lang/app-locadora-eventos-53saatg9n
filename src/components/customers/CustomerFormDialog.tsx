@@ -41,6 +41,7 @@ export function CustomerFormDialog({
   const { addClientCRM } = useApp()
   const [isLoadingCep, setIsLoadingCep] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const lastFetchedCep = useRef('')
 
   const form = useForm<ClientFormValues>({
@@ -82,10 +83,11 @@ export function CustomerFormDialog({
   const onSubmit = async (values: ClientFormValues) => {
     setIsSubmitting(true)
     try {
-      await addClientCRM(values)
+      await addClientCRM(values, selectedFiles)
       toast.success('Cliente cadastrado com sucesso!')
       onOpenChange(false)
       form.reset()
+      setSelectedFiles([])
     } catch (err) {
       const fieldErrors = extractFieldErrors(err)
       if (Object.keys(fieldErrors).length > 0) {
@@ -153,8 +155,27 @@ export function CustomerFormDialog({
               {renderInput('phone', 'Telefone', '(00) 00000-0000', formatPhone)}
               {renderInput('address', 'Endereço Completo', 'Rua, Número, Bairro', undefined, true)}
               {renderInput('email', 'E-mail', 'cliente@exemplo.com', undefined, true)}
+
+              <div className="md:col-span-2 border-t border-border pt-4 mt-2">
+                <FormLabel className="flex items-center gap-2 mb-2 font-semibold">
+                  Anexos (Documentos / Fotos)
+                </FormLabel>
+                <Input
+                  type="file"
+                  multiple
+                  onChange={(e) =>
+                    setSelectedFiles(e.target.files ? Array.from(e.target.files) : [])
+                  }
+                  accept="image/*,.pdf,.doc,.docx"
+                  className="cursor-pointer bg-card"
+                />
+                <p className="text-[11px] text-muted-foreground mt-1">
+                  Máx 10 arquivos, até 5MB cada.
+                </p>
+              </div>
             </div>
             <div className="flex justify-end gap-3 pt-4 border-t border-border mt-2">
+              {' '}
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Cancelar
               </Button>
