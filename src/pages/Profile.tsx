@@ -60,7 +60,7 @@ const Profile = () => {
     setLocalProfile(companyProfile)
   }, [companyProfile])
 
-  const isCompany = role === 'company'
+  const isCompany = role === 'company' || role === 'supplier'
   const isVerified = localProfile.isVerified
 
   const fiveStarCount = useMemo(() => {
@@ -528,6 +528,18 @@ const Profile = () => {
                   className="h-11"
                   value={localProfile.name}
                   onChange={(e) => setLocalProfile({ ...localProfile, name: e.target.value })}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Categoria de Serviço (Especialidade)</Label>
+                <Input
+                  className="h-11"
+                  value={localProfile.service_category || ''}
+                  onChange={(e) =>
+                    setLocalProfile({ ...localProfile, service_category: e.target.value })
+                  }
+                  placeholder="Ex: Fotografia, Buffet, Som"
                 />
               </div>
 

@@ -12,8 +12,10 @@ import {
   MessageCircle,
 } from 'lucide-react'
 import { isBefore, addDays, isToday, startOfDay } from 'date-fns'
-import { useApp } from '@/store/AppContext'
+import { useApp, Demand } from '@/store/AppContext'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { useRealtime } from '@/hooks/use-realtime'
+import { getDemands } from '@/services/demands'
 import { Badge } from '@/components/ui/badge'
 import { getLoyaltyTier, cn } from '@/lib/utils'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
@@ -27,29 +29,64 @@ export default function Dashboard() {
       : ['finance', 'loyalty', 'events']
   const [widgets, setWidgets] = useState(defaultWidgets)
   const [draggedWidget, setDraggedWidget] = useState<string | null>(null)
+  const [localDemands, setLocalDemands] = useState<Demand[]>(demands)
+
+  useEffect(() => {
+    setLocalDemands(demands)
+  }, [demands])
 
   useEffect(() => {
     setWidgets(defaultWidgets)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [role])
 
+  const fetchDemands = async () => {
+    try {
+      const data = await getDemands()
+      const formattedData = data.map((d) => ({
+        ...d,
+        customerId: d.customer_id,
+        date: d.event_date,
+      })) as any
+      setLocalDemands(formattedData)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  useRealtime('demands', () => {
+    fetchDemands()
+  })
+
   const dashboardDemands = useMemo(() => {
-    const sourceDemands = demands
+    const sourceDemands = localDemands
     if (role === 'customer') return sourceDemands.filter((d) => d.customerId === currentUser?.id)
     if (role === 'admin') return sourceDemands
 
     const supplierSectors = companyProfile?.sectors || []
-    if (supplierSectors.length === 0) return []
+    const supplierCategory = companyProfile?.service_category?.toLowerCase() || ''
+
+    if (supplierSectors.length === 0 && !supplierCategory) return []
 
     return sourceDemands.filter((d) => {
+      const demandCategory = d.category?.toLowerCase() || ''
+      const matchesCategory =
+        demandCategory && supplierCategory && demandCategory.includes(supplierCategory)
+
       const matchesRequirement = supplierSectors.some(
         (s) => d.requirements && d.requirements[s as keyof typeof d.requirements],
       )
-      const matchesCategory = d.category ? supplierSectors.includes(d.category) : false
+      const matchesSectorCategory = d.category ? supplierSectors.includes(d.category) : false
 
-      return matchesRequirement || matchesCategory
+      return matchesRequirement || matchesSectorCategory || matchesCategory
     })
-  }, [demands, role, companyProfile?.sectors, currentUser?.id])
+  }, [
+    localDemands,
+    role,
+    companyProfile?.sectors,
+    companyProfile?.service_category,
+    currentUser?.id,
+  ])
 
   const handleDragStart = (e: React.DragEvent, id: string) => {
     setDraggedWidget(id)

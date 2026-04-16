@@ -1,7 +1,9 @@
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Calendar, MapPin, Target } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useRealtime } from '@/hooks/use-realtime'
+import { getDemands } from '@/services/demands'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
@@ -13,24 +15,59 @@ import { updateDemand } from '@/services/demands'
 
 const Demands = () => {
   const { role, demands, isSubscribed, companyProfile, proposals, currentUser } = useApp()
+  const [localDemands, setLocalDemands] = useState<Demand[]>(demands)
+
+  useEffect(() => {
+    setLocalDemands(demands)
+  }, [demands])
+
+  const fetchDemands = async () => {
+    try {
+      const data = await getDemands()
+      const formattedData = data.map((d) => ({
+        ...d,
+        customerId: d.customer_id,
+        date: d.event_date,
+      })) as any
+      setLocalDemands(formattedData)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  useRealtime('demands', () => {
+    fetchDemands()
+  })
 
   const filteredDemands = useMemo(() => {
-    const sourceDemands = demands
+    const sourceDemands = localDemands
     if (role === 'customer') return sourceDemands.filter((d) => d.customerId === currentUser?.id)
     if (role === 'admin') return sourceDemands
 
     const supplierSectors = companyProfile?.sectors || []
-    if (supplierSectors.length === 0) return []
+    const supplierCategory = companyProfile?.service_category?.toLowerCase() || ''
+
+    if (supplierSectors.length === 0 && !supplierCategory) return []
 
     return sourceDemands.filter((d) => {
+      const demandCategory = d.category?.toLowerCase() || ''
+      const matchesCategory =
+        demandCategory && supplierCategory && demandCategory.includes(supplierCategory)
+
       const matchesRequirement = supplierSectors.some(
         (s) => d.requirements && d.requirements[s as keyof typeof d.requirements],
       )
-      const matchesCategory = d.category ? supplierSectors.includes(d.category) : false
+      const matchesSectorCategory = d.category ? supplierSectors.includes(d.category) : false
 
-      return matchesRequirement || matchesCategory
+      return matchesRequirement || matchesSectorCategory || matchesCategory
     })
-  }, [demands, role, companyProfile?.sectors, currentUser?.id])
+  }, [
+    localDemands,
+    role,
+    companyProfile?.sectors,
+    companyProfile?.service_category,
+    currentUser?.id,
+  ])
 
   const handleStatusUpdate = async (e: React.MouseEvent, id: string, newStatus: string) => {
     e.preventDefault()
@@ -84,7 +121,7 @@ const Demands = () => {
     }
     if (status === 'pending') {
       return (
-        <Badge className="bg-orange-500/10 text-orange-500 border-orange-500/20 uppercase tracking-wider font-bold shrink-0 text-[10px]">
+        <Badge className="bg-slate-100 text-slate-600 border-slate-200 uppercase tracking-wider font-bold shrink-0 text-[10px]">
           Pendente
         </Badge>
       )
@@ -133,7 +170,7 @@ const Demands = () => {
   ]
   const chartConfig = { count: { label: 'Quantidade' } }
 
-  if (role === 'company' && !isSubscribed) {
+  if ((role === 'company' || role === 'supplier') && !isSubscribed) {
     return (
       <div className="p-6 flex flex-col items-center justify-center min-h-[70vh] text-center animate-slide-up">
         <h2 className="text-2xl font-bold mb-3 text-foreground tracking-tight">Acesso Restrito</h2>
@@ -163,7 +200,7 @@ const Demands = () => {
                 </h2>
                 <div className="flex flex-col items-end gap-2">
                   {getStatusBadge(demand.status, demand.paymentStatus)}
-                  {role === 'company' && demand.status === 'pending' && (
+                  {(role === 'company' || role === 'supplier') && demand.status === 'pending' && (
                     <Button
                       size="sm"
                       onClick={(e) => handleStatusUpdate(e, demand.id, 'in_analysis')}
@@ -173,14 +210,25 @@ const Demands = () => {
                       Analisar
                     </Button>
                   )}
-                  {role === 'company' && demand.status === 'in_analysis' && (
-                    <Button
-                      size="sm"
-                      onClick={(e) => handleStatusUpdate(e, demand.id, 'accepted')}
-                      className="h-7 text-xs bg-emerald-600 hover:bg-emerald-700"
-                    >
-                      Aceitar
-                    </Button>
+                  {(role === 'company' || role === 'supplier') &&
+                    demand.status === 'in_analysis' && (
+                      <Button
+                        size="sm"
+                        onClick={(e) => handleStatusUpdate(e, demand.id, 'accepted')}
+                        className="h-7 text-xs bg-emerald-600 hover:bg-emerald-700"
+                      >
+                        Aceitar
+                      </Button>
+                    )}
+                  {role === 'customer' && demand.status === 'in_analysis' && (
+                    <span className="text-[11px] text-blue-600 font-semibold bg-blue-50 px-2 py-1 rounded-md">
+                      Em análise pelo fornecedor
+                    </span>
+                  )}
+                  {role === 'customer' && demand.status === 'accepted' && (
+                    <span className="text-[11px] text-emerald-600 font-semibold bg-emerald-50 px-2 py-1 rounded-md">
+                      Proposta aceita
+                    </span>
                   )}
                 </div>
               </div>
@@ -252,7 +300,7 @@ const Demands = () => {
 
   return (
     <div className="space-y-6 animate-slide-up pb-12 p-4 sm:p-6 max-w-7xl mx-auto">
-      {role === 'company' && (
+      {(role === 'company' || role === 'supplier') && (
         <Card className="mb-8 border-border shadow-sm bg-card">
           <CardHeader className="pb-4">
             <div className="flex items-center gap-2">

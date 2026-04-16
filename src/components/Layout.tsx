@@ -57,9 +57,11 @@ export function Layout() {
 
       newNotifs.forEach((n) => {
         const isForMe =
-          role === 'company'
+          role === 'company' || role === 'supplier'
             ? n.targetSupplierId === currentUser?.id ||
-              companyProfile?.sectors?.includes(n.sector || '')
+              companyProfile?.sectors?.includes(n.sector || '') ||
+              (companyProfile?.service_category &&
+                n.sector?.toLowerCase() === companyProfile.service_category.toLowerCase())
             : n.customerId === currentUser?.id
 
         if (isForMe && !n.read) {
@@ -93,7 +95,7 @@ export function Layout() {
   } else if (role === 'company' || role === 'supplier') {
     navItems.push(
       { name: 'Início', path: '/', icon: LayoutDashboard },
-      { name: 'Pedidos de Serviço', path: '/demands', icon: Calendar },
+      { name: 'Oportunidades', path: '/demands', icon: Calendar },
       { name: 'Meus Chats', path: '/messages', icon: MessageSquare },
       { name: 'Estoque', path: '/inventory', icon: Package },
       { name: 'Desempenho', path: '/insights', icon: LineChart },
@@ -112,12 +114,14 @@ export function Layout() {
   }
 
   const myNotifications =
-    role === 'company'
+    role === 'company' || role === 'supplier'
       ? notifications
           .filter(
             (n) =>
               n.targetSupplierId === currentUser?.id ||
-              companyProfile?.sectors?.includes(n.sector || ''),
+              companyProfile?.sectors?.includes(n.sector || '') ||
+              (companyProfile?.service_category &&
+                n.sector?.toLowerCase() === companyProfile.service_category.toLowerCase()),
           )
           .slice(0, 5)
       : notifications.filter((n) => n.customerId === currentUser?.id).slice(0, 5)
