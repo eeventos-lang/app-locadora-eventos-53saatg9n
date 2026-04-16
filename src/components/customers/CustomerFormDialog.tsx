@@ -17,6 +17,7 @@ import {
 import { useApp } from '@/store/AppContext'
 import { toast } from 'sonner'
 import { formatCPF, formatCEP, formatPhone } from '@/lib/formatters'
+import { extractFieldErrors, getErrorMessage } from '@/lib/pocketbase/errors'
 
 const clientSchema = z.object({
   name: z.string().min(2, 'Nome é obrigatório'),
@@ -39,6 +40,7 @@ export function CustomerFormDialog({
 }) {
   const { addClientCRM } = useApp()
   const [isLoadingCep, setIsLoadingCep] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const lastFetchedCep = useRef('')
 
   const form = useForm<ClientFormValues>({
@@ -77,11 +79,26 @@ export function CustomerFormDialog({
     }
   }, [cepValue, form])
 
-  const onSubmit = (values: ClientFormValues) => {
-    addClientCRM(values)
-    toast.success('Cliente cadastrado com sucesso!')
-    onOpenChange(false)
-    form.reset()
+  const onSubmit = async (values: ClientFormValues) => {
+    setIsSubmitting(true)
+    try {
+      await addClientCRM(values)
+      toast.success('Cliente cadastrado com sucesso!')
+      onOpenChange(false)
+      form.reset()
+    } catch (err) {
+      const fieldErrors = extractFieldErrors(err)
+      if (Object.keys(fieldErrors).length > 0) {
+        Object.entries(fieldErrors).forEach(([field, msg]) => {
+          const formField = field === 'document' ? 'cpf' : field
+          form.setError(formField as any, { message: msg })
+        })
+      } else {
+        toast.error(getErrorMessage(err))
+      }
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const renderInput = (
@@ -141,7 +158,8 @@ export function CustomerFormDialog({
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Cancelar
               </Button>
-              <Button type="submit" className="px-8 shadow-sm">
+              <Button type="submit" className="px-8 shadow-sm" disabled={isSubmitting}>
+                {isSubmitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 Salvar Cliente
               </Button>
             </div>

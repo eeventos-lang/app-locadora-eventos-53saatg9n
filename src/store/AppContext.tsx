@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react'
+import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react'
 import pb from '@/lib/pocketbase/client'
+import { useRealtime } from '@/hooks/use-realtime'
 
 export type Role = 'customer' | 'company' | 'supplier' | 'admin'
 
@@ -340,9 +341,9 @@ interface AppContextType {
   getSafetyIndex: (supplierId: string) => number
   redeemLoyaltyPoints: (points: number, reward: string) => void
   clientsCRM: ClientCRM[]
-  addClientCRM: (client: Omit<ClientCRM, 'id' | 'createdAt' | 'supplierId'>) => void
+  addClientCRM: (client: Omit<ClientCRM, 'id' | 'createdAt' | 'supplierId'>) => Promise<void>
   suppliersCRM: SupplierCRM[]
-  addSupplierCRM: (supplier: Omit<SupplierCRM, 'id' | 'createdAt' | 'companyId'>) => void
+  addSupplierCRM: (supplier: Omit<SupplierCRM, 'id' | 'createdAt' | 'companyId'>) => Promise<void>
   supplierDocuments: SupplierDocument[]
   addSupplierDocument: (doc: Omit<SupplierDocument, 'id' | 'uploadDate'>) => void
   deleteSupplierDocument: (id: string) => void
@@ -625,54 +626,6 @@ const MOCK_MESSAGES: ChatMessage[] = [
   },
 ]
 
-const MOCK_CLIENTS_CRM: ClientCRM[] = [
-  {
-    id: 'crm1',
-    supplierId: 'u1',
-    name: 'Carlos Oliveira',
-    email: 'carlos@exemplo.com',
-    cpf: '111.222.333-44',
-    rg: 'MG-12.345.678',
-    cep: '01001-000',
-    address: 'Praça da Sé, s/n - Centro, São Paulo',
-    phone: '(11) 98765-4321',
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 'crm2',
-    supplierId: 'u1',
-    name: 'Ana Júlia Silva',
-    email: 'anaju@exemplo.com',
-    cpf: '555.666.777-88',
-    rg: 'SP-98.765.432',
-    cep: '13010-111',
-    address: 'Av. Francisco Glicério, 100 - Centro, Campinas',
-    phone: '(19) 91234-5678',
-    createdAt: new Date(Date.now() - 86400000).toISOString(),
-  },
-]
-
-const MOCK_SUPPLIERS_CRM: SupplierCRM[] = [
-  {
-    id: 'scrm1',
-    companyId: 'u1',
-    name: 'Flores & Cia',
-    cnpjCpf: '11.222.333/0001-44',
-    stateRegistration: '123456789',
-    cep: '01001-000',
-    street: 'Praça da Sé',
-    number: 's/n',
-    complement: '',
-    neighborhood: 'Centro',
-    city: 'São Paulo',
-    state: 'SP',
-    phone: '(11) 98765-4321',
-    email: 'contato@floresecia.com',
-    category: 'decoracao',
-    createdAt: new Date().toISOString(),
-  },
-]
-
 const MOCK_SUPPLIER_DOCS: SupplierDocument[] = [
   {
     id: 'doc1',
@@ -801,8 +754,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     useState<ScheduledInvitation[]>(MOCK_SCHEDULED)
   const [chats, setChats] = useState<Chat[]>(MOCK_CHATS)
   const [messages, setMessages] = useState<ChatMessage[]>(MOCK_MESSAGES)
-  const [clientsCRM, setClientsCRM] = useState<ClientCRM[]>(MOCK_CLIENTS_CRM)
-  const [suppliersCRM, setSuppliersCRM] = useState<SupplierCRM[]>(MOCK_SUPPLIERS_CRM)
+  const [clientsCRM, setClientsCRM] = useState<ClientCRM[]>([])
+  const [suppliersCRM, setSuppliersCRM] = useState<SupplierCRM[]>([])
   const [supplierDocuments, setSupplierDocuments] = useState<SupplierDocument[]>(MOCK_SUPPLIER_DOCS)
   const [supplierFinances, setSupplierFinances] =
     useState<SupplierFinance[]>(MOCK_SUPPLIER_FINANCES)
@@ -811,6 +764,66 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [inventoryAllocations, setInventoryAllocations] = useState<InventoryAllocation[]>(
     MOCK_INVENTORY_ALLOCATIONS,
   )
+
+  const loadCRMData = useCallback(async () => {
+    if (!pb.authStore.isValid) return
+    try {
+      const [clientsRecords, suppliersRecords] = await Promise.all([
+        pb.collection('crm_clients').getFullList({ sort: '-created' }),
+        pb.collection('crm_suppliers').getFullList({ sort: '-created' }),
+      ])
+
+      setClientsCRM(
+        clientsRecords.map((r) => ({
+          id: r.id,
+          supplierId: r.supplier_id,
+          name: r.name,
+          cpf: r.document,
+          rg: r.rg,
+          address: r.address,
+          cep: r.cep,
+          phone: r.phone,
+          email: r.email,
+          createdAt: r.created,
+        })),
+      )
+
+      setSuppliersCRM(
+        suppliersRecords.map((r) => ({
+          id: r.id,
+          companyId: r.company_id,
+          name: r.name,
+          cnpjCpf: r.document,
+          stateRegistration: r.stateRegistration,
+          cep: r.cep,
+          street: r.street,
+          number: r.number,
+          complement: r.complement,
+          neighborhood: r.neighborhood,
+          city: r.city,
+          state: r.state,
+          phone: r.phone,
+          email: r.email,
+          category: r.service_category,
+          createdAt: r.created,
+        })),
+      )
+    } catch (error) {
+      console.error('Error loading CRM data:', error)
+    }
+  }, [])
+
+  useEffect(() => {
+    loadCRMData()
+  }, [currentUser, loadCRMData])
+
+  useRealtime('crm_clients', () => {
+    loadCRMData()
+  })
+
+  useRealtime('crm_suppliers', () => {
+    loadCRMData()
+  })
 
   const addDemand = (demandData: any) => {
     const newDemand: Demand = {
@@ -1251,26 +1264,62 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     ])
   }
 
-  const addClientCRM = (clientData: Omit<ClientCRM, 'id' | 'createdAt' | 'supplierId'>) => {
+  const addClientCRM = async (clientData: Omit<ClientCRM, 'id' | 'createdAt' | 'supplierId'>) => {
     if (!currentUser) return
-    const newClient: ClientCRM = {
-      ...clientData,
-      id: Math.random().toString(36).substring(7),
-      supplierId: currentUser.id,
-      createdAt: new Date().toISOString(),
+    if (!pb.authStore.isValid) {
+      const newClient: ClientCRM = {
+        ...clientData,
+        id: Math.random().toString(36).substring(7),
+        supplierId: currentUser.id,
+        createdAt: new Date().toISOString(),
+      }
+      setClientsCRM((prev) => [newClient, ...prev])
+      return
     }
-    setClientsCRM((prev) => [newClient, ...prev])
+
+    await pb.collection('crm_clients').create({
+      supplier_id: currentUser.id,
+      name: clientData.name,
+      document: clientData.cpf,
+      rg: clientData.rg,
+      address: clientData.address,
+      cep: clientData.cep,
+      phone: clientData.phone,
+      email: clientData.email,
+    })
   }
 
-  const addSupplierCRM = (supplierData: Omit<SupplierCRM, 'id' | 'createdAt' | 'companyId'>) => {
+  const addSupplierCRM = async (
+    supplierData: Omit<SupplierCRM, 'id' | 'createdAt' | 'companyId'>,
+  ) => {
     if (!currentUser) return
-    const newSupplier: SupplierCRM = {
-      ...supplierData,
-      id: Math.random().toString(36).substring(7),
-      companyId: currentUser.id,
-      createdAt: new Date().toISOString(),
+    if (!pb.authStore.isValid) {
+      const newSupplier: SupplierCRM = {
+        ...supplierData,
+        id: Math.random().toString(36).substring(7),
+        companyId: currentUser.id,
+        createdAt: new Date().toISOString(),
+      }
+      setSuppliersCRM((prev) => [newSupplier, ...prev])
+      return
     }
-    setSuppliersCRM((prev) => [newSupplier, ...prev])
+
+    await pb.collection('crm_suppliers').create({
+      company_id: currentUser.id,
+      name: supplierData.name,
+      document: supplierData.cnpjCpf,
+      stateRegistration: supplierData.stateRegistration,
+      cep: supplierData.cep,
+      street: supplierData.street,
+      number: supplierData.number,
+      complement: supplierData.complement,
+      neighborhood: supplierData.neighborhood,
+      city: supplierData.city,
+      state: supplierData.state,
+      phone: supplierData.phone,
+      email: supplierData.email,
+      service_category: supplierData.category,
+    })
   }
 
   const addSupplierDocument = (docData: Omit<SupplierDocument, 'id' | 'uploadDate'>) => {

@@ -25,6 +25,7 @@ import { useApp } from '@/store/AppContext'
 import { toast } from 'sonner'
 import { formatCEP, formatPhone } from '@/lib/formatters'
 import { SERVICES } from '@/lib/services'
+import { extractFieldErrors, getErrorMessage } from '@/lib/pocketbase/errors'
 
 const supplierSchema = z.object({
   name: z.string().min(2, 'Nome/Razão Social é obrigatório'),
@@ -53,6 +54,7 @@ export function SupplierFormDialog({
 }) {
   const { addSupplierCRM } = useApp()
   const [isLoadingCep, setIsLoadingCep] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const lastFetchedCep = useRef('')
 
   const form = useForm<SupplierFormValues>({
@@ -104,15 +106,31 @@ export function SupplierFormDialog({
     }
   }, [cepValue, form])
 
-  const onSubmit = (values: SupplierFormValues) => {
-    addSupplierCRM({
-      ...values,
-      complement: values.complement || '',
-      stateRegistration: values.stateRegistration || '',
-    })
-    toast.success('Fornecedor cadastrado com sucesso!')
-    onOpenChange(false)
-    form.reset()
+  const onSubmit = async (values: SupplierFormValues) => {
+    setIsSubmitting(true)
+    try {
+      await addSupplierCRM({
+        ...values,
+        complement: values.complement || '',
+        stateRegistration: values.stateRegistration || '',
+      })
+      toast.success('Fornecedor cadastrado com sucesso!')
+      onOpenChange(false)
+      form.reset()
+    } catch (err) {
+      const fieldErrors = extractFieldErrors(err)
+      if (Object.keys(fieldErrors).length > 0) {
+        Object.entries(fieldErrors).forEach(([field, msg]) => {
+          const formField =
+            field === 'document' ? 'cnpjCpf' : field === 'service_category' ? 'category' : field
+          form.setError(formField as any, { message: msg })
+        })
+      } else {
+        toast.error(getErrorMessage(err))
+      }
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const formatCnpjCpf = (val: string) => {
@@ -229,7 +247,8 @@ export function SupplierFormDialog({
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Cancelar
               </Button>
-              <Button type="submit" className="px-8 shadow-sm">
+              <Button type="submit" className="px-8 shadow-sm" disabled={isSubmitting}>
+                {isSubmitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 Salvar Fornecedor
               </Button>
             </div>
