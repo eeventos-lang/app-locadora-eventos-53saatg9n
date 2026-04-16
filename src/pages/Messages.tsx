@@ -1,43 +1,88 @@
-import { useState, useRef, useEffect, useMemo } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Send, ArrowLeft, Search, MessageSquare } from 'lucide-react'
+import { Send, ArrowLeft, Search, MessageSquare, ShieldAlert } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useApp } from '@/store/AppContext'
 import { cn } from '@/lib/utils'
+import pb from '@/lib/pocketbase/client'
+import { useRealtime } from '@/hooks/use-realtime'
+import {
+  getMarketplaceChats,
+  getMarketplaceMessages,
+  sendMarketplaceMessage,
+} from '@/services/marketplace'
 
 export default function Messages() {
-  const { currentUser, chats, messages, sendChatMessage, users } = useApp()
+  const { currentUser } = useApp()
   const [searchParams, setSearchParams] = useSearchParams()
   const activeChatId = searchParams.get('chat')
   const [text, setText] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  const myChats = useMemo(() => {
-    return chats
-      .filter((c) => currentUser && c.participants.includes(currentUser.id))
-      .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
-  }, [chats, currentUser])
+  const [chats, setChats] = useState<any[]>([])
+  const [messages, setMessages] = useState<any[]>([])
 
-  const activeChat = myChats.find((c) => c.id === activeChatId)
+  const loadChats = async () => {
+    try {
+      if (pb.authStore.isValid) {
+        const records = await getMarketplaceChats()
+        setChats(records)
+      }
+    } catch (e) {
+      console.error('Failed to load chats', e)
+    }
+  }
 
-  const activeMessages = useMemo(() => {
-    return messages
-      .filter((m) => m.chatId === activeChatId)
-      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
-  }, [messages, activeChatId])
+  const loadMessages = async () => {
+    if (activeChatId && pb.authStore.isValid) {
+      try {
+        const records = await getMarketplaceMessages(activeChatId)
+        setMessages(records)
+      } catch (e) {
+        console.error('Failed to load messages', e)
+      }
+    }
+  }
+
+  useEffect(() => {
+    loadChats()
+  }, [])
+
+  useEffect(() => {
+    loadMessages()
+  }, [activeChatId])
+
+  useRealtime('chats', () => {
+    loadChats()
+  })
+  useRealtime('messages', (e) => {
+    if (e.action === 'create' && e.record.chat_id === activeChatId) {
+      setMessages((prev) => [...prev, e.record])
+    }
+  })
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [activeMessages])
+  }, [messages])
 
-  const handleSend = (e: React.FormEvent) => {
+  const handleSend = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!text.trim() || !activeChatId) return
-    sendChatMessage(activeChatId, text.trim())
+    if (!text.trim() || !activeChatId || !pb.authStore.record?.id) return
+    const msgText = text.trim()
     setText('')
+    try {
+      await sendMarketplaceMessage({
+        chat_id: activeChatId,
+        sender_id: pb.authStore.record.id,
+        content: msgText,
+      })
+    } catch (e) {
+      console.error('Send error', e)
+    }
   }
 
   const setActiveChat = (id: string | null) => {
@@ -45,24 +90,24 @@ export default function Messages() {
     else setSearchParams({})
   }
 
-  if (!currentUser) {
+  if (!currentUser || !pb.authStore.isValid) {
     return (
       <div className="flex-1 flex items-center justify-center p-8 text-center text-muted-foreground">
-        Faça login para acessar suas mensagens.
+        Faça login para acessar suas mensagens protegidas pelo Marketplace.
       </div>
     )
   }
 
-  const filteredChats = myChats.filter((chat) => {
-    const otherUserId = chat.participants.find((p) => p !== currentUser.id)
-    const otherUser = users.find((u) => u.id === otherUserId)
-    const name = otherUser?.companyProfile?.name || otherUser?.name || 'Desconhecido'
+  const filteredChats = chats.filter((chat) => {
+    const otherUser = chat.expand?.participants?.find((p: any) => p.id !== pb.authStore.record?.id)
+    const name = otherUser?.name || 'Desconhecido'
     return name.toLowerCase().includes(searchTerm.toLowerCase())
   })
 
+  const activeChat = chats.find((c) => c.id === activeChatId)
+
   return (
     <div className="flex flex-1 overflow-hidden bg-background">
-      {/* Sidebar List */}
       <div
         className={cn(
           'w-full md:w-80 lg:w-96 border-r border-border flex flex-col bg-card/30',
@@ -91,14 +136,10 @@ export default function Messages() {
           ) : (
             <div className="flex flex-col">
               {filteredChats.map((chat) => {
-                const otherUserId = chat.participants.find((p) => p !== currentUser.id)
-                const otherUser = users.find((u) => u.id === otherUserId)
-                const name = otherUser?.companyProfile?.name || otherUser?.name || 'Desconhecido'
-                const lastMsg = messages
-                  .filter((m) => m.chatId === chat.id)
-                  .sort(
-                    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-                  )[0]
+                const otherUser = chat.expand?.participants?.find(
+                  (p: any) => p.id !== pb.authStore.record?.id,
+                )
+                const name = otherUser?.name || 'Desconhecido'
 
                 return (
                   <button
@@ -110,32 +151,22 @@ export default function Messages() {
                     )}
                   >
                     <div className="w-12 h-12 rounded-full bg-secondary shrink-0 flex items-center justify-center font-bold text-muted-foreground border border-border overflow-hidden">
-                      {otherUser?.companyProfile?.logo ? (
-                        <img
-                          src={otherUser.companyProfile.logo}
-                          alt={name}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        name.charAt(0).toUpperCase()
-                      )}
+                      {name.charAt(0).toUpperCase()}
                     </div>
                     <div className="flex-1 overflow-hidden">
                       <div className="flex justify-between items-center mb-1">
                         <span className="font-semibold text-sm truncate text-foreground pr-2">
                           {name}
                         </span>
-                        {lastMsg && (
-                          <span className="text-[10px] text-muted-foreground whitespace-nowrap shrink-0">
-                            {new Date(lastMsg.createdAt).toLocaleDateString('pt-BR', {
-                              day: '2-digit',
-                              month: 'short',
-                            })}
-                          </span>
-                        )}
+                        <span className="text-[10px] text-muted-foreground whitespace-nowrap shrink-0">
+                          {new Date(chat.updated).toLocaleDateString('pt-BR', {
+                            day: '2-digit',
+                            month: 'short',
+                          })}
+                        </span>
                       </div>
                       <p className="text-xs text-muted-foreground truncate">
-                        {lastMsg ? lastMsg.text : 'Iniciar conversa'}
+                        {chat.expand?.proposal_id?.description || 'Iniciar conversa'}
                       </p>
                     </div>
                   </button>
@@ -146,7 +177,6 @@ export default function Messages() {
         </ScrollArea>
       </div>
 
-      {/* Active Chat Area */}
       <div
         className={cn(
           'flex-1 flex flex-col min-w-0 bg-background',
@@ -165,23 +195,23 @@ export default function Messages() {
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               {(() => {
-                const otherUserId = activeChat.participants.find((p) => p !== currentUser.id)
-                const otherUser = users.find((u) => u.id === otherUserId)
-                const name = otherUser?.companyProfile?.name || otherUser?.name || 'Desconhecido'
+                const otherUser = activeChat.expand?.participants?.find(
+                  (p: any) => p.id !== pb.authStore.record?.id,
+                )
+                const name = otherUser?.name || 'Desconhecido'
                 return (
                   <div className="flex items-center gap-3 overflow-hidden">
                     <div className="w-10 h-10 rounded-full bg-secondary shrink-0 flex items-center justify-center font-bold text-sm border border-border overflow-hidden">
-                      {otherUser?.companyProfile?.logo ? (
-                        <img
-                          src={otherUser.companyProfile.logo}
-                          alt={name}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        name.charAt(0).toUpperCase()
+                      {name.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-foreground truncate">{name}</span>
+                      {activeChat.expand?.proposal_id?.status === 'pending' && (
+                        <span className="text-[10px] text-amber-500 font-medium">
+                          Informações protegidas (Pagamento pendente)
+                        </span>
                       )}
                     </div>
-                    <span className="font-semibold text-foreground truncate">{name}</span>
                   </div>
                 )
               })()}
@@ -189,13 +219,13 @@ export default function Messages() {
 
             <ScrollArea className="flex-1 p-4">
               <div className="space-y-4 max-w-3xl mx-auto flex flex-col pb-4">
-                {activeMessages.length === 0 ? (
+                {messages.length === 0 ? (
                   <div className="text-center text-muted-foreground p-8 my-auto text-sm">
                     Envie a primeira mensagem para iniciar a conversa.
                   </div>
                 ) : (
-                  activeMessages.map((msg) => {
-                    const isMine = msg.senderId === currentUser.id
+                  messages.map((msg) => {
+                    const isMine = msg.sender_id === pb.authStore.record?.id
                     return (
                       <div
                         key={msg.id}
@@ -203,14 +233,32 @@ export default function Messages() {
                       >
                         <div
                           className={cn(
-                            'max-w-[85%] sm:max-w-[70%] rounded-2xl px-4 py-2.5 text-sm',
+                            'max-w-[85%] sm:max-w-[70%] rounded-2xl px-4 py-2.5 text-sm relative group',
                             isMine
                               ? 'bg-primary text-primary-foreground rounded-tr-sm shadow-sm'
                               : 'bg-muted text-foreground rounded-tl-sm border border-border',
                           )}
                         >
-                          <p className="whitespace-pre-wrap leading-relaxed break-words">
-                            {msg.text}
+                          <p className="whitespace-pre-wrap leading-relaxed break-words flex items-center flex-wrap gap-1">
+                            {msg.content}
+                            {msg.is_masked && (
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <ShieldAlert
+                                    className={cn(
+                                      'w-4 h-4 ml-1 inline-block',
+                                      isMine ? 'text-primary-foreground/70' : 'text-amber-500',
+                                    )}
+                                  />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>
+                                    Dados de contato ocultos por segurança até a confirmação do
+                                    pagamento.
+                                  </p>
+                                </TooltipContent>
+                              </Tooltip>
+                            )}
                           </p>
                           <span
                             className={cn(
@@ -218,7 +266,7 @@ export default function Messages() {
                               isMine ? 'text-primary-foreground/70' : 'text-muted-foreground',
                             )}
                           >
-                            {new Date(msg.createdAt).toLocaleTimeString('pt-BR', {
+                            {new Date(msg.created).toLocaleTimeString('pt-BR', {
                               hour: '2-digit',
                               minute: '2-digit',
                             })}

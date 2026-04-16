@@ -86,10 +86,10 @@ export function Layout() {
       ? [
           { name: 'Fornecedores', path: '/suppliers', icon: Users },
           { name: 'Favoritos', path: '/favorites', icon: Heart },
-          { name: 'Agendamentos', path: '/schedules', icon: CalendarClock },
+          { name: 'Meus Eventos', path: '/schedules', icon: CalendarClock },
         ]
       : [
-          { name: 'Insights', path: '/insights', icon: LineChart },
+          { name: 'Meus Serviços', path: '/insights', icon: LineChart },
           { name: 'Cadastros', path: '/registrations', icon: Users },
           { name: 'Estoque', path: '/inventory', icon: Package },
           { name: 'Relatórios', path: '/reports', icon: PieChart },

@@ -44,6 +44,14 @@ import {
 import { useToast } from '@/hooks/use-toast'
 import { useApp, TechRequirement } from '@/store/AppContext'
 import { SERVICES } from '@/lib/services'
+import pb from '@/lib/pocketbase/client'
+import { useRealtime } from '@/hooks/use-realtime'
+import {
+  getMarketplaceProposals,
+  createMarketplaceProposal,
+  updateMarketplaceProposal,
+  createMarketplaceChat,
+} from '@/services/marketplace'
 import { BackButton } from '@/components/BackButton'
 import { cn } from '@/lib/utils'
 import logoImg from '@/assets/e-eventos-novo-62817.png'
@@ -109,6 +117,35 @@ const DemandDetail = () => {
   const [allocItemId, setAllocItemId] = useState('')
   const [allocQuantity, setAllocQuantity] = useState('')
 
+  const [pbProposals, setPbProposals] = useState<any[]>([])
+
+  useEffect(() => {
+    if (pb.authStore.isValid) {
+      getMarketplaceProposals()
+        .then((data) => {
+          setPbProposals(data)
+        })
+        .catch(console.error)
+    }
+  }, [])
+
+  useRealtime('proposals', () => {
+    getMarketplaceProposals()
+      .then((data) => {
+        setPbProposals(data)
+      })
+      .catch(console.error)
+  })
+
+  const handlePayPbProposal = async (proposalId: string) => {
+    try {
+      await updateMarketplaceProposal(proposalId, { status: 'paid' })
+      toast({ title: 'Pagamento Confirmado', description: 'O chat foi desbloqueado com sucesso!' })
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   const demand = demands.find((d) => d.id === id)
 
   const applicableSectors = demand
@@ -149,7 +186,7 @@ const DemandDetail = () => {
     return sum * 0.9
   }
 
-  const handleSubmitProposal = () => {
+  const handleSubmitProposal = async () => {
     if (!proposalValue || !proposalMessage || selectedSectors.length === 0) {
       toast({
         title: 'Atenção',
@@ -157,6 +194,37 @@ const DemandDetail = () => {
         variant: 'destructive',
       })
       return
+    }
+
+    try {
+      if (pb.authStore.isValid && pb.authStore.record) {
+        let customerId = ''
+        try {
+          const customer = await pb
+            .collection('users')
+            .getFirstListItem(`email='cliente@exemplo.com'`)
+          customerId = customer.id
+        } catch (e) {
+          console.error(e)
+        }
+
+        if (customerId) {
+          const newProp = await createMarketplaceProposal({
+            customer_id: customerId,
+            supplier_id: pb.authStore.record.id,
+            amount: Number(proposalValue),
+            status: 'pending',
+            description: proposalMessage,
+          })
+
+          await createMarketplaceChat({
+            participants: [customerId, pb.authStore.record.id],
+            proposal_id: newProp.id,
+          })
+        }
+      }
+    } catch (e) {
+      console.error('Failed to create PB proposal', e)
     }
 
     addProposal({
@@ -1088,12 +1156,74 @@ const DemandDetail = () => {
                 </Alert>
               )}
 
-              {demandProposals.length === 0 ? (
+              {demandProposals.length === 0 && pbProposals.length === 0 ? (
                 <div className="bg-secondary/30 border-2 border-dashed border-border rounded-xl p-8 text-sm text-muted-foreground text-center">
                   Nenhuma proposta recebida até o momento.
                 </div>
               ) : (
                 <div className="space-y-4">
+                  {pbProposals.map((proposal) => (
+                    <Card
+                      key={proposal.id}
+                      className="border-primary/30 shadow-md hover:border-primary/50 transition-colors bg-card"
+                    >
+                      <CardContent className="p-6">
+                        <div className="flex flex-col md:flex-row justify-between gap-6">
+                          <div className="flex-1">
+                            <h4 className="font-bold text-lg text-foreground flex items-center gap-2 flex-wrap">
+                              {proposal.expand?.supplier_id?.name || 'Fornecedor Marketplace'}{' '}
+                              (PocketBase)
+                              {proposal.status === 'paid' && (
+                                <Badge className="bg-green-500/10 text-green-500 hover:bg-green-500/20 border-green-500/20">
+                                  Paga (Chat Desbloqueado)
+                                </Badge>
+                              )}
+                              {proposal.status === 'pending' && (
+                                <Badge variant="secondary">Pendente</Badge>
+                              )}
+                            </h4>
+                            <div className="mt-4 flex flex-col gap-3">
+                              <div className="flex items-start gap-3 bg-secondary/50 p-4 rounded-lg">
+                                <MessageSquare className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" />
+                                <p className="text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">
+                                  {proposal.description}
+                                </p>
+                              </div>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="w-fit gap-2"
+                                onClick={() => navigate('/messages')}
+                              >
+                                <MessageSquare className="w-4 h-4" /> Falar com Fornecedor (Chat)
+                              </Button>
+                            </div>
+                          </div>
+                          <div className="flex flex-col items-start md:items-end justify-between min-w-[150px] border-t md:border-t-0 md:border-l border-border pt-4 md:pt-0 md:pl-6">
+                            <div className="text-left md:text-right w-full mb-4">
+                              <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-1">
+                                Valor Proposto
+                              </p>
+                              <span className="text-2xl font-bold text-primary">
+                                {new Intl.NumberFormat('pt-BR', {
+                                  style: 'currency',
+                                  currency: 'BRL',
+                                }).format(proposal.amount)}
+                              </span>
+                            </div>
+                            {proposal.status === 'pending' && role === 'customer' && (
+                              <Button
+                                onClick={() => handlePayPbProposal(proposal.id)}
+                                className="w-full shadow-sm bg-emerald-600 hover:bg-emerald-700"
+                              >
+                                Aceitar e Pagar (Libera Chat)
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
                   {demandProposals.map((proposal) => {
                     const canAccept =
                       proposal.offeredSectors?.every((s) => demand.sectorStatus[s] === 'pending') ??
