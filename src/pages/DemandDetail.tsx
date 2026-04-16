@@ -64,6 +64,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { getDemand, updateDemand, DemandsRecord } from '@/services/demands'
+import { useEffect } from 'react'
 
 const DemandDetail = () => {
   const { id } = useParams()
@@ -118,8 +120,21 @@ const DemandDetail = () => {
   const [allocQuantity, setAllocQuantity] = useState('')
 
   const [pbProposals, setPbProposals] = useState<any[]>([])
+  const [dbDemand, setDbDemand] = useState<DemandsRecord | null>(null)
+
+  const loadDemand = async () => {
+    if (id && pb.authStore.isValid) {
+      try {
+        const d = await getDemand(id)
+        setDbDemand(d)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+  }
 
   useEffect(() => {
+    loadDemand()
     if (pb.authStore.isValid) {
       getMarketplaceProposals()
         .then((data) => {
@@ -136,6 +151,7 @@ const DemandDetail = () => {
       })
       .catch(console.error)
   })
+  useRealtime('demands', loadDemand)
 
   const handlePayPbProposal = async (proposalId: string) => {
     try {
@@ -154,7 +170,26 @@ const DemandDetail = () => {
     }
   }
 
-  const demand = demands.find((d) => d.id === id)
+  const mappedDemand: Demand | undefined = dbDemand
+    ? {
+        id: dbDemand.id!,
+        title: dbDemand.title,
+        guests: dbDemand.guests || 0,
+        date: dbDemand.event_date || '',
+        location: dbDemand.location || '',
+        budget: dbDemand.budget || 0,
+        budgetBreakdown: dbDemand.budgetBreakdown || {},
+        requirements: dbDemand.requirements || {},
+        status: dbDemand.status as any,
+        customerId: dbDemand.customer_id,
+        paymentStatus: (dbDemand.paymentStatus as any) || 'gathering',
+        hasInsurance: dbDemand.hasInsurance || false,
+        sectorStatus: dbDemand.sectorStatus || {},
+        contractedProviders: dbDemand.contractedProviders || {},
+      }
+    : undefined
+
+  const demand = mappedDemand || demands.find((d) => d.id === id)
 
   const applicableSectors = demand
     ? SERVICES.filter(
@@ -292,7 +327,10 @@ const DemandDetail = () => {
     navigate(`/messages?chat=${chatId}`)
   }
 
-  const handleCancelDemand = () => {
+  const handleCancelDemand = async () => {
+    if (dbDemand) {
+      await updateDemand(dbDemand.id!, { status: 'cancelled' })
+    }
     cancelDemand(demand.id)
     setIsCancelOpen(false)
     toast({
@@ -342,7 +380,7 @@ const DemandDetail = () => {
       )
     }
 
-    if (demand.status === 'canceled') {
+    if (demand.status === 'canceled' || demand.status === 'cancelled') {
       return (
         <Badge className="bg-destructive/10 text-destructive border-destructive/20 uppercase tracking-wider font-bold shrink-0">
           Cancelado
@@ -393,6 +431,20 @@ const DemandDetail = () => {
       return (
         <Badge className="bg-blue-500/10 text-blue-500 border-blue-500/20 uppercase tracking-wider font-bold shrink-0">
           Em negociação
+        </Badge>
+      )
+    }
+    if (demand.status === 'in_analysis') {
+      return (
+        <Badge className="bg-purple-500/10 text-purple-600 border-purple-500/20 uppercase tracking-wider font-bold shrink-0">
+          Em Análise
+        </Badge>
+      )
+    }
+    if (demand.status === 'accepted') {
+      return (
+        <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 uppercase tracking-wider font-bold shrink-0">
+          Aceito
         </Badge>
       )
     }
@@ -467,7 +519,8 @@ const DemandDetail = () => {
 
             {role === 'customer' &&
               ['escrow', 'pending_payment'].includes(demand.paymentStatus) &&
-              demand.status !== 'canceled' && (
+              demand.status !== 'canceled' &&
+              demand.status !== 'cancelled' && (
                 <Button
                   variant="ghost"
                   className="text-destructive hover:bg-destructive/10 hover:text-destructive text-sm"
@@ -523,7 +576,9 @@ const DemandDetail = () => {
           <Card
             className={cn(
               'border-border overflow-hidden shadow-sm',
-              demand.status === 'canceled' ? 'opacity-70 grayscale' : 'border-l-4 border-l-primary',
+              demand.status === 'canceled' || demand.status === 'cancelled'
+                ? 'opacity-70 grayscale'
+                : 'border-l-4 border-l-primary',
             )}
           >
             <CardContent className="p-6 md:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -551,105 +606,109 @@ const DemandDetail = () => {
             </CardContent>
           </Card>
 
-          {role === 'company' && demand.status !== 'canceled' && isProviderContracted && (
-            <Card className="border-border shadow-sm animate-fade-in-up bg-card">
-              <CardHeader className="pb-3 border-b border-border mb-4 flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle className="text-lg flex items-center gap-2 text-foreground">
-                    <Package className="w-5 h-5 text-primary" /> Alocação de Estoque
-                  </CardTitle>
-                  <CardDescription className="mt-1">
-                    Reserve itens do seu estoque físico para este evento.
-                  </CardDescription>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="flex flex-col sm:flex-row gap-4 items-end">
-                  <div className="space-y-2 flex-1 w-full">
-                    <Label>Selecionar Item</Label>
-                    <Select value={allocItemId} onValueChange={setAllocItemId}>
-                      <SelectTrigger className="bg-background">
-                        <SelectValue placeholder="Escolha um item disponível..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {myItems.map((item) => {
-                          const used = inventoryAllocations
-                            .filter((a) => a.inventoryItemId === item.id)
-                            .reduce((s, a) => s + a.quantity, 0)
-                          const avail = item.totalQuantity - used
-                          return (
-                            <SelectItem key={item.id} value={item.id} disabled={avail <= 0}>
-                              {item.name} ({avail} disponíveis)
-                            </SelectItem>
-                          )
-                        })}
-                      </SelectContent>
-                    </Select>
+          {role === 'company' &&
+            demand.status !== 'canceled' &&
+            demand.status !== 'cancelled' &&
+            isProviderContracted && (
+              <Card className="border-border shadow-sm animate-fade-in-up bg-card">
+                <CardHeader className="pb-3 border-b border-border mb-4 flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle className="text-lg flex items-center gap-2 text-foreground">
+                      <Package className="w-5 h-5 text-primary" /> Alocação de Estoque
+                    </CardTitle>
+                    <CardDescription className="mt-1">
+                      Reserve itens do seu estoque físico para este evento.
+                    </CardDescription>
                   </div>
-                  <div className="space-y-2 w-full sm:w-32">
-                    <Label>Quantidade</Label>
-                    <Input
-                      type="number"
-                      min="1"
-                      placeholder="Qtd"
-                      value={allocQuantity}
-                      onChange={(e) => setAllocQuantity(e.target.value)}
-                      className="bg-background"
-                    />
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="flex flex-col sm:flex-row gap-4 items-end">
+                    <div className="space-y-2 flex-1 w-full">
+                      <Label>Selecionar Item</Label>
+                      <Select value={allocItemId} onValueChange={setAllocItemId}>
+                        <SelectTrigger className="bg-background">
+                          <SelectValue placeholder="Escolha um item disponível..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {myItems.map((item) => {
+                            const used = inventoryAllocations
+                              .filter((a) => a.inventoryItemId === item.id)
+                              .reduce((s, a) => s + a.quantity, 0)
+                            const avail = item.totalQuantity - used
+                            return (
+                              <SelectItem key={item.id} value={item.id} disabled={avail <= 0}>
+                                {item.name} ({avail} disponíveis)
+                              </SelectItem>
+                            )
+                          })}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2 w-full sm:w-32">
+                      <Label>Quantidade</Label>
+                      <Input
+                        type="number"
+                        min="1"
+                        placeholder="Qtd"
+                        value={allocQuantity}
+                        onChange={(e) => setAllocQuantity(e.target.value)}
+                        className="bg-background"
+                      />
+                    </div>
+                    <Button onClick={handleAllocate} className="w-full sm:w-auto shadow-sm gap-2">
+                      <Plus className="w-4 h-4" /> Alocar
+                    </Button>
                   </div>
-                  <Button onClick={handleAllocate} className="w-full sm:w-auto shadow-sm gap-2">
-                    <Plus className="w-4 h-4" /> Alocar
-                  </Button>
-                </div>
 
-                {myAllocations.length > 0 && (
-                  <div className="rounded-md border border-border overflow-hidden">
-                    <Table>
-                      <TableHeader className="bg-muted/50">
-                        <TableRow>
-                          <TableHead>Item</TableHead>
-                          <TableHead className="text-center">Qtd. Alocada</TableHead>
-                          <TableHead className="text-right">Ação</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {myAllocations.map((alloc) => {
-                          const item = myItems.find((i) => i.id === alloc.inventoryItemId)
-                          return (
-                            <TableRow key={alloc.id}>
-                              <TableCell className="font-medium">
-                                {item?.name || 'Desconhecido'}
-                              </TableCell>
-                              <TableCell className="text-center font-bold text-primary">
-                                {alloc.quantity}
-                              </TableCell>
-                              <TableCell className="text-right">
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="text-destructive hover:text-destructive hover:bg-destructive/10 h-8"
-                                  onClick={() => {
-                                    deallocateInventory(alloc.id)
-                                    toast({ title: 'Alocação removida.' })
-                                  }}
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </Button>
-                              </TableCell>
-                            </TableRow>
-                          )
-                        })}
-                      </TableBody>
-                    </Table>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          )}
+                  {myAllocations.length > 0 && (
+                    <div className="rounded-md border border-border overflow-hidden">
+                      <Table>
+                        <TableHeader className="bg-muted/50">
+                          <TableRow>
+                            <TableHead>Item</TableHead>
+                            <TableHead className="text-center">Qtd. Alocada</TableHead>
+                            <TableHead className="text-right">Ação</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {myAllocations.map((alloc) => {
+                            const item = myItems.find((i) => i.id === alloc.inventoryItemId)
+                            return (
+                              <TableRow key={alloc.id}>
+                                <TableCell className="font-medium">
+                                  {item?.name || 'Desconhecido'}
+                                </TableCell>
+                                <TableCell className="text-center font-bold text-primary">
+                                  {alloc.quantity}
+                                </TableCell>
+                                <TableCell className="text-right">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="text-destructive hover:text-destructive hover:bg-destructive/10 h-8"
+                                    onClick={() => {
+                                      deallocateInventory(alloc.id)
+                                      toast({ title: 'Alocação removida.' })
+                                    }}
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </Button>
+                                </TableCell>
+                              </TableRow>
+                            )
+                          })}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
 
           {role === 'customer' &&
             demand.paymentStatus === 'escrow' &&
-            demand.status !== 'canceled' && (
+            demand.status !== 'canceled' &&
+            demand.status !== 'cancelled' && (
               <section className="space-y-4 mt-8 animate-fade-in-up">
                 <div className="flex items-center gap-2 border-b border-border pb-2">
                   <ShieldCheck className="w-6 h-6 text-primary" />
@@ -693,18 +752,34 @@ const DemandDetail = () => {
                               <>
                                 <Button
                                   className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white shadow-md order-1 sm:order-2"
-                                  onClick={() => updateSectorStatus(demand.id, s.id, 'concluded')}
+                                  onClick={async () => {
+                                    if (dbDemand)
+                                      await updateDemand(dbDemand.id!, {
+                                        sectorStatus: {
+                                          ...dbDemand.sectorStatus,
+                                          [s.id]: 'concluded',
+                                        },
+                                      })
+                                    updateSectorStatus(demand.id, s.id, 'concluded')
+                                  }}
                                 >
                                   Concluído
                                 </Button>
                                 <Button
                                   variant="outline"
                                   className="w-full sm:w-auto text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground order-2 sm:order-1"
-                                  onClick={() =>
+                                  onClick={async () => {
+                                    if (dbDemand)
+                                      await updateDemand(dbDemand.id!, {
+                                        sectorStatus: {
+                                          ...dbDemand.sectorStatus,
+                                          [s.id]: 'not_delivered',
+                                        },
+                                      })
                                     updateSectorStatus(demand.id, s.id, 'not_delivered')
-                                  }
+                                  }}
                                 >
-                                  Não Entregue
+                                  Não Entregue{' '}
                                 </Button>
                               </>
                             )}
@@ -770,13 +845,21 @@ const DemandDetail = () => {
                       </Button>
                       <Button
                         variant="destructive"
-                        onClick={() => {
+                        onClick={async () => {
                           if (!disputeReason) return
+                          if (dbDemand)
+                            await updateDemand(dbDemand.id!, {
+                              sectorStatus: {
+                                ...dbDemand.sectorStatus,
+                                [disputeSector]: 'disputed',
+                              },
+                            })
                           disputeService(demand.id, disputeSector, disputeReason)
                           setIsDisputeOpen(false)
                           setDisputeReason('')
                         }}
                       >
+                        {' '}
                         Confirmar Disputa
                       </Button>
                     </DialogFooter>
@@ -928,10 +1011,14 @@ const DemandDetail = () => {
                 </p>
                 <Button
                   size="lg"
-                  onClick={() => signContracts(demand.id)}
+                  onClick={async () => {
+                    if (dbDemand)
+                      await updateDemand(dbDemand.id!, { paymentStatus: 'pending_payment' })
+                    signContracts(demand.id)
+                  }}
                   className="w-full sm:w-auto h-14 text-base px-8 shadow-md"
                 >
-                  Assinar Todos os Contratos Digitais
+                  Assinar Todos os Contratos Digitais{' '}
                 </Button>
               </CardContent>
             </Card>
@@ -1092,7 +1179,9 @@ const DemandDetail = () => {
                         Cancelar
                       </Button>
                       <Button
-                        onClick={() => {
+                        onClick={async () => {
+                          if (dbDemand)
+                            await updateDemand(dbDemand.id!, { paymentStatus: 'escrow' })
                           payEvent(demand.id, optDelivery || optCancel)
                           setIsPaymentOpen(false)
                           toast({
@@ -1103,6 +1192,7 @@ const DemandDetail = () => {
                         }}
                         className="bg-emerald-600 hover:bg-emerald-700 text-white px-8"
                       >
+                        {' '}
                         Confirmar Pagamento
                       </Button>
                     </DialogFooter>
@@ -1145,7 +1235,7 @@ const DemandDetail = () => {
             </section>
           )}
 
-          {role === 'customer' && demand.status !== 'canceled' && (
+          {role === 'customer' && demand.status !== 'canceled' && demand.status !== 'cancelled' && (
             <section className="space-y-4 mt-8 animate-fade-in">
               <h3 className="font-semibold text-foreground text-xl border-b border-border pb-2">
                 Propostas Recebidas ({demandProposals.length})
@@ -1322,7 +1412,7 @@ const DemandDetail = () => {
           )}
         </div>
 
-        {role === 'company' && demand.status !== 'canceled' && (
+        {role === 'company' && demand.status !== 'canceled' && demand.status !== 'cancelled' && (
           <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/90 backdrop-blur-md border-t border-border z-40 md:sticky md:bg-transparent md:backdrop-blur-none md:border-t-0 md:p-0 mt-6 print:hidden">
             {supplierProposal ? (
               <div className="p-5 bg-secondary rounded-xl text-center border border-border shadow-sm flex flex-col items-center gap-2">

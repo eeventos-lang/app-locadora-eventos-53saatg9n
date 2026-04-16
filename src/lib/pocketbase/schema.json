@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-16T20:06:09.728Z",
+  "generatedAt": "2026-04-16T20:11:25.193Z",
   "collections": [
     {
       "name": "users",
@@ -29,31 +29,21 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": [
-            "onCreate"
-          ]
+          "autodateTriggers": ["onCreate"]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": [
-            "onCreate",
-            "onUpdate"
-          ]
+          "autodateTriggers": ["onCreate", "onUpdate"]
         },
         {
           "name": "role",
           "type": "select",
           "required": false,
           "system": false,
-          "selectValues": [
-            "admin",
-            "customer",
-            "supplier",
-            "company"
-          ]
+          "selectValues": ["admin", "customer", "supplier", "company"]
         }
       ],
       "indexes": [
@@ -77,10 +67,7 @@
           "type": "select",
           "required": true,
           "system": false,
-          "selectValues": [
-            "income",
-            "expense"
-          ]
+          "selectValues": ["income", "expense"]
         },
         {
           "name": "category",
@@ -105,12 +92,7 @@
           "type": "select",
           "required": false,
           "system": false,
-          "selectValues": [
-            "PIX",
-            "envelope",
-            "card",
-            "cash"
-          ]
+          "selectValues": ["PIX", "envelope", "card", "cash"]
         },
         {
           "name": "is_recurring",
@@ -129,19 +111,14 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": [
-            "onCreate"
-          ]
+          "autodateTriggers": ["onCreate"]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": [
-            "onCreate",
-            "onUpdate"
-          ]
+          "autodateTriggers": ["onCreate", "onUpdate"]
         }
       ],
       "indexes": []
@@ -180,19 +157,14 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": [
-            "onCreate"
-          ]
+          "autodateTriggers": ["onCreate"]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": [
-            "onCreate",
-            "onUpdate"
-          ]
+          "autodateTriggers": ["onCreate", "onUpdate"]
         }
       ],
       "indexes": []
@@ -233,11 +205,7 @@
           "type": "select",
           "required": true,
           "system": false,
-          "selectValues": [
-            "pending",
-            "paid",
-            "cancelled"
-          ]
+          "selectValues": ["pending", "paid", "cancelled"]
         },
         {
           "name": "description",
@@ -250,19 +218,14 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": [
-            "onCreate"
-          ]
+          "autodateTriggers": ["onCreate"]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": [
-            "onCreate",
-            "onUpdate"
-          ]
+          "autodateTriggers": ["onCreate", "onUpdate"]
         }
       ],
       "indexes": []
@@ -297,19 +260,14 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": [
-            "onCreate"
-          ]
+          "autodateTriggers": ["onCreate"]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": [
-            "onCreate",
-            "onUpdate"
-          ]
+          "autodateTriggers": ["onCreate", "onUpdate"]
         }
       ],
       "indexes": []
@@ -356,19 +314,14 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": [
-            "onCreate"
-          ]
+          "autodateTriggers": ["onCreate"]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": [
-            "onCreate",
-            "onUpdate"
-          ]
+          "autodateTriggers": ["onCreate", "onUpdate"]
         }
       ],
       "indexes": []
@@ -444,19 +397,14 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": [
-            "onCreate"
-          ]
+          "autodateTriggers": ["onCreate"]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": [
-            "onCreate",
-            "onUpdate"
-          ]
+          "autodateTriggers": ["onCreate", "onUpdate"]
         },
         {
           "name": "attachments",
@@ -580,25 +528,140 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": [
-            "onCreate"
-          ]
+          "autodateTriggers": ["onCreate"]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": [
-            "onCreate",
-            "onUpdate"
-          ]
+          "autodateTriggers": ["onCreate", "onUpdate"]
         },
         {
           "name": "attachments",
           "type": "file",
           "required": false,
           "system": false
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "name": "demands",
+      "type": "base",
+      "apiRules": {
+        "list": "@request.auth.id != ''",
+        "view": "@request.auth.id != ''",
+        "create": "@request.auth.id != '' && @request.auth.role = 'customer'",
+        "update": "@request.auth.id != '' && (customer_id = @request.auth.id || @request.auth.role = 'supplier' || @request.auth.role = 'company' || @request.auth.role = 'admin')",
+        "delete": "@request.auth.id != '' && customer_id = @request.auth.id"
+      },
+      "fields": [
+        {
+          "name": "customer_id",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "category",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "status",
+          "type": "select",
+          "required": true,
+          "system": false,
+          "selectValues": ["pending", "in_analysis", "accepted", "completed", "cancelled"]
+        },
+        {
+          "name": "event_date",
+          "type": "date",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "budget",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "location",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "guests",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "requirements",
+          "type": "json",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "budgetBreakdown",
+          "type": "json",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "paymentStatus",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "hasInsurance",
+          "type": "bool",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "sectorStatus",
+          "type": "json",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "contractedProviders",
+          "type": "json",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
         }
       ],
       "indexes": []

@@ -10,6 +10,8 @@ import { Step2Services } from '@/components/create-event/Step2Services'
 import { Step3Review } from '@/components/create-event/Step3Review'
 import { useEventTotals } from '@/hooks/use-event-totals'
 import { BackButton } from '@/components/BackButton'
+import { createDemand } from '@/services/demands'
+import pb from '@/lib/pocketbase/client'
 
 const steps = ['Básico', 'Serviços', 'Revisão']
 
@@ -59,15 +61,56 @@ const CreateEvent = () => {
   const handleNext = () => currentStep < 3 && setCurrentStep((p) => p + 1)
   const handleBack = () => (currentStep > 1 ? setCurrentStep((p) => p - 1) : navigate(-1))
 
-  const handleSubmit = () => {
-    addDemand({
-      ...formData,
-      title: formData.title || 'Novo Evento',
-      budget: totals.total,
-      budgetBreakdown: totals.breakdown,
-    })
-    toast({ title: 'Sucesso!', description: 'Sua demanda foi publicada para os fornecedores.' })
-    navigate('/demands')
+  const handleSubmit = async () => {
+    if (!pb.authStore.isValid || !pb.authStore.record) {
+      toast({
+        title: 'Erro',
+        description: 'Você precisa estar logado para criar um evento.',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    try {
+      if (pb.authStore.record.role !== 'customer') {
+        await pb.collection('users').update(pb.authStore.record.id, { role: 'customer' })
+      }
+
+      await createDemand({
+        customer_id: pb.authStore.record.id,
+        title: formData.title || 'Novo Evento',
+        description: formData.requirements.details,
+        category: 'geral',
+        status: 'pending',
+        event_date: formData.date ? new Date(formData.date).toISOString() : '',
+        budget: totals.total,
+        location: formData.location,
+        guests: formData.guests,
+        requirements: formData.requirements,
+        budgetBreakdown: totals.breakdown,
+        paymentStatus: 'gathering',
+        hasInsurance: false,
+        sectorStatus: {},
+        contractedProviders: {},
+      })
+
+      addDemand({
+        ...formData,
+        title: formData.title || 'Novo Evento',
+        budget: totals.total,
+        budgetBreakdown: totals.breakdown,
+      })
+
+      toast({ title: 'Sucesso!', description: 'Sua demanda foi publicada para os fornecedores.' })
+      navigate('/demands')
+    } catch (err) {
+      console.error(err)
+      toast({
+        title: 'Erro',
+        description: 'Falha ao salvar evento no banco de dados.',
+        variant: 'destructive',
+      })
+    }
   }
 
   return (

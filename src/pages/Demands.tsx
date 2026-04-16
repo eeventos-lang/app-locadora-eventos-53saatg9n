@@ -8,17 +8,71 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts'
 import { useApp, Demand } from '@/store/AppContext'
 import { SERVICES } from '@/lib/services'
+import { getDemands, updateDemand, DemandsRecord } from '@/services/demands'
+import pb from '@/lib/pocketbase/client'
+import { useRealtime } from '@/hooks/use-realtime'
+import { useEffect, useState } from 'react'
 
 const Demands = () => {
   const { role, demands, isSubscribed, companyProfile, proposals, currentUser } = useApp()
+  const [dbDemands, setDbDemands] = useState<DemandsRecord[]>([])
+
+  const loadDemands = async () => {
+    if (pb.authStore.isValid) {
+      try {
+        const list = await getDemands()
+        setDbDemands(list)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+  }
+
+  useEffect(() => {
+    loadDemands()
+  }, [])
+  useRealtime('demands', loadDemands)
+
+  const mappedDbDemands = useMemo(() => {
+    return dbDemands.map(
+      (d) =>
+        ({
+          id: d.id!,
+          title: d.title,
+          guests: d.guests || 0,
+          date: d.event_date || '',
+          location: d.location || '',
+          budget: d.budget || 0,
+          budgetBreakdown: d.budgetBreakdown || {},
+          requirements: d.requirements || {},
+          status: d.status as any,
+          customerId: d.customer_id,
+          paymentStatus: (d.paymentStatus as any) || 'gathering',
+          hasInsurance: d.hasInsurance || false,
+          sectorStatus: d.sectorStatus || {},
+          contractedProviders: d.contractedProviders || {},
+        }) as Demand,
+    )
+  }, [dbDemands])
 
   const filteredDemands = useMemo(() => {
-    if (role === 'customer') return demands.filter((d) => d.customerId === currentUser?.id)
+    const sourceDemands = mappedDbDemands.length > 0 ? mappedDbDemands : demands
+    if (role === 'customer') return sourceDemands.filter((d) => d.customerId === currentUser?.id)
     if (!companyProfile?.sectors || companyProfile.sectors.length === 0) return []
-    return demands.filter((d) =>
+    return sourceDemands.filter((d) =>
       companyProfile.sectors.some((s) => d.requirements[s as keyof typeof d.requirements]),
     )
-  }, [demands, role, companyProfile?.sectors, currentUser?.id])
+  }, [mappedDbDemands, demands, role, companyProfile?.sectors, currentUser?.id])
+
+  const handleStatusUpdate = async (e: React.MouseEvent, id: string, newStatus: string) => {
+    e.preventDefault()
+    e.stopPropagation()
+    try {
+      await updateDemand(id, { status: newStatus as any })
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
   const getDisplayBudget = (demand: Demand) => {
     if (role === 'customer') return demand.budget
@@ -74,6 +128,27 @@ const Demands = () => {
         </Badge>
       )
     }
+    if (status === 'in_analysis') {
+      return (
+        <Badge className="bg-purple-500/10 text-purple-600 border-purple-500/20 uppercase tracking-wider font-bold shrink-0 text-[10px]">
+          Em Análise
+        </Badge>
+      )
+    }
+    if (status === 'accepted') {
+      return (
+        <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 uppercase tracking-wider font-bold shrink-0 text-[10px]">
+          Aceito
+        </Badge>
+      )
+    }
+    if (status === 'cancelled' || status === 'canceled') {
+      return (
+        <Badge className="bg-red-500/10 text-red-600 border-red-500/20 uppercase tracking-wider font-bold shrink-0 text-[10px]">
+          Cancelado
+        </Badge>
+      )
+    }
     return null
   }
 
@@ -118,7 +193,28 @@ const Demands = () => {
                 <h2 className="font-semibold text-foreground text-lg md:text-xl leading-tight group-hover:text-primary transition-colors">
                   {demand.title}
                 </h2>
-                {getStatusBadge(demand.status, demand.paymentStatus)}
+                <div className="flex flex-col items-end gap-2">
+                  {getStatusBadge(demand.status, demand.paymentStatus)}
+                  {role === 'company' && demand.status === 'pending' && (
+                    <Button
+                      size="sm"
+                      onClick={(e) => handleStatusUpdate(e, demand.id, 'in_analysis')}
+                      variant="outline"
+                      className="h-7 text-xs"
+                    >
+                      Analisar
+                    </Button>
+                  )}
+                  {role === 'company' && demand.status === 'in_analysis' && (
+                    <Button
+                      size="sm"
+                      onClick={(e) => handleStatusUpdate(e, demand.id, 'accepted')}
+                      className="h-7 text-xs bg-emerald-600 hover:bg-emerald-700"
+                    >
+                      Aceitar
+                    </Button>
+                  )}
+                </div>
               </div>
 
               <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-sm text-muted-foreground">
