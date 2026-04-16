@@ -140,9 +140,17 @@ const DemandDetail = () => {
   const handlePayPbProposal = async (proposalId: string) => {
     try {
       await updateMarketplaceProposal(proposalId, { status: 'paid' })
-      toast({ title: 'Pagamento Confirmado', description: 'O chat foi desbloqueado com sucesso!' })
+      toast({
+        title: 'Pagamento Confirmado',
+        description: 'O chat foi desbloqueado e os dados de contato estão visíveis!',
+      })
     } catch (e) {
       console.error(e)
+      toast({
+        title: 'Erro',
+        description: 'Falha ao confirmar o pagamento.',
+        variant: 'destructive',
+      })
     }
   }
 

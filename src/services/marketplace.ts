@@ -1,15 +1,38 @@
 import pb from '@/lib/pocketbase/client'
 
-export const getMarketplaceProposals = () =>
-  pb.collection('proposals').getFullList({ expand: 'customer_id,supplier_id' })
-export const createMarketplaceProposal = (data: any) => pb.collection('proposals').create(data)
-export const updateMarketplaceProposal = (id: string, data: any) =>
-  pb.collection('proposals').update(id, data)
-export const getMarketplaceChats = () =>
-  pb.collection('chats').getFullList({
-    expand: 'participants,proposal_id,proposal_id.customer_id,proposal_id.supplier_id',
+export const getMarketplaceProposals = async () => {
+  return await pb.collection('proposals').getFullList({
+    expand: 'supplier_id,customer_id',
+    sort: '-created',
   })
-export const createMarketplaceChat = (data: any) => pb.collection('chats').create(data)
-export const getMarketplaceMessages = (chatId: string) =>
-  pb.collection('messages').getFullList({ filter: `chat_id = '${chatId}'`, sort: 'created' })
-export const sendMarketplaceMessage = (data: any) => pb.collection('messages').create(data)
+}
+
+export const createMarketplaceProposal = async (data: any) => {
+  return await pb.collection('proposals').create(data)
+}
+
+export const updateMarketplaceProposal = async (id: string, data: any) => {
+  return await pb.collection('proposals').update(id, data)
+}
+
+export const getMarketplaceChats = async () => {
+  return await pb.collection('chats').getFullList({
+    expand: 'participants,proposal_id',
+    sort: '-updated',
+  })
+}
+
+export const createMarketplaceChat = async (data: any) => {
+  return await pb.collection('chats').create(data)
+}
+
+export const getMarketplaceMessages = async (chatId: string) => {
+  return await pb.collection('messages').getFullList({
+    filter: `chat_id = "${chatId}"`,
+    sort: 'created',
+  })
+}
+
+export const sendMarketplaceMessage = async (data: any) => {
+  return await pb.collection('messages').create(data)
+}

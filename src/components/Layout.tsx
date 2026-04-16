@@ -78,26 +78,38 @@ export function Layout() {
     navigate('/')
   }
 
-  const navItems = [
-    { name: 'Início', path: '/', icon: LayoutDashboard },
-    { name: 'Mensagens', path: '/messages', icon: MessageSquare },
-    { name: 'Demandas', path: '/demands', icon: Calendar },
-    ...(role === 'customer'
-      ? [
-          { name: 'Fornecedores', path: '/suppliers', icon: Users },
-          { name: 'Favoritos', path: '/favorites', icon: Heart },
-          { name: 'Meus Eventos', path: '/schedules', icon: CalendarClock },
-        ]
-      : [
-          { name: 'Meus Serviços', path: '/insights', icon: LineChart },
-          { name: 'Cadastros', path: '/registrations', icon: Users },
-          { name: 'Estoque', path: '/inventory', icon: Package },
-          { name: 'Relatórios', path: '/reports', icon: PieChart },
-        ]),
-    { name: 'Fluxo de Caixa', path: '/finance', icon: Receipt },
-    { name: 'Criar Evento', path: '/create-event', icon: PlusCircle },
-    { name: 'Planos', path: '/subscription', icon: CreditCard },
-  ]
+  const navItems = []
+
+  if (role === 'admin') {
+    navItems.push(
+      { name: 'Início', path: '/', icon: LayoutDashboard },
+      { name: 'Demandas', path: '/demands', icon: Calendar },
+      { name: 'Mensagens', path: '/messages', icon: MessageSquare },
+      { name: 'Transações', path: '/finance', icon: Receipt },
+      { name: 'Estoque', path: '/inventory', icon: Package },
+      { name: 'Usuários', path: '/registrations', icon: Users },
+      { name: 'Relatórios', path: '/reports', icon: PieChart },
+    )
+  } else if (role === 'company' || role === 'supplier') {
+    navItems.push(
+      { name: 'Início', path: '/', icon: LayoutDashboard },
+      { name: 'Pedidos de Serviço', path: '/demands', icon: Calendar },
+      { name: 'Meus Chats', path: '/messages', icon: MessageSquare },
+      { name: 'Estoque', path: '/inventory', icon: Package },
+      { name: 'Desempenho', path: '/insights', icon: LineChart },
+      { name: 'Fluxo de Caixa', path: '/finance', icon: Receipt },
+    )
+  } else {
+    navItems.push(
+      { name: 'Início', path: '/', icon: LayoutDashboard },
+      { name: 'Marketplace', path: '/suppliers', icon: Users },
+      { name: 'Minhas Demandas', path: '/demands', icon: Calendar },
+      { name: 'Meus Chats', path: '/messages', icon: MessageSquare },
+      { name: 'Criar Evento', path: '/create-event', icon: PlusCircle },
+      { name: 'Meus Eventos', path: '/schedules', icon: CalendarClock },
+      { name: 'Favoritos', path: '/favorites', icon: Heart },
+    )
+  }
 
   const myNotifications =
     role === 'company'
@@ -340,31 +352,35 @@ export function Layout() {
                     <>
                       <li>
                         <Link to="/suppliers" className="hover:text-primary transition-colors">
-                          Buscar Fornecedores
+                          Marketplace
                         </Link>
                       </li>
                       <li>
                         <Link to="/schedules" className="hover:text-primary transition-colors">
-                          Agendamentos
+                          Meus Eventos
                         </Link>
                       </li>
                     </>
                   )}
-                  {role === 'company' && (
+                  {(role === 'company' || role === 'supplier') && (
                     <>
                       <li>
                         <Link to="/insights" className="hover:text-primary transition-colors">
-                          Insights & Desempenho
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="/registrations" className="hover:text-primary transition-colors">
-                          Gestão de Cadastros
+                          Desempenho
                         </Link>
                       </li>
                       <li>
                         <Link to="/inventory" className="hover:text-primary transition-colors">
                           Estoque
+                        </Link>
+                      </li>
+                    </>
+                  )}
+                  {role === 'admin' && (
+                    <>
+                      <li>
+                        <Link to="/registrations" className="hover:text-primary transition-colors">
+                          Usuários
                         </Link>
                       </li>
                       <li>

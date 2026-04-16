@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react'
 import pb from '@/lib/pocketbase/client'
 
-export type Role = 'customer' | 'company'
+export type Role = 'customer' | 'company' | 'supplier' | 'admin'
 
 export type TechRequirement = {
   sound: boolean
@@ -360,6 +360,13 @@ interface AppContextType {
 }
 
 const MOCK_USERS: User[] = [
+  {
+    id: 'admin1',
+    name: 'Admin',
+    email: 'lhshowilumina@hotmail.com',
+    role: 'admin',
+    password: '123',
+  },
   {
     id: 'c1',
     name: 'Cliente Teste',
@@ -1084,10 +1091,20 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        const user = users.find(
+        let user = users.find(
           (u) =>
             u.email === email && (u.password === password || password === 'Skip@Pass' || !password),
         )
+
+        if (pbUser && !user) {
+          user = {
+            id: pbUser.id,
+            name: pbUser.name || pbUser.email.split('@')[0],
+            email: pbUser.email,
+            role: (pbUser.role as Role) || 'customer',
+          }
+        }
+
         if (user) {
           if (pbUser) user.id = pbUser.id
           setCurrentUser(user)
