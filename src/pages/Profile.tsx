@@ -76,12 +76,20 @@ const Profile = () => {
   const tier = getLoyaltyTier(points)
   const TierIcon = tier.icon
 
-  const handleSave = () => {
-    updateCompanyProfile(localProfile)
-    toast({
-      title: 'Cadastro Salvo',
-      description: 'Os dados da sua conta foram atualizados com sucesso.',
-    })
+  const handleSave = async () => {
+    try {
+      await updateCompanyProfile(localProfile)
+      toast({
+        title: 'Cadastro Salvo',
+        description: 'Os dados da sua conta foram atualizados com sucesso.',
+      })
+    } catch (e) {
+      toast({
+        title: 'Erro',
+        description: 'Falha ao salvar os dados. Tente novamente.',
+        variant: 'destructive',
+      })
+    }
   }
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {

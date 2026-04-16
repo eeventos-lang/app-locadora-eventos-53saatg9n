@@ -135,6 +135,12 @@ const DemandDetail = () => {
       .catch(console.error)
   })
 
+  useEffect(() => {
+    if (demand && (role === 'company' || role === 'supplier') && demand.status === 'pending') {
+      pb.collection('demands').update(demand.id, { status: 'in_analysis' }).catch(console.error)
+    }
+  }, [demand?.id, demand?.status, role])
+
   const handlePayPbProposal = async (proposalId: string) => {
     try {
       await updateMarketplaceProposal(proposalId, { status: 'paid' })
@@ -378,7 +384,7 @@ const DemandDetail = () => {
     }
     if (demand.status === 'pending') {
       return (
-        <Badge className="bg-orange-500/10 text-orange-500 border-orange-500/20 uppercase tracking-wider font-bold shrink-0">
+        <Badge className="bg-amber-100 text-amber-700 border-amber-200 uppercase tracking-wider font-bold shrink-0">
           Pendente
         </Badge>
       )

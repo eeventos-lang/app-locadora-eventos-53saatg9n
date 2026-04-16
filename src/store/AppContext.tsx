@@ -145,6 +145,7 @@ export type User = {
   role: Role
   password?: string
   sectors?: string[]
+  specialties?: string[]
   companyProfile?: CompanyProfile
 }
 
@@ -320,7 +321,7 @@ interface AppContextType {
   ) => Promise<void>
   cancelDemand: (demandId: string) => Promise<void>
   companyProfile: CompanyProfile
-  updateCompanyProfile: (profile: Partial<CompanyProfile>) => void
+  updateCompanyProfile: (profile: Partial<CompanyProfile>) => Promise<void>
   users: User[]
   currentUser: User | null
   registerUser: (user: Omit<User, 'id'>) => Promise<void>
@@ -469,14 +470,24 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       setSuppliersCRM(mappedSuppliers)
 
       if (pb.authStore.record) {
-        const mySupplierRec = mappedSuppliers.find((s) => s.companyId === pb.authStore.record?.id)
+        const userRec = pb.authStore.record
+        const userSpecialties = userRec.specialties || []
+        const mySupplierRec = mappedSuppliers.find((s) => s.companyId === userRec.id)
         if (mySupplierRec) {
           setCompanyProfile((prev) => ({
             ...prev,
             name: mySupplierRec.name,
-            sectors: mySupplierRec.category
-              ? mySupplierRec.category.split(',').map((s) => s.trim())
-              : prev.sectors,
+            sectors:
+              userSpecialties.length > 0
+                ? userSpecialties
+                : mySupplierRec.category
+                  ? mySupplierRec.category.split(',').map((s) => s.trim())
+                  : prev.sectors,
+          }))
+        } else {
+          setCompanyProfile((prev) => ({
+            ...prev,
+            sectors: userSpecialties.length > 0 ? userSpecialties : prev.sectors,
           }))
         }
       }
@@ -519,6 +530,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
                 name: pbUser.name || pbUser.email.split('@')[0],
                 email: pbUser.email,
                 role: (pbUser.role as Role) || 'customer',
+                specialties: pbUser.specialties || [],
               }
               setCurrentUser(user)
               setRole(user.role)
@@ -545,6 +557,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
           name: model.name || model.email.split('@')[0],
           email: model.email,
           role: (model.role as Role) || 'customer',
+          specialties: model.specialties || [],
         }
         setCurrentUser(user)
         setRole(user.role)
@@ -787,7 +800,17 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
   }
 
-  const updateCompanyProfile = (profile: Partial<CompanyProfile>) => {
+  const updateCompanyProfile = async (profile: Partial<CompanyProfile>) => {
+    if (currentUser) {
+      await pb
+        .collection('users')
+        .update(currentUser.id, {
+          specialties: profile.sectors || [],
+        })
+        .catch(console.error)
+      setCurrentUser((prev) => (prev ? { ...prev, specialties: profile.sectors || [] } : prev))
+    }
+
     setCompanyProfile((prev) => {
       const updated = {
         ...prev,
@@ -802,6 +825,17 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       }
       return updated
     })
+  }
+
+  const setRoleWrapped = (newRole: Role) => {
+    setRole(newRole)
+    if (currentUser) {
+      pb.collection('users').update(currentUser.id, { role: newRole }).catch(console.error)
+      setCurrentUser({ ...currentUser, role: newRole })
+    }
+    setDemands([])
+    setProposals([])
+    loadData()
   }
 
   const registerUser = async (userData: any) => {
@@ -1137,7 +1171,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     <AppContext.Provider
       value={{
         role,
-        setRole,
+        setRole: setRoleWrapped,
         isSubscribed,
         setIsSubscribed,
         demands,

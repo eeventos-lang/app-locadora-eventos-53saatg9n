@@ -44,7 +44,7 @@ const Demands = () => {
     if (role === 'customer') return sourceDemands.filter((d) => d.customerId === currentUser?.id)
     if (role === 'admin') return sourceDemands
 
-    const supplierSectors = companyProfile?.sectors || []
+    const supplierSectors = currentUser?.specialties || companyProfile?.sectors || []
     const supplierCategory = companyProfile?.service_category?.toLowerCase() || ''
 
     if (supplierSectors.length === 0 && !supplierCategory) return []
@@ -52,7 +52,8 @@ const Demands = () => {
     return sourceDemands.filter((d) => {
       const demandCategory = d.category?.toLowerCase() || ''
       const matchesCategory =
-        demandCategory && supplierCategory && demandCategory.includes(supplierCategory)
+        (demandCategory && supplierCategory && demandCategory.includes(supplierCategory)) ||
+        supplierSectors.some((s) => s.toLowerCase() === demandCategory)
 
       const matchesRequirement = supplierSectors.some(
         (s) => d.requirements && d.requirements[s as keyof typeof d.requirements],
@@ -121,7 +122,7 @@ const Demands = () => {
     }
     if (status === 'pending') {
       return (
-        <Badge className="bg-slate-100 text-slate-600 border-slate-200 uppercase tracking-wider font-bold shrink-0 text-[10px]">
+        <Badge className="bg-amber-100 text-amber-700 border-amber-200 uppercase tracking-wider font-bold shrink-0 text-[10px]">
           Pendente
         </Badge>
       )

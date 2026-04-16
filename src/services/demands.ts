@@ -22,7 +22,9 @@ export interface DemandsRecord {
 }
 
 export const getDemands = async () => {
-  return pb.collection('demands').getFullList<DemandsRecord>({ sort: '-created' })
+  return pb
+    .collection('demands')
+    .getFullList<DemandsRecord>({ filter: 'customer_id != ""', sort: '-created' })
 }
 
 export const getDemand = async (id: string) => {
