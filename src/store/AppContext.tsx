@@ -28,7 +28,14 @@ export type TechRequirement = {
   details: string
 }
 
-export type DemandStatus = 'pending' | 'negotiating' | 'completed' | 'canceled'
+export type DemandStatus =
+  | 'pending'
+  | 'negotiating'
+  | 'completed'
+  | 'canceled'
+  | 'cancelled'
+  | 'in_analysis'
+  | 'accepted'
 
 export type PaymentStatus =
   | 'gathering'
@@ -309,8 +316,8 @@ interface AppContextType {
       | 'contractedProviders'
       | 'customerId'
     >,
-  ) => void
-  cancelDemand: (demandId: string) => void
+  ) => Promise<void>
+  cancelDemand: (demandId: string) => Promise<void>
   companyProfile: CompanyProfile
   updateCompanyProfile: (profile: Partial<CompanyProfile>) => void
   users: User[]
@@ -321,10 +328,10 @@ interface AppContextType {
   proposals: Proposal[]
   addProposal: (proposal: Omit<Proposal, 'id' | 'status' | 'createdAt'>) => void
   acceptProposal: (proposalId: string) => void
-  signContracts: (demandId: string) => void
-  payEvent: (demandId: string, hasInsurance?: boolean) => void
-  updateSectorStatus: (demandId: string, sector: string, status: SectorStatus) => void
-  disputeService: (demandId: string, sector: string, reason: string) => void
+  signContracts: (demandId: string) => Promise<void>
+  payEvent: (demandId: string, hasInsurance?: boolean) => Promise<void>
+  updateSectorStatus: (demandId: string, sector: string, status: SectorStatus) => Promise<void>
+  disputeService: (demandId: string, sector: string, reason: string) => Promise<void>
   transactions: Transaction[]
   notifications: Notification[]
   markNotificationsAsRead: () => void
@@ -406,16 +413,18 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [inventoryAllocations, setInventoryAllocations] = useState<InventoryAllocation[]>([])
   const [isInitializing, setIsInitializing] = useState(true)
 
-  const loadCRMData = useCallback(async () => {
+  const loadData = useCallback(async () => {
     if (!pb.authStore.isValid) {
       setClientsCRM([])
       setSuppliersCRM([])
+      setDemands([])
       return
     }
     try {
-      const [clientsRecords, suppliersRecords] = await Promise.all([
+      const [clientsRecords, suppliersRecords, demandsRecords] = await Promise.all([
         pb.collection('crm_clients').getFullList({ sort: '-created' }),
         pb.collection('crm_suppliers').getFullList({ sort: '-created' }),
+        pb.collection('demands').getFullList({ sort: '-created' }),
       ])
 
       setClientsCRM(
@@ -457,8 +466,28 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
           createdAt: r.created,
         })),
       )
+
+      setDemands(
+        demandsRecords.map((d) => ({
+          id: d.id,
+          customerId: d.customer_id,
+          title: d.title,
+          budget: d.budget || 0,
+          budgetBreakdown: d.budgetBreakdown || {},
+          guests: d.guests || 0,
+          date: d.event_date || '',
+          location: d.location || '',
+          requirements: d.requirements || {},
+          status: d.status as DemandStatus,
+          paymentStatus: (d.paymentStatus as PaymentStatus) || 'gathering',
+          sectorStatus: d.sectorStatus || {},
+          contractedProviders: d.contractedProviders || {},
+          createdAt: d.created,
+          hasInsurance: d.hasInsurance || false,
+        })),
+      )
     } catch (error) {
-      console.error('Error loading CRM data:', error)
+      console.error('Error loading data:', error)
     }
   }, [])
 
@@ -488,7 +517,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         pb.authStore.clear()
       } finally {
         setIsInitializing(false)
-        loadCRMData()
+        loadData()
       }
     }
 
@@ -504,61 +533,67 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         }
         setCurrentUser(user)
         setRole(user.role)
-        loadCRMData()
+        loadData()
       } else {
         setCurrentUser(null)
         setClientsCRM([])
         setSuppliersCRM([])
+        setDemands([])
       }
     })
 
     return () => unsub()
-  }, [loadCRMData])
+  }, [loadData])
 
   useRealtime('crm_clients', () => {
-    loadCRMData()
+    loadData()
   })
 
   useRealtime('crm_suppliers', () => {
-    loadCRMData()
+    loadData()
   })
 
-  const addDemand = (demandData: any) => {
-    const newDemand: Demand = {
-      ...demandData,
-      id: Math.random().toString(36).substring(7),
-      customerId: currentUser?.id || 'c1',
+  useRealtime('demands', () => {
+    loadData()
+  })
+
+  const addDemand = async (demandData: any) => {
+    if (!currentUser || currentUser.role !== 'customer') {
+      throw new Error('Apenas clientes podem criar eventos.')
+    }
+    await pb.collection('demands').create({
+      customer_id: currentUser.id,
+      title: demandData.title,
+      description: demandData.requirements?.details || '',
       status: 'pending',
+      event_date: demandData.date,
+      budget: demandData.budget,
+      location: demandData.location,
+      guests: demandData.guests,
+      requirements: demandData.requirements,
+      budgetBreakdown: demandData.budgetBreakdown || {},
       paymentStatus: 'gathering',
+      hasInsurance: false,
       sectorStatus: {},
       contractedProviders: {},
-      createdAt: new Date().toISOString(),
-    }
-    setDemands([newDemand, ...demands])
+    })
   }
 
-  const cancelDemand = (demandId: string) => {
-    let cancelledDemandTitle = ''
-    let refundIssued = false
-    let cId = ''
+  const cancelDemand = async (demandId: string) => {
+    const demand = demands.find((d) => d.id === demandId)
+    if (!demand) return
 
-    setDemands((prev) =>
-      prev.map((d) => {
-        if (d.id === demandId) {
-          cancelledDemandTitle = d.title
-          cId = d.customerId
-          const isRefunded =
-            d.hasInsurance && (d.paymentStatus === 'escrow' || d.paymentStatus === 'completed')
-          refundIssued = isRefunded
-          return {
-            ...d,
-            status: 'canceled',
-            paymentStatus: isRefunded ? 'processing_refund' : d.paymentStatus,
-          }
-        }
-        return d
-      }),
-    )
+    let cancelledDemandTitle = demand.title
+    let cId = demand.customerId
+    const isRefunded =
+      demand.hasInsurance &&
+      (demand.paymentStatus === 'escrow' || demand.paymentStatus === 'completed')
+    let refundIssued = isRefunded
+
+    await pb.collection('demands').update(demandId, {
+      status: 'cancelled',
+      paymentStatus: isRefunded ? 'processing_refund' : demand.paymentStatus,
+    })
 
     setTransactions((prev) =>
       prev.map((t) => {
@@ -583,9 +618,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       ])
 
       setTimeout(() => {
-        setDemands((curr) =>
-          curr.map((d) => (d.id === demandId ? { ...d, paymentStatus: 'refunded' } : d)),
-        )
         setTransactions((curr) =>
           curr.map((t) =>
             t.demandId === demandId && t.hasInsurance ? { ...t, status: 'refunded' } : t,
@@ -622,16 +654,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     )
   }
 
-  const signContracts = (demandId: string) => {
-    setDemands((prev) =>
-      prev.map((d) => (d.id === demandId ? { ...d, paymentStatus: 'pending_payment' } : d)),
-    )
+  const signContracts = async (demandId: string) => {
+    await pb.collection('demands').update(demandId, { paymentStatus: 'pending_payment' })
   }
 
-  const payEvent = (demandId: string, hasInsurance: boolean = false) => {
-    setDemands((prev) =>
-      prev.map((d) => (d.id === demandId ? { ...d, paymentStatus: 'escrow', hasInsurance } : d)),
-    )
+  const payEvent = async (demandId: string, hasInsurance: boolean = false) => {
+    await pb.collection('demands').update(demandId, { paymentStatus: 'escrow', hasInsurance })
 
     const dProposals = proposals.filter((p) => p.demandId === demandId && p.status === 'accepted')
     const demand = demands.find((d) => d.id === demandId)
@@ -654,72 +682,73 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setTransactions((prev) => [...newTransactions, ...prev])
   }
 
-  const updateSectorStatus = (demandId: string, sector: string, status: SectorStatus) => {
-    setDemands((prev) => {
-      const newDemands = [...prev]
-      const dIndex = newDemands.findIndex((d) => d.id === demandId)
-      if (dIndex === -1) return prev
+  const updateSectorStatus = async (demandId: string, sector: string, status: SectorStatus) => {
+    const demand = demands.find((d) => d.id === demandId)
+    if (!demand) return
 
-      const d = { ...newDemands[dIndex] }
-      d.sectorStatus = { ...d.sectorStatus, [sector]: status }
+    const newSectorStatus = { ...demand.sectorStatus, [sector]: status }
+    const contractedSectors = Object.keys(demand.contractedProviders || {})
 
-      const contractedSectors = Object.keys(d.contractedProviders)
-      const allConcluded =
-        contractedSectors.length > 0 &&
-        contractedSectors.every((s) => d.sectorStatus[s] === 'concluded')
+    let isCompleted = false
+    if (contractedSectors.length > 0) {
+      isCompleted = contractedSectors.every((s) =>
+        s === sector ? status === 'concluded' : newSectorStatus[s] === 'concluded',
+      )
+    }
 
-      if (allConcluded && status === 'concluded' && d.status !== 'completed') {
-        d.status = 'completed'
-        d.paymentStatus = 'completed'
+    const payload: any = { sectorStatus: newSectorStatus }
+    if (isCompleted && demand.status !== 'completed') {
+      payload.status = 'completed'
+      payload.paymentStatus = 'completed'
+    }
 
-        setTransactions((txs) =>
-          txs.map((t) => (t.demandId === demandId ? { ...t, status: 'completed' } : t)),
-        )
+    await pb.collection('demands').update(demandId, payload)
 
-        setTimeout(() => {
-          const providersToReward = new Set(Object.values(d.contractedProviders))
-          providersToReward.forEach((pid) => {
-            setUsers((uList) =>
-              uList.map((u) => {
-                if (u.id === pid && u.companyProfile) {
-                  return {
-                    ...u,
-                    companyProfile: {
-                      ...u.companyProfile,
-                      loyaltyPoints: (u.companyProfile.loyaltyPoints || 0) + 100,
-                    },
-                  }
+    if (payload.status === 'completed') {
+      setTransactions((txs) =>
+        txs.map((t) => (t.demandId === demandId ? { ...t, status: 'completed' } : t)),
+      )
+
+      setTimeout(() => {
+        const providersToReward = new Set(Object.values(demand.contractedProviders || {}))
+        providersToReward.forEach((pid) => {
+          setUsers((uList) =>
+            uList.map((u) => {
+              if (u.id === pid && u.companyProfile) {
+                return {
+                  ...u,
+                  companyProfile: {
+                    ...u.companyProfile,
+                    loyaltyPoints: (u.companyProfile.loyaltyPoints || 0) + 100,
+                  },
                 }
-                return u
-              }),
-            )
+              }
+              return u
+            }),
+          )
 
-            if (currentUser?.id === pid) {
-              setCompanyProfile((cp) => ({ ...cp, loyaltyPoints: (cp.loyaltyPoints || 0) + 100 }))
-            }
+          if (currentUser?.id === pid) {
+            setCompanyProfile((cp) => ({ ...cp, loyaltyPoints: (cp.loyaltyPoints || 0) + 100 }))
+          }
 
-            setNotifications((n) => [
-              {
-                id: Math.random().toString(),
-                title: 'Evento Concluído! +100 Pontos',
-                message: `O evento ${d.title} foi finalizado. Seu pagamento foi liberado e você ganhou 100 Pontos de Fidelidade!`,
-                read: false,
-                createdAt: new Date().toISOString(),
-                targetSupplierId: pid,
-              },
-              ...n,
-            ])
-          })
-        }, 100)
-      }
-
-      newDemands[dIndex] = d
-      return newDemands
-    })
+          setNotifications((n) => [
+            {
+              id: Math.random().toString(),
+              title: 'Evento Concluído! +100 Pontos',
+              message: `O evento ${demand.title} foi finalizado. Seu pagamento foi liberado e você ganhou 100 Pontos de Fidelidade!`,
+              read: false,
+              createdAt: new Date().toISOString(),
+              targetSupplierId: pid as string,
+            },
+            ...n,
+          ])
+        })
+      }, 100)
+    }
   }
 
-  const disputeService = (demandId: string, sector: string, reason: string) => {
-    updateSectorStatus(demandId, sector, 'disputed')
+  const disputeService = async (demandId: string, sector: string, reason: string) => {
+    await updateSectorStatus(demandId, sector, 'disputed')
   }
 
   const inviteSupplier = (supplierId: string, demandId: string) => {
@@ -728,7 +757,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         id: Math.random().toString(36).substring(7),
         title: 'Novo Convite Direto!',
         message:
-          'Você recebeu um convite exclusivo para um evento. Confira os detalhes e envie sua proposta.',
+          'Você recebeu um convite exclusivo para um evento. Confira os detalhes e enviem sua proposta.',
         read: false,
         createdAt: new Date().toISOString(),
         targetSupplierId: supplierId,
@@ -801,7 +830,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     }
     setCurrentUser(user)
     setRole(user.role)
-    await loadCRMData()
+    await loadData()
   }
 
   const logout = () => {
@@ -810,6 +839,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setRole('customer')
     setClientsCRM([])
     setSuppliersCRM([])
+    setDemands([])
   }
 
   const addReview = (reviewData: Omit<Review, 'id' | 'createdAt'>) => {

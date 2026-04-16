@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
   Calendar,
@@ -7,7 +7,6 @@ import {
   Users,
   MessageSquare,
   ShieldCheck,
-  CheckCircle2,
   Star,
   Ban,
   FileText,
@@ -17,7 +16,7 @@ import {
   Trash2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
 import {
@@ -42,7 +41,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
-import { useApp, TechRequirement } from '@/store/AppContext'
+import { useApp, TechRequirement, Demand } from '@/store/AppContext'
 import { SERVICES } from '@/lib/services'
 import pb from '@/lib/pocketbase/client'
 import { useRealtime } from '@/hooks/use-realtime'
@@ -64,8 +63,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { getDemand, updateDemand, DemandsRecord } from '@/services/demands'
-import { useEffect } from 'react'
 
 const DemandDetail = () => {
   const { id } = useParams()
@@ -115,26 +112,12 @@ const DemandDetail = () => {
   const [reviewComment, setReviewComment] = useState('')
   const [hoverRating, setHoverRating] = useState(0)
 
-  // Inventory Allocation State
   const [allocItemId, setAllocItemId] = useState('')
   const [allocQuantity, setAllocQuantity] = useState('')
 
   const [pbProposals, setPbProposals] = useState<any[]>([])
-  const [dbDemand, setDbDemand] = useState<DemandsRecord | null>(null)
-
-  const loadDemand = async () => {
-    if (id && pb.authStore.isValid) {
-      try {
-        const d = await getDemand(id)
-        setDbDemand(d)
-      } catch (e) {
-        console.error(e)
-      }
-    }
-  }
 
   useEffect(() => {
-    loadDemand()
     if (pb.authStore.isValid) {
       getMarketplaceProposals()
         .then((data) => {
@@ -151,7 +134,6 @@ const DemandDetail = () => {
       })
       .catch(console.error)
   })
-  useRealtime('demands', loadDemand)
 
   const handlePayPbProposal = async (proposalId: string) => {
     try {
@@ -170,26 +152,7 @@ const DemandDetail = () => {
     }
   }
 
-  const mappedDemand: Demand | undefined = dbDemand
-    ? {
-        id: dbDemand.id!,
-        title: dbDemand.title,
-        guests: dbDemand.guests || 0,
-        date: dbDemand.event_date || '',
-        location: dbDemand.location || '',
-        budget: dbDemand.budget || 0,
-        budgetBreakdown: dbDemand.budgetBreakdown || {},
-        requirements: dbDemand.requirements || {},
-        status: dbDemand.status as any,
-        customerId: dbDemand.customer_id,
-        paymentStatus: (dbDemand.paymentStatus as any) || 'gathering',
-        hasInsurance: dbDemand.hasInsurance || false,
-        sectorStatus: dbDemand.sectorStatus || {},
-        contractedProviders: dbDemand.contractedProviders || {},
-      }
-    : undefined
-
-  const demand = mappedDemand || demands.find((d) => d.id === id)
+  const demand = demands.find((d) => d.id === id)
 
   const applicableSectors = demand
     ? SERVICES.filter(
@@ -241,15 +204,7 @@ const DemandDetail = () => {
 
     try {
       if (pb.authStore.isValid && pb.authStore.record) {
-        let customerId = ''
-        try {
-          const customer = await pb
-            .collection('users')
-            .getFirstListItem(`email='cliente@exemplo.com'`)
-          customerId = customer.id
-        } catch (e) {
-          console.error(e)
-        }
+        const customerId = demand.customerId
 
         if (customerId) {
           const newProp = await createMarketplaceProposal({
@@ -328,18 +283,19 @@ const DemandDetail = () => {
   }
 
   const handleCancelDemand = async () => {
-    if (dbDemand) {
-      await updateDemand(dbDemand.id!, { status: 'cancelled' })
-    }
-    cancelDemand(demand.id)
     setIsCancelOpen(false)
-    toast({
-      title: 'Evento Cancelado',
-      description: demand.hasInsurance
-        ? 'O cancelamento foi confirmado e o processo de reembolso do seguro foi iniciado automaticamente.'
-        : 'O cancelamento foi confirmado. Entre em contato com os fornecedores sobre multas rescisórias.',
-      variant: 'default',
-    })
+    try {
+      await cancelDemand(demand.id)
+      toast({
+        title: 'Evento Cancelado',
+        description: demand.hasInsurance
+          ? 'O cancelamento foi confirmado e o processo de reembolso do seguro foi iniciado automaticamente.'
+          : 'O cancelamento foi confirmado. Entre em contato com os fornecedores sobre multas rescisórias.',
+        variant: 'default',
+      })
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   const handleAllocate = () => {
@@ -753,14 +709,11 @@ const DemandDetail = () => {
                                 <Button
                                   className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white shadow-md order-1 sm:order-2"
                                   onClick={async () => {
-                                    if (dbDemand)
-                                      await updateDemand(dbDemand.id!, {
-                                        sectorStatus: {
-                                          ...dbDemand.sectorStatus,
-                                          [s.id]: 'concluded',
-                                        },
-                                      })
-                                    updateSectorStatus(demand.id, s.id, 'concluded')
+                                    try {
+                                      await updateSectorStatus(demand.id, s.id, 'concluded')
+                                    } catch (e) {
+                                      console.error(e)
+                                    }
                                   }}
                                 >
                                   Concluído
@@ -769,14 +722,11 @@ const DemandDetail = () => {
                                   variant="outline"
                                   className="w-full sm:w-auto text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground order-2 sm:order-1"
                                   onClick={async () => {
-                                    if (dbDemand)
-                                      await updateDemand(dbDemand.id!, {
-                                        sectorStatus: {
-                                          ...dbDemand.sectorStatus,
-                                          [s.id]: 'not_delivered',
-                                        },
-                                      })
-                                    updateSectorStatus(demand.id, s.id, 'not_delivered')
+                                    try {
+                                      await updateSectorStatus(demand.id, s.id, 'not_delivered')
+                                    } catch (e) {
+                                      console.error(e)
+                                    }
                                   }}
                                 >
                                   Não Entregue{' '}
@@ -847,16 +797,13 @@ const DemandDetail = () => {
                         variant="destructive"
                         onClick={async () => {
                           if (!disputeReason) return
-                          if (dbDemand)
-                            await updateDemand(dbDemand.id!, {
-                              sectorStatus: {
-                                ...dbDemand.sectorStatus,
-                                [disputeSector]: 'disputed',
-                              },
-                            })
-                          disputeService(demand.id, disputeSector, disputeReason)
-                          setIsDisputeOpen(false)
-                          setDisputeReason('')
+                          try {
+                            await disputeService(demand.id, disputeSector, disputeReason)
+                            setIsDisputeOpen(false)
+                            setDisputeReason('')
+                          } catch (e) {
+                            console.error(e)
+                          }
                         }}
                       >
                         {' '}
@@ -1012,9 +959,11 @@ const DemandDetail = () => {
                 <Button
                   size="lg"
                   onClick={async () => {
-                    if (dbDemand)
-                      await updateDemand(dbDemand.id!, { paymentStatus: 'pending_payment' })
-                    signContracts(demand.id)
+                    try {
+                      await signContracts(demand.id)
+                    } catch (e) {
+                      console.error(e)
+                    }
                   }}
                   className="w-full sm:w-auto h-14 text-base px-8 shadow-md"
                 >
@@ -1180,15 +1129,17 @@ const DemandDetail = () => {
                       </Button>
                       <Button
                         onClick={async () => {
-                          if (dbDemand)
-                            await updateDemand(dbDemand.id!, { paymentStatus: 'escrow' })
-                          payEvent(demand.id, optDelivery || optCancel)
-                          setIsPaymentOpen(false)
-                          toast({
-                            title: 'Pagamento Aprovado!',
-                            description:
-                              'O evento está totalmente garantido e os fornecedores foram notificados.',
-                          })
+                          try {
+                            await payEvent(demand.id, optDelivery || optCancel)
+                            setIsPaymentOpen(false)
+                            toast({
+                              title: 'Pagamento Aprovado!',
+                              description:
+                                'O evento está totalmente garantido e os fornecedores foram notificados.',
+                            })
+                          } catch (e) {
+                            console.error(e)
+                          }
                         }}
                         className="bg-emerald-600 hover:bg-emerald-700 text-white px-8"
                       >

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import {
@@ -22,7 +22,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer } fro
 export default function Dashboard() {
   const { currentUser, companyProfile, demands, role, supplierFinances, suppliersCRM } = useApp()
   const defaultWidgets =
-    role === 'company'
+    role === 'company' || role === 'supplier'
       ? ['alerts', 'finance', 'loyalty', 'events']
       : ['finance', 'loyalty', 'events']
   const [widgets, setWidgets] = useState(defaultWidgets)
@@ -32,6 +32,18 @@ export default function Dashboard() {
     setWidgets(defaultWidgets)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [role])
+
+  const dashboardDemands = useMemo(() => {
+    const sourceDemands = demands
+    if (role === 'customer') return sourceDemands.filter((d) => d.customerId === currentUser?.id)
+    if (role === 'admin') return sourceDemands
+    if (!companyProfile?.sectors || companyProfile.sectors.length === 0) return []
+    return sourceDemands.filter((d) =>
+      companyProfile.sectors.some(
+        (s) => d.requirements && d.requirements[s as keyof typeof d.requirements],
+      ),
+    )
+  }, [demands, role, companyProfile?.sectors, currentUser?.id])
 
   const handleDragStart = (e: React.DragEvent, id: string) => {
     setDraggedWidget(id)
@@ -329,28 +341,34 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent className="pt-4 flex-1">
             <div className="space-y-3">
-              {demands.slice(0, 4).map((d) => (
-                <div
-                  key={d.id}
-                  className="flex justify-between items-center p-3 rounded-xl border border-border/50 bg-secondary/30 hover:bg-secondary/60 transition-colors"
-                >
-                  <div className="mr-2 overflow-hidden">
-                    <p className="font-semibold text-foreground truncate">{d.title}</p>
-                    <p className="text-xs text-muted-foreground truncate">
-                      {new Date(d.date).toLocaleDateString('pt-BR')} • {d.location}
-                    </p>
-                  </div>
-                  <Badge variant="outline" className="bg-background whitespace-nowrap">
-                    {d.status === 'pending'
-                      ? 'Pendente'
-                      : d.status === 'negotiating'
-                        ? 'Em Negociação'
-                        : d.status === 'completed'
-                          ? 'Concluído'
-                          : 'Cancelado'}
-                  </Badge>
+              {dashboardDemands.length === 0 ? (
+                <div className="text-center text-muted-foreground py-8 text-sm">
+                  Nenhum evento encontrado no momento.
                 </div>
-              ))}
+              ) : (
+                dashboardDemands.slice(0, 4).map((d) => (
+                  <div
+                    key={d.id}
+                    className="flex justify-between items-center p-3 rounded-xl border border-border/50 bg-secondary/30 hover:bg-secondary/60 transition-colors"
+                  >
+                    <div className="mr-2 overflow-hidden">
+                      <p className="font-semibold text-foreground truncate">{d.title}</p>
+                      <p className="text-xs text-muted-foreground truncate">
+                        {new Date(d.date).toLocaleDateString('pt-BR')} • {d.location}
+                      </p>
+                    </div>
+                    <Badge variant="outline" className="bg-background whitespace-nowrap">
+                      {d.status === 'pending'
+                        ? 'Pendente'
+                        : d.status === 'negotiating'
+                          ? 'Em Negociação'
+                          : d.status === 'completed'
+                            ? 'Concluído'
+                            : 'Cancelado'}
+                    </Badge>
+                  </div>
+                ))
+              )}
             </div>
             <div className="mt-4">
               <Button variant="ghost" className="w-full text-sm text-primary" asChild>
@@ -375,9 +393,11 @@ export default function Dashboard() {
             Arraste e solte os widgets para personalizar sua área de trabalho.
           </p>
         </div>
-        <Button asChild>
-          <Link to="/create-event">Criar Novo Evento</Link>
-        </Button>
+        {role === 'customer' && (
+          <Button asChild>
+            <Link to="/create-event">Criar Novo Evento</Link>
+          </Button>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">

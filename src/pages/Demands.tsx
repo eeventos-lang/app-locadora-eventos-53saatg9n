@@ -6,63 +6,25 @@ import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts'
+import { Button } from '@/components/ui/button'
 import { useApp, Demand } from '@/store/AppContext'
 import { SERVICES } from '@/lib/services'
-import { getDemands, updateDemand, DemandsRecord } from '@/services/demands'
-import pb from '@/lib/pocketbase/client'
-import { useRealtime } from '@/hooks/use-realtime'
-import { useEffect, useState } from 'react'
+import { updateDemand } from '@/services/demands'
 
 const Demands = () => {
   const { role, demands, isSubscribed, companyProfile, proposals, currentUser } = useApp()
-  const [dbDemands, setDbDemands] = useState<DemandsRecord[]>([])
-
-  const loadDemands = async () => {
-    if (pb.authStore.isValid) {
-      try {
-        const list = await getDemands()
-        setDbDemands(list)
-      } catch (e) {
-        console.error(e)
-      }
-    }
-  }
-
-  useEffect(() => {
-    loadDemands()
-  }, [])
-  useRealtime('demands', loadDemands)
-
-  const mappedDbDemands = useMemo(() => {
-    return dbDemands.map(
-      (d) =>
-        ({
-          id: d.id!,
-          title: d.title,
-          guests: d.guests || 0,
-          date: d.event_date || '',
-          location: d.location || '',
-          budget: d.budget || 0,
-          budgetBreakdown: d.budgetBreakdown || {},
-          requirements: d.requirements || {},
-          status: d.status as any,
-          customerId: d.customer_id,
-          paymentStatus: (d.paymentStatus as any) || 'gathering',
-          hasInsurance: d.hasInsurance || false,
-          sectorStatus: d.sectorStatus || {},
-          contractedProviders: d.contractedProviders || {},
-        }) as Demand,
-    )
-  }, [dbDemands])
 
   const filteredDemands = useMemo(() => {
-    const sourceDemands = mappedDbDemands.length > 0 ? mappedDbDemands : demands
+    const sourceDemands = demands
     if (role === 'customer') return sourceDemands.filter((d) => d.customerId === currentUser?.id)
+    if (role === 'admin') return sourceDemands
     if (!companyProfile?.sectors || companyProfile.sectors.length === 0) return []
     return sourceDemands.filter((d) =>
-      companyProfile.sectors.some((s) => d.requirements[s as keyof typeof d.requirements]),
+      companyProfile.sectors.some(
+        (s) => d.requirements && d.requirements[s as keyof typeof d.requirements],
+      ),
     )
-  }, [mappedDbDemands, demands, role, companyProfile?.sectors, currentUser?.id])
+  }, [demands, role, companyProfile?.sectors, currentUser?.id])
 
   const handleStatusUpdate = async (e: React.MouseEvent, id: string, newStatus: string) => {
     e.preventDefault()
