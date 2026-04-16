@@ -361,410 +361,39 @@ interface AppContextType {
   isInitializing: boolean
 }
 
-const MOCK_USERS: User[] = [
-  {
-    id: 'admin1',
-    name: 'Admin',
-    email: 'lhshowilumina@hotmail.com',
-    role: 'admin',
-    password: '123',
-  },
-  {
-    id: 'c1',
-    name: 'Cliente Teste',
-    email: 'cliente@exemplo.com',
-    role: 'customer',
-    password: '123',
-  },
-  {
-    id: 'u1',
-    name: 'JD Decorações',
-    email: 'joao.doe@exemplo.com',
-    role: 'company',
-    password: '123',
-    sectors: ['decoracao', 'space', 'buffet'],
-    companyProfile: {
-      name: 'JD Decorações e Espaços',
-      specialties: 'Casamentos, Cenografia, Arranjos Florais, Buffet Completo',
-      sectors: ['decoracao', 'space', 'buffet'],
-      address: 'Av. das Flores, 123, São Paulo - SP',
-      logo: '',
-      observations: 'Transformando seu evento em um momento inesquecível.',
-      cnpj: '12.345.678/0001-90',
-      portfolio: 'portfolio_jd_2026.pdf',
-      isVerified: true,
-      unavailableDates: ['2026-05-15', '2026-05-25'],
-      safetyIndex: 98,
-      loyaltyPoints: 650, // Silver tier
-      monthlyStats: {
-        pointsEarned: 150,
-        pointsEarnedPrev: 100,
-        feeSavings: 350,
-        feeSavingsPrev: 150,
-      },
-      paymentGateway: {
-        provider: 'stripe',
-        publicKey: 'pk_test_51...123',
-        connected: true,
-      },
-      integrations: {
-        google: {
-          connected: true,
-          lastSync: new Date().toISOString(),
-          account: 'agenda.jd@gmail.com',
-        },
-      },
-      billingSettings: {
-        autoSend: true,
-        subject: 'Aviso de Vencimento: Fatura Pendente',
-        body: 'Olá [Customer Name],\n\nIdentificamos uma fatura pendente no valor de R$ [Amount] com vencimento em [Due Date].\n\nPor favor, realize o pagamento para evitar multas.',
-      },
-    },
-  },
-  {
-    id: 'u2',
-    name: 'MS Áudio e Luz',
-    email: 'maria@exemplo.com',
-    role: 'company',
-    password: '123',
-    sectors: ['sound', 'light', 'led'],
-    companyProfile: {
-      name: 'MS Áudio e Luz',
-      specialties: 'PA, Iluminação Cênica, Painéis de LED indoor/outdoor',
-      sectors: ['sound', 'light', 'led'],
-      address: 'Rua do Som, 45, Campinas - SP',
-      logo: '',
-      observations: '',
-      isVerified: false,
-      safetyIndex: 85,
-      loyaltyPoints: 50,
-    },
-  },
-]
-
-const MOCK_DEMANDS: Demand[] = [
-  {
-    id: 'd1',
-    customerId: 'c1',
-    title: 'Casamento Sítio das Palmeiras',
-    budget: 65000,
-    budgetBreakdown: { sound: 1500, light: 1000, decoracao: 3000 },
-    guests: 300,
-    date: '2026-05-20',
-    location: 'São Paulo, SP',
-    requirements: {
-      sound: true,
-      light: true,
-      led: false,
-      grid: true,
-      buffet: true,
-      drinks: false,
-      cocktails: true,
-      photo: false,
-      video: false,
-      singer: false,
-      band: true,
-      dj: true,
-      space: false,
-      decoracao: true,
-      ceremonial: true,
-      security: false,
-      details: 'Preciso de PA para 300 pessoas.',
-    },
-    status: 'negotiating',
-    paymentStatus: 'gathering',
-    sectorStatus: {
-      sound: 'pending',
-      light: 'pending',
-      grid: 'pending',
-      buffet: 'pending',
-      cocktails: 'pending',
-      band: 'pending',
-      dj: 'pending',
-      decoracao: 'contracted',
-      ceremonial: 'pending',
-    },
-    contractedProviders: { decoracao: 'p2' },
-    createdAt: new Date().toISOString(),
-    hasInsurance: true,
-  },
-  {
-    id: 'd2',
-    customerId: 'c1',
-    title: 'Festa Corporativa de Fim de Ano',
-    budget: 15000,
-    guests: 100,
-    date: '2026-12-10',
-    location: 'Campinas, SP',
-    requirements: {
-      sound: true,
-      light: true,
-      led: false,
-      grid: false,
-      buffet: false,
-      drinks: false,
-      cocktails: false,
-      photo: false,
-      video: false,
-      singer: false,
-      band: false,
-      dj: true,
-      space: false,
-      decoracao: false,
-      ceremonial: false,
-      security: false,
-      details: 'Som e iluminação básica.',
-    },
-    status: 'pending',
-    paymentStatus: 'escrow',
-    sectorStatus: {
-      sound: 'contracted',
-      light: 'contracted',
-      dj: 'contracted',
-    },
-    contractedProviders: { sound: 'p3', light: 'p3', dj: 'p3' },
-    createdAt: new Date().toISOString(),
-    hasInsurance: true,
-  },
-]
-
-const MOCK_PROPOSALS: Proposal[] = [
-  {
-    id: 'p2',
-    demandId: 'd1',
-    supplierId: 'u1',
-    supplierName: 'JD Decorações e Espaços',
-    value: 3500,
-    message: 'Proposta para decoração completa.',
-    status: 'accepted',
-    offeredSectors: ['decoracao'],
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 'p3',
-    demandId: 'd2',
-    supplierId: 'u2',
-    supplierName: 'MS Áudio e Luz',
-    value: 2000,
-    message: 'Pacote som, luz e DJ.',
-    status: 'accepted',
-    offeredSectors: ['sound', 'light', 'dj'],
-    createdAt: new Date().toISOString(),
-  },
-]
-
-const MOCK_TRANSACTIONS: Transaction[] = [
-  {
-    id: 't1',
-    demandId: 'd2',
-    demandTitle: 'Festa Corporativa de Fim de Ano',
-    customerId: 'c1',
-    clientName: 'Cliente Teste',
-    supplierId: 'u2',
-    supplierName: 'MS Áudio e Luz',
-    amount: 2000,
-    date: new Date().toISOString(),
-    status: 'completed',
-    hasInsurance: true,
-    sectors: ['sound', 'light', 'dj'],
-  },
-]
-
-const MOCK_REVIEWS: Review[] = []
-for (let i = 0; i < 15; i++) {
-  MOCK_REVIEWS.push({
-    id: `r_u1_${i}`,
-    demandId: `d_mock_${i}`,
-    customerId: 'c1',
-    supplierId: 'u1',
-    rating: 5,
-    comment: [
-      'Serviço excelente!',
-      'Muito pontual',
-      'Profissionalismo incrível',
-      'Alta qualidade e ótimo atendimento',
-    ][i % 4],
-    createdAt: new Date(Date.now() - i * 86400000).toISOString(),
-  })
-}
-
-const MOCK_FAVORITES: Favorite[] = [{ customerId: 'c1', supplierId: 'u1' }]
-
-const MOCK_SCHEDULED: ScheduledInvitation[] = [
-  {
-    id: 's1',
-    customerId: 'c1',
-    supplierId: 'u1',
-    title: 'Festa de Fim de Ano 2026',
-    date: '2026-12-15T00:00:00.000Z',
-    status: 'pending',
-    createdAt: new Date().toISOString(),
-  },
-]
-
-const MOCK_CHATS: Chat[] = [
-  {
-    id: 'chat1',
-    participants: ['c1', 'u1'],
-    updatedAt: new Date().toISOString(),
-  },
-]
-
-const MOCK_MESSAGES: ChatMessage[] = [
-  {
-    id: 'm1',
-    chatId: 'chat1',
-    senderId: 'c1',
-    text: 'Olá! Gostaria de tirar umas dúvidas sobre o orçamento.',
-    createdAt: new Date(Date.now() - 3600000).toISOString(),
-  },
-  {
-    id: 'm2',
-    chatId: 'chat1',
-    senderId: 'u1',
-    text: 'Oi! Claro, como posso ajudar? Estamos à disposição.',
-    createdAt: new Date(Date.now() - 3500000).toISOString(),
-  },
-]
-
-const MOCK_SUPPLIER_DOCS: SupplierDocument[] = [
-  {
-    id: 'doc1',
-    supplierId: 'scrm1',
-    name: 'Alvara_Funcionamento_2026.pdf',
-    type: 'application/pdf',
-    uploadDate: new Date().toISOString(),
-  },
-  {
-    id: 'doc2',
-    supplierId: 'scrm1',
-    name: 'Contrato_Prestacao_Servicos.docx',
-    type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    uploadDate: new Date(Date.now() - 86400000).toISOString(),
-  },
-]
-
-const MOCK_SUPPLIER_FINANCES: SupplierFinance[] = [
-  {
-    id: 'fin1',
-    supplierId: 'scrm1',
-    description: 'Adiantamento - Casamento Sítio das Palmeiras',
-    amount: 2500,
-    dueDate: new Date(Date.now() - 86400000 * 5).toISOString(),
-    status: 'overdue',
-    demandId: 'd1',
-    billingStatus: 'pending',
-  },
-  {
-    id: 'fin2',
-    supplierId: 'scrm1',
-    description: 'Sinal - Evento Corporativo',
-    amount: 1500,
-    dueDate: new Date(Date.now() - 86400000 * 2).toISOString(),
-    status: 'paid',
-  },
-]
-
-const MOCK_INCOME_RECORDS: IncomeRecord[] = [
-  {
-    id: 'inc1',
-    companyId: 'u1',
-    clientName: 'Empresa Alpha',
-    amount: 8500,
-    date: new Date().toISOString(),
-    category: 'Locação de Equipamento',
-    status: 'received',
-    createdAt: new Date().toISOString(),
-    demandId: 'd1',
-  },
-  {
-    id: 'inc2',
-    companyId: 'u1',
-    clientName: 'Roberto Almeida',
-    amount: 3200,
-    date: new Date(Date.now() - 86400000 * 10).toISOString(),
-    category: 'Serviços Adicionais',
-    status: 'pending',
-    createdAt: new Date().toISOString(),
-    billingStatus: 'sent',
-    lastBilledAt: new Date().toISOString(),
-  },
-]
-
-const MOCK_INVENTORY_ITEMS: InventoryItem[] = [
-  {
-    id: 'inv1',
-    companyId: 'u1',
-    name: 'Mesa de Jantar Madeira',
-    category: 'Móveis',
-    totalQuantity: 50,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 'inv2',
-    companyId: 'u1',
-    name: 'Cadeira Tiffany Dourada',
-    category: 'Móveis',
-    totalQuantity: 300,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 'inv3',
-    companyId: 'u1',
-    name: 'Arranjo de Flores Grande',
-    category: 'Decoração',
-    totalQuantity: 20,
-    createdAt: new Date().toISOString(),
-  },
-]
-
-const MOCK_INVENTORY_ALLOCATIONS: InventoryAllocation[] = [
-  {
-    id: 'alloc1',
-    inventoryItemId: 'inv1',
-    demandId: 'd1',
-    quantity: 15,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 'alloc2',
-    inventoryItemId: 'inv2',
-    demandId: 'd1',
-    quantity: 100,
-    createdAt: new Date().toISOString(),
-  },
-]
-
 const AppContext = createContext<AppContextType | undefined>(undefined)
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [users, setUsers] = useState<User[]>(MOCK_USERS)
-  const [currentUser, setCurrentUser] = useState<User | null>(MOCK_USERS[1])
-  const [role, setRole] = useState<Role>('company')
+  const [users, setUsers] = useState<User[]>([])
+  const [currentUser, setCurrentUser] = useState<User | null>(null)
+  const [role, setRole] = useState<Role>('customer')
   const [isSubscribed, setIsSubscribed] = useState<boolean>(true)
-  const [demands, setDemands] = useState<Demand[]>(MOCK_DEMANDS)
-  const [proposals, setProposals] = useState<Proposal[]>(MOCK_PROPOSALS)
-  const [transactions, setTransactions] = useState<Transaction[]>(MOCK_TRANSACTIONS)
+  const [demands, setDemands] = useState<Demand[]>([])
+  const [proposals, setProposals] = useState<Proposal[]>([])
+  const [transactions, setTransactions] = useState<Transaction[]>([])
   const [notifications, setNotifications] = useState<Notification[]>([])
-  const [companyProfile, setCompanyProfile] = useState<CompanyProfile>(
-    MOCK_USERS[1].companyProfile!,
-  )
-  const [reviews, setReviews] = useState<Review[]>(MOCK_REVIEWS)
-  const [favorites, setFavorites] = useState<Favorite[]>(MOCK_FAVORITES)
-  const [scheduledInvitations, setScheduledInvitations] =
-    useState<ScheduledInvitation[]>(MOCK_SCHEDULED)
-  const [chats, setChats] = useState<Chat[]>(MOCK_CHATS)
-  const [messages, setMessages] = useState<ChatMessage[]>(MOCK_MESSAGES)
+  const [companyProfile, setCompanyProfile] = useState<CompanyProfile>({
+    name: '',
+    specialties: '',
+    sectors: [],
+    address: '',
+    logo: '',
+    observations: '',
+    loyaltyPoints: 0,
+    safetyIndex: 100,
+  })
+  const [reviews, setReviews] = useState<Review[]>([])
+  const [favorites, setFavorites] = useState<Favorite[]>([])
+  const [scheduledInvitations, setScheduledInvitations] = useState<ScheduledInvitation[]>([])
+  const [chats, setChats] = useState<Chat[]>([])
+  const [messages, setMessages] = useState<ChatMessage[]>([])
   const [clientsCRM, setClientsCRM] = useState<ClientCRM[]>([])
   const [suppliersCRM, setSuppliersCRM] = useState<SupplierCRM[]>([])
-  const [supplierDocuments, setSupplierDocuments] = useState<SupplierDocument[]>(MOCK_SUPPLIER_DOCS)
-  const [supplierFinances, setSupplierFinances] =
-    useState<SupplierFinance[]>(MOCK_SUPPLIER_FINANCES)
-  const [incomeRecords, setIncomeRecords] = useState<IncomeRecord[]>(MOCK_INCOME_RECORDS)
-  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>(MOCK_INVENTORY_ITEMS)
-  const [inventoryAllocations, setInventoryAllocations] = useState<InventoryAllocation[]>(
-    MOCK_INVENTORY_ALLOCATIONS,
-  )
+  const [supplierDocuments, setSupplierDocuments] = useState<SupplierDocument[]>([])
+  const [supplierFinances, setSupplierFinances] = useState<SupplierFinance[]>([])
+  const [incomeRecords, setIncomeRecords] = useState<IncomeRecord[]>([])
+  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([])
+  const [inventoryAllocations, setInventoryAllocations] = useState<InventoryAllocation[]>([])
   const [isInitializing, setIsInitializing] = useState(true)
 
   const loadCRMData = useCallback(async () => {
@@ -822,14 +451,20 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const initApp = async () => {
       try {
-        if (!pb.authStore.isValid) {
-          await pb.collection('users').authWithPassword('joao.doe@exemplo.com', 'Skip@Pass')
-        }
         if (pb.authStore.isValid && pb.authStore.record) {
-          setCurrentUser((prev) => (prev ? { ...prev, id: pb.authStore.record!.id } : null))
+          const pbUser = pb.authStore.record
+          const user: User = {
+            id: pbUser.id,
+            name: pbUser.name || pbUser.email.split('@')[0],
+            email: pbUser.email,
+            role: (pbUser.role as Role) || 'customer',
+          }
+          setCurrentUser(user)
+          setRole(user.role)
         }
       } catch (err) {
         console.error('Init Auth failed:', err)
+        pb.authStore.clear()
       } finally {
         setIsInitializing(false)
         loadCRMData()
@@ -840,9 +475,17 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
     const unsub = pb.authStore.onChange((token, model) => {
       if (model) {
-        setCurrentUser((prev) => (prev ? { ...prev, id: model.id } : null))
+        const user: User = {
+          id: model.id,
+          name: model.name || model.email.split('@')[0],
+          email: model.email,
+          role: (model.role as Role) || 'customer',
+        }
+        setCurrentUser(user)
+        setRole(user.role)
         loadCRMData()
       } else {
+        setCurrentUser(null)
         setClientsCRM([])
         setSuppliersCRM([])
       }
@@ -918,7 +561,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         ...prev,
       ])
 
-      // Simulate API Call to External Gateway (Stripe/Mercado Pago)
       setTimeout(() => {
         setDemands((curr) =>
           curr.map((d) => (d.id === demandId ? { ...d, paymentStatus: 'refunded' } : d)),
@@ -970,7 +612,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       prev.map((d) => (d.id === demandId ? { ...d, paymentStatus: 'escrow', hasInsurance } : d)),
     )
 
-    // Create transactions for accepted proposals
     const dProposals = proposals.filter((p) => p.demandId === demandId && p.status === 'accepted')
     const demand = demands.find((d) => d.id === demandId)
     if (!demand) return
@@ -1010,12 +651,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         d.status = 'completed'
         d.paymentStatus = 'completed'
 
-        // Update transactions to completed
         setTransactions((txs) =>
           txs.map((t) => (t.demandId === demandId ? { ...t, status: 'completed' } : t)),
         )
 
-        // Award points to providers
         setTimeout(() => {
           const providersToReward = new Set(Object.values(d.contractedProviders))
           providersToReward.forEach((pid) => {
@@ -1100,9 +739,19 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const registerUser = async (userData: any) => {
+    const record = await pb.collection('users').create({
+      email: userData.email,
+      password: userData.password || 'Skip@Pass',
+      passwordConfirm: userData.password || 'Skip@Pass',
+      name: userData.name,
+      role: userData.role,
+    })
+
     const newUser: User = {
-      ...userData,
-      id: Math.random().toString(36).substring(7),
+      id: record.id,
+      name: record.name || record.email.split('@')[0],
+      email: record.email,
+      role: (record.role as Role) || 'customer',
       companyProfile:
         userData.role === 'company'
           ? {
@@ -1113,53 +762,33 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
               logo: '',
               observations: '',
               loyaltyPoints: 0,
+              safetyIndex: 100,
             }
           : undefined,
     }
-    setUsers([...users, newUser])
+    setUsers((prev) => [...prev, newUser])
   }
 
   const login = async (email: string, password?: string) => {
-    let pbUser: any = null
-    try {
-      const authData = await pb.collection('users').authWithPassword(email, password || 'Skip@Pass')
-      pbUser = authData.record
-    } catch (e) {
-      console.warn('PB Auth failed')
+    const authData = await pb.collection('users').authWithPassword(email, password || 'Skip@Pass')
+    const pbUser = authData.record
+    const user: User = {
+      id: pbUser.id,
+      name: pbUser.name || pbUser.email.split('@')[0],
+      email: pbUser.email,
+      role: (pbUser.role as Role) || 'customer',
     }
-
-    return new Promise<void>((resolve, reject) => {
-      setTimeout(() => {
-        let user = users.find(
-          (u) =>
-            u.email === email && (u.password === password || password === 'Skip@Pass' || !password),
-        )
-
-        if (pbUser && !user) {
-          user = {
-            id: pbUser.id,
-            name: pbUser.name || pbUser.email.split('@')[0],
-            email: pbUser.email,
-            role: (pbUser.role as Role) || 'customer',
-          }
-        }
-
-        if (user) {
-          if (pbUser) user.id = pbUser.id
-          setCurrentUser(user)
-          setRole(user.role)
-          if (user.companyProfile) setCompanyProfile(user.companyProfile)
-          resolve()
-        } else {
-          reject(new Error('Credenciais inválidas.'))
-        }
-      }, 500)
-    })
+    setCurrentUser(user)
+    setRole(user.role)
+    await loadCRMData()
   }
 
   const logout = () => {
+    pb.authStore.clear()
     setCurrentUser(null)
     setRole('customer')
+    setClientsCRM([])
+    setSuppliersCRM([])
   }
 
   const addReview = (reviewData: Omit<Review, 'id' | 'createdAt'>) => {

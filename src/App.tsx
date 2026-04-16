@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import { Layout } from '@/components/Layout'
 import pb from '@/lib/pocketbase/client'
@@ -126,20 +126,24 @@ if (typeof window !== 'undefined') {
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
-    const unsub = pb.authStore.onChange((token, model) => {
-      if (!model || !pb.authStore.isValid) {
+    const checkAuth = () => {
+      const isAuthRoute = location.pathname === '/login' || location.pathname === '/register'
+      if (!pb.authStore.isValid && !isAuthRoute) {
         navigate('/login')
       }
-    })
-
-    if (!pb.authStore.isValid) {
-      navigate('/login')
     }
 
+    checkAuth()
+
+    const unsub = pb.authStore.onChange(() => {
+      checkAuth()
+    })
+
     return () => unsub()
-  }, [navigate])
+  }, [navigate, location.pathname])
 
   return <>{children}</>
 }
