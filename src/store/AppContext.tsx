@@ -1074,17 +1074,15 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   const login = async (email: string, password?: string) => {
-    return new Promise<void>(async (resolve, reject) => {
-      let pbUser: any = null
-      try {
-        const authData = await pb
-          .collection('users')
-          .authWithPassword(email, password || 'Skip@Pass')
-        pbUser = authData.record
-      } catch (e) {
-        console.warn('PB Auth failed')
-      }
+    let pbUser: any = null
+    try {
+      const authData = await pb.collection('users').authWithPassword(email, password || 'Skip@Pass')
+      pbUser = authData.record
+    } catch (e) {
+      console.warn('PB Auth failed')
+    }
 
+    return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         const user = users.find(
           (u) =>

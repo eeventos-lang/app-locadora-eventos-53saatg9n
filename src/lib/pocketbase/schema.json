@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-16T12:38:04.543Z",
+  "generatedAt": "2026-04-16T12:44:26.202Z",
   "collections": [
     {
       "name": "users",
@@ -43,7 +43,15 @@
           "type": "select",
           "required": false,
           "system": false,
-          "selectValues": ["admin", "leader", "treasurer", "pastor"]
+          "selectValues": [
+            "admin",
+            "leader",
+            "treasurer",
+            "pastor",
+            "customer",
+            "supplier",
+            "company"
+          ]
         }
       ],
       "indexes": [
@@ -287,6 +295,163 @@
         {
           "name": "status",
           "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "name": "proposals",
+      "type": "base",
+      "apiRules": {
+        "list": "@request.auth.id != '' && (customer_id = @request.auth.id || supplier_id = @request.auth.id)",
+        "view": "@request.auth.id != '' && (customer_id = @request.auth.id || supplier_id = @request.auth.id)",
+        "create": "@request.auth.id != ''",
+        "update": "@request.auth.id != '' && (customer_id = @request.auth.id || supplier_id = @request.auth.id)",
+        "delete": null
+      },
+      "fields": [
+        {
+          "name": "customer_id",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "supplier_id",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "amount",
+          "type": "number",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "status",
+          "type": "select",
+          "required": true,
+          "system": false,
+          "selectValues": ["pending", "paid", "cancelled"]
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "name": "chats",
+      "type": "base",
+      "apiRules": {
+        "list": "@request.auth.id != '' && participants ?= @request.auth.id",
+        "view": "@request.auth.id != '' && participants ?= @request.auth.id",
+        "create": "@request.auth.id != ''",
+        "update": "@request.auth.id != '' && participants ?= @request.auth.id",
+        "delete": null
+      },
+      "fields": [
+        {
+          "name": "participants",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "proposal_id",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "proposals"
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "name": "messages",
+      "type": "base",
+      "apiRules": {
+        "list": "@request.auth.id != '' && chat_id.participants ?= @request.auth.id",
+        "view": "@request.auth.id != '' && chat_id.participants ?= @request.auth.id",
+        "create": "@request.auth.id != '' && chat_id.participants ?= @request.auth.id",
+        "update": "@request.auth.id != '' && sender_id = @request.auth.id",
+        "delete": null
+      },
+      "fields": [
+        {
+          "name": "chat_id",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "chats"
+        },
+        {
+          "name": "sender_id",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "content",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "is_masked",
+          "type": "bool",
           "required": false,
           "system": false
         },

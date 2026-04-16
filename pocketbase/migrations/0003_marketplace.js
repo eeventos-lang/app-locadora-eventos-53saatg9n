@@ -1,11 +1,19 @@
 migrate(
   (app) => {
     const users = app.findCollectionByNameOrId('_pb_users_auth_')
-    const roleField = users.fields.getByName('role')
+    let roleField = users.fields.getByName('role')
     if (roleField) {
-      roleField.selectValues = [
-        ...new Set([...roleField.selectValues, 'customer', 'supplier', 'company']),
+      roleField.values = [
+        ...new Set([...(roleField.values || []), 'customer', 'supplier', 'company']),
       ]
+    } else {
+      users.fields.add(
+        new SelectField({
+          name: 'role',
+          values: ['customer', 'supplier', 'company'],
+          maxSelect: 1,
+        }),
+      )
     }
     app.save(users)
 
