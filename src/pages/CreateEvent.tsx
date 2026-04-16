@@ -18,7 +18,6 @@ const steps = ['Básico', 'Serviços', 'Revisão']
 const CreateEvent = () => {
   const navigate = useNavigate()
   const { toast } = useToast()
-  const { addDemand } = useApp()
   const [currentStep, setCurrentStep] = useState(1)
 
   const [formData, setFormData] = useState<EventFormData>({
@@ -92,13 +91,6 @@ const CreateEvent = () => {
         hasInsurance: false,
         sectorStatus: {},
         contractedProviders: {},
-      })
-
-      addDemand({
-        ...formData,
-        title: formData.title || 'Novo Evento',
-        budget: totals.total,
-        budgetBreakdown: totals.breakdown,
       })
 
       toast({ title: 'Sucesso!', description: 'Sua demanda foi publicada para os fornecedores.' })

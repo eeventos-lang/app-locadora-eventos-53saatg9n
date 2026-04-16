@@ -18,12 +18,18 @@ const Demands = () => {
     const sourceDemands = demands
     if (role === 'customer') return sourceDemands.filter((d) => d.customerId === currentUser?.id)
     if (role === 'admin') return sourceDemands
-    if (!companyProfile?.sectors || companyProfile.sectors.length === 0) return []
-    return sourceDemands.filter((d) =>
-      companyProfile.sectors.some(
+
+    const supplierSectors = companyProfile?.sectors || []
+    if (supplierSectors.length === 0) return []
+
+    return sourceDemands.filter((d) => {
+      const matchesRequirement = supplierSectors.some(
         (s) => d.requirements && d.requirements[s as keyof typeof d.requirements],
-      ),
-    )
+      )
+      const matchesCategory = d.category ? supplierSectors.includes(d.category) : false
+
+      return matchesRequirement || matchesCategory
+    })
   }, [demands, role, companyProfile?.sectors, currentUser?.id])
 
   const handleStatusUpdate = async (e: React.MouseEvent, id: string, newStatus: string) => {

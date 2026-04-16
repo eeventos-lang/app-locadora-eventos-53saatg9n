@@ -52,6 +52,7 @@ export type Demand = {
   id: string
   customerId: string
   title: string
+  category?: string
   budget: number
   budgetBreakdown?: Record<string, number>
   guests: number
@@ -444,34 +445,48 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         })),
       )
 
-      setSuppliersCRM(
-        suppliersRecords.map((r) => ({
-          id: r.id,
-          collectionId: r.collectionId,
-          companyId: r.company_id,
-          name: r.name,
-          cnpjCpf: r.document,
-          stateRegistration: r.stateRegistration,
-          cep: r.cep,
-          street: r.street,
-          number: r.number,
-          complement: r.complement,
-          neighborhood: r.neighborhood,
-          city: r.city,
-          state: r.state,
-          phone: r.phone,
-          email: r.email,
-          category: r.service_category,
-          attachments: r.attachments || [],
-          createdAt: r.created,
-        })),
-      )
+      const mappedSuppliers = suppliersRecords.map((r) => ({
+        id: r.id,
+        collectionId: r.collectionId,
+        companyId: r.company_id,
+        name: r.name,
+        cnpjCpf: r.document,
+        stateRegistration: r.stateRegistration,
+        cep: r.cep,
+        street: r.street,
+        number: r.number,
+        complement: r.complement,
+        neighborhood: r.neighborhood,
+        city: r.city,
+        state: r.state,
+        phone: r.phone,
+        email: r.email,
+        category: r.service_category,
+        attachments: r.attachments || [],
+        createdAt: r.created,
+      }))
+
+      setSuppliersCRM(mappedSuppliers)
+
+      if (pb.authStore.record) {
+        const mySupplierRec = mappedSuppliers.find((s) => s.companyId === pb.authStore.record?.id)
+        if (mySupplierRec) {
+          setCompanyProfile((prev) => ({
+            ...prev,
+            name: mySupplierRec.name,
+            sectors: mySupplierRec.category
+              ? mySupplierRec.category.split(',').map((s) => s.trim())
+              : prev.sectors,
+          }))
+        }
+      }
 
       setDemands(
         demandsRecords.map((d) => ({
           id: d.id,
           customerId: d.customer_id,
           title: d.title,
+          category: d.category || '',
           budget: d.budget || 0,
           budgetBreakdown: d.budgetBreakdown || {},
           guests: d.guests || 0,
@@ -565,6 +580,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       customer_id: currentUser.id,
       title: demandData.title,
       description: demandData.requirements?.details || '',
+      category: demandData.category || 'geral',
       status: 'pending',
       event_date: demandData.date,
       budget: demandData.budget,

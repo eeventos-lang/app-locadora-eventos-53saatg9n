@@ -390,11 +390,13 @@ export function Layout() {
                       </li>
                     </>
                   )}
-                  <li>
-                    <Link to="/create-event" className="hover:text-primary transition-colors">
-                      Criar Evento
-                    </Link>
-                  </li>
+                  {role === 'customer' && (
+                    <li>
+                      <Link to="/create-event" className="hover:text-primary transition-colors">
+                        Criar Evento
+                      </Link>
+                    </li>
+                  )}
                 </ul>
               </div>
               <div>
