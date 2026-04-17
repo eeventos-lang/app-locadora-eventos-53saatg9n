@@ -91,6 +91,8 @@ const DemandDetail = () => {
     deallocateInventory,
   } = useApp()
 
+  const demand = demands.find((d) => d.id === id)
+
   const [isProposalOpen, setIsProposalOpen] = useState(false)
   const [proposalValue, setProposalValue] = useState('')
   const [proposalMessage, setProposalMessage] = useState('')
@@ -178,8 +180,6 @@ const DemandDetail = () => {
       })
     }
   }
-
-  const demand = demands.find((d) => d.id === id)
 
   const applicableSectors = demand
     ? SERVICES.filter(
