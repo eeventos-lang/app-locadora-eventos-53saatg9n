@@ -8,6 +8,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { ShieldCheck, Shield } from 'lucide-react'
+import { Switch } from '@/components/ui/switch'
 import { EventFormData } from '@/types/event'
 
 type Totals = {
@@ -23,15 +25,58 @@ type Totals = {
 
 type Props = {
   formData: EventFormData
+  updateForm: (field: string, value: any) => void
   totals: Totals
 }
 
 const fmt = (v: number) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v)
 
-export const Step3Review = ({ formData, totals }: Props) => {
+export const Step3Review = ({ formData, updateForm, totals }: Props) => {
   return (
     <div className="space-y-6 animate-fade-in">
+      <div className="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-4">
+        <h3 className="font-semibold text-foreground flex items-center gap-2">
+          <ShieldCheck className="w-5 h-5 text-primary" />
+          Segurança e Garantias do Evento
+        </h3>
+        <p className="text-sm text-muted-foreground">
+          Selecione as opções de proteção desejadas para o seu evento.
+        </p>
+
+        <div className="space-y-4 pt-2">
+          <div className="flex items-center justify-between gap-4 p-4 bg-background rounded-lg border border-border shadow-sm">
+            <div className="space-y-0.5">
+              <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                Seguro de Cancelamento
+              </label>
+              <p className="text-xs text-muted-foreground">
+                Garante 100% de reembolso caso precise cancelar até 48h antes.
+              </p>
+            </div>
+            <Switch
+              checked={formData.hasInsurance}
+              onCheckedChange={(val) => updateForm('hasInsurance', val)}
+            />
+          </div>
+
+          <div className="flex items-center justify-between gap-4 p-4 bg-background rounded-lg border border-border shadow-sm">
+            <div className="space-y-0.5">
+              <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                Garantia de Entrega
+              </label>
+              <p className="text-xs text-muted-foreground">
+                Suporte imediato de reposição e reembolso extra caso o fornecedor falhe.
+              </p>
+            </div>
+            <Switch
+              checked={formData.hasGuarantee}
+              onCheckedChange={(val) => updateForm('hasGuarantee', val)}
+            />
+          </div>
+        </div>
+      </div>
+
       <div className="bg-card border border-border rounded-xl p-4 space-y-4">
         <div className="flex justify-between items-start">
           <div>

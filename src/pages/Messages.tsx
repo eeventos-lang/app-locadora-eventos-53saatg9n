@@ -1,6 +1,15 @@
 import { useState, useRef, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Send, ArrowLeft, Search, MessageSquare, ShieldAlert } from 'lucide-react'
+import {
+  Send,
+  ArrowLeft,
+  Search,
+  MessageSquare,
+  ShieldAlert,
+  Check,
+  Clock,
+  AlertCircle,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -15,6 +24,18 @@ import {
   sendMarketplaceMessage,
 } from '@/services/marketplace'
 
+type MessageStatus = 'sending' | 'sent' | 'error'
+
+interface LocalMessage {
+  id: string
+  chat_id: string
+  sender_id: string
+  content: string
+  is_masked?: boolean
+  created: string
+  status: MessageStatus
+}
+
 export default function Messages() {
   const { currentUser } = useApp()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -24,7 +45,7 @@ export default function Messages() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const [chats, setChats] = useState<any[]>([])
-  const [messages, setMessages] = useState<any[]>([])
+  const [messages, setMessages] = useState<LocalMessage[]>([])
 
   const loadChats = async () => {
     try {
@@ -41,10 +62,12 @@ export default function Messages() {
     if (activeChatId && pb.authStore.isValid) {
       try {
         const records = await getMarketplaceMessages(activeChatId)
-        setMessages(records)
+        setMessages(records.map((r) => ({ ...r, status: 'sent' as const })))
       } catch (e) {
         console.error('Failed to load messages', e)
       }
+    } else {
+      setMessages([])
     }
   }
 
@@ -59,9 +82,24 @@ export default function Messages() {
   useRealtime('chats', () => {
     loadChats()
   })
+
   useRealtime('messages', (e) => {
     if (e.action === 'create' && e.record.chat_id === activeChatId) {
-      setMessages((prev) => [...prev, e.record])
+      // Avoid duplicating our own optimistic messages by checking ID
+      setMessages((prev) => {
+        // If we already have this message id or a temporary one with the same content recently, we might skip or replace.
+        // But for simplicity, let's just append if it's not by us, or if we ensure optimistic ID format differs.
+        const existing = prev.find((m) => m.id === e.record.id)
+        if (existing) {
+          // Update status to sent if it matched
+          return prev.map((m) => (m.id === existing.id ? { ...m, status: 'sent' } : m))
+        }
+        // If it's a completely new message from someone else, or from us but on another device
+        if (e.record.sender_id !== pb.authStore.record?.id) {
+          return [...prev, { ...e.record, status: 'sent' } as LocalMessage]
+        }
+        return prev
+      })
     }
   })
 
@@ -72,16 +110,40 @@ export default function Messages() {
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!text.trim() || !activeChatId || !pb.authStore.record?.id) return
+
     const msgText = text.trim()
+    const tempId = `temp-${Date.now()}`
+
+    // Optimistic UI update
+    const optimisticMsg: LocalMessage = {
+      id: tempId,
+      chat_id: activeChatId,
+      sender_id: pb.authStore.record.id,
+      content: msgText,
+      created: new Date().toISOString(),
+      status: 'sending',
+    }
+
+    setMessages((prev) => [...prev, optimisticMsg])
     setText('')
+
     try {
-      await sendMarketplaceMessage({
+      const realRecord = await sendMarketplaceMessage({
         chat_id: activeChatId,
         sender_id: pb.authStore.record.id,
         content: msgText,
       })
-    } catch (e) {
-      console.error('Send error', e)
+
+      // Update the optimistic message with real ID and sent status
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === tempId ? ({ ...realRecord, status: 'sent' } as LocalMessage) : m,
+        ),
+      )
+    } catch (err) {
+      console.error('Send error', err)
+      // Mark as error
+      setMessages((prev) => prev.map((m) => (m.id === tempId ? { ...m, status: 'error' } : m)))
     }
   }
 
@@ -233,7 +295,7 @@ export default function Messages() {
                       >
                         <div
                           className={cn(
-                            'max-w-[85%] sm:max-w-[70%] rounded-2xl px-4 py-2.5 text-sm relative group',
+                            'max-w-[85%] sm:max-w-[70%] rounded-2xl px-4 py-2.5 text-sm relative group flex flex-col',
                             isMine
                               ? 'bg-primary text-primary-foreground rounded-tr-sm shadow-sm'
                               : 'bg-muted text-foreground rounded-tl-sm border border-border',
@@ -260,17 +322,29 @@ export default function Messages() {
                               </Tooltip>
                             )}
                           </p>
-                          <span
+                          <div
                             className={cn(
-                              'text-[10px] mt-1.5 block text-right',
-                              isMine ? 'text-primary-foreground/70' : 'text-muted-foreground',
+                              'text-[10px] mt-1.5 flex justify-end items-center gap-1 opacity-80',
+                              isMine ? 'text-primary-foreground/90' : 'text-muted-foreground',
                             )}
                           >
-                            {new Date(msg.created).toLocaleTimeString('pt-BR', {
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            })}
-                          </span>
+                            <span>
+                              {new Date(msg.created).toLocaleTimeString('pt-BR', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </span>
+                            {isMine && msg.status === 'sending' && <Clock className="w-3 h-3" />}
+                            {isMine && msg.status === 'sent' && <Check className="w-3 h-3" />}
+                            {isMine && msg.status === 'error' && (
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <AlertCircle className="w-3 h-3 text-red-300" />
+                                </TooltipTrigger>
+                                <TooltipContent>Falha ao enviar</TooltipContent>
+                              </Tooltip>
+                            )}
+                          </div>
                         </div>
                       </div>
                     )

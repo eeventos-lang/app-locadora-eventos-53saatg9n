@@ -15,6 +15,7 @@ export interface DemandsRecord {
   budgetBreakdown?: any
   paymentStatus?: string
   hasInsurance?: boolean
+  has_guarantee?: boolean
   sectorStatus?: any
   contractedProviders?: any
   project_notes?: string

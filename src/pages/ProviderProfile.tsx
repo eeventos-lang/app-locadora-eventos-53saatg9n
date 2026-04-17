@@ -162,14 +162,17 @@ export default function ProviderProfile() {
 
             <div className="flex flex-col w-full gap-3 mt-8">
               {currentUser?.id !== supplier.id && (
-                <Button onClick={handleMessage} className="w-full shadow-sm font-semibold gap-2">
-                  <MessageSquare className="w-4 h-4" /> Enviar Mensagem
+                <Button
+                  onClick={handleMessage}
+                  className="w-full shadow-md font-bold gap-2 text-base h-12 bg-primary hover:bg-primary/90 text-primary-foreground"
+                >
+                  <MessageSquare className="w-5 h-5" /> Enviar Mensagem Direta
                 </Button>
               )}
               <Button
                 variant="outline"
                 className={cn(
-                  'w-full gap-2 transition-colors',
+                  'w-full gap-2 transition-colors h-11',
                   isFav && 'border-pink-500 text-pink-600 hover:bg-pink-50 hover:text-pink-700',
                 )}
                 onClick={() => toggleFavorite(supplier.id)}

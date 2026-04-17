@@ -1006,181 +1006,201 @@ const DemandDetail = () => {
           )}
 
           {role === 'customer' && demand.paymentStatus === 'pending_payment' && (
-            <Card className="bg-primary/5 border-primary/20 shadow-sm mt-8 animate-fade-in-up">
-              <CardContent className="p-6 text-center space-y-4">
-                <h3 className="text-2xl font-bold text-foreground tracking-tight">
-                  Contratos Assinados
-                </h3>
-                <p className="text-muted-foreground text-lg">
+            <Card className="bg-emerald-500/5 border-emerald-500/30 shadow-lg mt-8 animate-fade-in-up overflow-hidden ring-1 ring-emerald-500/20">
+              <CardHeader className="bg-emerald-500/10 border-b border-emerald-500/20 pb-4">
+                <CardTitle className="text-2xl font-bold text-emerald-800 dark:text-emerald-400 tracking-tight flex items-center gap-2">
+                  <ShieldCheck className="w-6 h-6" />
+                  Pagamento Seguro
+                </CardTitle>
+                <CardDescription className="text-emerald-700/80 dark:text-emerald-300/80 text-base">
                   Realize o pagamento para garantir a reserva. O valor fica retido com segurança
                   pela plataforma até a entrega do evento.
-                </p>
-                <Dialog open={isPaymentOpen} onOpenChange={setIsPaymentOpen}>
-                  <DialogTrigger asChild>
-                    <Button
-                      size="lg"
-                      className="w-full sm:w-auto h-14 text-base px-8 shadow-md bg-emerald-600 hover:bg-emerald-700 text-white"
-                    >
-                      Ir para Pagamento Seguro
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[500px]">
-                    <DialogHeader>
-                      <DialogTitle>Pagamento e Seguros Opcionais</DialogTitle>
-                      <DialogDescription>
-                        Personalize sua garantia antes de finalizar o pagamento.
-                      </DialogDescription>
-                    </DialogHeader>
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-6 space-y-8">
+                <div className="bg-background/80 p-5 rounded-xl border border-border shadow-sm">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="font-bold text-foreground">Resumo do Pedido</h4>
+                    <span className="text-2xl font-black text-primary">
+                      {new Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      }).format(finalTotalPayment)}
+                    </span>
+                  </div>
 
-                    <div className="space-y-4 py-2">
-                      <div className="bg-secondary/30 p-4 rounded-xl border border-border space-y-3">
-                        <h4 className="font-semibold text-foreground">Proteção e Garantias</h4>
-                        <div className="flex items-start space-x-3 p-3 bg-background rounded-lg border border-border hover:border-primary/50 transition-colors">
-                          <Checkbox
-                            id="optCancel"
-                            checked={optCancel}
-                            onCheckedChange={(c) => setOptCancel(!!c)}
-                          />
-                          <div className="grid gap-1 leading-none flex-1">
-                            <Label htmlFor="optCancel" className="font-semibold cursor-pointer">
-                              Seguro de Cancelamento
-                            </Label>
-                            <p className="text-xs text-muted-foreground leading-relaxed">
-                              Garante 100% de reembolso caso precise cancelar o evento até 48h antes
-                              da data.
-                            </p>
-                            <p className="text-xs font-bold text-primary mt-1">
-                              +{' '}
-                              {new Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL',
-                              }).format(cancelCost)}{' '}
-                              (5%)
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-start space-x-3 p-3 bg-background rounded-lg border border-border hover:border-primary/50 transition-colors">
-                          <Checkbox
-                            id="optDelivery"
-                            checked={optDelivery}
-                            onCheckedChange={(c) => setOptDelivery(!!c)}
-                          />
-                          <div className="grid gap-1 leading-none flex-1">
-                            <Label htmlFor="optDelivery" className="font-semibold cursor-pointer">
-                              Garantia de Entrega
-                            </Label>
-                            <p className="text-xs text-muted-foreground leading-relaxed">
-                              Suporte imediato de reposição e reembolso extra caso o fornecedor
-                              falhe no dia.
-                            </p>
-                            <p className="text-xs font-bold text-primary mt-1">
-                              +{' '}
-                              {new Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL',
-                              }).format(deliveryCost)}{' '}
-                              (8%)
-                            </p>
-                          </div>
+                  <div className="space-y-3">
+                    <h5 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+                      Adicionar Proteções (Opcional)
+                    </h5>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div
+                        className={cn(
+                          'flex items-start space-x-3 p-4 rounded-xl border-2 transition-all cursor-pointer',
+                          optCancel
+                            ? 'border-primary bg-primary/5'
+                            : 'border-border bg-background hover:border-primary/40',
+                        )}
+                        onClick={() => setOptCancel(!optCancel)}
+                      >
+                        <Checkbox
+                          id="optCancel"
+                          checked={optCancel}
+                          onCheckedChange={(c) => setOptCancel(!!c)}
+                          className="mt-1"
+                        />
+                        <div className="grid gap-1 leading-none flex-1">
+                          <Label htmlFor="optCancel" className="font-bold cursor-pointer">
+                            Seguro de Cancelamento
+                          </Label>
+                          <p className="text-xs text-muted-foreground leading-relaxed">
+                            100% de reembolso se cancelar até 48h antes.
+                          </p>
+                          <p className="text-sm font-bold text-primary mt-1">
+                            +{' '}
+                            {new Intl.NumberFormat('pt-BR', {
+                              style: 'currency',
+                              currency: 'BRL',
+                            }).format(cancelCost)}
+                          </p>
                         </div>
                       </div>
 
-                      <Tabs defaultValue="credit-card" className="w-full">
-                        <TabsList className="grid w-full grid-cols-2">
-                          <TabsTrigger value="credit-card">Cartão de Crédito</TabsTrigger>
-                          <TabsTrigger value="pix">PIX</TabsTrigger>
-                        </TabsList>
-                        <TabsContent value="credit-card" className="space-y-4 pt-4">
-                          <div className="bg-primary/5 p-4 rounded-xl flex justify-between items-center border border-primary/20">
-                            <span className="font-semibold text-primary">Total a Pagar</span>
-                            <span className="text-2xl font-bold text-foreground">
-                              {new Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL',
-                              }).format(finalTotalPayment)}
-                            </span>
+                      <div
+                        className={cn(
+                          'flex items-start space-x-3 p-4 rounded-xl border-2 transition-all cursor-pointer',
+                          optDelivery
+                            ? 'border-primary bg-primary/5'
+                            : 'border-border bg-background hover:border-primary/40',
+                        )}
+                        onClick={() => setOptDelivery(!optDelivery)}
+                      >
+                        <Checkbox
+                          id="optDelivery"
+                          checked={optDelivery}
+                          onCheckedChange={(c) => setOptDelivery(!!c)}
+                          className="mt-1"
+                        />
+                        <div className="grid gap-1 leading-none flex-1">
+                          <Label htmlFor="optDelivery" className="font-bold cursor-pointer">
+                            Garantia de Entrega
+                          </Label>
+                          <p className="text-xs text-muted-foreground leading-relaxed">
+                            Suporte de reposição e reembolso extra em falhas.
+                          </p>
+                          <p className="text-sm font-bold text-primary mt-1">
+                            +{' '}
+                            {new Intl.NumberFormat('pt-BR', {
+                              style: 'currency',
+                              currency: 'BRL',
+                            }).format(deliveryCost)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h4 className="font-bold text-foreground">Método de Pagamento</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Cartão de Crédito */}
+                    <div className="bg-background rounded-xl border border-border p-5 shadow-sm focus-within:ring-2 focus-within:ring-primary/50 transition-all">
+                      <div className="flex items-center gap-3 mb-4 border-b border-border pb-3">
+                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                          <DollarSign className="w-5 h-5 text-blue-600" />
+                        </div>
+                        <h5 className="font-bold text-lg">Cartão de Crédito</h5>
+                      </div>
+                      <div className="space-y-3">
+                        <div className="space-y-1">
+                          <Label className="text-xs">Número do Cartão</Label>
+                          <Input placeholder="0000 0000 0000 0000" className="h-10" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="space-y-1">
+                            <Label className="text-xs">Validade</Label>
+                            <Input placeholder="MM/AA" className="h-10" />
                           </div>
-                          <div className="space-y-2">
-                            <Label>Número do Cartão</Label>
-                            <Input placeholder="0000 0000 0000 0000" />
+                          <div className="space-y-1">
+                            <Label className="text-xs">CVV</Label>
+                            <Input placeholder="123" type="password" className="h-10" />
                           </div>
-                          <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                              <Label>Validade</Label>
-                              <Input placeholder="MM/AA" />
-                            </div>
-                            <div className="space-y-2">
-                              <Label>CVV</Label>
-                              <Input placeholder="123" type="password" />
-                            </div>
-                          </div>
-                        </TabsContent>
-                        <TabsContent
-                          value="pix"
-                          className="space-y-4 pt-4 text-center flex flex-col items-center"
+                        </div>
+                        <Button
+                          onClick={async () => {
+                            try {
+                              await payEvent(demand.id, optDelivery || optCancel)
+                              toast({
+                                title: 'Pagamento Aprovado!',
+                                description:
+                                  'O evento está totalmente garantido e os fornecedores foram notificados.',
+                              })
+                            } catch (e) {
+                              console.error(e)
+                            }
+                          }}
+                          className="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 text-white shadow-md h-11"
                         >
-                          <div className="bg-primary/5 p-4 rounded-xl flex justify-between items-center border border-primary/20 w-full mb-2">
-                            <span className="font-semibold text-primary">Total a Pagar</span>
-                            <span className="text-2xl font-bold text-foreground">
-                              {new Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL',
-                              }).format(finalTotalPayment)}
-                            </span>
-                          </div>
-                          <div className="bg-white p-3 inline-block rounded-xl border-2 border-border shadow-sm">
-                            <img
-                              src="https://img.usecurling.com/i?q=qr-code&color=black&shape=outline"
-                              alt="QR Code PIX"
-                              className="w-32 h-32 object-contain"
-                            />
-                          </div>
-                          <div className="space-y-2 w-full text-left">
-                            <Label>Chave Copia e Cola</Label>
-                            <div className="flex gap-2">
-                              <Input
-                                readOnly
-                                value="00020101021126580014br.gov.bcb.pix..."
-                                className="bg-muted font-mono text-xs"
-                              />
-                              <Button
-                                variant="outline"
-                                onClick={() => toast({ title: 'Chave Copiada!' })}
-                              >
-                                Copiar
-                              </Button>
-                            </div>
-                          </div>
-                        </TabsContent>
-                      </Tabs>
+                          Pagar com Cartão
+                        </Button>
+                      </div>
                     </div>
 
-                    <DialogFooter>
-                      <Button variant="outline" onClick={() => setIsPaymentOpen(false)}>
-                        Cancelar
-                      </Button>
-                      <Button
-                        onClick={async () => {
-                          try {
-                            await payEvent(demand.id, optDelivery || optCancel)
-                            setIsPaymentOpen(false)
-                            toast({
-                              title: 'Pagamento Aprovado!',
-                              description:
-                                'O evento está totalmente garantido e os fornecedores foram notificados.',
-                            })
-                          } catch (e) {
-                            console.error(e)
-                          }
-                        }}
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white px-8"
-                      >
-                        {' '}
-                        Confirmar Pagamento
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
+                    {/* PIX */}
+                    <div className="bg-background rounded-xl border border-border p-5 shadow-sm flex flex-col">
+                      <div className="flex items-center gap-3 mb-4 border-b border-border pb-3">
+                        <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
+                          <span className="font-black text-teal-600 italic">PIX</span>
+                        </div>
+                        <h5 className="font-bold text-lg">Transferência PIX</h5>
+                      </div>
+                      <div className="flex-1 flex flex-col items-center justify-center text-center space-y-4">
+                        <div className="bg-white p-2 rounded-xl border-2 border-border/50">
+                          <img
+                            src="https://img.usecurling.com/i?q=qr-code&color=black&shape=outline"
+                            alt="QR Code PIX"
+                            className="w-32 h-32 object-contain"
+                          />
+                        </div>
+                        <div className="w-full space-y-1 text-left">
+                          <Label className="text-xs">Chave Copia e Cola</Label>
+                          <div className="flex gap-2">
+                            <Input
+                              readOnly
+                              value="00020101021126580014br.gov.bcb.pix..."
+                              className="bg-muted font-mono text-xs h-10"
+                            />
+                            <Button
+                              variant="secondary"
+                              onClick={() => toast({ title: 'Chave Copiada!' })}
+                              className="h-10 px-3"
+                            >
+                              Copiar
+                            </Button>
+                          </div>
+                        </div>
+                        <Button
+                          onClick={async () => {
+                            try {
+                              await payEvent(demand.id, optDelivery || optCancel)
+                              toast({
+                                title: 'Pagamento Confirmado!',
+                                description: 'Recebemos o seu PIX. Evento garantido!',
+                              })
+                            } catch (e) {
+                              console.error(e)
+                            }
+                          }}
+                          variant="outline"
+                          className="w-full mt-auto border-emerald-500/50 text-emerald-700 hover:bg-emerald-50 h-11"
+                        >
+                          Simular Confirmação PIX
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           )}
@@ -1299,12 +1319,11 @@ const DemandDetail = () => {
                                 </p>
                               </div>
                               <Button
-                                variant="outline"
                                 size="sm"
-                                className="w-fit gap-2"
+                                className="w-fit gap-2 shadow-sm font-semibold"
                                 onClick={() => navigate('/messages')}
                               >
-                                <MessageSquare className="w-4 h-4" /> Falar com Fornecedor (Chat)
+                                <MessageSquare className="w-4 h-4" /> Falar com Fornecedor
                               </Button>
                             </div>
                           </div>
@@ -1380,9 +1399,8 @@ const DemandDetail = () => {
                                   </p>
                                 </div>
                                 <Button
-                                  variant="outline"
                                   size="sm"
-                                  className="w-fit gap-2"
+                                  className="w-fit gap-2 shadow-sm font-semibold"
                                   onClick={() => handleOpenChat(proposal.supplierId)}
                                 >
                                   <MessageSquare className="w-4 h-4" /> Falar com Fornecedor

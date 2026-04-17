@@ -6,6 +6,8 @@ export type EventFormData = {
   date: string
   location: string
   requirements: TechRequirement
+  hasInsurance: boolean
+  hasGuarantee: boolean
 }
 
 export type EventConfigs = {

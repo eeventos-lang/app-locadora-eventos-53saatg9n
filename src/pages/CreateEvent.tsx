@@ -44,6 +44,8 @@ const CreateEvent = () => {
       security: false,
       details: '',
     },
+    hasInsurance: false,
+    hasGuarantee: false,
   })
 
   const [configs, setConfigs] = useState<EventConfigs>({
@@ -88,7 +90,8 @@ const CreateEvent = () => {
         requirements: formData.requirements,
         budgetBreakdown: totals.breakdown,
         paymentStatus: 'gathering',
-        hasInsurance: false,
+        hasInsurance: formData.hasInsurance,
+        has_guarantee: formData.hasGuarantee,
         sectorStatus: {},
         contractedProviders: {},
       })
@@ -160,7 +163,9 @@ const CreateEvent = () => {
             setConfigs={setConfigs}
           />
         )}
-        {currentStep === 3 && <Step3Review formData={formData} totals={totals} />}
+        {currentStep === 3 && (
+          <Step3Review formData={formData} updateForm={updateForm} totals={totals} />
+        )}
       </div>
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/90 backdrop-blur-md border-t border-border z-40">
         <div className="max-w-4xl mx-auto">
