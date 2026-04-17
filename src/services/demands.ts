@@ -17,6 +17,7 @@ export interface DemandsRecord {
   hasInsurance?: boolean
   sectorStatus?: any
   contractedProviders?: any
+  project_notes?: string
   created?: string
   updated?: string
 }

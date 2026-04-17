@@ -35,6 +35,7 @@ import {
 import { SERVICES } from '@/lib/services'
 import { getLoyaltyTier, cn } from '@/lib/utils'
 import { format } from 'date-fns'
+import pb from '@/lib/pocketbase/client'
 
 const Profile = () => {
   const {
@@ -79,6 +80,17 @@ const Profile = () => {
   const handleSave = async () => {
     try {
       await updateCompanyProfile(localProfile)
+
+      if (pb.authStore.isValid && pb.authStore.record) {
+        await pb
+          .collection('users')
+          .update(pb.authStore.record.id, {
+            specialties: localProfile.sectors || [],
+            name: localProfile.name || currentUser?.name,
+          })
+          .catch(console.error)
+      }
+
       toast({
         title: 'Cadastro Salvo',
         description: 'Os dados da sua conta foram atualizados com sucesso.',

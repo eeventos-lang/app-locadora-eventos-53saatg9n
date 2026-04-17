@@ -116,6 +116,7 @@ const DemandDetail = () => {
   const [allocQuantity, setAllocQuantity] = useState('')
 
   const [pbProposals, setPbProposals] = useState<any[]>([])
+  const [projectNotes, setProjectNotes] = useState('')
 
   useEffect(() => {
     if (pb.authStore.isValid) {
@@ -140,6 +141,26 @@ const DemandDetail = () => {
       pb.collection('demands').update(demand.id, { status: 'in_analysis' }).catch(console.error)
     }
   }, [demand?.id, demand?.status, role])
+
+  useEffect(() => {
+    if (demand) {
+      setProjectNotes(demand.project_notes || '')
+    }
+  }, [demand?.project_notes])
+
+  const handleSaveNotes = async () => {
+    if (!demand) return
+    try {
+      await pb.collection('demands').update(demand.id, { project_notes: projectNotes })
+      toast({
+        title: 'Acompanhamento Salvo',
+        description: 'As notas do projeto foram atualizadas.',
+      })
+    } catch (e) {
+      console.error(e)
+      toast({ title: 'Erro', description: 'Falha ao salvar as notas.', variant: 'destructive' })
+    }
+  }
 
   const handlePayPbProposal = async (proposalId: string) => {
     try {
@@ -434,6 +455,11 @@ const DemandDetail = () => {
 
   const myAllocations = inventoryAllocations.filter((a) => a.demandId === demand.id)
   const myItems = inventoryItems.filter((i) => i.companyId === currentUser?.id)
+
+  const hasPaidProposal =
+    pbProposals.some((p) => p.status === 'paid') ||
+    demand.paymentStatus === 'escrow' ||
+    demand.paymentStatus === 'completed'
 
   return (
     <>
@@ -1189,6 +1215,34 @@ const DemandDetail = () => {
               <div className="bg-card border border-border rounded-xl p-6 text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed shadow-sm">
                 {demand.requirements.details}
               </div>
+            </section>
+          )}
+
+          {hasPaidProposal && (
+            <section className="space-y-4 mt-8 animate-fade-in">
+              <h3 className="font-semibold text-foreground text-xl border-b border-border pb-2">
+                Acompanhamento do Projeto
+              </h3>
+              <Card className="bg-card border-border shadow-sm">
+                <CardContent className="p-6 space-y-4">
+                  <p className="text-sm text-muted-foreground">
+                    Utilize este espaço para documentar o desenvolvimento do evento, alinhar
+                    expectativas e registrar informações importantes. Visível para o cliente e
+                    fornecedores contratados.
+                  </p>
+                  <Textarea
+                    value={projectNotes}
+                    onChange={(e) => setProjectNotes(e.target.value)}
+                    placeholder="Adicione notas, links ou detalhes sobre o andamento do projeto..."
+                    className="min-h-[150px] resize-none"
+                  />
+                  <div className="flex justify-end">
+                    <Button onClick={handleSaveNotes} className="shadow-sm">
+                      Salvar Notas do Projeto
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             </section>
           )}
 

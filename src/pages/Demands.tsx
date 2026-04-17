@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { useApp, Demand } from '@/store/AppContext'
 import { SERVICES } from '@/lib/services'
 import { updateDemand } from '@/services/demands'
+import pb from '@/lib/pocketbase/client'
 
 const Demands = () => {
   const { role, demands, isSubscribed, companyProfile, proposals, currentUser } = useApp()
@@ -39,12 +40,19 @@ const Demands = () => {
     fetchDemands()
   })
 
+  useRealtime('proposals', () => {
+    fetchDemands()
+  })
+
   const filteredDemands = useMemo(() => {
     const sourceDemands = localDemands
-    if (role === 'customer') return sourceDemands.filter((d) => d.customerId === currentUser?.id)
+    if (role === 'customer')
+      return sourceDemands.filter(
+        (d) => (d as any).customerId === currentUser?.id || d.customer_id === currentUser?.id,
+      )
     if (role === 'admin') return sourceDemands
 
-    const supplierSectors = currentUser?.specialties || companyProfile?.sectors || []
+    const supplierSectors = pb.authStore.record?.specialties || companyProfile?.sectors || []
     const supplierCategory = companyProfile?.service_category?.toLowerCase() || ''
 
     if (supplierSectors.length === 0 && !supplierCategory) return []
@@ -53,10 +61,10 @@ const Demands = () => {
       const demandCategory = d.category?.toLowerCase() || ''
       const matchesCategory =
         (demandCategory && supplierCategory && demandCategory.includes(supplierCategory)) ||
-        supplierSectors.some((s) => s.toLowerCase() === demandCategory)
+        supplierSectors.some((s: string) => s.toLowerCase() === demandCategory)
 
       const matchesRequirement = supplierSectors.some(
-        (s) => d.requirements && d.requirements[s as keyof typeof d.requirements],
+        (s: string) => d.requirements && d.requirements[s as keyof typeof d.requirements],
       )
       const matchesSectorCategory = d.category ? supplierSectors.includes(d.category) : false
 
@@ -75,6 +83,23 @@ const Demands = () => {
     e.stopPropagation()
     try {
       await updateDemand(id, { status: newStatus as any })
+      if (newStatus === 'accepted' && pb.authStore.isValid && pb.authStore.record) {
+        const demand = localDemands.find((d) => d.id === id)
+        if (demand) {
+          const customerId = (demand as any).customerId || demand.customer_id
+          const newProp = await pb.collection('proposals').create({
+            customer_id: customerId,
+            supplier_id: pb.authStore.record.id,
+            amount: demand.budget || 0,
+            status: 'pending',
+            description: 'Aceitou a demanda diretamente pelo valor original.',
+          })
+          await pb.collection('chats').create({
+            participants: [customerId, pb.authStore.record.id],
+            proposal_id: newProp.id,
+          })
+        }
+      }
     } catch (err) {
       console.error(err)
     }
